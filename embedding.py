@@ -17,6 +17,8 @@ class Embedding(SNPManipulations):
         self.plugNextDelay = {}
         self.plugJackDelay = {}
         self.jackDelay = {}
+        self.jackNextDelay = {}
+
         self.correctedPlugVector = {}
         self.testName = "DEEMBED_1"
         self.plugName = "TestPlug"
@@ -157,7 +159,7 @@ class Embedding(SNPManipulations):
 
         '''WRTIE TO EXCEL DB'''
 
-        worksheet = self.workbook.add_worksheet("Plug Corrected DB Phase")
+        worksheet = self.workbook.add_worksheet("Plug Reverse Corrected DB Phase")
 
 
         cell_format = self.workbook.add_format({'align': 'center',
@@ -223,8 +225,132 @@ class Embedding(SNPManipulations):
         
         return self.correctedPlugVector
 
-    def getJackVectorReverse(self, load):
-        pass
+    def getJackVectorReverse(self, openSNP, shortSNP, loadSNP):
+
+        self.openSample = openSNP
+        self.shortSample = shortSNP
+        
+        openDelay = self.getOpenDelay()
+        shortDelay = self.getShortDelay()
+
+        pairs = openDelay.keys() #Get list of pairs (This is the same as shortDelay)
+        freq = self.openSample.freq   #Get the list of frequencies (This is the same as the shortSample)
+        num_samples = len(freq)
+               
+        for pair in pairs:
+            f100 = list(self.openSample.freq).index(100400400.4004)
+            f500 = list(self.openSample.freq).index(500000000)
+            print("f100 ", f100)
+            openAvg = np.mean(openDelay[pair][f100:f500])
+            shortAvg = np.mean(shortDelay[pair][f100:f500]) + 80e-12
+            print(self.correctedPlugVector.keys())
+            #correctedPlug = np.mean(self.correctedPlugVector[pair][f100:f500])
+
+
+            self.jackDelay[pair] = ((openAvg + shortAvg)/4) # - correctedPlug
+
+        self.jackNextDelay["12-36"] = self.jackDelay["12"] + self.jackDelay["36"]
+        self.jackNextDelay["45-12"] = self.jackDelay["12"] + self.jackDelay["45"]
+        self.jackNextDelay["12-78"] = self.jackDelay["12"] + self.jackDelay["78"]
+        self.jackNextDelay["45-36"] = self.jackDelay["36"] + self.jackDelay["45"]
+        self.jackNextDelay["36-78"] = self.jackDelay["36"] + self.jackDelay["78"]
+        self.jackNextDelay["45-78"] = self.jackDelay["45"] + self.jackDelay["78"]
+
+        self.matedNextNoCorrection = self.loadSample.getNEXT(self.loadSample.dd, z=True)
+
+        self.jackVector = {}
+
+        for key in self.matedNextNoCorrection.keys():
+            self.jackVector[key] = []
+            for f in range(0, len(self.matedNextNoCorrection[key])):
+                #To correct the phase, we must first calculate the old phase
+                phase_calib = np.angle(self.matedNextNoCorrection[key][f], deg=True)
+                #Using the old phase and the delay, we will calculate the corrected phase
+                phase_corrected = phase_calib + 360 * self.loadSample.freq[f] * self.jackNextDelay[key]
+                #Then we'll calculate the amplitude
+                amplitude = np.abs(self.matedNextNoCorrection[key][f])
+
+                #By keeping the amplitude the same, we can use the corrected phase to find the new Real and Immaginary components.
+                real = amplitude * np.cos(phase_corrected * np.pi/180)
+                imag = amplitude * np.sin(phase_corrected * np.pi/180)
+                matedNextCorrected = complex(real, imag)
+                self.jackVector[key].append(matedNextCorrected - self.correctedPlugVector[key][f])
+                
+        #And then we write the corrected jack Next dictionary to a json file
+        print(self.jackVector["12-36"][2])
+        print()
+        #testPlugFile = open(self.jackName, "w")
+        #testPlugFile.write(json.dumps(self.jackVector))
+        #testPlugFile.close
+
+        '''WRTIE TO EXCEL DB'''
+
+        worksheet = self.workbook.add_worksheet("Jack Corrected DB Phase")
+
+
+        cell_format = self.workbook.add_format({'align': 'center',
+                                               'valign': 'vcenter'})
+        worksheet.merge_range('B1:C1', "", cell_format)
+        worksheet.merge_range('D1:E1', "", cell_format)
+        worksheet.merge_range('F1:G1', "", cell_format)
+        worksheet.merge_range('H1:I1', "", cell_format)
+        worksheet.merge_range('J1:K1', "", cell_format)
+        worksheet.merge_range('L1:M1', "", cell_format)
+
+        worksheet.write('A2', "Frequency")
+        for i, f in enumerate(self.loadSample.freq):
+            worksheet.write(i+2,0, f)
+
+        curPos = 1
+        for i, key in enumerate(self.jackVector.keys()):
+            print(key)
+
+            worksheet.write(0, curPos, key)
+            worksheet.write(1, curPos, "dB")
+            worksheet.write(1, curPos+1, "⌀")
+
+            for f in range(0, len(self.jackVector[key])):
+                
+                worksheet.write(2+f,curPos, 20 * np.log10(np.abs(self.jackVector[key][f])))
+                worksheet.write(2+f,curPos+1, np.angle(self.jackVector[key][f]))
+
+            curPos += 2
+
+        '''WRTIE TO EXCEL REAL IMAG'''
+
+        worksheet = self.workbook.add_worksheet("Jack Corrected Z")
+
+
+        cell_format = self.workbook.add_format({'align': 'center',
+                                               'valign': 'vcenter'})
+        worksheet.merge_range('B1:C1', "", cell_format)
+        worksheet.merge_range('D1:E1', "", cell_format)
+        worksheet.merge_range('F1:G1', "", cell_format)
+        worksheet.merge_range('H1:I1', "", cell_format)
+        worksheet.merge_range('J1:K1', "", cell_format)
+        worksheet.merge_range('L1:M1', "", cell_format)
+
+        worksheet.write('A2', "Frequency")
+        for i, f in enumerate(self.loadSample.freq):
+            worksheet.write(i+2,0, f)
+
+        curPos = 1
+        for i, key in enumerate(self.jackVector.keys()):
+            print(key)
+
+            worksheet.write(0, curPos, key)
+            worksheet.write(1, curPos, "Re")
+            worksheet.write(1, curPos+1, "Im")
+
+            for f in range(0, len(self.jackVector[key])):
+                
+                worksheet.write(2+f,curPos, self.jackVector[key][f].real)
+                worksheet.write(2+f,curPos+1,  self.jackVector[key][f].imag)
+
+            curPos += 2
+        self.workbook.close()
+            
+        return self.jackNextDelay
     
 
     def getJackVector(self, loadSNP):
@@ -404,6 +530,9 @@ class Embedding(SNPManipulations):
         self.setLimit("6A")
         self.setPlugVectors("6A")
         self.reembeded = {}
+
+        
+        
         for i in range(1,15):
             #First, we will declare the reembeded array
             self.reembeded[i] = []
@@ -430,7 +559,7 @@ class Embedding(SNPManipulations):
 
         f500 = list(self.openSample.freq).index(500000000)
 
-        case = 14
+        case = 1
 
         print("Reembed case 3 : ", 20*np.log10(np.abs(self.reembeded[case][f100])))
         print("Plug Vector: ", 20*np.log10(np.abs(self.correctedPlugVector["45-36"][f100])))
@@ -514,12 +643,16 @@ if __name__ == "__main__":
 
     plugJackLoad = "snps\DEEMBED TEST\MatingPlugJackForward.s8p"
 
+    jackPlugReverse = "snps\DEEMBED TEST\MatingPlugJackReverse.s8p"
+    jackPlugOpen = "snps\DEEMBED TEST\MatingPlugJackOpen.s8p"
+    jackPlugShort = "snps\DEEMBED TEST\MatingPlugJackShort.s8p"
+
     em.getDirectFixtureDelay(directFixtureOpen, directFixtureShort)
     em.getPlugDelay(plugDirectFixtureOpen, plugDirectFixtureShort)
     em.getPlugNextDelay()
     em.correctPlugVector(plugDirectFixtureLoad)
-    em.getJackVector(plugJackLoad)
-    
+    #em.getJackVector(plugJackLoad)
+    em.getJackVectorReverse(jackPlugOpen, jackPlugShort, jackPlugReverse)
     
     em.reembed()
     
