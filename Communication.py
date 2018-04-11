@@ -92,23 +92,27 @@ class Communication(object):
 
             self.session.write("SENS:FREQ:STOP "+str(self.max_freq))
             print("set max f")
+            print("set avg")
             self.session.write("SENS:SWE:TYPE LIN")
             self.session.write("SENS:SWE:POIN "+str(self.num_points))
             print("ok")
             self.session.write(":SENS:AVER:CLE")
             self.session.write(":ABOR")
+            self.session.write("SENS:AVER:COUN {}".format(str(self.average)))
             self.session.write(":INIT1:CONT ON")
             self.session.write(":TRIG:SOUR immediate")
-            self.session.write("SENS:SWE:GRO:COUN 4") #{}".format(str(self.average))) # "+str(self.average))
+            self.session.write("SENS:SWE:GRO:COUN 4") # # "+str(self.average))
             print("ok")
+
             
 
             self.session.write("SENS:SWE:MODE GRO;*OPC?")
 
             self.session.write(":CALC:PAR:SEL 'CH1_S11_1'")
+            print(self.session.query(";*OPC?"))
             print("Start")
-            print(self.session.query(":CALC:DATA:SNP:PORT:SAVE '{}', '{}.s{}p';*OPC?".format(str([i for i in range(1,portNum+1)])[1:-1], "Y:\\"+testName, portNum)))
-
+            self.session.write(":CALC:DATA:SNP:PORT:SAVE '{}', '{}.s{}p'".format(str([i for i in range(1,portNum+1)])[1:-1], "Y:\\"+testName, portNum))
+            print(self.session.query(";*OPC?"))
             #rm.list_resources()
 
 
