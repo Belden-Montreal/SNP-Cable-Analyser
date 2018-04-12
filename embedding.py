@@ -26,6 +26,9 @@ class Embedding(SNPManipulations):
 
         self.workbook = xlsxwriter.Workbook(self.testName+".xlsx")
 
+        self.k1 = 5e-12     #Pair Shorting jack 12, 45, 78
+        self.k2 = 14e-12    #Pair Shorting jack 36
+        self.k3 = 20e-12    #Thru calibration 
 
     def getOpenDelay(self):
         '''
@@ -89,10 +92,10 @@ class Embedding(SNPManipulations):
             f500 = list(self.openSample.freq).index(500000000)
             print("f100 ", f100)
             openAvg = np.mean(openDelay[pair][f100:f500])
-            shortAvg = np.mean(shortDelay[pair][f100:f500]) + 85e-12
+            shortAvg = np.mean(shortDelay[pair][f100:f500]) 
 
 
-            self.plugDelay[pair] = ((openAvg + shortAvg)/4) - self.directFixtureDelay[pair]
+            self.plugDelay[pair] = ((openAvg + shortAvg - self.k1 - self.k2) /4) - self.directFixtureDelay[pair] + self.k3
 
             
         return self.plugDelay
@@ -229,26 +232,28 @@ class Embedding(SNPManipulations):
 
         self.openSample = openSNP
         self.shortSample = shortSNP
-        
+        self.loadSample = loadSNP
+
         openDelay = self.getOpenDelay()
         shortDelay = self.getShortDelay()
 
         pairs = openDelay.keys() #Get list of pairs (This is the same as shortDelay)
         freq = self.openSample.freq   #Get the list of frequencies (This is the same as the shortSample)
         num_samples = len(freq)
-               
+        self.matedNextNoCorrection = {}
         for pair in pairs:
             f100 = list(self.openSample.freq).index(100400400.4004)
             f500 = list(self.openSample.freq).index(500000000)
             print("f100 ", f100)
             openAvg = np.mean(openDelay[pair][f100:f500])
-            shortAvg = np.mean(shortDelay[pair][f100:f500]) + 80e-12
+            shortAvg = np.mean(shortDelay[pair][f100:f500]) 
             print(self.correctedPlugVector.keys())
             #correctedPlug = np.mean(self.correctedPlugVector[pair][f100:f500])
 
 
-            self.jackDelay[pair] = ((openAvg + shortAvg)/4) # - correctedPlug
-
+            self.jackDelay[pair] = ((openAvg + shortAvg - self.k1 - self.k2 )/4)  - self.plugDelay[pair] + self.k3
+            
+            
         self.jackNextDelay["12-36"] = self.jackDelay["12"] + self.jackDelay["36"]
         self.jackNextDelay["45-12"] = self.jackDelay["12"] + self.jackDelay["45"]
         self.jackNextDelay["12-78"] = self.jackDelay["12"] + self.jackDelay["78"]
@@ -257,9 +262,9 @@ class Embedding(SNPManipulations):
         self.jackNextDelay["45-78"] = self.jackDelay["45"] + self.jackDelay["78"]
 
         self.matedNextNoCorrection = self.loadSample.getNEXT(self.loadSample.dd, z=True)
-
+        
         self.jackVector = {}
-
+        
         for key in self.matedNextNoCorrection.keys():
             self.jackVector[key] = []
             for f in range(0, len(self.matedNextNoCorrection[key])):
@@ -496,7 +501,7 @@ class Embedding(SNPManipulations):
         if cat == "6A" or cat == "6":
             self.plug1  = lambda f: (-(38.1-20*np.log10((f/1e6)/100)), np.angle(self.correctedPlugVector["45-36"][list(self.loadSample.freq).index(f)], deg=True))
             self.plug2  = lambda f: (-(38.6-20*np.log10((f/1e6)/100)), np.angle(self.correctedPlugVector["45-36"][list(self.loadSample.freq).index(f)], deg=True))
-            self.plug3  = lambda f: (-(39.0 -20*np.log10((f/1e6)/100)), np.angle(self.correctedPlugVector["45-36"][list(self.loadSample.freq).index(f)], deg=True))
+            self.plug3  = lambda f: (-(39.196987322793674 -20*np.log10((f/1e6)/100)), np.angle(self.correctedPlugVector["45-36"][list(self.loadSample.freq).index(f)], deg=True))
             self.plug4  = lambda f: (-(39.5-20*np.log10((f/1e6)/100)), np.angle(self.correctedPlugVector["45-36"][list(self.loadSample.freq).index(f)], deg=True))
             self.plug5  = lambda f: (-(46.5-20*np.log10((f/1e6)/100)), np.angle(self.correctedPlugVector["12-36"][list(self.loadSample.freq).index(f)], deg=True)) 
             self.plug6  = lambda f: (-(49.5-20*np.log10((f/1e6)/100)), np.angle(self.correctedPlugVector["12-36"][list(self.loadSample.freq).index(f)], deg=True))
@@ -559,7 +564,7 @@ class Embedding(SNPManipulations):
 
         f500 = list(self.openSample.freq).index(500000000)
 
-        case = 1
+        case = 3
 
         print("Reembed case 3 : ", 20*np.log10(np.abs(self.reembeded[case][f100])))
         print("Plug Vector: ", 20*np.log10(np.abs(self.correctedPlugVector["45-36"][f100])))
@@ -579,16 +584,17 @@ class Embedding(SNPManipulations):
         plt.semilogx(x, lim ,  label = "plug Vector case")
         
         plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=5,
-                   ncol=2, borderaxespad=1)
+                   ncol=2, borderaxespad=2)
         plt.ylabel('mag')
         
         plt.subplot(212)
         plt.semilogx(x, np.angle(self.reembeded[case], deg=True), label = "angle")
+        plt.semilogx(x, np.angle(self.correctedPlugVector[key], deg=True), label = "Phase Plug")
         
         lim = [plug_case(i)[1] for i in x]
         plt.semilogx(x, lim ,  label = "limit")
         plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=5,
-                   ncol=2,  borderaxespad=1)
+                   ncol=2,  borderaxespad=2)
         plt.ylabel('deg')
         plt.ion()
 
@@ -639,11 +645,11 @@ if __name__ == "__main__":
 
     plugDirectFixtureShort = "snps\DEEMBED TEST\DirectFixPlugShort.s8p"
     plugDirectFixtureOpen = "snps\DEEMBED TEST\DirectFixPlugOpen.s8p"
-    plugDirectFixtureLoad = "snps\DEEMBED TEST\DirectFixPlug.s8p"
+    plugDirectFixtureLoad = "snps\DEEMBED TEST\DirectFixPlugLoad2.s8p"
 
     plugJackLoad = "snps\DEEMBED TEST\MatingPlugJackForward.s8p"
 
-    jackPlugReverse = "snps\DEEMBED TEST\MatingPlugJackReverse.s8p"
+    jackPlugReverse = "snps\DEEMBED TEST\MatingPlugJacktReverse.s8p"
     jackPlugOpen = "snps\DEEMBED TEST\MatingPlugJackOpen.s8p"
     jackPlugShort = "snps\DEEMBED TEST\MatingPlugJackShort.s8p"
 
@@ -651,6 +657,9 @@ if __name__ == "__main__":
     em.getPlugDelay(plugDirectFixtureOpen, plugDirectFixtureShort)
     em.getPlugNextDelay()
     em.correctPlugVector(plugDirectFixtureLoad)
+
+
+    
     #em.getJackVector(plugJackLoad)
     em.getJackVectorReverse(jackPlugOpen, jackPlugShort, jackPlugReverse)
     
