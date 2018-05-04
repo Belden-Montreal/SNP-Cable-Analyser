@@ -261,6 +261,12 @@ class SNPManipulations(rf):
 
 
     def getPSFEXT(self, matrix):
+
+        if self.one_sided: #if the test setup is one sided, then there can be no
+                           #FEXT  because there is no other side for
+                           #the signal to go through
+            return {}
+            
         FEXT_db = self.getFEXT(matrix, z=False) #First, we start by calculating the FEXT in db. We do this regardless of wether it has already been done.
 
         self.PSFEXT_dict = {}
@@ -275,11 +281,9 @@ class SNPManipulations(rf):
 
         for f in range(0, self.num_samples):
             for k in range(0, numPorts):
-                PSk = 10*np.log10(np.sum([10**(FEXT_db[key][f]/10) for key in keys if (key.split("-")[0] == self.port_name[k] or key.split("-")[1] == self.port_name[k]) ]))
+                PSk = 10*np.log10(np.sum([10**(FEXT_db[key][f]/10) for key in keys if (key.split("-")[0] == self.port_name[k] ) ]))
                 self.PSFEXT_dict[self.port_name[k]].append(PSk)
                     
-
-
                 #PSNEXT_side2 = 10*np.log10(np.sum([10**-(NEXT_db[self.port_name[k+numPorts/2] + "-" + self.port_name[i]])/10 for i in range(numPorts/2, numPorts) if i < k]))
                 #self.PSNEXT_dict[self.port_name[k+numPorts/2]].append(PSNEXT_side2)
 
@@ -294,6 +298,12 @@ class SNPManipulations(rf):
         To do this, I will simply take each FEXT that has been calculated, extract the disturbed pair (k),
         and subract by IL_k.
         '''
+
+        if self.one_sided: #if the test setup is one sided, then there can be no
+                           #ACRF  because there is no other side for
+                           #the signal to go through
+            return {}
+            
         
         FEXT_db = self.getFEXT(matrix, z=False) #First, we start by calculating the FEXT in db. We do this regardless of wether it has already been done.
         IL_db = self.getIL(matrix, z=False, full=True) #First, we start by calculating the IL in db. We do this regardless of wether it has already been done.
@@ -322,12 +332,12 @@ class SNPManipulations(rf):
 
     def getPSACRF(self, matrix):
 
-        self.PSACRF_dict = {}
-        ACRF = self.getACRF(matrix)
+        '''self.PSACRF_dict = {}
+        PSFEXT = self.getPSFEXT(matrix)
 
         #Then we get a list of all the port names as well as a list of all the ACRF names
         port_names = [names for names in self.port_name.values()]
-        ACRF_names = [names for names in ACRF.keys()]
+        PSFEXT_names = [names for names in ACRF.keys()]
 
         #We establish dicitonairy keys and initialize arrays
         for k in port_names:
@@ -341,9 +351,77 @@ class SNPManipulations(rf):
                 ACRF_k = [ACRF[i][f] for i in ACRF if i.split("-")[0] == k]
                 #print ACRF_k
                 PSACRF_k = np.sum(ACRF_k)
-                self.PSACRF_dict[k].append(PSACRF_k)
+                self.PSACRF_dict[k].append(PSACRF_k)'''
+        if self.one_sided: #if the test setup is one sided, then there can be no
+                           #ACRF  because there is no other side for
+                           #the signal to go through
+            return {}
+            
+        
+        PSFEXT_db = self.getPSFEXT(matrix) #First, we start by calculating the FEXT in db. We do this regardless of wether it has already been done.
+        IL_db = self.getIL(matrix, z=False, full=True) #First, we start by calculating the IL in db. We do this regardless of wether it has already been done.
+
+        print(IL_db.keys())
+        PSFEXT_keys = PSFEXT_db.keys()
+        
+        self.PSACRF_dict = {}
+        numPorts = self.getNumPorts(matrix)
+        #Establish dicitonairy keys and initialize arrays
+        for key in PSFEXT_keys:
+            #print str(j)
+            self.PSACRF_dict[key] = []
+
+        #Populate dictionairy
+        #self.PSNEXT_dict[self.port_name[0]] = []
+
+        for f in range(0, self.num_samples):
+            for key in PSFEXT_keys:
+                PSACRFk =PSFEXT_db[key][f] - IL_db[key][f]
+                self.PSACRF_dict[key].append(PSACRFk)     
 
         return self.PSACRF_dict
+
+
+
+    """
+    def getACRN(self, matrix):
+        '''
+        The caluclaation of the ACRN is simply the subtraction of the NEXT and IL.
+        To do this, I will simply take each NEXT that has been calculated, extract the disturbed pair (k),
+        and subract by IL_k.
+        '''
+
+        if self.one_sided: #if the test setup is one sided, then there can be no
+                           #ACRF  because there is no other side for
+                           #the signal to go through
+            return {}
+            
+        
+        NEXT_db = self.getNEXT(matrix, z=False) #First, we start by calculating the NEXT in db. We do this regardless of wether it has already been done.
+        IL_db = self.getIL(matrix, z=False, full=True) #First, we start by calculating the IL in db. We do this regardless of wether it has already been done.
+
+
+        NEXT_keys = NEXT_db.keys()
+        
+        self.ACRN_dict = {}
+        numPorts = self.getNumPorts(matrix)
+        #Establish dicitonairy keys and initialize arrays
+        for key in NEXT_keys:
+            #print str(j)
+            self.ACRN_dict[key] = []
+
+        #Populate dictionairy
+        #self.PSNEXT_dict[self.port_name[0]] = []
+
+        for f in range(0, self.num_samples):
+            for key in NEXT_keys:
+                k = key.split("-")[0]
+                ACRFk = FEXT_db[key][f] - IL_db[k][f]
+                self.ACRF_dict[key].append(ACRFk)       
+        
+
+        return self.ACRF_dict
+    """
 
     def getELTCTL(self):
 
@@ -382,6 +460,7 @@ class SNPManipulations(rf):
             self.DELAY_dict[key] = []
 
         phase = []
+        
         '''
         #We calculate for each frequency
         #for f in range(0, self.num_samples):

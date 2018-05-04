@@ -1,11 +1,15 @@
 from Sample import Sample
+from alien import Alien
 
+from embedding2 import Embedding
 
 import threading
 from PyQt5 import QtWidgets, QtGui
 import time
 
 import xlsxwriter
+import os
+import subprocess
 
 class Project: #Put (object) later
 
@@ -15,14 +19,12 @@ class Project: #Put (object) later
         self.activeMeasurements = []
     
     def importSNP(self, samples):
-        #options = QtWidgets.QFileDialog.Options()
-        #options |= QtWidgets.QFileDialog.DontUseNativeDialog        
-        #samples, _ = QtWidgets.QFileDialog.getOpenFileNames(self,"QFileDialog.getOpenFileNames()", "","sNp Files (*.s*p)", options=options)
+
         if len(samples) == 0:
             return -1
             
         start_time = time.time()
-        #TODO: add file dialog to select snp files. 
+
         threads = []
         num_meas = len(self.measurements)
     
@@ -35,6 +37,7 @@ class Project: #Put (object) later
             threads.append(t)
             t.start()
             print("starting")
+            
         for t in threads:
             print("done")
             t.join()
@@ -44,8 +47,26 @@ class Project: #Put (object) later
 
         #TODO: Add selected samples
 
-    def vnaAcquire(self):
-        pass
+    def delete(self, samples):
+        for sample in samples:
+            sample = self.getSampleByName(sample)
+
+            print("Sample Name:" , sample)
+            for idx, measurement in enumerate(self.measurements):
+                if measurement is sample:
+                    print(idx)
+                    del self.measurements[idx]
+
+            #print("Sample Index:", sample.ref )
+            
+
+    def addEmbed(self, testName):
+        self.measurements.append(Embedding(testName))
+
+
+    def addAlien(self, testName):              
+ 
+        self.measurements.append(Alien(testName))
 
     def setStandard(self, *args):
         pass
@@ -53,10 +74,7 @@ class Project: #Put (object) later
     def assignPorts(self, *args):
         pass
 
-    def calibrate(self, *args):
-        pass
-
-    def generateReport(self, *args):
+    def generatePdf(self, *args):
         pass
 
     def addLimit(self):
@@ -114,7 +132,7 @@ if __name__ == '__main__':
     proj1.importSNP([r"snps\TestPCLiam3.s8p", r"snps\TestPCLiam4.s8p"])
 
     print(proj1.getSampleByName(u"TestPCLiam3"))
-    proj1.generateExcel(["TestPCLiam3","TestPCLiam4"])
+    proj1.generateExcel("test1.xlsx", ["TestPCLiam3","TestPCLiam4"])
 
 
     

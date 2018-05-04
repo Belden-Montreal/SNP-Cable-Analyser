@@ -5,7 +5,10 @@ import time
 
 class Sample(SNPManipulations):
 
+    '''This class handles the SNP samples for the basic test'''
+
     def __init__(self, snpFile, one_sided = None):
+
 
         self.snpFile = snpFile
 
@@ -33,6 +36,7 @@ class Sample(SNPManipulations):
 
         self.port_name = {}
         self.pair_combo = ["45", "12","36","78"]
+        
         if self.one_sided:
             for i in range(0, self.getNumPorts(self.dd)):
                 self.port_name[i] = self.pair_combo[i]  #{0:"12", 1:"36", 2:"45", 3:"78"}
@@ -44,7 +48,7 @@ class Sample(SNPManipulations):
                 self.port_name[i] = "(r)"+self.pair_combo[i-self.getNumPorts(self.dd)//2]  #{4:"(r)12",  :"(r)36", 6:"(r)45", 7:"(r)78", 0:"12", 1:"36", 2:"45", 3:"78"}
             self.parameters = ["RL", "IL", "NEXT", "Propagation Delay", "PSNEXT","FEXT", "PSFEXT", "ACRF", "PSACRF", "LCL", "LCTL", "TCL", "TCTL", "ELTCTL","CMRL", "CMNEXT", "CMDMNEXT", "CMDMRL", "DMCMNEXT", "DMCMRL"]
 
-
+            
 
         #print self.port_name
         
@@ -61,7 +65,7 @@ class Sample(SNPManipulations):
     def getParameters(self, z=False):
 
         self.RL = self.getRL(self.dd, z)
-        self.IL = self.getIL(self.dd, z)
+        self.IL = self.getIL(self.dd, z )
         self.NEXT = self.getNEXT(self.dd, z)
         self.PropagationDelay = self.getPropagationDelay()
 
@@ -90,6 +94,11 @@ class Sample(SNPManipulations):
     def reCalc(self, one_sided = None):
         self.__init__(self.snpFile, one_sided)
         self.getParameters()
+        
+
+    def __retr__(self):
+        return "SNP"
+        
   
 
 if __name__ == "__main__":

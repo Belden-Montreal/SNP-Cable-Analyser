@@ -119,9 +119,12 @@ class Communication(object):
         except visa.Error as ex:
             print(ex)
 
+        
+
     def close(self):
         self.session.close()
         self.rm.close()
+
 
  
 if __name__ == '__main__':

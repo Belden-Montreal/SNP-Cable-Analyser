@@ -12,6 +12,9 @@ class Embedding(SNPManipulations):
 
     def __init__(self):
 
+
+
+        
         self.directFixtureDelay = {}
         self.plugDelay = {}
         self.plugNextDelay = {}
@@ -24,7 +27,7 @@ class Embedding(SNPManipulations):
         self.plugName = "TestPlug"
         self.jackName = "TestJack"
 
-        self.workbook = xlsxwriter.Workbook(self.testName+".xlsx")
+        self.workbook = xlsxwriter.Workbook(self.testName + ".xlsx")
 
         self.k1 = 5e-12     #Pair Shorting jack 12, 45, 78
         self.k2 = 14e-12    #Pair Shorting jack 36
@@ -94,10 +97,8 @@ class Embedding(SNPManipulations):
             openAvg = np.mean(openDelay[pair][f100:f500])
             shortAvg = np.mean(shortDelay[pair][f100:f500]) 
 
+            self.plugDelay[pair] = ((openAvg + shortAvg - self.k1 - self.k2) / 4) - self.directFixtureDelay[pair] + self.k3
 
-            self.plugDelay[pair] = ((openAvg + shortAvg - self.k1 - self.k2) /4) - self.directFixtureDelay[pair] + self.k3
-
-            
         return self.plugDelay
     
 
@@ -113,7 +114,6 @@ class Embedding(SNPManipulations):
 
         return self.plugNextDelay
     
-
     def correctPlugVector(self, loadSNP):
         
         self.loadSample = loadSNP
@@ -130,7 +130,7 @@ class Embedding(SNPManipulations):
                 #Using the old phase and the delay, we will calculate the corrected phase
                 phase_corrected = phase_calib + 360 * self.loadSample.freq[f] * self.plugNextDelay[key]
 
-                if(key == "45-36" and self.loadSample.freq[f]== 100400400.4004):
+                if(key == "45-36" and self.loadSample.freq[f] == 100400400.4004):
                     print("freq: ", self.loadSample.freq[f])
                     print("Next No corr : ", plugNextNoCorrection[key][f])
                     print("Correct Plug Phase :", phase_corrected)
@@ -193,7 +193,7 @@ class Embedding(SNPManipulations):
 
             curPos += 2
 
-        '''WRTIE TO EXCEL REAL IMAG'''
+        ''' WRTIE TO EXCEL REAL IMAG '''
 
         worksheet = self.workbook.add_worksheet("Plug Corrected Z")
 
@@ -516,8 +516,8 @@ class Embedding(SNPManipulations):
 
         elif cat == "5":
             self.plug1  = lambda f: (-35.8- 20 * np.log10((f/1e6)/100), np.angle(self.correctedPlugVector["45-36"][list(self.loadSample.freq).index(f)], deg=True)) 
-            self.plug2  = lambda f:([], [])
-            self.plug3  = lambda f:([], [])
+            self.plug2  = lambda f: ([], [])
+            self.plug3  = lambda f: ([], [])
             self.plug4  = lambda f: (-39.5- 20 * np.log10((f/1e6)/100), np.angle(self.correctedPlugVector["45-36"][list(self.loadSample.freq).index(f)], deg=True)) 
             self.plug5  = lambda f: (-42.0- 20 * np.log10((f/1e6)/100), np.angle(self.correctedPlugVector["12-36"][list(self.loadSample.freq).index(f)], deg=True)) 
             self.plug6  = lambda f: (-50.0- 20 * np.log10((f/1e6)/100), np.angle(self.correctedPlugVector["12-36"][list(self.loadSample.freq).index(f)], deg=True))
@@ -531,13 +531,11 @@ class Embedding(SNPManipulations):
             self.plug14 = lambda f:([], [])
             
     def reembed(self):
-        
+
         self.setLimit("6A")
         self.setPlugVectors("6A")
         self.reembeded = {}
 
-        
-        
         for i in range(1,15):
             #First, we will declare the reembeded array
             self.reembeded[i] = []
@@ -564,7 +562,7 @@ class Embedding(SNPManipulations):
 
         f500 = list(self.openSample.freq).index(500000000)
 
-        case = 3
+        case = 4
 
         print("Reembed case 3 : ", 20*np.log10(np.abs(self.reembeded[case][f100])))
         print("Plug Vector: ", 20*np.log10(np.abs(self.correctedPlugVector["45-36"][f100])))
@@ -572,6 +570,7 @@ class Embedding(SNPManipulations):
 
         x = self.openSample.freq
         lim = [plug_case(i)[0] for i in x]
+        
         key = ["45-36", "45-36", "45-36", "45-36", "12-36", "12-36", "36-78", "36-78", "45-12", "45-12", "45-78", "45-78", "12-78", "12-78"][case-1]
 
         plt.figure(1)
@@ -660,8 +659,8 @@ if __name__ == "__main__":
 
 
     
-    #em.getJackVector(plugJackLoad)
-    em.getJackVectorReverse(jackPlugOpen, jackPlugShort, jackPlugReverse)
+    em.getJackVector(plugJackLoad)
+    #em.getJackVectorReverse(jackPlugOpen, jackPlugShort, jackPlugReverse)
     
     em.reembed()
     

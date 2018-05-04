@@ -177,7 +177,7 @@ Press Next once you've done so'''.format(attach,  str(self.thruOneEnd[attach][se
 
     def Thru2E(self, attach, seq):   #Thru 2 end
         page = QtWidgets.QWizardPage()
-        page.setTitle("Thru Two end, {},{}".format(attach, seq))
+        page.setTitle("Thru Two end,{},{}".format(attach, seq))
         self.label = QtWidgets.QLabel('''Insert Thru artifact {} To make connections
 
 {}
@@ -191,6 +191,8 @@ Press Next once you've done so'''.format(attach,  str(self.thruTwoEnd[attach][se
         layout.addWidget(self.thru2EButton)
 
         page.setLayout(layout)
+
+        print("Cal here")
 
         self.thruOut = self.thruTwoEnd[attach][seq]
 

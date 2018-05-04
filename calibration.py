@@ -5,10 +5,10 @@ class Calibration(object):
         self.openMeasured = False
         self.shortMeasured = False
         self.loadMeasured = False
-        ports = session.query("SYST:CAL:ALL:GUID:PORT?").replace("+","")
-        print(len(ports.split(",")))
-        self.numPorts = len(ports.split(","))*2
-        self.numPorts = 8
+        ports = session.query("SOUR:CAT?").split(',')
+        #print(ports)
+        self.numPorts = len(ports)
+        print("Num ports = ", self.numPorts)
         self.session = session #the communication session must already be opened
         #self.numPorts = session.query("SYST:CHAN:CAT?")
         #print(self.numPorts)
@@ -239,7 +239,8 @@ if __name__ == "__main__":
     rm = visa.ResourceManager()
     session = rm.open_resource(VISA_ADDRESS)
     session.timeout = timeout
-
+    print(session.query("*IDN?"))
+    print(session.query("SOUR:CAT?"))
             
     cal = Calibration(session)
     cal.getInstructions()
