@@ -11,6 +11,7 @@ import xlsxwriter
 import os
 import subprocess
 
+
 class Project: #Put (object) later
 
     def __init__(self):
@@ -62,6 +63,7 @@ class Project: #Put (object) later
 
     def addEmbed(self, testName):
         self.measurements.append(Embedding(testName))
+        
 
 
     def addAlien(self, testName):              

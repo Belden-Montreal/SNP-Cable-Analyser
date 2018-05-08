@@ -40,8 +40,12 @@ from Project import Project
 
 from calWizard import CalWizard
 
-class ExampleApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, QtWidgets.QFileDialog, QtWidgets.QListView, QtWidgets.QDialog, QtCore.Qt):
+class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, QtWidgets.QFileDialog, QtWidgets.QListView, QtWidgets.QDialog, QtCore.Qt):
 
+    '''
+    This class handles all of the user sent commands from the GUI.   
+
+    '''
 
     def __init__(self):
 
@@ -51,7 +55,7 @@ class ExampleApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, Qt
         fileMenu = self.actionImport_SnP
         newProject = self.actionNew_Project
 
-        #Initialize sample sample Table
+        #Initialize sample sample Table 
         self.sampleTable.setColumnCount(3)
         self.sampleTable.setHorizontalHeaderLabels(["Name","Date", "Limit"])
         self.sampleTable.setSortingEnabled(True)
@@ -67,25 +71,36 @@ class ExampleApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, Qt
 
         #Initialize plot parameters
 
+        self.activeParameter = "Main" #We want the the first sample tab to display to be the Main tab.
+                                                                            
 
-        self.activeParameter = "Main"
-
-        nav = NavigationToolbar(self.graphicsView, self)
+        nav = NavigationToolbar(self.graphicsView, self)  #Sets up the menu at the bottom of the GUI which lets us interact with the matplotlib plots
         self.verticalLayout_3.addWidget(nav)
 
-        arguments = sys.argv[1:]
+
+        #Here, we process any arguments that might be sent the program from outside of the interface.
+        #In other words, when ever a user right click on an SNP files, rather than opening them in Notepad, it would be opened in this interface.
+        arguments = sys.argv[1:] 
+        
         if len(arguments):
             self.Project.importSNP(arguments)
             self.displaySamplesInTable()
+            
 
     def importSnp(self):
+        #Whenever the user clicks on the import SNP button, it opens a file dialog
         self.openFileNamesDialog()
 
 
     def addEmbed(self):
-        
-        self.Project.addEmbed("Test_Deembed")
-        self.displaySamplesInTable()
+        testName, result = QtWidgets.QInputDialog.getText(self, "Add an Embedded Sample",
+                                                                "Please enter a sample name")
+        if result and len(testName) > 1 and not testName.isspace():
+            print("%s!" % testName)
+            self.Project.addEmbed(testName)
+            self.displaySamplesInTable()
+        else:
+            return
         
     def addAlien(self):
 
@@ -93,10 +108,12 @@ class ExampleApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, Qt
         self.displaySamplesInTable()
 
     def newProject(self):
+        
         self.Project = Project()
         self.sampleTable.setRowCount(0);
 
     def deleteSample(self):
+        
         self.Project.delete(self.selected)
         self.displaySamplesInTable()
         self.setActiveSample()
@@ -110,19 +127,25 @@ class ExampleApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, Qt
         self.selected = []
         for i in self.sampleTable.selectionModel().selectedRows():
             self.selected.append(self.sampleTable.item(i.row(),0).text())
-        self.Project.activeSample = self.selected
         #print self.selected
+        if len(self.selected) >= 1:
+            self.Project.activeSample = self.selected
+           
+        
         if len(self.selected) == 1:  #Since only one sample can be displayed at a time
+
             if self.Project.getSampleByName(self.selected[0]).__retr__() == "Alien":
                 self.setupAlien()
 
             elif self.Project.getSampleByName(self.selected[0]).__retr__() == "Embed":
                 self.setupEmbed()
+
             else:
                 self.displaySampleParams(self.selected)
         
-        elif len(self.selected) > 1:
+        elif len(self.selected) > 1 or len(self.selected) < 1:
             self.displaySampleParams(None)
+
 
     def displaySamplesInTable(self):
         measurementCount = len(self.Project.measurements)
@@ -288,7 +311,12 @@ class ExampleApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, Qt
 
         if activeParameter != "Embedding Main":
             self.graphicsView.figure.clear()
+
+            if activeParameter not in embededParams.keys():
+                return
+            
             ax=self.graphicsView.figure.add_subplot(111)
+            
             color=iter(cm.rainbow(np.linspace(0,1,len(embededParams[activeParameter]))))
             for case in embededParams[activeParameter]:
                 c = next(color)
@@ -506,7 +534,7 @@ class ExampleApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, Qt
 
         options = self.Options()
         options |= self.DontUseNativeDialog
-        files, _ = self.getOpenFileNames(self,"Select SNP(s)", "","sNp Files (*.s*p)", options=options)
+        files, _ = self.getOpenFileNames(self, "Select SNP(s)", "","sNp Files (*.s*p)", options=options)
         #print files
         print(files)
         self.Project.importSNP(files)
@@ -646,7 +674,7 @@ class ExampleApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, Qt
         if sample == None:
             self.param_tabs.clear()
             return
-
+        
         self.param_tabs.clear()
 
         #print sample
@@ -663,7 +691,7 @@ class ExampleApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, Qt
         self.tab_list.append(self.mainTab)
 
         for param in self.sample.parameters:
-            #print param
+            #print(param)
             self.new_tab = QtWidgets.QWidget()
             self.tab_list.append(self.new_tab)
             self.param_tabs.addTab(self.new_tab, param)
@@ -684,8 +712,10 @@ class ExampleApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, Qt
         self.tab_index = self.param_tabs.currentIndex()
         self.activeParameter = self.param_tabs.tabText(self.tab_index)
         print(self.activeParameter)
-        sample = self.Project.getSampleByName(self.selected[0])
-
+        if self.selected:
+            sample = self.Project.getSampleByName(self.selected[0])
+        else:
+            return
         #print index
         
         if self.tab_index >= 1:
@@ -703,7 +733,8 @@ class ExampleApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, Qt
             if addr:
                 try:
                     print("before")
-                    self.comm = Communication(addr)
+                    self.comm = Communication()
+                    self.comm.connectToVNA(addr)
                     print("done")
                     connected = True
                     self.actionWho_am_I.setEnabled(True)
@@ -716,7 +747,7 @@ class ExampleApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, Qt
                     self.actionConnect.setEnabled(False)
 
                 except Exception as e:
-                    print(e)
+                    print("Error: ",e)
             else:
                 break
 
@@ -736,7 +767,6 @@ class ExampleApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, Qt
                 self.actionDisconnect.setEnabled(False)
                 self.actionRun.setEnabled(False)
                 self.actionConnect.setEnabled(True)
-
             except Exception as e:
                 print(e)
 
@@ -776,9 +806,12 @@ class ExampleApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, Qt
 
 class Addr_Dialog:
     def getAddr(self):
+        comm = Communication()
         dialog = QtWidgets.QDialog()
         addr_dialog = VNA_addr_dialog.Ui_Addr_Dialog()
         addr_dialog.setupUi(dialog)
+        addr_dialog.plainTextEdit.setPlainText(comm.VNAAddress)
+
         result = dialog.exec_()
         print("here")
         if not result:
@@ -792,11 +825,26 @@ class Addr_Dialog:
 
 class Test_Params_Dialog:
     def getParams(self):
+
+        comm = Communication()
+        
         dialog = QtWidgets.QDialog()
         params_dialog = TestParameters.Ui_TestParameterDialog()
         params_dialog.setupUi(dialog)
+        print("NEXT ID: ", comm.getNextID(comm.test_name))
+        params_dialog.testNameLineEdit_2.setText(comm.getNextID(comm.test_name)) 
+        params_dialog.iFBandwidthLineEdit.setText(str(comm.IF))
+        params_dialog.startFrequencyLineEdit.setText(str(comm.min_freq))
+        params_dialog.stopFrequencyLineEdit.setText(str(comm.max_freq))
+        params_dialog.numberOfPointsLineEdit.setText(str(comm.num_points))
+        params_dialog.numberOfPortsLineEdit.setText(str(comm.port_num))
+        params_dialog.numberOfAverageLineEdit.setText(str(comm.average))
+        params_dialog.timeoutLineEdit.setText(str(comm.timeout))
+
         result = dialog.exec_()
 
+
+        
         if not result:
             return 0
         if result:
@@ -824,7 +872,7 @@ def main():
     splash.show()
 
     #time.sleep(10)
-    form = ExampleApp()  # We set the  form to be our ExampleApp (design)
+    form = BeldenSNPApp()  # We set the  form to be our ExampleApp (design)
 
     form.show()  # Show the form
 
