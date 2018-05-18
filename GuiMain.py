@@ -672,7 +672,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
             elif action == exportExcel:
                 print(self.selected)
                 file, _ = self.getSaveFileName(self,"Export Excel Repport", "","Excel File (*.xlsx)")
-                self.Project.generateExcel(file , self.selected)
+                self.Project.generateExcel(file , self.selected, True)
 
             elif action == delete:
                 self.deleteSample()
