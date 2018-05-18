@@ -7,6 +7,7 @@ import configparser
 import re
 import os
 
+
 class Communication(object):
 
     def __init__(self):
@@ -65,7 +66,7 @@ class Communication(object):
     @property
     def max_freq(self):
         try:
-            return int(self.config['comm_settings']['max_freq'])
+            return int(float(self.config['comm_settings']['max_freq']))
         except Exception as e:
             return ''
 
@@ -76,7 +77,7 @@ class Communication(object):
     @property
     def min_freq(self):
         try:
-            return int(self.config['comm_settings']['min_freq'])
+            return int(float(self.config['comm_settings']['min_freq']))
         except Exception as e:
             return ''
 
@@ -87,7 +88,7 @@ class Communication(object):
     @property
     def average(self):
         try:
-            return int(self.config['comm_settings']['average'])
+            return int(float(self.config['comm_settings']['average']))
         except Exception as e:
             return ''
 
@@ -98,7 +99,7 @@ class Communication(object):
     @property
     def IF(self):
         try:
-            return int(self.config['comm_settings']['if'])
+            return int(float(self.config['comm_settings']['if']))
         except Exception as e:
             return ''
             
@@ -110,7 +111,7 @@ class Communication(object):
     @property
     def num_points(self):
         try:
-            return int(self.config['comm_settings']['num_points']) 
+            return int(float(self.config['comm_settings']['num_points']))
         except Exception as e:
             return ''
         
@@ -150,7 +151,7 @@ class Communication(object):
     @property
     def timeout(self):
         try:
-            return int(self.config['comm_settings']['timeout'])
+            return int(float(self.config['comm_settings']['timeout']))
         except Exception as e:
             return ''
         

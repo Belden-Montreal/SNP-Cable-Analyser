@@ -25,6 +25,7 @@ class SNPManipulations(rf):
         self.one_sided = False
 
     def getRL(self, matrix, z=True ):
+        
         '''
         Get the Return Loss array in dd or cc mode.
         Use this function to get LCL in dc mode or TCL in cd mode.

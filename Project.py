@@ -115,6 +115,7 @@ class Project: #Put (object) later
                         worksheet.write(5+j,curPos+i, str(data))
         
                 curPos += numSignals
+                
         workbook.close()
 
 

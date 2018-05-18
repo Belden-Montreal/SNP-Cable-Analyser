@@ -87,7 +87,7 @@ class Embedding(SNPManipulations):
 
         pairs = openDelay.keys() #Get list of pairs (This is the same as shortDelay)
         self.freq = self.openSample.freq   #Get the list of frequencies (This is the same as the shortSample)
-        num_samples = len(freq)
+        num_samples = len(self.freq)
         for pair in pairs:
             #first Find 100MHz and 500MHz
             f100 = list(self.openSample.freq).index(100400400.4004)
@@ -366,60 +366,66 @@ class Embedding(SNPManipulations):
         f500 = list(self.loadSample.freq).index(500000000)
 
 
-    def addPlug(self, dfOpen, dfShort, pdfOpen, pdfShort, pdfLoad, plugName = "PlugTest" ):
+    def addPlug(self, dfOpen, dfShort, pdfOpen, pdfShort, pdfLoad, plugName = None ):
         '''
         This function is used to calculate the plug and export its data into a file
         df  -> Direct Fixture
         pdf -> Plug and Direct Fixture
         '''
 
-        if not os.path.isdir(self.plugFolder):
-            os.mkdir(self.plugFolder)
-        file = self.plugFolder + plugName + ".xml"
+
         
         
         directFixtureDelay = self.getDirectFixtureDelay(dfOpen, dfShort) #Dictionairy of the delay in seconds on each pair
 
         plugDelay = self.getPlugDelay(pdfOpen, pdfShort) #Dictionairy of the delay in seconds on each pair
         plugNextDelay = self.getPlugNextDelay() #Dictionairy of the delay in seconds on each pair combination ex.: {12-36, 12-45}
-        correctedPlugVector = self.correctPlugVector(plugDirectFixtureLoad) #Dictionairy of arrays of the corrected vector for the plug ex,: {12-36 : [...]}
+        print("plugDirectFixtureLoad, " , pdfLoad)
+        correctedPlugVector = self.correctPlugVector(pdfLoad) #Dictionairy of arrays of the corrected vector for the plug ex,: {12-36 : [...]}
 
         #Now we'll write to the xml file the plugs data as elements 
+        if plugName:
 
-        plug      = ET.Element("plug")
-        plug.set('name', plugName)  
+            if not os.path.isdir(self.plugFolder):
+                os.mkdir(self.plugFolder)
+            file = self.plugFolder + plugName + ".xml"
+            
+            plug      = ET.Element("plug")
+            plug.set('name', plugName)  
 
-        minFreq   = ET.SubElement(plug, "minFreq")
-        minFreq.text = str(self.minFreq)
-        
-        maxFreq   = ET.SubElement(plug, "maxFreq")
-        maxFreq.text = str(self.maxFreq)
-        
-        numPoints = ET.SubElement(plug, "numPoints")
-        numPoints.text = str(self.numPoints)
+            minFreq   = ET.SubElement(plug, "minFreq")
+            minFreq.text = str(self.minFreq)
+            
+            maxFreq   = ET.SubElement(plug, "maxFreq")
+            maxFreq.text = str(self.maxFreq)
+            
+            numPoints = ET.SubElement(plug, "numPoints")
+            numPoints.text = str(self.numPoints)
 
-        plugDelayElement = ET.SubElement(plug, "plugDelay")
+            plugDelayElement = ET.SubElement(plug, "plugDelay")
 
-        for key in plugDelay.keys():
-            pair = ET.SubElement(plugDelayElement, "pair_"+ key)
-            print(key)
-            pair.text = str(plugDelay[key])
+            for key in plugDelay.keys():
+                pair = ET.SubElement(plugDelayElement, "pair_"+ key)
+                print(key)
+                pair.text = str(plugDelay[key])
 
-        plugNextDelayElement = ET.SubElement(plug, "plugNextDelay")
-     
-        for key in plugNextDelay.keys():
-            pair = ET.SubElement(plugNextDelayElement, "Next_"+ key)
-            pair.text = str(plugNextDelay[key])
+            plugNextDelayElement = ET.SubElement(plug, "plugNextDelay")
+         
+            for key in plugNextDelay.keys():
+                pair = ET.SubElement(plugNextDelayElement, "Next_"+ key)
+                pair.text = str(plugNextDelay[key])
 
-        correctedPlugVectorElement = ET.SubElement(plug, "correctedPlugVector")
-        for key in correctedPlugVector.keys():
-            pair = ET.SubElement(correctedPlugVectorElement, "Next_"+key)
-            pair.text = str(correctedPlugVector[key])
+            correctedPlugVectorElement = ET.SubElement(plug, "correctedPlugVector")
+            for key in correctedPlugVector.keys():
+                pair = ET.SubElement(correctedPlugVectorElement, "Next_"+key)
+                pair.text = str(correctedPlugVector[key])
 
 
-        mydata = ET.tostring(plug)  
-        myfile = open(file, "wb")  
-        myfile.write(mydata)
+            mydata = ET.tostring(plug)  
+            myfile = open(file, "wb")  
+            myfile.write(mydata)
+
+        return correctedPlugVector
 
 
     def getPlugList(self):
