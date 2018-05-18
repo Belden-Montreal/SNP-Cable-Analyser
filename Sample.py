@@ -62,34 +62,61 @@ class Sample(SNPManipulations):
         self.limit = Limit()'''
         
 
-    def getParameters(self, z=False):
+    def getParameters(self):
 
-        self.RL = self.getRL(self.dd, z)
-        self.IL = self.getIL(self.dd, z )
-        self.NEXT = self.getNEXT(self.dd, z)
+        self.RL = self.getRL(self.dd, False)
+        self.IL = self.getIL(self.dd, False)
+        self.NEXT = self.getNEXT(self.dd, False)
         self.PropagationDelay = self.getPropagationDelay()
 
-        self.FEXT = self.getFEXT(self.dd, z)
+        self.FEXT = self.getFEXT(self.dd, False)
         self.PSNEXT = self.getPSNEXT(self.dd)
         self.PSFEXT = self.getPSFEXT(self.dd)
         self.ACRF = self.getACRF(self.dd)
         self.PSACRF = self.getPSACRF(self.dd)
 
-        self.LCL = self.getRL(self.dc, z)
-        self.LCTL = self.getIL(self.dc, z)
-        self.TCL = self.getRL(self.cd, z)
-        self.TCTL = self.getIL(self.cd, z)
+        self.LCL = self.getRL(self.dc, False)
+        self.LCTL = self.getIL(self.dc, False)
+        self.TCL = self.getRL(self.cd, False)
+        self.TCTL = self.getIL(self.cd, False)
         self.ELTCTL = self.getELTCTL()
 
-        self.CMRL =  self.getRL(self.cc, z) #commun mode Return Loss
-        self.CMNEXT =  self.getNEXT(self.cc, z) #commun mode NEXT
+        self.CMRL =  self.getRL(self.cc, False) #commun mode Return Loss
+        self.CMNEXT =  self.getNEXT(self.cc, False) #commun mode NEXT
 
-        self.CMDMNEXT =  self.getNEXT(self.cd, z) #commun mode NEXT
-        self.CMDMRL =  self.getRL(self.cd, z) #commun mode NEXT
+        self.CMDMNEXT =  self.getNEXT(self.cd, False) #commun mode NEXT
+        self.CMDMRL =  self.getRL(self.cd, False) #commun mode NEXT
 
-        self.DMCMNEXT    = self.getNEXT(self.dc, z)
-        self.DMCMRL      = self.getRL(self.dc, z)
+        self.DMCMNEXT    = self.getNEXT(self.dc, False)
+        self.DMCMRL      = self.getRL(self.dc, False)
         #print self.RL.keys()
+
+        #real and complex values
+        self.RLZ = self.getRL(self.dd)
+        self.ILZ = self.getIL(self.dd)
+        self.NEXTZ = self.getNEXT(self.dd)
+        self.PropagationDelayZ = self.getPropagationDelay()
+
+        self.FEXTZ = self.getFEXT(self.dd)
+        self.PSNEXTZ = self.getPSNEXT(self.dd)
+        self.PSFEXTZ = self.getPSFEXT(self.dd)
+        self.ACRFZ = self.getACRF(self.dd)
+        self.PSACRFZ = self.getPSACRF(self.dd)
+
+        self.LCLZ = self.getRL(self.dc)
+        self.LCTLZ = self.getIL(self.dc)
+        self.TCLZ = self.getRL(self.cd)
+        self.TCTLZ = self.getIL(self.cd)
+        self.ELTCTLZ = self.getELTCTL()
+
+        self.CMRLZ =  self.getRL(self.cc) #commun mode Return Loss
+        self.CMNEXTZ =  self.getNEXT(self.cc) #commun mode NEXT
+
+        self.CMDMNEXTZ =  self.getNEXT(self.cd) #commun mode NEXT
+        self.CMDMRLZ =  self.getRL(self.cd) #commun mode NEXT
+
+        self.DMCMNEXTZ    = self.getNEXT(self.dc)
+        self.DMCMRLZ      = self.getRL(self.dc)
 
     def reCalc(self, one_sided = None):
         self.__init__(self.snpFile, one_sided)
