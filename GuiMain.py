@@ -40,6 +40,8 @@ from Project import Project
 
 from calWizard import CalWizard
 
+from decimal import Decimal
+
 class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, QtWidgets.QFileDialog, QtWidgets.QListView, QtWidgets.QDialog, QtCore.Qt):
 
     '''
@@ -175,11 +177,28 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
         self.embedWidget.importShort.clicked.connect(self.importShort)
         self.embedWidget.importLoad.clicked.connect(self.importLoad)
         self.embedWidget.reembedButton.clicked.connect(self.reembed)
-
+        self.embedWidget.plugList.currentIndexChanged.connect(self.embedUpdatePlugDNEXT)
+        
         self.embedWidget.reverseCheckBox.toggled.connect(self.embedUpdateTab)
        
         self.embedUpdateTab()
-    
+
+    def embedUpdatePlugDNEXT(self):
+        embeddedSample = self.Project.getSampleByName(self.selected[0])
+
+        plugIndex = self.embedWidget.plugList.currentIndex()
+        plug = embeddedSample.getPlugList()[plugIndex]
+        plugFile = plug + ".xml"
+
+        embeddedSample.getPlugParams(plugFile)
+        print(embeddedSample.plugNextDelay)
+        self.embedWidget.dnext12_36.setText(str(embeddedSample.plugNextDelay["12-36"]))
+        self.embedWidget.dnext45_12.setText(str(embeddedSample.plugNextDelay["45-12"]))
+        self.embedWidget.dnext12_78.setText(str(embeddedSample.plugNextDelay["12-78"]))
+        self.embedWidget.dnext45_36.setText(str(embeddedSample.plugNextDelay["45-36"]))
+        self.embedWidget.dnext36_78.setText(str(embeddedSample.plugNextDelay["36-78"]))
+        self.embedWidget.dnext45_78.setText(str(embeddedSample.plugNextDelay["45-78"]))
+        
     def importOpen(self):
         embeddedSample = self.Project.getSampleByName(self.selected[0])
         embeddedSample.embeddedOpen = self.embedImportSNP()
@@ -203,9 +222,15 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
 
         embeddedSample.getPlugParams(plugFile)
 
+        embeddedSample.k1 = self.embedWidget.SJ_124578_LineEdit.text()
+        embeddedSample.k2 = self.embedWidget.sJ36LineEdit.text()
+        embeddedSample.k3 = self.embedWidget.thruCalibLineEdit.text()
+
+        print(embeddedSample.k1)
+
         if self.embedtestType == "Reverse":
             print(embeddedSample.embeddedOpen)
-            if embeddedSample.embeddedOpen.isspace() or  embeddedSample.embeddedShort.isspace() or embeddedSample.embeddedLoad.isspace():
+            if embeddedSample.embeddedOpen.isspace() or embeddedSample.embeddedShort.isspace() or embeddedSample.embeddedLoad.isspace():
                 msg = QtWidgets.QMessageBox()
                 msg.setIcon(QtWidgets.QMessageBox.Warning)
                 msg.setText("Make sure that you have selected an open, short and load sample")
@@ -236,9 +261,9 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
         #self.embedUpdateTab()
         '''self.embedPlugUpdate()'''
         
-        
+    
     def embedImportSNP(self):
-
+        
         options = self.Options()
         options |= self.DontUseNativeDialog
         file, _ = self.getOpenFileName(self, "QFileDialog.getOpenFileNames()", "","sNp Files (*.s*p)", options=options)
@@ -246,10 +271,14 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
         if file:
             return file
 
-        
     def embedUpdateTab(self):
-
         embeddedSample = self.Project.getSampleByName(self.selected[0])
+
+        plugIndex = self.embedWidget.plugList.currentIndex()
+        plug = embeddedSample.getPlugList()[plugIndex]
+        plugFile = plug + ".xml"
+
+        embeddedSample.getPlugParams(plugFile)
 
         self.embedWidget.openFileName.setText(embeddedSample.embeddedOpen)
         self.embedWidget.shortFileName.setText(embeddedSample.embeddedShort)
@@ -297,7 +326,11 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
             self.embedWidget.acquireOpen.setEnabled(False)
             self.embedWidget.importShort.setEnabled(False)
             self.embedWidget.acquireShort.setEnabled(False)
-    
+
+        self.embedWidget.SJ_124578_LineEdit.setText(str(embeddedSample.k1))
+        self.embedWidget.sJ36LineEdit.setText(str(embeddedSample.k2))
+        self.embedWidget.thruCalibLineEdit.setText(str(embeddedSample.k3))
+
 
     def embedPlotUpdate(self):
 
@@ -322,9 +355,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
                 c = next(color)
                 reembedingNum = int(case.replace("case", ""))
                 ax.semilogx(sample.freq, sample.reembeded[reembedingNum], label=case, c = c)
-
-                #print key
-
+                
             ax.legend(loc='upper left', ncol =  2 )
 
             #self.figure.tight_layout()
@@ -338,7 +369,6 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
                 
             #self.ax.legend()
             self.graphicsView.draw()
-        
         else:
             self.plot(None, None)       
 
@@ -447,7 +477,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
         alien.addDisturber(dist)'''
         options = self.Options()
         options |= self.DontUseNativeDialog
-        files, _ = self.getOpenFileNames(self,"Select Disturbers", "","sNp Files (*.s*p)", options=options)
+        files, _ = self.getOpenFileNames(self,"Select Disturbers", "", "sNp Files (*.s*p)", options=options)
         #print files
         if files:
             print(files)
@@ -521,6 +551,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
             alien.addDisturberMeasurement(end, testType, file, selectedDisturber)
             self.alienUpdateDisturberList()
             self.alienPlot()
+            
         except Exception as e:
             msg = QtWidgets.QMessageBox()
             msg.setIcon(QtWidgets.QMessageBox.Information)
@@ -559,8 +590,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
 
                 #a = scipy.signal.decimate(x, 10)
                 ax.semilogx(x, param_dict[key], label=key, c = c)
-
-                #print key
+                #print key 
 
             ax.legend(loc='upper left', ncol = 1 if len(param_dict.keys()) <= 8 else 2 )
 
@@ -642,8 +672,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
             elif action == exportExcel:
                 print(self.selected)
                 file, _ = self.getSaveFileName(self,"Export Excel Repport", "","Excel File (*.xlsx)")
-                z = True
-                self.Project.generateExcel(file , self.selected, z)
+                self.Project.generateExcel(file , self.selected)
 
             elif action == delete:
                 self.deleteSample()
@@ -781,28 +810,31 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
         msg.exec_()
 
     def aquire(self):
-            testName, numPorts, IF, start_freq, stop_freq, num_points, average, timeout = Test_Params_Dialog().getParams()
-            if testName:
-                try:
-                    #comm = Communication(addr)
-                    self.comm.IF = IF
-                    self.comm.min_freq = start_freq
-                    self.comm.max_freq = stop_freq
-                    self.comm.num_points = num_points
-                    self.comm.average = average
+            try:
+                testName, numPorts, IF, start_freq, stop_freq, num_points, average, timeout = Test_Params_Dialog().getParams()
+                if testName:
+                    try:
+                        #comm = Communication(addr)
+                        self.comm.IF = IF
+                        self.comm.min_freq = start_freq
+                        self.comm.max_freq = stop_freq
+                        self.comm.num_points = num_points
+                        self.comm.average = average
 
-                    self.comm.aquire(testName, numPorts)
-                    print(r"Y:/{}.s{}p".format(testName, numPorts))
-                    self.Project.importSNP([r"Y:/{}.s{}p".format(testName, numPorts)])
-                    self.displaySamplesInTable()
-                except Exception as e:
-                    pass
+                        self.comm.aquire(testName, numPorts)
+                        print(r"Y:/{}.s{}p".format(testName, numPorts))
+                        self.Project.importSNP([r"Y:/{}.s{}p".format(testName, numPorts)])
+                        self.displaySamplesInTable()
+                    except Exception as e:
+                        pass
+            except Exception as e:
+                print("Cancel")
 
     def reject(self):
         pass
 
     def calibrate(self):
-        print("CALC")
+        print("CALIBRATE")
         self.comm.calibrate()
 
 class Addr_Dialog:
@@ -832,19 +864,19 @@ class Test_Params_Dialog:
         dialog = QtWidgets.QDialog()
         params_dialog = TestParameters.Ui_TestParameterDialog()
         params_dialog.setupUi(dialog)
+        print("Current ID: ", comm.test_name)
         print("NEXT ID: ", comm.getNextID(comm.test_name))
         params_dialog.testNameLineEdit_2.setText(comm.getNextID(comm.test_name)) 
         params_dialog.iFBandwidthLineEdit.setText(str(comm.IF))
-        params_dialog.startFrequencyLineEdit.setText(str(comm.min_freq))
-        params_dialog.stopFrequencyLineEdit.setText(str(comm.max_freq))
+        print("Min Freq ", comm.min_freq)
+        params_dialog.startFrequencyLineEdit.setText('%E' % Decimal(comm.min_freq))
+        params_dialog.stopFrequencyLineEdit.setText('%E' % Decimal(comm.max_freq))
         params_dialog.numberOfPointsLineEdit.setText(str(comm.num_points))
         params_dialog.numberOfPortsLineEdit.setText(str(comm.port_num))
         params_dialog.numberOfAverageLineEdit.setText(str(comm.average))
-        params_dialog.timeoutLineEdit.setText(str(comm.timeout))
+        params_dialog.timeoutLineEdit.setText('%E' % Decimal(comm.timeout))
 
         result = dialog.exec_()
-
-
         
         if not result:
             return 0
@@ -861,21 +893,25 @@ class Test_Params_Dialog:
 
                 return testName, num_ports, IF, start_freq, stop_freq, num_points, average, timeout
             except Exception as e:
-                print(e)
+                print("Cancel")
 
 def main():
 
     app = QtWidgets.QApplication(sys.argv)  # A new instance of QApplication
     app.setStyle('fusion')
     app.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
-    pixmap = QtGui.QPixmap("splash.jpeg")
-    splash = QtWidgets.QSplashScreen(pixmap)
-    splash.show()
+
+    screen_resolution = app.desktop().screenGeometry()
+    width, height = screen_resolution.width(), screen_resolution.height()
+    #pixmap = QtGui.QPixmap("splash.jpeg")
+    #splash = QtWidgets.QSplashScreen(pixmap)
+    #splash.show()
 
     #time.sleep(10)
     form = BeldenSNPApp()  # We set the  form to be our ExampleApp (design)
 
-    form.show()  # Show the form
+    #form.show()  # Show the form
+    form.showMaximized()
 
     print("Starting")
     print(sys.argv)
@@ -885,7 +921,7 @@ def main():
         sys._excepthook(exctype, value, traceback)
         sys.exit(1)
     sys.excepthook = exception_hook
-    splash.finish(form)
+    #splash.finish(form)
 
     sys.exit(app.exec_())
 
