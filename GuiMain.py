@@ -3,6 +3,8 @@ import sys
 import scipy
 import MW3
 import VNA_addr_dialog
+import Set_Limit_Dialog
+from treeModel import TreeModel
 import TestParameters
 from Communication import Communication
 import matplotlib.figure
@@ -121,7 +123,16 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
         self.setActiveSample()
 
     def setLimit(self):
-        pass
+        
+        dialog = QtWidgets.QDialog()
+        limitDialog = Set_Limit_Dialog.Ui_LimitDialog()
+        limitDialog.setupUi(dialog)
+        model = TreeModel(["Standard", "Description"])
+        limitDialog.treeView.setModel(model)
+        result = dialog.exec_()
+        if result:
+            print(limitDialog.treeView.selectedIndexes()[0].parent().data()+" : "
+            +limitDialog.treeView.selectedIndexes()[0].data())
 
     def setActiveSample(self):
         self.plot(None, None)
@@ -661,7 +672,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
                     self.displaySampleParams(None)
             elif action == end_end:
                 for sample in self.selected:
-                    self.Project.getSampleByame(sample).reCalc(one_sided = False)
+                    self.Project.getSampleByName(sample).reCalc(one_sided = False)
 
                 if len(self.selected) == 1:  #Since only one sample can be displayed at a time
                     self.displaySampleParams(self.selected)
@@ -677,6 +688,8 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
             elif action == delete:
                 self.deleteSample()
 
+            elif action == setLimit:
+                self.setLimit()
             #self.Project.activeMeasurements = selected
             return 1
 
