@@ -3,8 +3,7 @@ import sys
 import scipy
 import MW3
 import VNA_addr_dialog
-from limits import Set_Limit_Dialog
-from limits.TreeModel import TreeModel
+from limits.LimitDialog import LimitDialog
 import TestParameters
 from Communication import Communication
 import matplotlib.figure
@@ -124,32 +123,12 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
 
     def setLimit(self):
         
-        dialog = QtWidgets.QDialog()
-        limitDialog = Set_Limit_Dialog.Ui_LimitDialog()
-        limitDialog.setupUi(dialog)
-        model = TreeModel()
-        limitDialog.treeView.setModel(model)
-        button = limitDialog.buttonBox.button(QtWidgets.QDialogButtonBox.Ok)
-        button.setDisabled(True)
-        limitDialog.treeView.clicked.connect(lambda index: self.updateButton(index, button, model))
-        limitDialog.treeView.doubleClicked.connect(lambda index: self.doubleClickAccept(index, dialog, model))
-        result = dialog.exec_()
+        limitDialog = LimitDialog()
+        result = limitDialog.showDialog()
         if result:
             #For testing purposes
-            print(limitDialog.treeView.selectedIndexes()[0].parent().data()+" : "
-            +limitDialog.treeView.selectedIndexes()[0].data())
-
-    def updateButton(self, index, button, model):
-        if index:
-            if not (model.parent(index) == QtCore.QModelIndex() or index.internalPointer().children):
-                button.setEnabled(True)
-                return
-        button.setDisabled(True)
-
-    def doubleClickAccept(self, index, dialog, model):
-        if index:
-            if not (model.parent(index) == QtCore.QModelIndex() or index.internalPointer().children):
-                dialog.accept()
+            print(limitDialog.getSelection()[0].parent().data()+" : "
+            +limitDialog.getSelection()[0].data())
 
     def setActiveSample(self):
         self.plot(None, None)
