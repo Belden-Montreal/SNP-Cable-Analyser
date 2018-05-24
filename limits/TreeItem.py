@@ -22,4 +22,4 @@ class TreeItem():
         return len(self._data)
 
     def data(self, column):
-        return self._data[column]
+        return self._data[column].__str__()

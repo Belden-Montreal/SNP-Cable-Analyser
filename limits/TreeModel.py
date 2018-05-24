@@ -1,5 +1,6 @@
 from PyQt5 import QtCore
 from limits.TreeItem import TreeItem
+from limits.Limit import Limit
 
 class TreeModel(QtCore.QAbstractItemModel):
     def __init__(self, parent = None):
@@ -69,14 +70,15 @@ class TreeModel(QtCore.QAbstractItemModel):
         file = open("limits/limits.txt", "r")
         parents = []
         indentations = []
+        columns = 0
         for line in file:
             position = 0
             while position < len(line):
                 if not line[position] == '\t':
                     break
                 position += 1
-            data = line[position:].strip().split('\t')
-            if len(data) > 0:
+            rawData = line[position:].strip().split('\t')
+            if len(rawData) > 0:
                 if len(parents) > 0:
                     if position > indentations[-1]:
                         if parents[-1].childCount() > 0:
@@ -86,8 +88,15 @@ class TreeModel(QtCore.QAbstractItemModel):
                         while position < indentations[-1] and len(parents) > 0:
                             parents.pop()
                             indentations.pop()
+                    data = [rawData[0]]
+                    for item in rawData[1:]:
+                        data.append(Limit(item))
+                    while len(data) < columns:
+                        data.append("")
+
                     parents[-1].addChild(TreeItem(data, parents[-1]))
                 else:
-                    parents.append(TreeItem(data))
+                    parents.append(TreeItem(rawData))
+                    columns = len(rawData)
                     indentations.append(position)
         return parents[0]
