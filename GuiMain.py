@@ -3,8 +3,8 @@ import sys
 import scipy
 import MW3
 import VNA_addr_dialog
-import Set_Limit_Dialog
-from treeModel import TreeModel
+from limits import Set_Limit_Dialog
+from limits.TreeModel import TreeModel
 import TestParameters
 from Communication import Communication
 import matplotlib.figure

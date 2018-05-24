@@ -1,5 +1,5 @@
 from PyQt5 import QtCore
-from treeItem import TreeItem
+from limits.TreeItem import TreeItem
 
 class TreeModel(QtCore.QAbstractItemModel):
     def __init__(self, parent = None):
@@ -66,7 +66,7 @@ class TreeModel(QtCore.QAbstractItemModel):
         return None
 
     def setupModelFromFile(self):
-        file = open("limits.txt", "r")
+        file = open("limits/limits.txt", "r")
         parents = []
         indentations = []
         for line in file:
