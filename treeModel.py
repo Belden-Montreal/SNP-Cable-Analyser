@@ -5,13 +5,7 @@ class TreeModel(QtCore.QAbstractItemModel):
     def __init__(self, data, parent=None):
         QtCore.QAbstractItemModel.__init__(self)
         self.rootItem = TreeItem(data)
-        #For testing purposes
-        self.rootItem.addChild(TreeItem(["Tia",""]))
-        self.rootItem.child(0).addChild(TreeItem(["Cat6", ""]))
-        self.rootItem.child(0).addChild(TreeItem(["Cat5e", ""]))
-        self.rootItem.addChild(TreeItem(["IEEE",""]))
-        self.rootItem.child(1).addChild(TreeItem(["Cat6", ""]))
-        self.rootItem.child(1).addChild(TreeItem(["Cat5e", ""]))
+        self.setupModelFromFile()
 
     def index(self, row, column, parent):
         if not self.hasIndex(row, column, parent):
@@ -71,3 +65,25 @@ class TreeModel(QtCore.QAbstractItemModel):
             return self.rootItem.data(section)
 
         return None
+
+    def setupModelFromFile(self):
+        file = open("limits.txt", "r")
+        parents = [self.rootItem]
+        indentations = [0]
+        for line in file:
+            position = 0
+            while position < len(line):
+                if not line[position] == '\t':
+                    break
+                position += 1
+            data = line[position:].strip().split('\t')
+            if len(data) > 0:
+                if position > indentations[-1]:
+                    if parents[-1].childCount() > 0:
+                        parents.append(parents[-1].child(parents[-1].childCount()-1))
+                        indentations.append(position)
+                else:
+                    while position < indentations[-1] and len(parents) > 0:
+                        parents.pop()
+                        indentations.pop()
+                parents[-1].addChild(TreeItem(data, parents[-1]))

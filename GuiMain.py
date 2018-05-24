@@ -127,12 +127,23 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
         dialog = QtWidgets.QDialog()
         limitDialog = Set_Limit_Dialog.Ui_LimitDialog()
         limitDialog.setupUi(dialog)
-        model = TreeModel(["Standard", "Description"])
+        model = TreeModel(["Standard"])
         limitDialog.treeView.setModel(model)
+        button = limitDialog.buttonBox.button(QtWidgets.QDialogButtonBox.Ok)
+        button.setDisabled(True)
+        limitDialog.treeView.clicked.connect(lambda index: self.updateButton(index, button, model))
         result = dialog.exec_()
         if result:
+            #For testing purposes
             print(limitDialog.treeView.selectedIndexes()[0].parent().data()+" : "
             +limitDialog.treeView.selectedIndexes()[0].data())
+
+    def updateButton(self, index, button, model):
+        if index:
+            if not (model.parent(index) == QtCore.QModelIndex() or index.internalPointer().children):
+                button.setEnabled(True)
+                return
+        button.setDisabled(True)
 
     def setActiveSample(self):
         self.plot(None, None)

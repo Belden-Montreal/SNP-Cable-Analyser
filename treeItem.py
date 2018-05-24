@@ -6,7 +6,6 @@ class TreeItem():
 
     def addChild(self, item):
         self.children.append(item)
-        item.parent = self
 
     def child(self, row):
         return self.children[row]
