@@ -2,10 +2,9 @@ from PyQt5 import QtCore
 from treeItem import TreeItem
 
 class TreeModel(QtCore.QAbstractItemModel):
-    def __init__(self, data, parent=None):
+    def __init__(self, parent = None):
         QtCore.QAbstractItemModel.__init__(self)
-        self.rootItem = TreeItem(data)
-        self.setupModelFromFile()
+        self.rootItem = self.setupModelFromFile()
 
     def index(self, row, column, parent):
         if not self.hasIndex(row, column, parent):
@@ -68,8 +67,8 @@ class TreeModel(QtCore.QAbstractItemModel):
 
     def setupModelFromFile(self):
         file = open("limits.txt", "r")
-        parents = [self.rootItem]
-        indentations = [0]
+        parents = []
+        indentations = []
         for line in file:
             position = 0
             while position < len(line):
@@ -78,12 +77,17 @@ class TreeModel(QtCore.QAbstractItemModel):
                 position += 1
             data = line[position:].strip().split('\t')
             if len(data) > 0:
-                if position > indentations[-1]:
-                    if parents[-1].childCount() > 0:
-                        parents.append(parents[-1].child(parents[-1].childCount()-1))
-                        indentations.append(position)
+                if len(parents) > 0:
+                    if position > indentations[-1]:
+                        if parents[-1].childCount() > 0:
+                            parents.append(parents[-1].child(parents[-1].childCount()-1))
+                            indentations.append(position)
+                    else:
+                        while position < indentations[-1] and len(parents) > 0:
+                            parents.pop()
+                            indentations.pop()
+                    parents[-1].addChild(TreeItem(data, parents[-1]))
                 else:
-                    while position < indentations[-1] and len(parents) > 0:
-                        parents.pop()
-                        indentations.pop()
-                parents[-1].addChild(TreeItem(data, parents[-1]))
+                    parents.append(TreeItem(data))
+                    indentations.append(position)
+        return parents[0]

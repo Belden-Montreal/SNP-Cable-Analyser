@@ -1,7 +1,8 @@
-Tia
-	CAT6A
-	CAT6
-	CAT5e
-ISO
-	CAT6
-	CAT5e
+Standard
+	Tia
+		CAT6A
+		CAT6
+		CAT5e
+	ISO
+		CAT6
+		CAT5e
