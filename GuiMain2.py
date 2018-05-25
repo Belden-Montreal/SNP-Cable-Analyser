@@ -42,7 +42,7 @@ from calWizard import CalWizard
 
 from decimal import Decimal
 
-import addplug
+import addPlug
 
 class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, QtWidgets.QFileDialog, QtWidgets.QListView, QtWidgets.QDialog, QtCore.Qt):
 
@@ -379,12 +379,9 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
             self.plot(None, None)
 
     def addPlugDialog(self):
-
-
-
-        form = addplug.AddPlug()  # We set the  form to be our ExampleApp (design)
-
-        self.embedPlotUpdate()         
+        AddPlug()
+        self.embedUpdateTab()
+                
         
     def setupAlien(self):
         print("Alien Sample Added")

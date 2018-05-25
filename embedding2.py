@@ -420,8 +420,11 @@ class Embedding(SNPManipulations):
                 pair = ET.SubElement(correctedPlugVectorElement, "Next_"+key)
                 pair.text = str(correctedPlugVector[key])
 
+            if os.path.isfile(file):
+                raise Exception('File Already Exists')
+                return
 
-            mydata = ET.tostring(plug)  
+            mydata = ET.tostring(plug)
             myfile = open(file, "wb")  
             myfile.write(mydata)
 

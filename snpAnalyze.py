@@ -25,7 +25,6 @@ class SNPManipulations(rf):
         self.one_sided = False
 
     def getRL(self, matrix, z=True ):
-        
         '''
         Get the Return Loss array in dd or cc mode.
         Use this function to get LCL in dc mode or TCL in cd mode.
@@ -601,7 +600,7 @@ class SNPManipulations(rf):
             
 if __name__ == "__main__":
 
-    vna_out = SNPManipulations('snps/TestDelay3.s8p')
+    vna_out = SNPManipulations('testout_mm.s16p')
     vna_out.one_sided = False
     
     #vna_out.renumber([1,2], [2,1])
@@ -614,11 +613,14 @@ if __name__ == "__main__":
 
     #print vna_out.cc[0]
 
-    vna_out.write_touchstone("testout_mm", form="ri")
+    #vna_out.write_touchstone("testout_mm", form="ri")
         
-    vna_out.getNEXT(vna_out.dd, z=True)
+    vna_out.getRL(vna_out.dd, z=True)
 
-    print(vna_out.NEXT_dict["45-36"][1000-1])
+    print(vna_out.RL_dict["12"][0])
+    print(vna_out.RL_dict["12"][0].real)
+    print(vna_out.RL_dict["12"][0].imag)
+
 
     #vna_out.getACRF(vna_out.dd)
 
@@ -626,5 +628,5 @@ if __name__ == "__main__":
 
     #for (vals) in vna_out.RL_dict["36"][:1]:
     #    print(-20*np.log10(np.absolute(vals)))
-    print(vna_out.freq[1000-1])
+    #print(vna_out.freq[1000-1])
         
