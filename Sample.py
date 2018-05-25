@@ -91,6 +91,33 @@ class Sample(SNPManipulations):
         self.DMCMRL      = self.getRL(self.dc, z)
         #print self.RL.keys()
 
+        #real and complex values
+        self.RLZ = self.getRL(self.dd)
+        self.ILZ = self.getIL(self.dd)
+        self.NEXTZ = self.getNEXT(self.dd)
+        self.PropagationDelayZ = self.getPropagationDelay()
+
+        self.FEXTZ = self.getFEXT(self.dd)
+        self.PSNEXTZ = self.getPSNEXT(self.dd)
+        self.PSFEXTZ = self.getPSFEXT(self.dd)
+        self.ACRFZ = self.getACRF(self.dd)
+        self.PSACRFZ = self.getPSACRF(self.dd)
+
+        self.LCLZ = self.getRL(self.dc)
+        self.LCTLZ = self.getIL(self.dc)
+        self.TCLZ = self.getRL(self.cd)
+        self.TCTLZ = self.getIL(self.cd)
+        self.ELTCTLZ = self.getELTCTL()
+
+        self.CMRLZ =  self.getRL(self.cc) #commun mode Return Loss
+        self.CMNEXTZ =  self.getNEXT(self.cc) #commun mode NEXT
+
+        self.CMDMNEXTZ =  self.getNEXT(self.cd) #commun mode NEXT
+        self.CMDMRLZ =  self.getRL(self.cd) #commun mode NEXT
+
+        self.DMCMNEXTZ    = self.getNEXT(self.dc)
+        self.DMCMRLZ      = self.getRL(self.dc)
+
     def reCalc(self, one_sided = None):
         self.__init__(self.snpFile, one_sided)
         self.getParameters()
