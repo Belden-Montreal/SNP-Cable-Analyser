@@ -85,7 +85,7 @@ class Project: #Put (object) later
     def getSampleByName(self, name):
         return next((sample for sample in self.measurements if sample.name==name),None)
 
-    def generateExcel(self, outputName, samples, z = False):
+    def generateExcel(self, outputName, samples):
         workbook = xlsxwriter.Workbook(outputName)
         for sample in samples:
             print(sample)
@@ -105,33 +105,19 @@ class Project: #Put (object) later
             curPos = 1
             for i, param in enumerate(sample.parameters):
                 numSignals = len(getattr(sample, param.replace(" ", "")).keys())
-                if z is False:
-                    worksheet.merge_range(3, curPos, 3, curPos+numSignals-1,  "", cell_format)
-                    worksheet.write(3,curPos, param)
-                    keys = sorted(getattr(sample, param.replace(" ", "")).keys())
-                    for i, key in enumerate(keys):
-                        worksheet.write(4,curPos+i, key)
-                
-                        for j,data in enumerate(getattr(sample, param.replace(" ", ""))[key]):
-                            worksheet.write(5+j,curPos+i, data)
+                worksheet.merge_range(3, curPos, 3, curPos+numSignals-1,  "", cell_format)
+                worksheet.write(3,curPos, param)
+                keys = sorted(getattr(sample, param.replace(" ", "")).keys())
+                for i, key in enumerate(keys):
+                    worksheet.write(4,curPos+i, key)
             
-                    curPos += numSignals
-                else:
-                    worksheet.merge_range(2, curPos, 2, curPos+(numSignals-1)*2,  "", cell_format)
-                    worksheet.write(2,curPos, param)
-                    keys = sorted(getattr(sample, param.replace(" ", "")).keys())
-                    for i, key in enumerate(keys):
-                        worksheet.merge_range(3, curPos+i*2, 3, curPos+i*2+1, "", cell_format)
-                        worksheet.write(3,curPos+i*2, key)
-                        worksheet.write(4,curPos+i*2, "real")
-                        worksheet.write(4,curPos+i*2+1, "imaginary")
-                        for j,data in enumerate(getattr(sample, param.replace(" ", "")+"Z")[key]):
-                            worksheet.write(5+j,curPos+i*2, data.real)
-                            worksheet.write(5+j, curPos+i*2+1, data.imag)
-            
-                    curPos += numSignals*2
-        workbook.close()
+                    for j,data in enumerate(getattr(sample, param.replace(" ", ""))[key]):
+                        worksheet.write(5+j,curPos+i, str(data))
         
+                curPos += numSignals
+                
+        workbook.close()
+
 
     @property
     def activeSample(self):
