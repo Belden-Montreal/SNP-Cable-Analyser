@@ -15,7 +15,7 @@ class LimitDialog(object):
         self.limitDialog.treeView.doubleClicked.connect(lambda index: self.doubleClickAccept(index))
 
     def getSelection(self):
-        return self.limitDialog.treeView.selectedIndexes()
+        return self.limitDialog.treeView.selectedIndexes()[0]
 
     def showDialog(self):
         return self.dialog.exec_()

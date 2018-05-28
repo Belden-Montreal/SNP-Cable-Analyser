@@ -127,14 +127,10 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
         result = limitDialog.showDialog()
         if result:
             #For testing purposes
-            for item in limitDialog.getSelection():
-                string = item.data()
-                item = item.parent()
-                while item.internalPointer() is not None:
-                    string += " : "+item.data()
-                    item = item.parent()
+            item = limitDialog.getSelection()
+            string = item.internalPointer().limits.dict
                 
-                print(string)
+            print(string)
             
             
 

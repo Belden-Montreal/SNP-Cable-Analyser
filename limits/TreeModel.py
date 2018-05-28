@@ -71,7 +71,6 @@ class TreeModel(QtCore.QAbstractItemModel):
         file = open("limits/limits.xml", "r")
         data = xmltodict.parse(file.read())
         self.rootItem = TreeItem(data["Root"]["@name"], None, True)
-        print(data["Root"])
         self.parseProperty("Standard", self.rootItem, data["Root"])
 
     def parseProperty(self, name, parent, data):
