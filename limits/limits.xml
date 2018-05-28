@@ -1,0 +1,32 @@
+<Root name="Standard">    
+    <Standard name="Tia">
+        <Category name="CAT6A">
+            <Hardware name="Connecting Hardware">
+                <Limit param="RL" function="2"/>
+            </Hardware>
+            <Hardware name="Cord Cable"/>
+        </Category>
+        <Category name="CAT6">
+            <Hardware name="Connecting Hardware"/>
+            <Hardware name="Cord Cable"/>
+        </Category>
+        <Category name="CAT5e">
+            <Hardware name="Connecting Hardware"/>
+            <Hardware name="Cord Cable"/>
+        </Category>
+    </Standard>
+    <Standard name="Iso">
+        <Category name="CAT6A">
+            <Hardware name="Connecting Hardware"/>
+            <Hardware name="Cord Cable"/>
+        </Category>
+        <Category name="CAT6">
+            <Hardware name="Connecting Hardware"/>
+            <Hardware name="Cord Cable"/>
+        </Category>
+        <Category name="CAT5e">
+            <Hardware name="Connecting Hardware"/>
+            <Hardware name="Cord Cable"/>
+        </Category>
+    </Standard>
+</Root>

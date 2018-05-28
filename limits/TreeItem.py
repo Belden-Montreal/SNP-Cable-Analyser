@@ -1,7 +1,10 @@
+from limits.limitParameters import ParameterDict
+
 class TreeItem():
-    def __init__(self, data, parent=None):
+    def __init__(self, name, parent=None, header=False):
         self.parent = parent
-        self._data = data
+        self.name = name
+        self.limits = ParameterDict(header)
         self.children = []
 
     def addChild(self, item):
@@ -19,7 +22,10 @@ class TreeItem():
         return 0
     
     def columnCount(self):
-        return len(self._data)
+        return len(self.limits.dict) + 1
 
     def data(self, column):
-        return self._data[column].__str__()
+        if column == 0:
+            return self.name
+        else:
+            return list(self.limits.dict.values())[column-1].__str__()

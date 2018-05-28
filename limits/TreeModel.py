@@ -1,11 +1,12 @@
 from PyQt5 import QtCore
 from limits.TreeItem import TreeItem
 from limits.Limit import Limit
+import xmltodict
 
 class TreeModel(QtCore.QAbstractItemModel):
     def __init__(self, parent = None):
         QtCore.QAbstractItemModel.__init__(self)
-        self.rootItem = self.setupModelFromFile()
+        self.setupModelFromFile()
 
     def index(self, row, column, parent):
         if not self.hasIndex(row, column, parent):
@@ -67,36 +68,25 @@ class TreeModel(QtCore.QAbstractItemModel):
         return None
 
     def setupModelFromFile(self):
-        file = open("limits/limits.txt", "r")
-        parents = []
-        indentations = []
-        columns = 0
-        for line in file:
-            position = 0
-            while position < len(line):
-                if not line[position] == '\t':
-                    break
-                position += 1
-            rawData = line[position:].strip().split('\t')
-            if len(rawData) > 0:
-                if len(parents) > 0:
-                    if position > indentations[-1]:
-                        if parents[-1].childCount() > 0:
-                            parents.append(parents[-1].child(parents[-1].childCount()-1))
-                            indentations.append(position)
-                    else:
-                        while position < indentations[-1] and len(parents) > 0:
-                            parents.pop()
-                            indentations.pop()
-                    data = [rawData[0]]
-                    for item in rawData[1:]:
-                        data.append(Limit(item))
-                    while len(data) < columns:
-                        data.append("")
+        file = open("limits/limits.xml", "r")
+        data = xmltodict.parse(file.read())
+        self.rootItem = TreeItem(data["Root"]["@name"], None, True)
+        print(data["Root"])
+        self.parseProperty("Standard", self.rootItem, data["Root"])
 
-                    parents[-1].addChild(TreeItem(data, parents[-1]))
-                else:
-                    parents.append(TreeItem(rawData))
-                    columns = len(rawData)
-                    indentations.append(position)
-        return parents[0]
+    def parseProperty(self, name, parent, data):
+        if not isinstance(data[name], list):
+            properties = [data[name]]
+        else:
+            properties = data[name]
+        for prop in properties:
+            if "@name" in prop:
+                item = TreeItem(prop["@name"], parent)
+                parent.addChild(item)
+                for nextName in prop:
+                    if not nextName == "@name":
+                        self.parseProperty(nextName, item, prop)
+            else:
+                parent.limits.dict[prop["@param"]] = Limit(prop["@param"], prop["@function"])
+                
+
