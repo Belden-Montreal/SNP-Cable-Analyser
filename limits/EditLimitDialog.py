@@ -3,7 +3,14 @@ from limits import Edit_Limit_Dialog
 from limits.limitParameters import PARAMETERS
 from limits.TreeItem import TreeItem
 
+class Box():
+    STAND = 0
+    CAT = 1
+    HARDW = 2
+    PARAM = 3
+
 class EditLimitDialog():
+
     def __init__(self, model):
         self.model = model
         self.dialog = QtWidgets.QDialog()
@@ -14,11 +21,11 @@ class EditLimitDialog():
         self.editLimitDialog.parameterBox.addItems(PARAMETERS)
         for item in self.model.rootItem.children:
             self.editLimitDialog.standardBox.addItem(item.name, item)
-        self.setBoxItems(self.model.rootItem, 0, 1)
-        self.setBoxItems(self.model.rootItem.child(0), 0, 2)
-        self.editLimitDialog.standardBox.currentIndexChanged.connect(lambda index: self.setBoxItems(self.model.rootItem, index, 1))
-        self.editLimitDialog.categoryBox.currentIndexChanged.connect(lambda index: self.setBoxItems(self.editLimitDialog.standardBox.currentData(), index, 2))
-        self.editLimitDialog.hardwareBox.currentIndexChanged.connect(lambda index: self.setBoxItems(self.editLimitDialog.categoryBox.currentData(), index, 3))
+        self.setBoxItems(self.model.rootItem, 0, Box.CAT)
+        self.setBoxItems(self.model.rootItem.child(0), 0, Box.HARDW)
+        self.editLimitDialog.standardBox.currentIndexChanged.connect(lambda index: self.setBoxItems(self.model.rootItem, index, Box.CAT))
+        self.editLimitDialog.categoryBox.currentIndexChanged.connect(lambda index: self.setBoxItems(self.editLimitDialog.standardBox.currentData(), index, Box.HARDW))
+        self.editLimitDialog.hardwareBox.currentIndexChanged.connect(lambda index: self.setBoxItems(self.editLimitDialog.categoryBox.currentData(), index, Box.PARAM))
         self.editLimitDialog.parameterBox.currentTextChanged.connect(lambda text: self.setTextLimit(self.editLimitDialog.hardwareBox.currentData(), text))
         self.editLimitDialog.okButton.pressed.connect(lambda: self.saveLimit(True))
         self.editLimitDialog.cancelButton.pressed.connect(self.dialog.reject)
@@ -33,7 +40,7 @@ class EditLimitDialog():
                 self.boxes[boxIndex].addItem(item.name, item)
             self.setBoxItems(parent.child(index), 0, boxIndex + 1)
         elif boxIndex < len(self.boxes):
-            self.boxes[-1].setCurrentIndex(0)
+            self.boxes[Box.PARAM].setCurrentIndex(0)
             self.setTextLimit(parent.child(index), self.boxes[-1].currentText())
         self.boxes[boxIndex].blockSignals(False)
 
@@ -43,7 +50,7 @@ class EditLimitDialog():
 
     def setTextLimit(self, item, param):
         if param in item.limits.dict:
-            self.lineEdits[-1].setText(item.limits.dict[param].__str__())
+            self.lineEdits[Box.PARAM].setText(item.limits.dict[param].__str__())
 
     def saveLimit(self, closeDialog):
         if closeDialog:
