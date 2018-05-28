@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(542, 300)
+        Dialog.resize(541, 300)
         self.gridLayoutWidget = QtWidgets.QWidget(Dialog)
         self.gridLayoutWidget.setGeometry(QtCore.QRect(10, 10, 521, 241))
         self.gridLayoutWidget.setObjectName("gridLayoutWidget")
@@ -43,10 +43,22 @@ class Ui_Dialog(object):
         self.hardwareEdit.setObjectName("hardwareEdit")
         self.gridLayout.addWidget(self.hardwareEdit, 2, 1, 1, 1)
         self.gridLayout.setColumnMinimumWidth(0, 100)
-        self.buttonBox = QtWidgets.QDialogButtonBox(Dialog)
-        self.buttonBox.setGeometry(QtCore.QRect(15, 260, 511, 23))
-        self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok|QtWidgets.QDialogButtonBox.Save)
-        self.buttonBox.setObjectName("buttonBox")
+        self.horizontalLayoutWidget = QtWidgets.QWidget(Dialog)
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(279, 260, 251, 31))
+        self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
+        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout.setSpacing(10)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.saveButton = QtWidgets.QPushButton(self.horizontalLayoutWidget)
+        self.saveButton.setObjectName("saveButton")
+        self.horizontalLayout.addWidget(self.saveButton)
+        self.okButton = QtWidgets.QPushButton(self.horizontalLayoutWidget)
+        self.okButton.setObjectName("okButton")
+        self.horizontalLayout.addWidget(self.okButton)
+        self.cancelButton = QtWidgets.QPushButton(self.horizontalLayoutWidget)
+        self.cancelButton.setObjectName("cancelButton")
+        self.horizontalLayout.addWidget(self.cancelButton)
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
@@ -54,4 +66,7 @@ class Ui_Dialog(object):
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Edit Limits"))
+        self.saveButton.setText(_translate("Dialog", "Save"))
+        self.okButton.setText(_translate("Dialog", "Ok"))
+        self.cancelButton.setText(_translate("Dialog", "Cancel"))
 
