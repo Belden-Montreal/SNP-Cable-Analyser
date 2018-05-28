@@ -127,8 +127,16 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
         result = limitDialog.showDialog()
         if result:
             #For testing purposes
-            print(limitDialog.getSelection()[0].parent().data()+" : "
-            +limitDialog.getSelection()[0].data())
+            for item in limitDialog.getSelection():
+                string = item.data()
+                item = item.parent()
+                while item.internalPointer() is not None:
+                    string += " : "+item.data()
+                    item = item.parent()
+                
+                print(string)
+            
+            
 
     def setActiveSample(self):
         self.plot(None, None)
