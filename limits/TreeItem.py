@@ -27,5 +27,7 @@ class TreeItem():
     def data(self, column):
         if column == 0:
             return self.name
+        elif list(self.limits.dict.values())[column-1] == "" and not len(self.children):
+            return "-"
         else:
             return list(self.limits.dict.values())[column-1].__str__()

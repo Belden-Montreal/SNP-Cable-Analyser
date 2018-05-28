@@ -2,6 +2,7 @@ from PyQt5 import QtWidgets, QtCore
 from limits import Edit_Limit_Dialog
 from limits.limitParameters import PARAMETERS
 from limits.TreeItem import TreeItem
+from limits.Limit import Limit
 
 class Box():
     STAND = 0
@@ -56,6 +57,15 @@ class EditLimitDialog():
         if closeDialog:
             self.dialog.accept()
         #TODO: save to xml file and model
+        for i in range(3):
+            if i < 1:
+                item = [x for x in self.model.rootItem.children if x.name == self.boxes[i].currentText()]
+            else:
+                item = [x for x in self.boxes[i-1].currentData().children if x.name == self.boxes[i].currentText()]
+            if len(item) > 0:
+                item[0].name = self.lineEdits[i].text()
+                self.boxes[i].setItemText(self.boxes[i].currentIndex(), item[0].name)
+        self.boxes[Box.HARDW].currentData().limits.dict[self.boxes[Box.PARAM].currentText()] = Limit(self.boxes[Box.PARAM].currentText(), self.lineEdits[Box.PARAM].text())
 
     def showDialog(self):
         return self.dialog.exec_()
