@@ -1,6 +1,7 @@
 from PyQt5 import QtWidgets, QtCore
 from limits import Set_Limit_Dialog
 from limits.TreeModel import TreeModel
+from limits.EditLimitDialog import EditLimitDialog
 
 class LimitDialog(object):
     def __init__(self):
@@ -13,6 +14,7 @@ class LimitDialog(object):
         button.setDisabled(True)
         self.limitDialog.treeView.clicked.connect(lambda index: self.updateButton(index, button))
         self.limitDialog.treeView.doubleClicked.connect(lambda index: self.doubleClickAccept(index))
+        self.limitDialog.editButton.pressed.connect(lambda: self.openLimitEditDialog())
 
     def getSelection(self):
         return self.limitDialog.treeView.selectedIndexes()[0]
@@ -34,3 +36,8 @@ class LimitDialog(object):
 
     def isValidSelection(self, index):
         return not (self.model.parent(index) == QtCore.QModelIndex() or index.internalPointer().children)
+
+    def openLimitEditDialog(self):
+        editLimitDialog = EditLimitDialog(self.model)
+
+        res = editLimitDialog.showDialog()

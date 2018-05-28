@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>542</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Edit Limits</string>
+  </property>
+  <widget class="QWidget" name="gridLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>521</width>
+     <height>241</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout" columnminimumwidth="100,0">
+    <property name="leftMargin">
+     <number>5</number>
+    </property>
+    <property name="rightMargin">
+     <number>5</number>
+    </property>
+    <item row="1" column="0">
+     <widget class="QComboBox" name="categoryBox"/>
+    </item>
+    <item row="0" column="0">
+     <widget class="QComboBox" name="standardBox"/>
+    </item>
+    <item row="2" column="0">
+     <widget class="QComboBox" name="hardwareBox"/>
+    </item>
+    <item row="3" column="0">
+     <widget class="QComboBox" name="parameterBox"/>
+    </item>
+    <item row="3" column="1">
+     <widget class="QLineEdit" name="parameterEdit"/>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="standardEdit"/>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="categoryEdit"/>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="hardwareEdit"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QDialogButtonBox" name="buttonBox">
+   <property name="geometry">
+    <rect>
+     <x>15</x>
+     <y>260</y>
+     <width>511</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="standardButtons">
+    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok|QDialogButtonBox::Save</set>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
