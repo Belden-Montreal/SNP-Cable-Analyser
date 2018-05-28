@@ -13,13 +13,16 @@ class Ui_LimitDialog(object):
         LimitDialog.setObjectName("LimitDialog")
         LimitDialog.resize(400, 300)
         self.buttonBox = QtWidgets.QDialogButtonBox(LimitDialog)
-        self.buttonBox.setGeometry(QtCore.QRect(30, 240, 341, 32))
+        self.buttonBox.setGeometry(QtCore.QRect(210, 240, 161, 32))
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
         self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
         self.buttonBox.setObjectName("buttonBox")
         self.treeView = QtWidgets.QTreeView(LimitDialog)
         self.treeView.setGeometry(QtCore.QRect(10, 10, 381, 221))
         self.treeView.setObjectName("treeView")
+        self.editButton = QtWidgets.QPushButton(LimitDialog)
+        self.editButton.setGeometry(QtCore.QRect(20, 245, 75, 20))
+        self.editButton.setObjectName("editButton")
 
         self.retranslateUi(LimitDialog)
         self.buttonBox.accepted.connect(LimitDialog.accept)
@@ -29,4 +32,5 @@ class Ui_LimitDialog(object):
     def retranslateUi(self, LimitDialog):
         _translate = QtCore.QCoreApplication.translate
         LimitDialog.setWindowTitle(_translate("LimitDialog", "Set Limit"))
+        self.editButton.setText(_translate("LimitDialog", "Edit"))
 
