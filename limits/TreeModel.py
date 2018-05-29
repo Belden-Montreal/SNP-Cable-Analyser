@@ -1,6 +1,8 @@
 from PyQt5 import QtCore
 from limits.TreeItem import TreeItem
 from limits.Limit import Limit
+from collections import OrderedDict
+import json
 import xmltodict
 
 class TreeModel(QtCore.QAbstractItemModel):
@@ -69,9 +71,9 @@ class TreeModel(QtCore.QAbstractItemModel):
 
     def setupModelFromFile(self):
         file = open("limits/limits.xml", "r")
-        data = xmltodict.parse(file.read())
-        self.rootItem = TreeItem(data["Root"]["@name"], None, True)
-        self.parseProperty("Standard", self.rootItem, data["Root"])
+        self.dictData = xmltodict.parse(file.read())
+        self.rootItem = TreeItem(self.dictData["Root"]["@name"], None, True)
+        self.parseProperty("Standard", self.rootItem, self.dictData["Root"])
 
     def parseProperty(self, name, parent, data):
         if not isinstance(data[name], list):
@@ -86,6 +88,38 @@ class TreeModel(QtCore.QAbstractItemModel):
                     if not nextName == "@name":
                         self.parseProperty(nextName, item, prop)
             else:
-                parent.limits.dict[prop["@param"]] = Limit(prop["@param"], prop["@function"])
+                parent.limits.dict[prop["@param"]] = Limit(prop["@param"], prop["#text"])
                 
-
+    def updateDict(self):
+        self.dictData.clear()
+        standardItems = []
+        for standard in self.rootItem.children:
+            categoryItems = []
+            for category in standard.children:
+                hardwareItems = []
+                for hardware in category.children:
+                    limitItems = []
+                    for limit in hardware.limits.dict.values():
+                        if not (limit == ""):
+                            limitEntry = {"@param": limit.parameter, "#text": limit.clause}
+                            limitItems.append(limitEntry)
+                    if len(limitItems) > 0:
+                        hardwareItems.append({"@name": hardware.name, "Limit": limitItems})
+                    else:
+                        hardwareItems.append({"@name": hardware.name})
+                if len(hardwareItems) > 0:
+                    categoryItems.append({"@name": category.name, "Hardware": hardwareItems})
+                else:
+                    categoryItems.append({"@name": category.name})
+            if len(categoryItems) > 0: 
+                standardItems.append({"@name": standard.name, "Category": categoryItems})
+            else:
+                standardItems.append({"@name": standard.name})
+        if len(standardItems) > 0:
+            self.dictData = {"Root": {"@name": "Standard", "Standard": standardItems}}
+        else:
+            self.dictData = {"Root": {"@name": "Standard"}}
+            
+    def writeModelToFIle(self):
+        file = open("limits/limits.xml", "w")
+        xmltodict.unparse(self.dictData, file, pretty=True)

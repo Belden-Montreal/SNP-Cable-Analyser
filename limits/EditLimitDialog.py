@@ -11,7 +11,7 @@ class Box():
     PARAM = 3
 
 class EditLimitDialog():
-
+    NEW_ITEM = "New"
     def __init__(self, model):
         self.model = model
         self.dialog = QtWidgets.QDialog()
@@ -22,6 +22,7 @@ class EditLimitDialog():
         self.editLimitDialog.parameterBox.addItems(PARAMETERS)
         for item in self.model.rootItem.children:
             self.editLimitDialog.standardBox.addItem(item.name, item)
+        self.editLimitDialog.standardBox.addItem(self.NEW_ITEM)
         self.setBoxItems(self.model.rootItem, 0, Box.CAT)
         self.setBoxItems(self.model.rootItem.child(0), 0, Box.HARDW)
         self.editLimitDialog.standardBox.currentIndexChanged.connect(lambda index: self.setBoxItems(self.model.rootItem, index, Box.CAT))
@@ -34,17 +35,33 @@ class EditLimitDialog():
 
     def setBoxItems(self, parent, index, boxIndex):
         self.boxes[boxIndex].blockSignals(True)
-        self.setTextEdit(boxIndex-1)
-        if boxIndex < len(self.boxes) - 1:
-            self.boxes[boxIndex].clear()
-            for item in parent.child(index).children:
-                self.boxes[boxIndex].addItem(item.name, item)
-            self.setBoxItems(parent.child(index), 0, boxIndex + 1)
-        elif boxIndex < len(self.boxes):
-            self.boxes[Box.PARAM].setCurrentIndex(0)
-            self.setTextLimit(parent.child(index), self.boxes[-1].currentText())
+        if not (self.boxes[boxIndex-1].currentText() == self.NEW_ITEM):
+            self.setTextEdit(boxIndex-1)
+            if boxIndex < len(self.boxes) - 1:
+                self.boxes[boxIndex].clear()
+                for item in parent.child(index).children:
+                    self.boxes[boxIndex].addItem(item.name, item)
+                self.boxes[boxIndex].addItem(self.NEW_ITEM)
+                self.setBoxItems(parent.child(index), 0, boxIndex + 1)
+            elif boxIndex < len(self.boxes):
+                self.boxes[Box.PARAM].setCurrentIndex(0)
+                self.setTextLimit(parent.child(index), self.boxes[-1].currentText())
+        else:
+            self.lineEdits[boxIndex-1].clear()
+            self.setBoxesToNew(boxIndex)
         self.boxes[boxIndex].blockSignals(False)
 
+
+    def setBoxesToNew(self, boxIndex):
+        if boxIndex < len(self.boxes) - 1:
+            self.boxes[boxIndex].blockSignals(True)
+            self.boxes[boxIndex].clear()
+            self.boxes[boxIndex].addItem(self.NEW_ITEM)
+            self.lineEdits[boxIndex].clear()
+            self.setBoxesToNew(boxIndex + 1)
+            self.boxes[boxIndex].blockSignals(False)
+        elif boxIndex < len(self.boxes):
+            self.lineEdits[boxIndex].clear()
 
     def setTextEdit(self, boxIndex):
         self.lineEdits[boxIndex].setText(self.boxes[boxIndex].currentText())
@@ -54,18 +71,45 @@ class EditLimitDialog():
             self.lineEdits[Box.PARAM].setText(item.limits.dict[param].__str__())
 
     def saveLimit(self, closeDialog):
-        if closeDialog:
-            self.dialog.accept()
-        #TODO: save to xml file and model
+        if self.validateEdits():
+            for box in self.boxes:
+                box.blockSignals(True)
+            parent = self.model.rootItem
+            self.model.beginResetModel()
+            for i in range(3):
+                if not (self.boxes[i].currentText() == self.NEW_ITEM):
+                    if i < 1:
+                        item = next(x for x in self.model.rootItem.children if x.name == self.boxes[i].currentText())
+                    else:
+                        item = next(x for x in self.boxes[i-1].currentData().children if x.name == self.boxes[i].currentText())
+                    if item:
+                        item.name = self.lineEdits[i].text()
+                        self.boxes[i].setItemText(self.boxes[i].currentIndex(), item.name)
+                        parent = item
+                else: #New limit
+                    newItem = TreeItem(self.lineEdits[i].text(), parent)
+                    self.boxes[i].addItem(newItem.name, newItem)
+                    self.boxes[i].setCurrentText(newItem.name)
+                    parent.addChild(newItem)
+                    parent = newItem
+            if not (self.lineEdits[Box.PARAM].text() == ""):
+                self.boxes[Box.HARDW].currentData().limits.dict[self.boxes[Box.PARAM].currentText()] = Limit(self.boxes[Box.PARAM].currentText(), self.lineEdits[Box.PARAM].text())
+            for box in self.boxes:
+                box.blockSignals(False)
+            self.model.endResetModel()
+            self.model.updateDict()
+            if closeDialog:
+                self.dialog.accept()
+                self.model.writeModelToFIle()
+
+    def validateEdits(self):
         for i in range(3):
-            if i < 1:
-                item = [x for x in self.model.rootItem.children if x.name == self.boxes[i].currentText()]
-            else:
-                item = [x for x in self.boxes[i-1].currentData().children if x.name == self.boxes[i].currentText()]
-            if len(item) > 0:
-                item[0].name = self.lineEdits[i].text()
-                self.boxes[i].setItemText(self.boxes[i].currentIndex(), item[0].name)
-        self.boxes[Box.HARDW].currentData().limits.dict[self.boxes[Box.PARAM].currentText()] = Limit(self.boxes[Box.PARAM].currentText(), self.lineEdits[Box.PARAM].text())
+            if self.lineEdits[i].text() == "":
+                error = QtWidgets.QErrorMessage(self.dialog)
+                error.showMessage("Please fill the blanks.", "Empty_Blanks")
+                error.exec_()
+                return False
+        return True
 
     def showDialog(self):
         return self.dialog.exec_()

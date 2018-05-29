@@ -1,32 +1,34 @@
-<Root name="Standard">    
-    <Standard name="Tia">
-        <Category name="CAT6A">
-            <Hardware name="Connecting Hardware">
-                <Limit param="RL" function="2"/>
-            </Hardware>
-            <Hardware name="Cord Cable"/>
-        </Category>
-        <Category name="CAT6">
-            <Hardware name="Connecting Hardware"/>
-            <Hardware name="Cord Cable"/>
-        </Category>
-        <Category name="CAT5e">
-            <Hardware name="Connecting Hardware"/>
-            <Hardware name="Cord Cable"/>
-        </Category>
-    </Standard>
-    <Standard name="Iso">
-        <Category name="CAT6A">
-            <Hardware name="Connecting Hardware"/>
-            <Hardware name="Cord Cable"/>
-        </Category>
-        <Category name="CAT6">
-            <Hardware name="Connecting Hardware"/>
-            <Hardware name="Cord Cable"/>
-        </Category>
-        <Category name="CAT5e">
-            <Hardware name="Connecting Hardware"/>
-            <Hardware name="Cord Cable"/>
-        </Category>
-    </Standard>
+<?xml version="1.0" encoding="utf-8"?>
+<Root name="Standard">
+	<Standard name="Tia">
+		<Category name="CAT6A">
+			<Hardware name="Connecting Hardware">
+				<Limit param="RL">2</Limit>
+				<Limit param="IL">3</Limit>
+			</Hardware>
+			<Hardware name="Cord Cable"></Hardware>
+		</Category>
+		<Category name="CAT6">
+			<Hardware name="Connecting Hardware"></Hardware>
+			<Hardware name="Cord Cable"></Hardware>
+		</Category>
+		<Category name="CAT5e">
+			<Hardware name="Connecting Hardware"></Hardware>
+			<Hardware name="Cord Cable"></Hardware>
+		</Category>
+	</Standard>
+	<Standard name="Iso">
+		<Category name="CAT6A">
+			<Hardware name="Connecting Hardware"></Hardware>
+			<Hardware name="Cord Cable"></Hardware>
+		</Category>
+		<Category name="CAT6">
+			<Hardware name="Connecting Hardware"></Hardware>
+			<Hardware name="Cord Cable"></Hardware>
+		</Category>
+		<Category name="CAT5e">
+			<Hardware name="Connecting Hardware"></Hardware>
+			<Hardware name="Cord Cable"></Hardware>
+		</Category>
+	</Standard>
 </Root>
