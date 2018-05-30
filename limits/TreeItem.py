@@ -10,6 +10,9 @@ class TreeItem():
     def addChild(self, item):
         self.children.append(item)
 
+    def removeChild(self, item):
+        self.children.remove(item)
+
     def child(self, row):
         return self.children[row]
 

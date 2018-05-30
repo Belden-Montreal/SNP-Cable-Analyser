@@ -23,15 +23,18 @@ class EditLimitDialog():
         for item in self.model.rootItem.children:
             self.editLimitDialog.standardBox.addItem(item.name, item)
         self.editLimitDialog.standardBox.addItem(self.NEW_ITEM)
-        self.setBoxItems(self.model.rootItem, 0, Box.CAT)
-        self.setBoxItems(self.model.rootItem.child(0), 0, Box.HARDW)
-        self.editLimitDialog.standardBox.currentIndexChanged.connect(lambda index: self.setBoxItems(self.model.rootItem, index, Box.CAT))
-        self.editLimitDialog.categoryBox.currentIndexChanged.connect(lambda index: self.setBoxItems(self.editLimitDialog.standardBox.currentData(), index, Box.HARDW))
-        self.editLimitDialog.hardwareBox.currentIndexChanged.connect(lambda index: self.setBoxItems(self.editLimitDialog.categoryBox.currentData(), index, Box.PARAM))
+        self.setBoxItems(self.model.rootItem.child(0), 0, Box.CAT)
+        self.editLimitDialog.standardBox.currentIndexChanged.connect(lambda index: self.setBoxItems(self.editLimitDialog.standardBox.currentData(), index, Box.CAT))
+        self.editLimitDialog.categoryBox.currentIndexChanged.connect(lambda index: self.setBoxItems(self.editLimitDialog.categoryBox.currentData(), index, Box.HARDW))
+        self.editLimitDialog.hardwareBox.currentIndexChanged.connect(lambda index: self.setBoxItems(self.editLimitDialog.hardwareBox.currentData(), index, Box.PARAM))
         self.editLimitDialog.parameterBox.currentTextChanged.connect(lambda text: self.setTextLimit(self.editLimitDialog.hardwareBox.currentData(), text))
         self.editLimitDialog.okButton.pressed.connect(lambda: self.saveLimit(True))
         self.editLimitDialog.cancelButton.pressed.connect(self.dialog.reject)
         self.editLimitDialog.saveButton.pressed.connect(lambda: self.saveLimit(False))
+        self.editLimitDialog.delStandardButton.pressed.connect(lambda: self.deleteItem(Box.STAND))
+        self.editLimitDialog.delCategoryButton.pressed.connect(lambda: self.deleteItem(Box.CAT))
+        self.editLimitDialog.delHardwareButton.pressed.connect(lambda: self.deleteItem(Box.HARDW))
+
 
     def setBoxItems(self, parent, index, boxIndex):
         self.boxes[boxIndex].blockSignals(True)
@@ -39,16 +42,18 @@ class EditLimitDialog():
             self.setTextEdit(boxIndex-1)
             if boxIndex < len(self.boxes) - 1:
                 self.boxes[boxIndex].clear()
-                for item in parent.child(index).children:
+                for item in parent.children:
                     self.boxes[boxIndex].addItem(item.name, item)
                 self.boxes[boxIndex].addItem(self.NEW_ITEM)
-                self.setBoxItems(parent.child(index), 0, boxIndex + 1)
+                if parent.childCount() > 0:
+                    self.setBoxItems(parent.child(0), 0, boxIndex + 1)
+                else:
+                    self.setBoxesToNew(boxIndex)
             elif boxIndex < len(self.boxes):
                 self.boxes[Box.PARAM].setCurrentIndex(0)
-                self.setTextLimit(parent.child(index), self.boxes[-1].currentText())
+                self.setTextLimit(parent, self.boxes[-1].currentText())
         else:
-            self.lineEdits[boxIndex-1].clear()
-            self.setBoxesToNew(boxIndex)
+            self.setBoxesToNew(boxIndex-1)
         self.boxes[boxIndex].blockSignals(False)
 
 
@@ -111,6 +116,14 @@ class EditLimitDialog():
                 error.exec_()
                 return False
         return True
+
+    def deleteItem(self, buttonIndex):
+        itemToDelete = self.boxes[buttonIndex].currentData()
+        if itemToDelete:
+            res = QtWidgets.QMessageBox.question(self.dialog, "Deletion", "Are you sure you want to delete "+itemToDelete.name+"?", QtWidgets.QMessageBox.Yes|QtWidgets.QMessageBox.No, QtWidgets.QMessageBox.No)
+            if res == QtWidgets.QMessageBox.Yes:
+                itemToDelete.parent.removeChild(itemToDelete)
+                self.setBoxItems(itemToDelete.parent, 0, buttonIndex)
 
     def showDialog(self):
         return self.dialog.exec_()

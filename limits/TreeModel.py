@@ -2,7 +2,6 @@ from PyQt5 import QtCore
 from limits.TreeItem import TreeItem
 from limits.Limit import Limit
 from collections import OrderedDict
-import json
 import xmltodict
 
 class TreeModel(QtCore.QAbstractItemModel):
