@@ -10,7 +10,10 @@
 		</Category>
 		<Category name="CAT6">
 			<Hardware name="Connecting Hardware">
-				<Limit param="RL">24-20*log(f/100)</Limit>
+				<Limit param="RL">
+					<Part min="1" max="50">30</Part>
+					<Part max="250">24-20*log(f/100)</Part>
+				</Limit>
 				<Limit param="IL">0.02*sqrt(f)</Limit>
 				<Limit param="NEXT">54-20*log(f/100)</Limit>
 				<Limit param="PSNEXT">50-20*log(f/100)</Limit>
