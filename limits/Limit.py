@@ -1,5 +1,5 @@
-from sympy.parsing import sympy_parser
-
+from sympy.parsing.sympy_parser import parse_expr, standard_transformations, implicit_multiplication_application, convert_xor
+from sympy import N
 class Limit:
 
     def __init__(self, parameter, clause):
@@ -14,7 +14,11 @@ class Limit:
         return self.clause
 
     def parseClause(self, clause):
-        return sympy_parser.parse_expr(clause)
+        transformation = standard_transformations + (implicit_multiplication_application, convert_xor)
+        return parse_expr(clause, transformations=transformation)
 
-    def evaluateLimit(self):
-        return self.function()
+    def evaluate(self, vals):
+        for symbol in self.function.free_symbols:
+            if not(symbol.__str__() in vals):
+                return "Error. Parameter "+symbol.__str__()+" not provided"
+        return N(self.function.subs(vals))
