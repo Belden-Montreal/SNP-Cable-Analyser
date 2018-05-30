@@ -10,11 +10,18 @@ class LimitDialog(object):
         self.limitDialog.setupUi(self.dialog)
         self.model = TreeModel()
         self.limitDialog.treeView.setModel(self.model)
+        self.resizeColumns(QtCore.QModelIndex())
         button = self.limitDialog.buttonBox.button(QtWidgets.QDialogButtonBox.Ok)
         button.setDisabled(True)
         self.limitDialog.treeView.clicked.connect(lambda index: self.updateButton(index, button))
         self.limitDialog.treeView.doubleClicked.connect(lambda index: self.doubleClickAccept(index))
+        self.limitDialog.treeView.expanded.connect(lambda index: self.resizeColumns(index))
+        self.limitDialog.treeView.collapsed.connect(lambda index: self.resizeColumns(index))
         self.limitDialog.editButton.pressed.connect(lambda: self.openLimitEditDialog())
+
+    def resizeColumns(self, index):
+        for column in range(self.model.columnCount(index)):
+            self.limitDialog.treeView.resizeColumnToContents(column)
 
     def getSelection(self):
         return self.limitDialog.treeView.selectedIndexes()[0]
