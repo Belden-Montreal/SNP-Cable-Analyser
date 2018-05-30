@@ -126,12 +126,13 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
         limitDialog = LimitDialog()
         result = limitDialog.showDialog()
         if result:
-            #For testing purposes
-            item = limitDialog.getSelection()
-            string = item.internalPointer().limits.dict
-                
-            print(string)
-            
+            item = limitDialog.getSelection().internalPointer()               
+            for sample in self.selected:
+                self.Project.getSampleByName(sample).limit = item
+                for i in range(0, len(self.Project.measurements)):
+                    if self.sampleTable.item(i,0).text() == sample:
+                        self.sampleTable.setItem(i, 2, QtWidgets.QTableWidgetItem(item.name))
+            self.sampleTable.resizeColumnsToContents()
             
 
     def setActiveSample(self):
