@@ -34,6 +34,15 @@
 				<Limit param="RL">20+5*log(f)</Limit>
 				<Limit param="IL">1.2*(1.808*sqrt(f)+0.017*f+0.2/sqrt(f))</Limit>
 			</Hardware>
+			<Hardware name="Backbone cable">
+				<Limit param="RL">44.3-15*log(f/100)</Limit>
+				<Limit param="PSNEXT">42.3-15*log(f/100)</Limit>
+				<Limit param="ACRF">27.8-20*log(f/100)</Limit>
+				<Limit param="PSACRF">24.8-20*log(f/100)</Limit>
+			</Hardware>
+			<Hardware name="Cords and jumpers">
+				<Limit param="RL">24+3*log(f/25)</Limit>
+			</Hardware>
 		</Category>
 		<Category name="CAT5e">
 			<Hardware name="Connecting Hardware"></Hardware>

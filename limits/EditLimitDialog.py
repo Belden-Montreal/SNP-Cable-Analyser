@@ -67,8 +67,9 @@ class EditLimitDialog():
         self.lineEdits[boxIndex].setText(self.boxes[boxIndex].currentText())
 
     def setTextLimit(self, item, param):
-        if param in item.limits.dict:
-            self.lineEdits[Box.PARAM].setText(item.limits.dict[param].__str__())
+        if item:
+            if param in item.limits.dict:
+                self.lineEdits[Box.PARAM].setText(item.limits.dict[param].__str__())
 
     def saveLimit(self, closeDialog):
         if self.validateEdits():
