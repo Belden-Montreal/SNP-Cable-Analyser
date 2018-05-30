@@ -87,19 +87,15 @@ class TreeModel(QtCore.QAbstractItemModel):
                 for nextName in prop:
                     if not nextName == "@name":
                         self.parseProperty(nextName, item, prop)
-            elif "#text" in prop: #Limit has only one function
-                    parent.standard.limits[prop["@param"]] = Limit(prop["@param"], [prop["#text"]])
-            elif "Part" in prop:#Limit has multiple functions
-                limits = []
-                bounds = []
-                for part in prop["Part"]:
-                    if "@min" in part:
-                        bounds.append(int(part["@min"]))
-                    if "@max" in part:
-                        bounds.append(int(part["@max"]))
-                    if "#text" in part:
-                        limits.append(part["#text"])
-                parent.standard.limits[prop["@param"]] = Limit(prop["@param"], limits, bounds)
+            elif "#text" in prop:
+                    if "@min" in prop:
+                        parent.bounds.append(float(prop["@min"]))
+                    if "@max" in prop:
+                        parent.bounds.append(float(prop["@max"]))
+                    parent.clauses.append(prop["#text"])
+            elif "Part" in prop:
+                parent.standard.limits[prop["@param"]] = Limit(prop["@param"], [], [])
+                self.parseProperty("Part", parent.standard.limits[prop["@param"]], prop)
                 
     def updateDict(self):
         self.dictData.clear()
@@ -112,19 +108,16 @@ class TreeModel(QtCore.QAbstractItemModel):
                     limitItems = []
                     for limit in hardware.standard.limits.values():
                         if not (limit == ""):
-                            if len(limit.clauses) == 1:
-                                limitEntry = {"@param": limit.parameter, "#text": limit.clauses[0]}
-                            else:
-                                partItems = []
-                                i = 0
-                                for part in limit.clauses:
-                                    if i == 0:
-                                        partEntry = {"@min": limit.bounds[i], "@max": limit.bounds[i+1], "#text": part}
-                                    else:
-                                        partEntry = {"@max": limit.bounds[i+1], "#text": part}                                        
-                                    partItems.append(partEntry)
-                                    i += 1
-                                limitEntry = {"@param": limit.parameter, "Part": partItems}
+                            partItems = []
+                            i = 0
+                            for part in limit.clauses:
+                                if i == 0:
+                                    partEntry = {"@min": limit.bounds[i], "@max": limit.bounds[i+1], "#text": part}
+                                else:
+                                    partEntry = {"@max": limit.bounds[i+1], "#text": part}                                        
+                                partItems.append(partEntry)
+                                i += 1
+                            limitEntry = {"@param": limit.parameter, "Part": partItems}
                             limitItems.append(limitEntry)
                     if len(limitItems) > 0:
                         hardwareItems.append({"@name": hardware.name, "Limit": limitItems})
