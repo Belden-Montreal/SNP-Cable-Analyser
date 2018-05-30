@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>541</width>
-    <height>300</height>
+    <height>389</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <x>10</x>
      <y>10</y>
      <width>521</width>
-     <height>241</height>
+     <height>181</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout" columnminimumwidth="100,0,0">
@@ -47,9 +47,6 @@
     <item row="2" column="0">
      <widget class="QComboBox" name="hardwareBox"/>
     </item>
-    <item row="3" column="0">
-     <widget class="QComboBox" name="parameterBox"/>
-    </item>
     <item row="0" column="2">
      <widget class="QPushButton" name="delStandardButton">
       <property name="text">
@@ -71,16 +68,13 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="1" colspan="2">
-     <widget class="QLineEdit" name="parameterEdit"/>
-    </item>
    </layout>
   </widget>
   <widget class="QWidget" name="horizontalLayoutWidget">
    <property name="geometry">
     <rect>
      <x>280</x>
-     <y>260</y>
+     <y>350</y>
      <width>251</width>
      <height>31</height>
     </rect>
@@ -108,6 +102,47 @@
       <property name="text">
        <string>Cancel</string>
       </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="gridLayoutWidget_2">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>190</y>
+     <width>521</width>
+     <height>151</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="limitsLayout">
+    <property name="horizontalSpacing">
+     <number>45</number>
+    </property>
+    <item row="0" column="0">
+     <widget class="QComboBox" name="parameterBox"/>
+    </item>
+    <item row="0" column="1">
+     <widget class="QTableWidget" name="limitsTable">
+      <property name="rowCount">
+       <number>1</number>
+      </property>
+      <property name="columnCount">
+       <number>3</number>
+      </property>
+      <attribute name="horizontalHeaderVisible">
+       <bool>true</bool>
+      </attribute>
+      <attribute name="horizontalHeaderCascadingSectionResizes">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="verticalHeaderVisible">
+       <bool>false</bool>
+      </attribute>
+      <row/>
+      <column/>
+      <column/>
+      <column/>
      </widget>
     </item>
    </layout>

@@ -33,7 +33,7 @@ class TreeItem():
     def data(self, column):
         if column == 0:
             return self.name
-        elif self.standard.limit(column-1) == "" and not len(self.children):
+        elif self.standard.limit(column-1).__str__() == "" and not len(self.children):
             return "-"
         else:
             return self.standard.limit(column-1).__str__()

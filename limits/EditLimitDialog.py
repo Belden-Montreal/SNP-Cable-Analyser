@@ -17,7 +17,10 @@ class EditLimitDialog():
         self.editLimitDialog = Edit_Limit_Dialog.Ui_Dialog()
         self.editLimitDialog.setupUi(self.dialog)
         self.boxes = [self.editLimitDialog.standardBox, self.editLimitDialog.categoryBox, self.editLimitDialog.hardwareBox, self.editLimitDialog.parameterBox]
-        self.lineEdits = [self.editLimitDialog.standardEdit, self.editLimitDialog.categoryEdit, self.editLimitDialog.hardwareEdit, self.editLimitDialog.parameterEdit]
+        self.lineEdits = [self.editLimitDialog.standardEdit, self.editLimitDialog.categoryEdit, self.editLimitDialog.hardwareEdit]
+        self.editLimitDialog.limitsTable.setHorizontalHeaderLabels(["Min", "Max", "Limit"])
+        self.editLimitDialog.limitsTable.setColumnWidth(0, 50)
+        self.editLimitDialog.limitsTable.setColumnWidth(1, 50)
         self.editLimitDialog.parameterBox.addItems(self.model.header[1:])
         for item in self.model.rootItem.children:
             self.editLimitDialog.standardBox.addItem(item.name, item)
@@ -73,7 +76,21 @@ class EditLimitDialog():
     def setTextLimit(self, item, param):
         if item:
             if param in item.standard.limits:
-                self.lineEdits[Box.PARAM].setText(item.standard.limits[param].__str__())
+                self.editLimitDialog.limitsTable.clearContents()
+                self.editLimitDialog.limitsTable.setRowCount(len(item.standard.limits[param].clauses))
+                i = 0
+                for clause in item.standard.limits[param].clauses:
+                    minimum = item.standard.limits[param].bounds[i]
+                    if minimum == float('-inf'):
+                        minimum = "-"
+                    maximum = item.standard.limits[param].bounds[i+1]
+                    if maximum == float('inf'):
+                        maximum = "-"
+                    self.editLimitDialog.limitsTable.setItem(i, 0, QtWidgets.QTableWidgetItem(minimum.__str__()))
+                    self.editLimitDialog.limitsTable.setItem(i, 1, QtWidgets.QTableWidgetItem(maximum.__str__()))
+                    self.editLimitDialog.limitsTable.setItem(i, 2, QtWidgets.QTableWidgetItem(clause))
+                    self.editLimitDialog.limitsTable.resizeColumnToContents(2)
+                    i+=1
 
     def saveLimit(self, closeDialog):
         if self.validateEdits():
