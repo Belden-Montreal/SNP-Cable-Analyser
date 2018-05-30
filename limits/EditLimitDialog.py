@@ -1,6 +1,5 @@
 from PyQt5 import QtWidgets, QtCore
 from limits import Edit_Limit_Dialog
-from limits.limitParameters import PARAMETERS
 from limits.TreeItem import TreeItem
 from limits.Limit import Limit
 
@@ -19,7 +18,7 @@ class EditLimitDialog():
         self.editLimitDialog.setupUi(self.dialog)
         self.boxes = [self.editLimitDialog.standardBox, self.editLimitDialog.categoryBox, self.editLimitDialog.hardwareBox, self.editLimitDialog.parameterBox]
         self.lineEdits = [self.editLimitDialog.standardEdit, self.editLimitDialog.categoryEdit, self.editLimitDialog.hardwareEdit, self.editLimitDialog.parameterEdit]
-        self.editLimitDialog.parameterBox.addItems(PARAMETERS)
+        self.editLimitDialog.parameterBox.addItems(self.model.header[1:])
         for item in self.model.rootItem.children:
             self.editLimitDialog.standardBox.addItem(item.name, item)
         self.editLimitDialog.standardBox.addItem(self.NEW_ITEM)
@@ -73,8 +72,8 @@ class EditLimitDialog():
 
     def setTextLimit(self, item, param):
         if item:
-            if param in item.limits.dict:
-                self.lineEdits[Box.PARAM].setText(item.limits.dict[param].__str__())
+            if param in item.standard.limits:
+                self.lineEdits[Box.PARAM].setText(item.standard.limits[param].__str__())
 
     def saveLimit(self, closeDialog):
         if self.validateEdits():
@@ -99,14 +98,14 @@ class EditLimitDialog():
                     parent.addChild(newItem)
                     parent = newItem
             if not (self.lineEdits[Box.PARAM].text() == ""):
-                self.boxes[Box.HARDW].currentData().limits.dict[self.boxes[Box.PARAM].currentText()] = Limit(self.boxes[Box.PARAM].currentText(), self.lineEdits[Box.PARAM].text())
+                self.boxes[Box.HARDW].currentData().standard.limits[self.boxes[Box.PARAM].currentText()] = Limit(self.boxes[Box.PARAM].currentText(), [self.lineEdits[Box.PARAM].text()])
             for box in self.boxes:
                 box.blockSignals(False)
             self.model.endResetModel()
             self.model.updateDict()
             if closeDialog:
                 self.dialog.accept()
-                self.model.writeModelToFIle()
+                self.model.writeModelToFile()
 
     def validateEdits(self):
         for i in range(3):

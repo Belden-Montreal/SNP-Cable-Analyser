@@ -8,6 +8,7 @@ class TreeModel(QtCore.QAbstractItemModel):
     def __init__(self, parent = None):
         QtCore.QAbstractItemModel.__init__(self)
         self.setupModelFromFile()
+        self.header = ["Standard", "RL", "IL", "NEXT", "PSNEXT","FEXT", "PSFEXT", "ACRF", "PSACRF", "LCL", "LCTL", "TCL", "TCTL", "ELTCTL","CMRL", "CMNEXT"]
 
     def index(self, row, column, parent):
         if not self.hasIndex(row, column, parent):
@@ -64,14 +65,14 @@ class TreeModel(QtCore.QAbstractItemModel):
 
     def headerData(self, section, orientation, role):
         if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
-            return self.rootItem.data(section)
+            return self.header[section]
 
         return None
 
     def setupModelFromFile(self):
         file = open("limits/limits.xml", "r")
         self.dictData = xmltodict.parse(file.read())
-        self.rootItem = TreeItem(self.dictData["Root"]["@name"], None, True)
+        self.rootItem = TreeItem(self.dictData["Root"]["@name"])
         self.parseProperty("Standard", self.rootItem, self.dictData["Root"])
 
     def parseProperty(self, name, parent, data):
@@ -87,7 +88,7 @@ class TreeModel(QtCore.QAbstractItemModel):
                     if not nextName == "@name":
                         self.parseProperty(nextName, item, prop)
             else:
-                parent.limits.dict[prop["@param"]] = Limit(prop["@param"], prop["#text"])
+                parent.standard.limits[prop["@param"]] = Limit(prop["@param"], [prop["#text"]])
                 
     def updateDict(self):
         self.dictData.clear()
@@ -98,9 +99,9 @@ class TreeModel(QtCore.QAbstractItemModel):
                 hardwareItems = []
                 for hardware in category.children:
                     limitItems = []
-                    for limit in hardware.limits.dict.values():
+                    for limit in hardware.standard.limits.values():
                         if not (limit == ""):
-                            limitEntry = {"@param": limit.parameter, "#text": limit.clause}
+                            limitEntry = {"@param": limit.parameter, "#text": limit.clauses[0]}
                             limitItems.append(limitEntry)
                     if len(limitItems) > 0:
                         hardwareItems.append({"@name": hardware.name, "Limit": limitItems})
@@ -119,6 +120,6 @@ class TreeModel(QtCore.QAbstractItemModel):
         else:
             self.dictData = {"Root": {"@name": "Standard"}}
             
-    def writeModelToFIle(self):
+    def writeModelToFile(self):
         file = open("limits/limits.xml", "w")
         xmltodict.unparse(self.dictData, file, pretty=True)

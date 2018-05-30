@@ -1,10 +1,13 @@
-from limits.limitParameters import ParameterDict
+from limits.Standard import Standard
 
 class TreeItem():
-    def __init__(self, name, parent=None, header=False):
+    def __init__(self, name, parent=None):
         self.parent = parent
         self.name = name
-        self.limits = ParameterDict(header)
+        if parent:
+            self.standard = Standard(parent.name+" | "+name)
+        else:
+            self.standard = Standard("")
         self.children = []
 
     def addChild(self, item):
@@ -25,12 +28,12 @@ class TreeItem():
         return 0
     
     def columnCount(self):
-        return len(self.limits.dict) + 1
+        return len(self.standard.limits) + 1
 
     def data(self, column):
         if column == 0:
             return self.name
-        elif list(self.limits.dict.values())[column-1] == "" and not len(self.children):
+        elif self.standard.limit(column-1) == "" and not len(self.children):
             return "-"
         else:
-            return list(self.limits.dict.values())[column-1].__str__()
+            return self.standard.limit(column-1).__str__()

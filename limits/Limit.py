@@ -1,24 +1,34 @@
 from sympy.parsing.sympy_parser import parse_expr, standard_transformations, implicit_multiplication_application, convert_xor
 from sympy import N
+from sympy import Symbol
+
 class Limit:
 
-    def __init__(self, parameter, clause):
-        self.clause = clause
+    def __init__(self, parameter, clauses, bounds=[float('-inf'), float('inf')]):
+        self.clauses = clauses
         self.parameter = parameter
-        self.function = self.parseClause(clause)
+        self.parseClauses(clauses)
+        self.bounds = bounds
 
     def __str__(self):
-        return self.clause
+        return self.clauses[0]
 
     def __repr__(self):
-        return self.clause
+        return self.clauses[0]
 
-    def parseClause(self, clause):
+    def parseClauses(self, clauses):
         transformation = standard_transformations + (implicit_multiplication_application, convert_xor)
-        return parse_expr(clause, transformations=transformation)
+        self.functions = []
+        for clause in clauses:
+            self.functions.append(parse_expr(clause, transformations=transformation))
 
     def evaluate(self, vals):
-        for symbol in self.function.free_symbols:
-            if not(symbol.__str__() in vals):
-                return "Error. Parameter "+symbol.__str__()+" not provided"
-        return N(self.function.subs(vals))
+        i = 0
+        for function in self.functions:
+            for symbol in function.free_symbols:
+                if not(symbol.__str__() in vals):
+                    return "Error. Parameter "+symbol.__str__()+" not provided"
+            if self.bounds[i] < vals['f'] and vals['f'] < self.bounds[i+1]:
+                return N(function.subs(vals))
+            i += 1
+        return "Error. Frequency out of bounds"
