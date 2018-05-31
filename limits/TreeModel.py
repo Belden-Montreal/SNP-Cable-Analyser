@@ -107,7 +107,7 @@ class TreeModel(QtCore.QAbstractItemModel):
                 for hardware in category.children:
                     limitItems = []
                     for limit in hardware.standard.limits.values():
-                        if not (limit == ""):
+                        if not (limit.clauses[0] == ""):
                             partItems = []
                             i = 0
                             for part in limit.clauses:

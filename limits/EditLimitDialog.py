@@ -114,8 +114,15 @@ class EditLimitDialog():
                     self.boxes[i].setCurrentText(newItem.name)
                     parent.addChild(newItem)
                     parent = newItem
-            if not (self.lineEdits[Box.PARAM].text() == ""):
-                self.boxes[Box.HARDW].currentData().standard.limits[self.boxes[Box.PARAM].currentText()] = Limit(self.boxes[Box.PARAM].currentText(), [self.lineEdits[Box.PARAM].text(), "23"], [1, 10, 30])
+            limits = []
+            bounds = []
+            for x in range(0,self.editLimitDialog.limitsTable.rowCount()):
+                limits.append(self.editLimitDialog.limitsTable.item(x, 2).text())
+                if x == 0:
+                    bounds.append(float(self.editLimitDialog.limitsTable.item(x, 0).text()))
+                bounds.append(float(self.editLimitDialog.limitsTable.item(x, 1).text()))
+            print(bounds)
+            self.boxes[Box.HARDW].currentData().standard.limits[self.boxes[Box.PARAM].currentText()] = Limit(self.boxes[Box.PARAM].currentText(), limits, bounds)
             for box in self.boxes:
                 box.blockSignals(False)
             self.model.endResetModel()
