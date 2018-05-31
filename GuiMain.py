@@ -175,7 +175,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
         for i in range(0, measurementCount):
             self.sampleTable.setItem(i, 0, QtWidgets.QTableWidgetItem(self.Project.measurements[i].name))
             self.sampleTable.setItem(i, 1, QtWidgets.QTableWidgetItem(self.Project.measurements[i].date))
-            self.sampleTable.setItem(i, 2, QtWidgets.QTableWidgetItem(self.Project.measurements[i].standard))
+            #self.sampleTable.setItem(i, 2, QtWidgets.QTableWidgetItem(self.Project.measurements[i].standard))
         self.sampleTable.resizeColumnsToContents()
 
         
@@ -763,7 +763,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
 
         for param in self.sample.parameters:
             #print(param)
-            self.new_tab = ParameterWidget(param, self.sample)
+            self.new_tab = ParameterWidget(param.replace(" ", ''), self.sample)
             self.tab_list.append(self.new_tab.widget)
             self.param_tabs.addTab(self.new_tab.widget, param)
             #self.param_tabs.setCurrentIndex(self.tab_index)
@@ -800,8 +800,8 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
                 self.plot(self.sample.freq, getattr(self.sample, self.activeParameter.replace(" ", "")), limit = limit , unit = sample.freq_unit)
                 #print(self.sample.frequency.unit)
 
-                worstValue = sample.getWorstValue(self.activeParameter)
-                print(worstValue)
+                #worstValue = sample.getWorstValue(self.activeParameter)
+                #print(worstValue)
 
                 
         else:
