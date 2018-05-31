@@ -14,11 +14,11 @@ class TestLimits(unittest.TestCase):
 
     def test_parse_3(self):
         limit = Limit("RL", ["2/f"], [0, 10])
-        self.assertIsInstance(limit.evaluate({'f': -1}), str)
+        self.assertEqual(0, limit.evaluate({'f': -1}))
 
     def test_parse_4(self):
         limit = Limit("RL", ["f+1-x"])
-        self.assertIsInstance(limit.evaluate({'f': 4, 'z': 8}), str)
+        self.assertEqual(0, limit.evaluate({'f': 4, 'z': 8}))
 
     def test_parse_5(self):
         limit = Limit("RL", ["1.2*(1.808*sqrt(f)+0.017*f+0.2/sqrt(f))"])
@@ -28,6 +28,14 @@ class TestLimits(unittest.TestCase):
         limit = Limit("RL", ["f*2", "f^2"], [0, 10, 50])
         self.assertEqual(5*2, limit.evaluate({'f':5}))
         self.assertEqual(15**2, limit.evaluate({'f':15}))
+
+    def test_parse_array(self):
+        limit = Limit("RL", ["2*f"])
+        self.assertListEqual([2,4,6,8], limit.evaluateArray({'f':[1,2,3,4]}, 4))
+
+    def test_parse_array(self):
+        limit = Limit("RL", ["2*f*x"])
+        self.assertListEqual([8,12,12,8], limit.evaluateArray({'f':[1,2,3,4], 'x':[4,3,2,1]}, 4))
 
 if __name__ == '__main__':
     unittest.main()

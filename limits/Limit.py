@@ -34,3 +34,13 @@ class Limit:
                 return N(function.subs(vals))
             i += 1
         return 0
+
+    def evaluateArray(self, vals, nb):
+        results = []
+        for i in range(0, nb):
+            valsDict = {}
+            for param in vals:
+                valsDict[param] = vals[param][i]
+            results.append(self.evaluate(valsDict))
+        return results
+        
