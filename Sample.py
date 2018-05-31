@@ -2,6 +2,7 @@ from snpAnalyze import SNPManipulations
 import os
 from os.path import splitext
 import time
+import numpy as np
 
 class Sample(SNPManipulations):
 
@@ -22,7 +23,7 @@ class Sample(SNPManipulations):
         self.date = time.ctime(os.path.getctime(snpFile))
         #print self.date
 
-        self.limit = None
+        self.standard = None
 
         if one_sided != None:
             self.one_sided = one_sided
@@ -121,12 +122,64 @@ class Sample(SNPManipulations):
     def reCalc(self, one_sided = None):
         self.__init__(self.snpFile, one_sided)
         self.getParameters()
+
+
+    def getWorstMargin(self, parameter):
+        param = getattr(self, parameter)
+        pairs = param.keys()
+        worst = {}
+
+        for pair in pairs:
+            if self.standard:
+                margins = abs(param[pair] - self.standard.limits[parameter].evaluateArray({"f": self.freq} , len(sample.freq), neg=True))
+                worstMargin, index = self.advancedMin(margins)
+                value = param[pair][index]
+                freq = self.freq[index]
+                limit = self.standard.limits[parameter].evaluateArray({"f": self.freq} , len(sample.freq), neg=True)[index]
+
+                if value > limit:
+                    PassFail = "Fail"
+                
+                worst[pair] = (value, freq, limit, worstMargin)
+    
+        return worst, passFail
+
+    def getWorstValue(self, parameter):
+
+        PassFail = "Pass"
+        
+        param = getattr(self, parameter)
+        pairs = param.keys()
+        worst = {}
+
+        for pair in pairs:
+            if self.standard:
+                value = np.array(param[pair])
+                worstValue, index = self.advancedMin(0 - abs(value))
+                freq = self.freq[index]
+                limit = self.standard.limits[parameter].evaluateArray({"f": self.freq} , len(self.freq), neg=True)[index]
+                margin = abs(value - np.array(self.standard.limits[parameter].evaluateArray({"f": self.freq} , len(self.freq), neg=True)))[index]
+                
+                worst[pair] = (value, freq, limit, margin)
+
+                if  worstValue > limit:
+                    PassFail = "Fail"      
+
+        return worst, PassFail
+
+
         
 
     def __retr__(self):
         return "SNP"
         
-  
+
+
+    def advancedMin(self , vals):
+        return min(vals), list(vals).index(min(vals))
+
+    def advancedMax(self , vals):
+        return max(vals), list(vals).index(min(vals))
 
 if __name__ == "__main__":
     

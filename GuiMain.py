@@ -11,7 +11,7 @@ import matplotlib.backends.backend_qt5
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.pyplot import cm
-from ParameterWidget import ParameterWidget
+
 import os
 
 import time
@@ -44,6 +44,9 @@ from calWizard import CalWizard
 from decimal import Decimal
 
 import addplug
+
+import matplotlib.ticker
+
 
 class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, QtWidgets.QFileDialog, QtWidgets.QListView, QtWidgets.QDialog, QtCore.Qt):
 
@@ -128,10 +131,9 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
         limitDialog = LimitDialog()
         result = limitDialog.showDialog()
         if result:
-            self.standards = limitDialog.getStandardList()
             item = limitDialog.getSelection().internalPointer().standard
             for sample in self.selected:
-                self.Project.getSampleByName(sample).limit = item
+                self.Project.getSampleByName(sample).standard = item
                 for i in range(0, len(self.Project.measurements)):
                     if self.sampleTable.item(i,0).text() == sample:
                         self.sampleTable.setItem(i, 2, QtWidgets.QTableWidgetItem(item.name))
@@ -170,7 +172,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
         for i in range(0, measurementCount):
             self.sampleTable.setItem(i, 0, QtWidgets.QTableWidgetItem(self.Project.measurements[i].name))
             self.sampleTable.setItem(i, 1, QtWidgets.QTableWidgetItem(self.Project.measurements[i].date))
-            self.sampleTable.setItem(i, 2, QtWidgets.QTableWidgetItem(self.Project.measurements[i].limit))
+            self.sampleTable.setItem(i, 2, QtWidgets.QTableWidgetItem(self.Project.measurements[i].standard))
         self.sampleTable.resizeColumnsToContents()
 
         
@@ -600,7 +602,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
 
         self.displaySamplesInTable()
 
-    def plot(self, x=None, param_dict=None):
+    def plot(self, x=None, param_dict=None, limit = None, unit = "Mhz"):
 
         self.graphicsView.figure.clear()
         #ax.set_xlim(300*(10**3), 10**9)
@@ -617,17 +619,23 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
                 ax.semilogx(x, param_dict[key], label=key, c = c)
                 #print key 
 
+            ax.xaxis.set_major_formatter(matplotlib.ticker.ScalarFormatter())
+
             ax.legend(loc='upper left', ncol = 1 if len(param_dict.keys()) <= 8 else 2 )
 
             #self.figure.tight_layout()
 
             ax.grid(which="both")
 
-            ax.set_xlabel('Freq (Hz)')
+            ax.set_xlabel('Freq ({})'.format(unit))
             ax.set_ylabel('dB')
             ax.set_title(self.activeParameter)
             if self.activeParameter.replace(" ", "") == "PropagationDelay":
                 ax.set_ylabel('nSec')
+
+            if limit is not None:
+                ax.semilogx(x, limit, label=key, c = c)
+                
                 
             #self.ax.legend()
         self.graphicsView.draw()
@@ -749,9 +757,9 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
 
         for param in self.sample.parameters:
             #print(param)
-            self.new_tab = ParameterWidget(param, self.sample)
-            self.tab_list.append(self.new_tab.widget)
-            self.param_tabs.addTab(self.new_tab.widget, param)
+            self.new_tab = QtWidgets.QWidget()
+            self.tab_list.append(self.new_tab)
+            self.param_tabs.addTab(self.new_tab, param)
             #self.param_tabs.setCurrentIndex(self.tab_index)
 
         #self.param_tabs.currentChanged['int'].connect(self.tabChange)
@@ -779,7 +787,17 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
             if sample.__retr__() == "Embed":
                 self.embedPlotUpdate()
             else:
-                self.plot(self.sample.freq, getattr(self.sample, self.activeParameter.replace(" ", "")))
+                limit = None
+                if sample.standard is not None:
+                    limit = sample.standard.limits[self.activeParameter].evaluateArray({"f": sample.freq} , len(sample.freq), neg=True)
+                    #print(sample.freq)
+                self.plot(self.sample.freq, getattr(self.sample, self.activeParameter.replace(" ", "")), limit = limit , unit = sample.freq_unit)
+                #print(self.sample.frequency.unit)
+
+                worstValue = sample.getWorstValue(self.activeParameter)
+                print(worstValue)
+
+                
         else:
             self.plot(None, None)
 
@@ -790,8 +808,8 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
             if addr:
                 try:
                     print("before")
-                    #self.comm = Communication()
-                    #self.comm.connectToVNA(addr)
+                    self.comm = Communication()
+                    self.comm.connectToVNA(addr)
                     print("done")
                     connected = True
                     self.actionWho_am_I.setEnabled(True)
