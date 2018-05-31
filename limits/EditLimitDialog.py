@@ -121,7 +121,6 @@ class EditLimitDialog():
                 if x == 0:
                     bounds.append(float(self.editLimitDialog.limitsTable.item(x, 0).text()))
                 bounds.append(float(self.editLimitDialog.limitsTable.item(x, 1).text()))
-            print(bounds)
             self.boxes[Box.HARDW].currentData().standard.limits[self.boxes[Box.PARAM].currentText()] = Limit(self.boxes[Box.PARAM].currentText(), limits, bounds)
             for box in self.boxes:
                 box.blockSignals(False)

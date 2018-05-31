@@ -4,8 +4,8 @@
 		<Category name="CAT6A">
 			<Hardware name="Connecting Hardware">
 				<Limit param="RL">
-					<Part min="1" max="10">2</Part>
-					<Part max="30">23</Part>
+					<Part min="1.0" max="10.0">2</Part>
+					<Part max="30.0">23</Part>
 				</Limit>
 				<Limit param="IL">
 					<Part min="-inf" max="inf">3</Part>
