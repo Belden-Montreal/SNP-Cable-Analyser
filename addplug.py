@@ -16,11 +16,12 @@ import numpy as np
 from embedding2 import Embedding
 
 
-class addPlug(QtWidgets.QMainWindow, plugDialog.Ui_Dialog, QtWidgets.QAction, QtWidgets.QFileDialog, QtWidgets.QListView, QtWidgets.QDialog, QtCore.Qt):
+class AddPlug(QtWidgets.QMainWindow, plugDialog.Ui_Dialog, QtWidgets.QAction, QtWidgets.QFileDialog, QtWidgets.QListView, QtWidgets.QDialog, QtCore.Qt):
 
     def __init__(self):
         super(self.__class__, self).__init__()
-        self.setupUi(self)
+        self.dialog = QtWidgets.QDialog()
+        self.setupUi(self.dialog)
 
         self.em = Embedding()
 
@@ -50,6 +51,10 @@ class addPlug(QtWidgets.QMainWindow, plugDialog.Ui_Dialog, QtWidgets.QAction, Qt
         self.pdf_load_import.clicked.connect(self.pdfLoadImport)
         #self.pdf_load_acquire.clicked.connect(self.pdfLoadAcquire)
 
+        self.addPlug.clicked.connect(self.addNewPlug)
+        self.addPlug.setEnabled(False)
+
+        self.dialog.exec_()
 
     def dfOpenImport(self):
         self.dfOpen = self.importSNP()
@@ -79,16 +84,23 @@ class addPlug(QtWidgets.QMainWindow, plugDialog.Ui_Dialog, QtWidgets.QAction, Qt
         
 
     def createPlug(self, plugName = None):
+
         condition = self.dfOpen and self.dfShort and self.pdfOpen and self.pdfShort and self.pdfLoad
 
-        if condition:
+        if condition:  #if all the required measurements are there
             correctedPlugVector = self.em.addPlug(self.dfOpen , self.dfShort , self.pdfOpen , self.pdfShort , self.pdfLoad, plugName)
+
+            self.addPlug.setEnabled(True)
+
             if plugName == None:
 
                 self.correctedPlugVectorPhase = {}
+
+
                 
                 for pair in correctedPlugVector.keys():
                     self.correctedPlugVectorPhase[pair] = np.angle(correctedPlugVector[pair], deg = True)
+                    
 
                 self.plot()
 
@@ -100,82 +112,91 @@ class addPlug(QtWidgets.QMainWindow, plugDialog.Ui_Dialog, QtWidgets.QAction, Qt
         #print files
         if file:
             print(file)
-            return file  
+            return file
 
+
+    def getPhaseLimits(self):
+        tpLim = {}
+
+        f100 = list(self.em.freq).index(100400400.4004)
+        f500 = list(self.em.freq).index(500000000)
+
+        freq = np.array(self.em.freq[f100:f500]) / 1e6
+        tpLim["45-36"] = {}
+        tpLim["45-36"]["+"] = [(-90 + 1.5*f/100) + 1 if f in range(1, 500) else (-90 + 1.5*f/100) + f/100 for f in freq]
+        tpLim["45-36"]["-"] = [(-90 + 1.5*f/100) - 1 if f in range(1, 500) else (-90 + 1.5*f/100) - f/100 for f in freq]
+        
+        tpLim["12-36"] = {}
+        tpLim["12-36"]["+"] = [(-90 + 1.5*f/100) + 3*f/100 for f in freq]
+        tpLim["12-36"]["-"] = [(-90 + 1.5*f/100) - 3*f/100 for f in freq]
+
+        tpLim["36-78"] = {}
+        tpLim["36-78"]["+"] = [(-90 + 1.5*f/100) + 3*f/100 for f in freq]
+        tpLim["36-78"]["-"] = [(-90 + 1.5*f/100) - 3*f/100 for f in freq]
+
+
+        tpLim["45-12"] = {}
+        tpLim["45-12"]["+"] = [90 + (30*f/100) for f in freq]
+        tpLim["45-12"]["-"] = [90 - (30*f/100) for f in freq]
+
+        tpLim["45-78"] = {}
+        tpLim["45-78"]["+"] = [90 + (30*f/100) for f in freq]
+        tpLim["45-78"]["-"] = [90 - (30*f/100) for f in freq]
+
+        tpLim["12-78"] = None
+        
+        return tpLim
+        
     def plot(self):
 
-        self.graphicsView.figure.clear()
-
-        x = np.array([i for i in range(0, 500)])
-
-        ax=self.graphicsView.figure.add_subplot(321)
-        #a = scipy.signal.decimate(x, 10)
-        ax.plot(self.em.freq, self.correctedPlugVectorPhase['45-12'])
-
-
-        ax.grid(which="both")
-
-        ax.set_xlabel('Freq (Hz)')
-        ax.set_ylabel('dB')
-
-        ax=self.graphicsView.figure.add_subplot(322)
-        ax.semilogx(x, x**2)
-
-
-        ax.grid(which="both")
-
-        ax.set_xlabel('Freq (MHz)')
-        ax.set_ylabel('dB')
-
+        limit = self.getPhaseLimits()
         
-        ax=self.graphicsView.figure.add_subplot(323)
-        ax.semilogx(x, x**2)
+        self.graphicsView.figure.clear()
+        for i, pair in enumerate(self.correctedPlugVectorPhase):
+            f100 = list(self.em.freq).index(100400400.4004)
+            f500 = list(self.em.freq).index(500000000)
 
+            ax=self.graphicsView.figure.add_subplot(3, 2, i+1)
+            ax.semilogx(self.em.freq[f100: f500], self.correctedPlugVectorPhase[pair][f100: f500])
 
-        ax.grid(which="both")
+            ax.set_ylim((-100, 300))
 
-        ax.set_xlabel('Freq (MHz)')
-        ax.set_ylabel('dB') 
+            if limit[pair]:
+                ax.semilogx(self.em.freq[f100: f500], limit[pair]["+"])
+                ax.semilogx(self.em.freq[f100: f500], limit[pair]["-"])
 
+                ax.set_ylim((min(limit[pair]["-"]) - 5), max(limit[pair]["+"])+5)
+    
+            ax.grid(which="both")
 
-        ax=self.graphicsView.figure.add_subplot(324)
-        ax.semilogx(x, x**2)
+            ax.set_title(pair)
 
+            ax.set_xlabel('Freq (Hz)')
+            ax.set_ylabel('dB')
 
-        ax.grid(which="both")
-
-        ax.set_xlabel('Freq (MHz)')
-        ax.set_ylabel('dB')
-
-
-        ax=self.graphicsView.figure.add_subplot(325)
-        ax.semilogx(x, x**2)
-
-
-        ax.grid(which="both")
-
-        ax.set_xlabel('Freq (MHz)')
-        ax.set_ylabel('dB')
-
-
-
-        ax=self.graphicsView.figure.add_subplot(326)
-        ax.semilogx(x, x**2)
-
-
-        ax.grid(which="both")
-
-        ax.set_xlabel('Freq (MHz)')
-        ax.set_ylabel('dB') 
         self.graphicsView.draw()
 
+    def addNewPlug(self):
 
+        plugName = self.plug_name_line_edit.text()
+        try:
 
+            self.createPlug(plugName)
+            self.dialog.close()
+        except Exception as e:
+            print("file already exists")
+            msg = QtWidgets.QMessageBox()
+            msg.setIcon(QtWidgets.QMessageBox.Information)
 
-        
+            msg.setText("A plug by this name already exists.")
+            msg.setInformativeText("Please rename your plug")
+            msg.setWindowTitle("Plug name conflict")
+            msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+               
+            retval = msg.exec_()  
 
 def main():
-    app = QtWidgets.QApplication(sys.argv)  # A new instance of QApplication
+    app = QtWidgets.Dialog()  # A new instance of QApplication
     app.setStyle('fusion')
     app.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
         
@@ -183,7 +204,7 @@ def main():
     width, height = screen_resolution.width(), screen_resolution.height()
 
 
-    form = addPlug()  # We set the  form to be our ExampleApp (design)
+    form = AddPlug()  # We set the  form to be our ExampleApp (design)
 
     #form.show()  # Show the form
     form.show()

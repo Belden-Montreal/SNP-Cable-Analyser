@@ -3,7 +3,6 @@ import sys
 import scipy
 import MW3
 import VNA_addr_dialog
-from limits.LimitDialog import LimitDialog
 import TestParameters
 from Communication import Communication
 import matplotlib.figure
@@ -43,7 +42,7 @@ from calWizard import CalWizard
 
 from decimal import Decimal
 
-import addplug
+import addPlug
 
 class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, QtWidgets.QFileDialog, QtWidgets.QListView, QtWidgets.QDialog, QtCore.Qt):
 
@@ -124,18 +123,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
         self.setActiveSample()
 
     def setLimit(self):
-        
-        limitDialog = LimitDialog()
-        result = limitDialog.showDialog()
-        if result:
-            item = limitDialog.getSelection().internalPointer().standard
-            for sample in self.selected:
-                self.Project.getSampleByName(sample).limit = item
-                for i in range(0, len(self.Project.measurements)):
-                    if self.sampleTable.item(i,0).text() == sample:
-                        self.sampleTable.setItem(i, 2, QtWidgets.QTableWidgetItem(item.name))
-            self.sampleTable.resizeColumnsToContents()
-            
+        pass
 
     def setActiveSample(self):
         self.plot(None, None)
@@ -391,12 +379,9 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
             self.plot(None, None)
 
     def addPlugDialog(self):
-
-
-
-        form = addplug.AddPlug()  # We set the  form to be our ExampleApp (design)
-
-        self.embedPlotUpdate()         
+        AddPlug()
+        self.embedUpdateTab()
+                
         
     def setupAlien(self):
         print("Alien Sample Added")
@@ -685,7 +670,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
                     self.displaySampleParams(None)
             elif action == end_end:
                 for sample in self.selected:
-                    self.Project.getSampleByName(sample).reCalc(one_sided = False)
+                    self.Project.getSampleByame(sample).reCalc(one_sided = False)
 
                 if len(self.selected) == 1:  #Since only one sample can be displayed at a time
                     self.displaySampleParams(self.selected)
@@ -696,13 +681,11 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
             elif action == exportExcel:
                 print(self.selected)
                 file, _ = self.getSaveFileName(self,"Export Excel Repport", "","Excel File (*.xlsx)")
-                self.Project.generateExcel(file , self.selected, True)
+                self.Project.generateExcel(file , self.selected)
 
             elif action == delete:
                 self.deleteSample()
 
-            elif action == setLimit:
-                self.setLimit()
             #self.Project.activeMeasurements = selected
             return 1
 
