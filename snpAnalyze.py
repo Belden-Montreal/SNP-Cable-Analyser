@@ -24,6 +24,8 @@ class SNPManipulations(rf):
 
         self.one_sided = False
 
+        self.freq_unit = 'mhz'
+
     def getRL(self, matrix, z=True ):
         '''
         Get the Return Loss array in dd or cc mode.
@@ -597,6 +599,27 @@ class SNPManipulations(rf):
             result.update(dictionary)
         return result
 
+
+    @property
+    def freq_unit(self):
+        return self.frequency.unit
+
+    @freq_unit.setter
+    def freq_unit(self, unit):
+
+        unit_dict = {"hz" : 1,
+                     "khz" : 2,
+                     "mhz" : 3,
+                     "ghz" : 4}
+
+        current_unit = unit_dict[self.frequency.unit.lower()]
+        desired_unit = unit_dict[unit.lower()]
+
+        self.freq = self.freq * (1000 ** (current_unit - desired_unit))
+        self.frequency.unit = unit
+
+        
+
             
 if __name__ == "__main__":
 
@@ -617,9 +640,16 @@ if __name__ == "__main__":
         
     vna_out.getRL(vna_out.dd, z=True)
 
-    print(vna_out.RL_dict["12"][0])
-    print(vna_out.RL_dict["12"][0].real)
-    print(vna_out.RL_dict["12"][0].imag)
+    #print(vna_out.RL_dict["12"][0])
+    #print(vna_out.RL_dict["12"][0].real)
+    #print(vna_out.RL_dict["12"][0].imag)
+
+    vna_out.freq_unit = "MHz"
+    #print(vna_out.freq)
+
+    vna_out.freq_unit = "kHz"
+    print(vna_out.freq)
+    
 
 
     #vna_out.getACRF(vna_out.dd)
