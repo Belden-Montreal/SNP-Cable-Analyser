@@ -93,6 +93,7 @@ class TreeModel(QtCore.QAbstractItemModel):
                     if "@max" in prop:
                         parent.bounds.append(float(prop["@max"]))
                     parent.clauses.append(prop["#text"])
+                    parent.parseClauses(parent.clauses)
             elif "Part" in prop:
                 parent.standard.limits[prop["@param"]] = Limit(prop["@param"], [], [])
                 self.parseProperty("Part", parent.standard.limits[prop["@param"]], prop)

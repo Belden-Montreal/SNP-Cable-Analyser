@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>541</width>
+    <width>782</width>
     <height>389</height>
    </rect>
   </property>
@@ -18,7 +18,7 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>521</width>
+     <width>761</width>
      <height>181</height>
     </rect>
    </property>
@@ -111,7 +111,7 @@
     <rect>
      <x>10</x>
      <y>190</y>
-     <width>521</width>
+     <width>761</width>
      <height>151</height>
     </rect>
    </property>
@@ -119,12 +119,8 @@
     <property name="horizontalSpacing">
      <number>5</number>
     </property>
-    <item row="1" column="0">
-     <widget class="QPushButton" name="addButton">
-      <property name="text">
-       <string>Add</string>
-      </property>
-     </widget>
+    <item row="0" column="0" colspan="2">
+     <widget class="QComboBox" name="parameterBox"/>
     </item>
     <item row="1" column="1">
      <widget class="QPushButton" name="removeButton">
@@ -132,9 +128,6 @@
        <string>Remove</string>
       </property>
      </widget>
-    </item>
-    <item row="0" column="0" colspan="2">
-     <widget class="QComboBox" name="parameterBox"/>
     </item>
     <item row="0" column="2" rowspan="2">
      <widget class="QTableWidget" name="limitsTable">
@@ -154,6 +147,41 @@
        <bool>false</bool>
       </attribute>
       <row/>
+      <column/>
+      <column/>
+      <column/>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QPushButton" name="addButton">
+      <property name="text">
+       <string>Add</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="3" rowspan="2">
+     <widget class="QTableWidget" name="exampleTable">
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+      <property name="rowCount">
+       <number>1</number>
+      </property>
+      <property name="columnCount">
+       <number>11</number>
+      </property>
+      <attribute name="verticalHeaderVisible">
+       <bool>false</bool>
+      </attribute>
+      <row/>
+      <column/>
+      <column/>
+      <column/>
+      <column/>
+      <column/>
+      <column/>
+      <column/>
+      <column/>
       <column/>
       <column/>
       <column/>

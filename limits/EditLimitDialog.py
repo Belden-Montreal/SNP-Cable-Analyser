@@ -22,10 +22,12 @@ class EditLimitDialog():
         self.editLimitDialog.limitsTable.setColumnWidth(0, 50)
         self.editLimitDialog.limitsTable.setColumnWidth(1, 50)
         self.editLimitDialog.parameterBox.addItems(self.model.header[1:])
+        self.editLimitDialog.exampleTable.setHorizontalHeaderLabels(["1","4","8","10","16","20","62.5","100","200","250","400"])
         for item in self.model.rootItem.children:
             self.editLimitDialog.standardBox.addItem(item.name, item)
         self.editLimitDialog.standardBox.addItem(self.NEW_ITEM)
         self.setBoxItems(self.model.rootItem.child(0), 0, Box.CAT)
+        self.updateExampleTable()
         self.editLimitDialog.standardBox.currentIndexChanged.connect(lambda index: self.setBoxItems(self.editLimitDialog.standardBox.currentData(), index, Box.CAT))
         self.editLimitDialog.categoryBox.currentIndexChanged.connect(lambda index: self.setBoxItems(self.editLimitDialog.categoryBox.currentData(), index, Box.HARDW))
         self.editLimitDialog.hardwareBox.currentIndexChanged.connect(lambda index: self.setBoxItems(self.editLimitDialog.hardwareBox.currentData(), index, Box.PARAM))
@@ -56,6 +58,8 @@ class EditLimitDialog():
             elif boxIndex < len(self.boxes):
                 self.boxes[Box.PARAM].setCurrentIndex(0)
                 self.setTextLimit(parent, self.boxes[-1].currentText())
+                self.updateExampleTable()
+
         else:
             self.setBoxesToNew(boxIndex-1)
         self.boxes[boxIndex].blockSignals(False)
@@ -128,6 +132,7 @@ class EditLimitDialog():
                 box.blockSignals(False)
             self.model.endResetModel()
             self.model.updateDict()
+            self.updateExampleTable()
             if closeDialog:
                 self.dialog.accept()
                 self.model.writeModelToFile()
@@ -140,6 +145,12 @@ class EditLimitDialog():
                 error.exec_()
                 return False
         return True
+
+    def updateExampleTable(self):
+        self.editLimitDialog.exampleTable.clearContents()
+        limit = self.boxes[Box.HARDW].currentData().standard.limits[self.boxes[Box.PARAM].currentText()]
+        for y in range(0, self.editLimitDialog.exampleTable.columnCount()):
+            self.editLimitDialog.exampleTable.setItem(0, y, QtWidgets.QTableWidgetItem("{0:.2f}".format(limit.evaluate({'f': float(self.editLimitDialog.exampleTable.horizontalHeaderItem(y).text())}))))
 
     def deleteItem(self, buttonIndex):
         itemToDelete = self.boxes[buttonIndex].currentData()

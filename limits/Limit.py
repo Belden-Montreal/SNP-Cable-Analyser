@@ -29,8 +29,8 @@ class Limit:
         for function in self.functions:
             for symbol in function.free_symbols:
                 if not(symbol.__str__() in vals):
-                    return "Error. Parameter "+symbol.__str__()+" not provided"
-            if self.bounds[i] < vals['f'] and vals['f'] < self.bounds[i+1]:
+                    return 0
+            if self.bounds[i] <= vals['f'] and vals['f'] <= self.bounds[i+1]:
                 return N(function.subs(vals))
             i += 1
-        return "Error. Frequency out of bounds"
+        return 0
