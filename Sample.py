@@ -125,24 +125,25 @@ class Sample(SNPManipulations):
 
 
     def getWorstMargin(self, parameter):
+        PassFail = "Pass"
         param = getattr(self, parameter)
         pairs = param.keys()
         worst = {}
 
         for pair in pairs:
             if self.standard:
-                margins = abs(param[pair] - self.standard.limits[parameter].evaluateArray({"f": self.freq} , len(sample.freq), neg=True))
+                margins = abs(param[pair] - self.standard.limits[parameter].evaluateArray({"f": self.freq} , len(self.freq), neg=True))
                 worstMargin, index = self.advancedMin(margins)
                 value = param[pair][index]
                 freq = self.freq[index]
-                limit = self.standard.limits[parameter].evaluateArray({"f": self.freq} , len(sample.freq), neg=True)[index]
+                limit = self.standard.limits[parameter].evaluateArray({"f": self.freq} , len(self.freq), neg=True)[index]
 
                 if value > limit:
                     PassFail = "Fail"
                 
                 worst[pair] = (value, freq, limit, worstMargin)
     
-        return worst, passFail
+        return worst, PassFail
 
     def getWorstValue(self, parameter):
 
@@ -160,7 +161,7 @@ class Sample(SNPManipulations):
                 limit = self.standard.limits[parameter].evaluateArray({"f": self.freq} , len(self.freq), neg=True)[index]
                 margin = abs(value - np.array(self.standard.limits[parameter].evaluateArray({"f": self.freq} , len(self.freq), neg=True)))[index]
                 
-                worst[pair] = (value, freq, limit, margin)
+                worst[pair] = (worstValue, freq, limit, margin)
 
                 if  worstValue > limit:
                     PassFail = "Fail"      

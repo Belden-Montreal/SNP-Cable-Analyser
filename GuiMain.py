@@ -11,7 +11,7 @@ import matplotlib.backends.backend_qt5
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.pyplot import cm
-
+from ParameterWidget import ParameterWidget
 import os
 
 import time
@@ -757,9 +757,9 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
 
         for param in self.sample.parameters:
             #print(param)
-            self.new_tab = QtWidgets.QWidget()
-            self.tab_list.append(self.new_tab)
-            self.param_tabs.addTab(self.new_tab, param)
+            self.new_tab = ParameterWidget(param, self.sample)
+            self.tab_list.append(self.new_tab.widget)
+            self.param_tabs.addTab(self.new_tab.widget, param)
             #self.param_tabs.setCurrentIndex(self.tab_index)
 
         #self.param_tabs.currentChanged['int'].connect(self.tabChange)
