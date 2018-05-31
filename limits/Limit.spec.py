@@ -33,9 +33,13 @@ class TestLimits(unittest.TestCase):
         limit = Limit("RL", ["2*f"])
         self.assertListEqual([2,4,6,8], limit.evaluateArray({'f':[1,2,3,4]}, 4))
 
-    def test_parse_array(self):
+    def test_parse_array_2(self):
         limit = Limit("RL", ["2*f*x"])
         self.assertListEqual([8,12,12,8], limit.evaluateArray({'f':[1,2,3,4], 'x':[4,3,2,1]}, 4))
+
+    def test_parse_neg(self):
+        limit = Limit("RL", ["2*f"], [1,10])
+        self.assertEqual(-4, limit.evaluate({'f':2}, True))
 
 if __name__ == '__main__':
     unittest.main()

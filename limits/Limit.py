@@ -24,23 +24,26 @@ class Limit:
             if not (clause == ""):
                 self.functions.append(parse_expr(clause, transformations=transformation))
 
-    def evaluate(self, vals):
+    def evaluate(self, vals, neg=False):
         i = 0
         for function in self.functions:
             for symbol in function.free_symbols:
                 if not(symbol.__str__() in vals):
                     return 0
             if self.bounds[i] <= vals['f'] and vals['f'] <= self.bounds[i+1]:
-                return N(function.subs(vals))
+                if neg:
+                    return -N(function.subs(vals))
+                else:
+                    return N(function.subs(vals))
             i += 1
         return 0
 
-    def evaluateArray(self, vals, nb):
+    def evaluateArray(self, vals, nb, neg=False):
         results = []
         for i in range(0, nb):
             valsDict = {}
             for param in vals:
                 valsDict[param] = vals[param][i]
-            results.append(self.evaluate(valsDict))
+            results.append(self.evaluate(valsDict, neg))
         return results
         
