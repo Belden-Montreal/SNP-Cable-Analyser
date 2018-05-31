@@ -36,6 +36,8 @@ class EditLimitDialog():
         self.editLimitDialog.delStandardButton.pressed.connect(lambda: self.deleteItem(Box.STAND))
         self.editLimitDialog.delCategoryButton.pressed.connect(lambda: self.deleteItem(Box.CAT))
         self.editLimitDialog.delHardwareButton.pressed.connect(lambda: self.deleteItem(Box.HARDW))
+        self.editLimitDialog.addButton.pressed.connect(lambda: self.addLimit(self.editLimitDialog.limitsTable.selectedIndexes()))
+        self.editLimitDialog.removeButton.pressed.connect(lambda: self.removeLimit(self.editLimitDialog.limitsTable.selectedIndexes()))
 
 
     def setBoxItems(self, parent, index, boxIndex):
@@ -146,6 +148,20 @@ class EditLimitDialog():
             if res == QtWidgets.QMessageBox.Yes:
                 itemToDelete.parent.removeChild(itemToDelete)
                 self.setBoxItems(itemToDelete.parent, 0, buttonIndex)
+
+    def addLimit(self, rows):
+        if len(rows) == 0:
+            self.editLimitDialog.limitsTable.insertRow(self.editLimitDialog.limitsTable.rowCount())
+        else:
+            self.editLimitDialog.limitsTable.insertRow(rows[0].row())
+
+
+    def removeLimit(self, rows):
+        if len(rows) == 0:
+            self.editLimitDialog.limitsTable.removeRow(self.editLimitDialog.limitsTable.rowCount()-1)
+        else:
+            for row in rows:
+                self.editLimitDialog.limitsTable.removeRow(row.row())
 
     def showDialog(self):
         return self.dialog.exec_()
