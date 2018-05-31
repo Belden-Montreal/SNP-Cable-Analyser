@@ -128,6 +128,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
         limitDialog = LimitDialog()
         result = limitDialog.showDialog()
         if result:
+            self.standards = limitDialog.getStandardList()
             item = limitDialog.getSelection().internalPointer().standard
             for sample in self.selected:
                 self.Project.getSampleByName(sample).limit = item
@@ -789,8 +790,8 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
             if addr:
                 try:
                     print("before")
-                    self.comm = Communication()
-                    self.comm.connectToVNA(addr)
+                    #self.comm = Communication()
+                    #self.comm.connectToVNA(addr)
                     print("done")
                     connected = True
                     self.actionWho_am_I.setEnabled(True)

@@ -48,3 +48,16 @@ class LimitDialog(object):
         editLimitDialog = EditLimitDialog(self.model)
 
         res = editLimitDialog.showDialog()
+    
+    def getStandardList(self):
+        standards = []
+        self.getStandard(self.model.rootItem, standards)
+        return standards
+        
+    def getStandard(self, node, standardList):
+        if node.childCount():
+            for child in node.children:
+                self.getStandard(child, standardList)
+        else:
+            standardList.append(node.standard)
+

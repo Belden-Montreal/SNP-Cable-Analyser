@@ -4,10 +4,12 @@ class TreeItem():
     def __init__(self, name, parent=None):
         self.parent = parent
         self.name = name
-        if parent:
-            self.standard = Standard(parent.name+" | "+name)
-        else:
-            self.standard = Standard("")
+        current = parent
+        standardName = name
+        while current and not(current.name == "Standard"):
+            standardName = current.name+"|"+standardName
+            current = current.parent
+        self.standard = Standard(standardName)
         self.children = []
 
     def addChild(self, item):
