@@ -13,3 +13,6 @@ class Standard():
         if index < len(self.limits):
             return list(self.limits.values())[index]
         return ""
+
+    def __str__(self):
+        return self.name

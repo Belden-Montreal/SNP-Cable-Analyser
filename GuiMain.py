@@ -12,6 +12,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.pyplot import cm
 from ParameterWidget import ParameterWidget
+import MainWidget
 import os
 
 import time
@@ -138,6 +139,8 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
                     if self.sampleTable.item(i,0).text() == sample:
                         self.sampleTable.setItem(i, 2, QtWidgets.QTableWidgetItem(item.name))
             self.sampleTable.resizeColumnsToContents()
+            if self.mainTabWidget:
+                self.mainTabWidget.limitLabel.setText(item.__str__())
             
 
     def setActiveSample(self):
@@ -750,6 +753,9 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
 
         #Start off by creating the home tab
         self.mainTab = QtWidgets.QWidget()
+        self.mainTabWidget = MainWidget.Ui_MainWidget()
+        self.mainTabWidget.setupUi(self.mainTab)
+        self.setupMainTab()
         self.param_tabs.addTab(self.mainTab, "Main")
 
         self.tab_list = []
@@ -800,6 +806,11 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
                 
         else:
             self.plot(None, None)
+
+    def setupMainTab(self):
+        self.mainTabWidget.testNameLabel.setText(self.sample.name+" : ")
+        self.mainTabWidget.dateLabel.setText(self.sample.date.__str__())
+        self.mainTabWidget.limitLabel.setText(self.sample.standard.__str__())
 
     def connect(self):
         connected = False
