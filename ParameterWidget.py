@@ -15,10 +15,9 @@ class ParameterWidget():
         self.paramWidget.marginListWidget.currentTextChanged.connect(lambda text: self.pairSelected(text, valueType.MARGIN))
         self.paramWidget.worstListWidget.currentTextChanged.connect(lambda text: self.pairSelected(text, valueType.VALUE))
         self.setPairsList()
-        self.paramWidget.passLabel.setText("TODO")
         if sample.standard and param in sample.standard.limits:
             self.worstMargin = None#self.sample.getWorstMargin(self.param)[0]
-            self.worstValue = self.sample.getWorstValue(self.param)
+            self.worstValue = None#self.sample.getWorstValue(self.param)
         else:
             self.worstValue = None
             self.worstMargin = None
