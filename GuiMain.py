@@ -764,13 +764,22 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
         self.tab_list = []
         self.tab_list.append(self.mainTab)
 
+        allPass = True
+        failedParams = []
         for param in self.sample.parameters:
             #print(param)
             self.new_tab = ParameterWidget(param.replace(" ", ''), self.sample)
             self.tab_list.append(self.new_tab.widget)
             self.param_tabs.addTab(self.new_tab.widget, param)
+            allPass = allPass and self.new_tab.hasPassed
+            if not self.new_tab.hasPassed:
+                failedParams.append(param)
             #self.param_tabs.setCurrentIndex(self.tab_index)
-
+        if allPass:
+            self.mainTabWidget.passLabel.setText("Pass")
+        else:
+            self.mainTabWidget.passLabel.setText("Fail")
+        self.mainTabWidget.failsLabel.setText(str(failedParams))
         #self.param_tabs.currentChanged['int'].connect(self.tabChange)
 
         for i in range(0,self.param_tabs.count()):

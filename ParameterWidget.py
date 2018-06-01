@@ -16,11 +16,19 @@ class ParameterWidget():
         self.paramWidget.worstListWidget.currentTextChanged.connect(lambda text: self.pairSelected(text, valueType.VALUE))
         self.setPairsList()
         if sample.standard and param in sample.standard.limits:
-            self.worstMargin = None#self.sample.getWorstMargin(self.param)[0]
+            self.worstMargin = None#self.sample.getWorstMargin(self.param)
             self.worstValue = None#self.sample.getWorstValue(self.param)
+            if self.worstValue[1] == "Pass": #and worstMargin[1] == "Pass"
+                self.paramWidget.passLabel.setText("Pass")
+                self.hasPassed = True
+            else:
+                self.paramWidget.passLabel.setText("Fail")
+                self.hasPassed = False
         else:
             self.worstValue = None
             self.worstMargin = None
+            self.paramWidget.passLabel.setText("Fail")
+            self.hasPassed = False
 
 
 

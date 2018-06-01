@@ -13,7 +13,7 @@ class Ui_MainWidget(object):
         MainWidget.setObjectName("MainWidget")
         MainWidget.resize(1187, 323)
         self.formLayoutWidget = QtWidgets.QWidget(MainWidget)
-        self.formLayoutWidget.setGeometry(QtCore.QRect(10, 10, 1041, 301))
+        self.formLayoutWidget.setGeometry(QtCore.QRect(10, 10, 1701, 301))
         self.formLayoutWidget.setObjectName("formLayoutWidget")
         self.formLayout = QtWidgets.QFormLayout(self.formLayoutWidget)
         self.formLayout.setContentsMargins(0, 0, 0, 0)
