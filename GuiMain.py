@@ -133,14 +133,14 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
         result = limitDialog.showDialog()
         if result:
             item = limitDialog.getSelection().internalPointer().standard
+
             for sample in self.selected:
                 self.Project.getSampleByName(sample).standard = item
                 for i in range(0, len(self.Project.measurements)):
                     if self.sampleTable.item(i,0).text() == sample:
                         self.sampleTable.setItem(i, 2, QtWidgets.QTableWidgetItem(item.name))
             self.sampleTable.resizeColumnsToContents()
-            if self.mainTabWidget:
-                self.mainTabWidget.limitLabel.setText(item.__str__())
+            self.displaySampleParams(self.selected)
             
 
     def setActiveSample(self):
@@ -795,7 +795,8 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
             else:
                 limit = None
                 if sample.standard is not None:
-                    limit = sample.standard.limits[self.activeParameter].evaluateArray({"f": sample.freq} , len(sample.freq), neg=True)
+                    if self.activeParameter in sample.standard.limits:
+                        limit = sample.standard.limits[self.activeParameter].evaluateArray({"f": sample.freq} , len(sample.freq), neg=True)
                     #print(sample.freq)
                 self.plot(self.sample.freq, getattr(self.sample, self.activeParameter.replace(" ", "")), limit = limit , unit = sample.freq_unit)
                 #print(self.sample.frequency.unit)
