@@ -35,6 +35,7 @@ from Sample import Sample
 import numpy as np
 
 import threading
+import multiprocessing
 
 #import thread
 
@@ -48,6 +49,7 @@ import addplug
 
 import matplotlib.ticker
 
+from tabThread import TabThread
 
 class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, QtWidgets.QFileDialog, QtWidgets.QListView, QtWidgets.QDialog, QtCore.Qt):
 
@@ -761,11 +763,26 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
         self.tab_list = []
         self.tab_list.append(self.mainTab)
 
+        # threads = []
+        # values = []
+        # i = 0
+        # for param in self.sample.parameters:
+        #     thread = TabThread(i, self.sample, param)
+        #     threads.append(thread)
+        #     thread.start()
+        #     i += 1
+        # for thread in threads:
+        #     values.append(thread.join())
+        # i = 0
+
+        p = multiprocessing.Pool(processes = len(self.sample.parameters))
+        values = p.map(self.calculateValues, self.sample.parameters, self.sample)
         for param in self.sample.parameters:
             #print(param)
-            self.new_tab = ParameterWidget(param.replace(" ", ''), self.sample)
+            self.new_tab = ParameterWidget(param.replace(" ", ''), self.sample, values[i])
             self.tab_list.append(self.new_tab.widget)
             self.param_tabs.addTab(self.new_tab.widget, param)
+            i += 1
             #self.param_tabs.setCurrentIndex(self.tab_index)
 
         #self.param_tabs.currentChanged['int'].connect(self.tabChange)
@@ -778,6 +795,9 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
                 index = 0
         self.param_tabs.setCurrentIndex(index)
 
+    def calculateValues(self, param, sample):
+        pass
+    
     def tabChange(self):
         #This function is called whenever a parameter 
         self.tab_index = self.param_tabs.currentIndex()

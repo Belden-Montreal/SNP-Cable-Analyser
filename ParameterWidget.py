@@ -5,7 +5,7 @@ class valueType():
     VALUE = 1
 
 class ParameterWidget():
-    def __init__(self, param, sample):
+    def __init__(self, param, sample, values):
         self.widget  = QtWidgets.QWidget()
         self.paramWidget = Parameter_Widget.Ui_ParameterWidget()
         self.paramWidget.setupUi(self.widget)
@@ -15,16 +15,8 @@ class ParameterWidget():
         self.paramWidget.marginListWidget.currentTextChanged.connect(lambda text: self.pairSelected(text, valueType.MARGIN))
         self.paramWidget.worstListWidget.currentTextChanged.connect(lambda text: self.pairSelected(text, valueType.VALUE))
         self.setPairsList()
-        self.paramWidget.passLabel.setText("TODO")
-        if sample.standard and param in sample.standard.limits:
-            self.worstMargin = None#self.sample.getWorstMargin(self.param)[0]
-            self.worstValue = self.sample.getWorstValue(self.param)
-        else:
-            self.worstValue = None
-            self.worstMargin = None
-
-
-
+        self.worstValue = values[0]
+        self.worstMargin = values[1]
 
     def setPairsList(self):
         try:
