@@ -30,15 +30,17 @@ class ParameterWidget():
         self.setLabels(listIndex, pair)
 
     def setLabels(self, listIndex, pair):
-        if listIndex == valueType.MARGIN: #Worst margin
-            self.paramWidget.marginValueLabel.setText(self.sample.getWorstMargin(self.param)[0][pair][0].__str__())
-            self.paramWidget.marginFreqLabel.setText('')
-            self.paramWidget.marginLimitLabel.setText('')
-            self.paramWidget.marginLabel.setText('')
+        if listIndex == valueType.MARGIN and False: #Worst margin
+            margin = self.sample.getWorstMargin(self.param)[0][pair]
+            self.paramWidget.marginValueLabel.setText(margin[0].__str__())
+            self.paramWidget.marginFreqLabel.setText(margin[1].__str__())
+            self.paramWidget.marginLimitLabel.setText(margin[2].__str__())
+            self.paramWidget.marginLabel.setText(margin[3].__str__())
         else: #worst value
-            self.paramWidget.worstValueLabel.setText(self.sample.getWorstValue(self.param)[0][pair][0].__str__())
-            self.paramWidget.worstFreqLabel.setText('')
-            self.paramWidget.worstLimitLabel.setText('')
-            self.paramWidget.worstMarginLabel.setText('')
+            worst = self.sample.getWorstValue(self.param)[0][pair]
+            self.paramWidget.worstValueLabel.setText(worst[0].__str__())
+            self.paramWidget.worstFreqLabel.setText(worst[1].__str__())
+            self.paramWidget.worstLimitLabel.setText(worst[2].__str__())
+            self.paramWidget.worstMarginLabel.setText(worst[3].__str__())
 
 
