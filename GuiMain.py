@@ -763,20 +763,18 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
         self.tab_list = []
         self.tab_list.append(self.mainTab)
 
-        # threads = []
-        # values = []
-        # i = 0
-        # for param in self.sample.parameters:
-        #     thread = TabThread(i, self.sample, param)
-        #     threads.append(thread)
-        #     thread.start()
-        #     i += 1
-        # for thread in threads:
-        #     values.append(thread.join())
-        # i = 0
+        threads = []
+        values = []
+        i = 0
+        for param in self.sample.parameters:
+            thread = TabThread(i, self.sample, param)
+            threads.append(thread)
+            thread.start()
+            i += 1
+        for thread in threads:
+            values.append(thread.join())
+        i = 0
 
-        p = multiprocessing.Pool(processes = len(self.sample.parameters))
-        values = p.map(self.calculateValues, self.sample.parameters, self.sample)
         for param in self.sample.parameters:
             #print(param)
             self.new_tab = ParameterWidget(param.replace(" ", ''), self.sample, values[i])
