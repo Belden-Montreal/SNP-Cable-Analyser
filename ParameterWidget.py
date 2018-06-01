@@ -14,14 +14,19 @@ class ParameterWidget():
         self.sample = sample
         self.paramWidget.marginListWidget.currentTextChanged.connect(lambda text: self.pairSelected(text, valueType.MARGIN))
         self.paramWidget.worstListWidget.currentTextChanged.connect(lambda text: self.pairSelected(text, valueType.VALUE))
+        self.worstMargin = self.sample.getWorstMargin(self.param)#[0][pair][0].__str__()
+        self.worstValue  = self.sample.getWorstValue(self.param)#[0][pair][0].__str__()
         self.setPairsList()
         self.paramWidget.passLabel.setText("TODO")
 
+
+
+
     def setPairsList(self):
-        self.paramWidget.marginListWidget.addItems(getattr(self.sample, self.param.replace(" ","")).keys())
+        self.paramWidget.marginListWidget.addItems(self.worstMargin[0].keys())
         self.paramWidget.marginListWidget.sortItems()
         #self.paramWidget.marginListWidget.setCurrentRow(0)
-        self.paramWidget.worstListWidget.addItems(getattr(self.sample, self.param.replace(" ","")).keys())
+        self.paramWidget.worstListWidget.addItems(self.worstValue[0].keys())
         self.paramWidget.worstListWidget.sortItems()
         #self.paramWidget.worstListWidget.setCurrentRow(0)
 
@@ -31,12 +36,12 @@ class ParameterWidget():
 
     def setLabels(self, listIndex, pair):
         if listIndex == valueType.MARGIN: #Worst margin
-            self.paramWidget.marginValueLabel.setText(self.sample.getWorstMargin(self.param)[0][pair][0].__str__())
+            self.paramWidget.marginValueLabel.setText(self.worstMargin[0][pair][0].__str__())
             self.paramWidget.marginFreqLabel.setText('')
             self.paramWidget.marginLimitLabel.setText('')
             self.paramWidget.marginLabel.setText('')
         else: #worst value
-            self.paramWidget.worstValueLabel.setText(self.sample.getWorstValue(self.param)[0][pair][0].__str__())
+            self.paramWidget.worstValueLabel.setText(self.worstValue[0][pair][0].__str__())
             self.paramWidget.worstFreqLabel.setText('')
             self.paramWidget.worstLimitLabel.setText('')
             self.paramWidget.worstMarginLabel.setText('')
