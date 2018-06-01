@@ -175,7 +175,10 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
         for i in range(0, measurementCount):
             self.sampleTable.setItem(i, 0, QtWidgets.QTableWidgetItem(self.Project.measurements[i].name))
             self.sampleTable.setItem(i, 1, QtWidgets.QTableWidgetItem(self.Project.measurements[i].date))
-            self.sampleTable.setItem(i, 2, QtWidgets.QTableWidgetItem(self.Project.measurements[i].standard))
+            try:
+                self.sampleTable.setItem(i, 2, QtWidgets.QTableWidgetItem(self.Project.measurements[i].standard))
+            except:
+                pass
         self.sampleTable.resizeColumnsToContents()
 
         
