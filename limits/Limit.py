@@ -44,6 +44,7 @@ class Limit:
             valsDict = {}
             for param in vals:
                 valsDict[param] = vals[param][i]
-            results.append(self.evaluate(valsDict, neg))
+            if self.bounds[0] <= vals['f'][i] and vals['f'][i] <= self.bounds[-1]:
+                results.append((vals['f'][i], self.evaluate(valsDict, neg)))
         return results
         
