@@ -627,7 +627,6 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
 
             ax.xaxis.set_major_formatter(matplotlib.ticker.ScalarFormatter())
 
-            ax.legend(loc='upper left', ncol = 1 if len(param_dict.keys()) <= 8 else 2 )
 
             #self.figure.tight_layout()
 
@@ -640,7 +639,10 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
                 ax.set_ylabel('nSec')
 
             if limit is not None:
-                ax.semilogx(x, limit, label=key, c = c)
+                ax.semilogx(*zip(*limit), linestyle = '--', label="limit", c = c)
+
+            ax.legend(loc='upper left', ncol = 1 if len(param_dict.keys()) <= 8 else 2 )
+
                 
                 
             #self.ax.legend()
@@ -800,6 +802,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
                 if sample.standard is not None:
                     if self.activeParameter in sample.standard.limits:
                         limit = sample.standard.limits[self.activeParameter].evaluateArray({"f": sample.freq} , len(sample.freq), neg=True)
+                        print(limit[0])
                     #print(sample.freq)
                 self.plot(self.sample.freq, getattr(self.sample, self.activeParameter.replace(" ", "")), limit = limit , unit = sample.freq_unit)
                 #print(self.sample.frequency.unit)
