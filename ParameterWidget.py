@@ -15,12 +15,23 @@ class ParameterWidget():
         self.paramWidget.marginListWidget.currentTextChanged.connect(lambda text: self.pairSelected(text, valueType.MARGIN))
         self.paramWidget.worstListWidget.currentTextChanged.connect(lambda text: self.pairSelected(text, valueType.VALUE))
         self.setPairsList()
-        if values:
+        if values[0] and values[1]:
             self.worstValue = values[0]
             self.worstMargin = values[1]
+            if self.worstValue[1] == "Pass" and self.worstMargin[1] == "Pass":
+                self.paramWidget.passLabel.setText("Pass")
+                self.hasPassed = True
+            else:
+                self.paramWidget.passLabel.setText("Fail")
+                self.hasPassed = False
         else:
             self.worstMargin = None
             self.worstValue = None
+            self.paramWidget.passLabel.setText("Fail")
+            self.hasPassed = False
+
+
+
 
     def setPairsList(self):
         try:
@@ -34,16 +45,15 @@ class ParameterWidget():
             return
 
     def pairSelected(self, pair, listIndex):
-        #TODO: get value of pair
         self.setLabels(listIndex, pair)
+        print(self.worstValue[0][pair][0].__str__())
 
     def setLabels(self, listIndex, pair):
         if self.worstMargin and listIndex == valueType.MARGIN: #Worst margin
-            pass
-            # self.paramWidget.marginValueLabel.setText(self.worstMargin[pair][0].__str__())
-            # self.paramWidget.marginFreqLabel.setText(self.worstMargin[pair][1].__str__())
-            # self.paramWidget.marginLimitLabel.setText(self.worstMargin[pair][2].__str__())
-            # self.paramWidget.marginLabel.setText(self.worstMargin[pair][3].__str__())
+            self.paramWidget.marginValueLabel.setText(self.worstMargin[0][pair][0].__str__())
+            self.paramWidget.marginFreqLabel.setText(self.worstMargin[0][pair][1].__str__())
+            self.paramWidget.marginLimitLabel.setText(self.worstMargin[0][pair][2].__str__())
+            self.paramWidget.marginLabel.setText(self.worstMargin[0][pair][3].__str__())
         elif self.worstValue: #worst value
             self.paramWidget.worstValueLabel.setText(self.worstValue[0][pair][0].__str__())
             self.paramWidget.worstFreqLabel.setText(self.worstValue[0][pair][1].__str__())

@@ -129,19 +129,26 @@ class Sample(SNPManipulations):
         param = getattr(self, parameter)
         pairs = param.keys()
         worst = {}
-
-        for pair in pairs:
-            if self.standard:
-                margins = abs(param[pair] - self.standard.limits[parameter].evaluateArray({"f": self.freq} , len(self.freq), neg=True))
-                worstMargin, index = self.advancedMin(margins)
-                value = param[pair][index]
-                freq = self.freq[index]
-                limit = self.standard.limits[parameter].evaluateArray({"f": self.freq} , len(self.freq), neg=True)[index]
-
-                if value > limit:
-                    PassFail = "Fail"
+        limit = None
+        if self.standard:
+            if parameter in self.standard.limits:
+                limit = self.standard.limits[parameter].evaluateDict({"f": self.freq} , len(self.freq), neg=True)
+            for pair in pairs:
+                value = ''
+                freq = ''
+                lim = ''
+                worstMargin = ''
+                if limit:
+                    margins, frequencies, values = self.getMargins(param[pair], limit)
+                    if len(margins) > 0:
+                        worstMargin, index = self.advancedMax(margins)
+                        value = values[index]
+                        freq = frequencies[index]
+                        lim = limit[freq]
+                        if value > lim:
+                            PassFail = "Fail"
                 
-                worst[pair] = (value, freq, limit, worstMargin)
+                worst[pair] = (value, freq, lim, worstMargin)
     
         return worst, PassFail
 
@@ -152,40 +159,58 @@ class Sample(SNPManipulations):
         param = getattr(self, parameter)
         pairs = param.keys()
         worst = {}
+        limit = None
         if self.standard:
             if parameter in self.standard.limits:
-                limits = self.standard.limits[parameter].evaluateArray({"f": self.freq} , len(self.freq), neg=True)
+                limit = self.standard.limits[parameter].evaluateDict({"f": self.freq} , len(self.freq), neg=True)
             for pair in pairs:
+                validMin = False
                 value = np.array(param[pair])
-                worstValue, index = self.advancedMin(0 - abs(value))
-                freq = self.freq[index]
-                if limits:
-                    margin = abs(value - np.array(limits))[index]
-                    limit = limits[index]
-                else:
-                    limit = 0
-                    margin = 0
-                
-                worst[pair] = (worstValue, freq, limit, margin)
+                while not validMin:
+                    worstValue, index = self.advancedMin(0 - abs(value))
+                    freq = self.freq[index]
+                    if limit:
+                        if freq in limit:
+                            lim = limit[freq]
+                            margin = abs(worstValue - limit[freq])
+                            if  worstValue > lim:
+                                PassFail = "Fail"
+                            validMin = True
+                        else:
+                            value = np.delete(value, index)
+                    else:
+                        margin = ''
+                        lim = ''
+                        validMin = True
+                worst[pair] = (worstValue, freq, lim, margin)
 
-                if  worstValue > limit:
-                    PassFail = "Fail"     
+    
 
         return worst, PassFail
 
 
-        
-
     def __retr__(self):
         return "SNP"
-        
-
+    
 
     def advancedMin(self , vals):
         return min(vals), list(vals).index(min(vals))
 
     def advancedMax(self , vals):
-        return max(vals), list(vals).index(min(vals))
+        return max(vals), list(vals).index(max(vals))
+
+    def getMargins(self, measurements, limit):
+        margins = []
+        freq = []
+        values = []
+        i = 0
+        for val in measurements:
+            if self.freq[i] in limit:
+                margins.append(abs(val - limit[self.freq[i]]))
+                freq.append(self.freq[i])
+                values.append(val)
+            i+=1
+        return margins, freq, values
 
 if __name__ == "__main__":
     

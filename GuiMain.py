@@ -177,7 +177,10 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
         for i in range(0, measurementCount):
             self.sampleTable.setItem(i, 0, QtWidgets.QTableWidgetItem(self.Project.measurements[i].name))
             self.sampleTable.setItem(i, 1, QtWidgets.QTableWidgetItem(self.Project.measurements[i].date))
-            self.sampleTable.setItem(i, 2, QtWidgets.QTableWidgetItem(self.Project.measurements[i].standard))
+            try:
+                self.sampleTable.setItem(i, 2, QtWidgets.QTableWidgetItem(self.Project.measurements[i].standard))
+            except:
+                pass
         self.sampleTable.resizeColumnsToContents()
 
         
@@ -626,7 +629,6 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
 
             ax.xaxis.set_major_formatter(matplotlib.ticker.ScalarFormatter())
 
-            ax.legend(loc='upper left', ncol = 1 if len(param_dict.keys()) <= 8 else 2 )
 
             #self.figure.tight_layout()
 
@@ -639,7 +641,10 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
                 ax.set_ylabel('nSec')
 
             if limit is not None:
-                ax.semilogx(x, limit, label=key, c = c)
+                ax.semilogx(*zip(*limit), linestyle = '--', label="limit", c = c)
+
+            ax.legend(loc='upper left', ncol = 1 if len(param_dict.keys()) <= 8 else 2 )
+
                 
                 
             #self.ax.legend()
@@ -763,13 +768,24 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
         self.tab_list = []
         self.tab_list.append(self.mainTab)
         values = self.calculateErrors()
+        allPass = True
+        failedParams = []
         for param in self.sample.parameters:
             #print(param)
+            print(values[param.replace(" ","")])
+
             self.new_tab = ParameterWidget(param.replace(" ", ''), self.sample, values[param.replace(" ","")])
             self.tab_list.append(self.new_tab.widget)
             self.param_tabs.addTab(self.new_tab.widget, param)
+            allPass = allPass and self.new_tab.hasPassed
+            if not self.new_tab.hasPassed:
+                failedParams.append(param)
             #self.param_tabs.setCurrentIndex(self.tab_index)
-
+        if allPass:
+            self.mainTabWidget.passLabel.setText("Pass")
+        else:
+            self.mainTabWidget.passLabel.setText("Fail")
+        self.mainTabWidget.failsLabel.setText(str(failedParams))
         #self.param_tabs.currentChanged['int'].connect(self.tabChange)
 
         for i in range(0,self.param_tabs.count()):
@@ -780,18 +796,23 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
                 index = 0
         self.param_tabs.setCurrentIndex(index)
 
-    def calculateErrors(self):
-        threads = []
+    def calculateErrors(self, multithreading=True):
         values = {}
-        i = 0
-        for param in self.sample.parameters:
-            thread = TabThread(i, self.sample, param.replace(" ",""))
-            threads.append(thread)
-            thread.start()
-            i+=1
+        if multithreading:
+            threads = []
+            i = 0
+            for param in self.sample.parameters:
+                thread = TabThread(i, self.sample, param.replace(" ",""))
+                threads.append(thread)
+                thread.start()
+                i+=1
 
-        for thread in threads:
-           values[thread.param] = thread.join()
+            for thread in threads:
+                values[thread.param] = thread.join()
+        else:
+            for parameter in self.sample.parameters:
+                param = parameter.replace(" ","")
+                values[param] = (self.sample.getWorstValue(param), self.sample.getWorstMargin(param))
         return values
 
     def tabChange(self):

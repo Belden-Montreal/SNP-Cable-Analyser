@@ -1,2 +1,8 @@
 # compiled python files
 *.pyc
+
+# latex files
+*.aux
+*.tex
+*.log
+*.pdf

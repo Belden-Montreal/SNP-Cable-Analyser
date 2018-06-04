@@ -11,12 +11,12 @@ class TabThread(threading.Thread):
 
     def run(self):
         if self.sample.standard and self.param in self.sample.standard.limits:
-            try:
-                self.worstMargin = None#self.sample.getWorstMargin(self.param)
-                self.worstValue = self.sample.getWorstValue(self.param)
-            except:
-                self.worstMargin = None
-                self.worstValue = None
+            #try:
+            self.worstMargin = self.sample.getWorstMargin(self.param)
+            self.worstValue = self.sample.getWorstValue(self.param)
+            # except:
+            #     self.worstMargin = None
+            #     self.worstValue = None
     
     def join(self):
         threading.Thread.join(self)
