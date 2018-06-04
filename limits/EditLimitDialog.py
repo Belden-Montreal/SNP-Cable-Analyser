@@ -97,6 +97,7 @@ class EditLimitDialog():
                     self.editLimitDialog.limitsTable.setItem(i, 2, QtWidgets.QTableWidgetItem(clause))
                     self.editLimitDialog.limitsTable.resizeColumnToContents(2)
                     i+=1
+                self.updateExampleTable()
 
     def saveLimit(self, closeDialog):
         if self.validateEdits():
