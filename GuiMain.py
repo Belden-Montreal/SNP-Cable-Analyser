@@ -769,12 +769,10 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
 
         self.tab_list = []
         self.tab_list.append(self.mainTab)
-        values = self.calculateErrors(pool=True)
+        values = self.calculateErrors(pool=8)
         allPass = True
         failedParams = []
         for param in self.sample.parameters:
-            #print(param)
-            print(values[param.replace(" ","")])
 
             self.new_tab = ParameterWidget(param.replace(" ", ''), self.sample, values[param.replace(" ","")])
             self.tab_list.append(self.new_tab.widget)
@@ -782,13 +780,11 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
             allPass = allPass and self.new_tab.hasPassed
             if not self.new_tab.hasPassed:
                 failedParams.append(param)
-            #self.param_tabs.setCurrentIndex(self.tab_index)
         if allPass:
             self.mainTabWidget.passLabel.setText("Pass")
         else:
             self.mainTabWidget.passLabel.setText("Fail")
         self.mainTabWidget.failsLabel.setText(str(failedParams))
-        #self.param_tabs.currentChanged['int'].connect(self.tabChange)
 
         for i in range(0,self.param_tabs.count()):
             if self.param_tabs.tabText(i) == currentTab:
@@ -798,7 +794,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
                 index = 0
         self.param_tabs.setCurrentIndex(index)
 
-    def calculateErrors(self, multithreading=False, pool=False):
+    def calculateErrors(self, multithreading=False, pool=0):
         values = {}
         self.progressBar.setValue(0)
         if multithreading:
@@ -816,7 +812,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
                 self.progressBar.setValue(100*i/len(threads))
                 i += 1
         elif pool:
-            pool = ThreadPool(processes=os.cpu_count()*2)
+            pool = ThreadPool(processes=pool)
             results = pool.map(self.poolCalculate, self.sample.parameters)
             self.progressBar.setValue(100)
             i = 0
@@ -832,9 +828,13 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
                 i+=1
         return values
 
+    progressLock = threading.Lock()
     def poolCalculate(self, param):
+        value = (self.sample.getWorstValue(param.replace(" ","")), self.sample.getWorstMargin(param.replace(" ","")))
+        self.progressLock.acquire()
         self.progressBar.setValue(self.progressBar.value()+100/len(self.sample.parameters))
-        return (self.sample.getWorstValue(param.replace(" ","")), self.sample.getWorstMargin(param.replace(" ","")))
+        self.progressLock.release()
+        return value
 
     def tabChange(self):
         #This function is called whenever a parameter 
