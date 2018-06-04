@@ -15,7 +15,7 @@ class ParameterWidget():
         self.paramWidget.marginListWidget.currentTextChanged.connect(lambda text: self.pairSelected(text, valueType.MARGIN))
         self.paramWidget.worstListWidget.currentTextChanged.connect(lambda text: self.pairSelected(text, valueType.VALUE))
         self.setPairsList()
-        if values[0] and values[1]:
+        if values[0][0] and values[1]:
             self.worstValue = values[0]
             self.worstMargin = values[1]
             if self.worstValue[1] == "Pass" and self.worstMargin[1] == "Pass":
@@ -37,16 +37,13 @@ class ParameterWidget():
         try:
             self.paramWidget.marginListWidget.addItems(getattr(self.sample, self.param))
             self.paramWidget.marginListWidget.sortItems()
-            #self.paramWidget.marginListWidget.setCurrentRow(0)
             self.paramWidget.worstListWidget.addItems(getattr(self.sample, self.param))
             self.paramWidget.worstListWidget.sortItems()
-            #self.paramWidget.worstListWidget.setCurrentRow(0)
         except Exception as e:
             return
 
     def pairSelected(self, pair, listIndex):
         self.setLabels(listIndex, pair)
-        print(self.worstValue[0][pair][0].__str__())
 
     def setLabels(self, listIndex, pair):
         if self.worstMargin and listIndex == valueType.MARGIN: #Worst margin

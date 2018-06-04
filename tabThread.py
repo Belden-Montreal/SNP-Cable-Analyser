@@ -10,10 +10,8 @@ class TabThread(threading.Thread):
         self.worstMargin = None
 
     def run(self):
-        if self.sample.standard and self.param in self.sample.standard.limits:
-            #try:
-            self.worstMargin = self.sample.getWorstMargin(self.param)
-            self.worstValue = self.sample.getWorstValue(self.param)
+        self.worstMargin = self.sample.getWorstMargin(self.param)
+        self.worstValue = self.sample.getWorstValue(self.param)
             # except:
             #     self.worstMargin = None
             #     self.worstValue = None

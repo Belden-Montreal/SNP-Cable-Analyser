@@ -51,6 +51,8 @@ import matplotlib.ticker
 
 from tabThread import TabThread
 
+from multiprocessing.dummy import Pool as ThreadPool
+
 class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, QtWidgets.QFileDialog, QtWidgets.QListView, QtWidgets.QDialog, QtCore.Qt):
 
     '''
@@ -767,7 +769,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
 
         self.tab_list = []
         self.tab_list.append(self.mainTab)
-        values = self.calculateErrors()
+        values = self.calculateErrors(pool=True)
         allPass = True
         failedParams = []
         for param in self.sample.parameters:
@@ -796,8 +798,9 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
                 index = 0
         self.param_tabs.setCurrentIndex(index)
 
-    def calculateErrors(self, multithreading=True):
+    def calculateErrors(self, multithreading=False, pool=False):
         values = {}
+        self.progressBar.setValue(0)
         if multithreading:
             threads = []
             i = 0
@@ -807,13 +810,31 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
                 thread.start()
                 i+=1
 
+            i = 1
             for thread in threads:
                 values[thread.param] = thread.join()
+                self.progressBar.setValue(100*i/len(threads))
+                i += 1
+        elif pool:
+            pool = ThreadPool(processes=os.cpu_count()*2)
+            results = pool.map(self.poolCalculate, self.sample.parameters)
+            self.progressBar.setValue(100)
+            i = 0
+            for param in self.sample.parameters:
+                values[param.replace(" ","")] = results[i]
+                i+=1
         else:
+            i = 1
             for parameter in self.sample.parameters:
                 param = parameter.replace(" ","")
                 values[param] = (self.sample.getWorstValue(param), self.sample.getWorstMargin(param))
+                self.progressBar.setValue(100*i/len(self.sample.parameters))
+                i+=1
         return values
+
+    def poolCalculate(self, param):
+        self.progressBar.setValue(self.progressBar.value()+100/len(self.sample.parameters))
+        return (self.sample.getWorstValue(param.replace(" ","")), self.sample.getWorstMargin(param.replace(" ","")))
 
     def tabChange(self):
         #This function is called whenever a parameter 
