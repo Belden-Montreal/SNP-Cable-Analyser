@@ -1,6 +1,6 @@
 from sympy.parsing.sympy_parser import parse_expr, standard_transformations, implicit_multiplication_application, convert_xor
-from sympy import N
-from sympy import Symbol, refine, Q
+from sympy import N, log
+from sympy import Symbol
 import math
 
 class Limit:
@@ -22,7 +22,7 @@ class Limit:
         self.functions = []
         for clause in clauses:
             if not (clause == ""):
-                self.functions.append(refine(parse_expr(clause, transformations=transformation)))
+                self.functions.append(parse_expr(clause, local_dict={"log":lambda x: log(x, 10)}, transformations=transformation))
 
     def evaluate(self, vals, neg=False):
         i = 0
