@@ -17,13 +17,14 @@
 			<Hardware name="Connecting Hardware">
 				<Limit param="RL">
 					<Part min="1.0" max="50.0">30</Part>
-					<Part max="250.0">24-20*log(f/100)</Part>
+					<Part max="500.0">28-20*log(f/100)</Part>
 				</Limit>
 				<Limit param="IL">
 					<Part min="-inf" max="inf">0.02*sqrt(f)</Part>
 				</Limit>
 				<Limit param="NEXT">
-					<Part min="-inf" max="inf">54-20*log(f/100)</Part>
+					<Part min="1.0" max="250.0">54-20*log(f/100)</Part>
+					<Part max="500.0">46.04-40*log(f/250)</Part>
 				</Limit>
 				<Limit param="PSNEXT">
 					<Part min="-inf" max="inf">50-20*log(f/100)</Part>

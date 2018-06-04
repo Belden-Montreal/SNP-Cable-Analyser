@@ -40,11 +40,13 @@ class Limit:
 
     def evaluateArray(self, vals, nb, neg=False):
         results = []
-        for i in range(0, nb):
-            valsDict = {}
-            for param in vals:
-                valsDict[param] = vals[param][i]
-            if self.bounds[0] <= vals['f'][i] and vals['f'][i] <= self.bounds[-1]:
-                results.append((vals['f'][i], self.evaluate(valsDict, neg)))
+        if not (self.functions is []):
+            for i in range(0, nb):
+                valsDict = {}
+                for param in vals:
+                    valsDict[param] = vals[param][i]
+                if self.bounds[0] <= vals['f'][i] and vals['f'][i] <= self.bounds[-1]:
+                    results.append((vals['f'][i], self.evaluate(valsDict, neg)))
         return results
+        
         
