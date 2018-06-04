@@ -32,7 +32,7 @@ class Limit:
                     return 0
             if self.bounds[i] <= vals['f'] and vals['f'] <= self.bounds[i+1]:
                 if neg:
-                    return -N(function.subs(vals))
+                    return -1 * N(function.subs(vals))
                 else:
                     return N(function.subs(vals))
             i += 1

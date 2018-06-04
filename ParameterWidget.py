@@ -15,8 +15,12 @@ class ParameterWidget():
         self.paramWidget.marginListWidget.currentTextChanged.connect(lambda text: self.pairSelected(text, valueType.MARGIN))
         self.paramWidget.worstListWidget.currentTextChanged.connect(lambda text: self.pairSelected(text, valueType.VALUE))
         self.setPairsList()
-        self.worstValue = values[0]
-        self.worstMargin = values[1]
+        if values:
+            self.worstValue = values[0]
+            self.worstMargin = values[1]
+        else:
+            self.worstMargin = None
+            self.worstValue = None
 
     def setPairsList(self):
         try:

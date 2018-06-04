@@ -762,25 +762,12 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
 
         self.tab_list = []
         self.tab_list.append(self.mainTab)
-
-        threads = []
-        values = []
-        i = 0
-        for param in self.sample.parameters:
-            thread = TabThread(i, self.sample, param)
-            threads.append(thread)
-            thread.start()
-            i += 1
-        for thread in threads:
-            values.append(thread.join())
-        i = 0
-
+        values = self.calculateErrors()
         for param in self.sample.parameters:
             #print(param)
-            self.new_tab = ParameterWidget(param.replace(" ", ''), self.sample, values[i])
+            self.new_tab = ParameterWidget(param.replace(" ", ''), self.sample, values[param.replace(" ","")])
             self.tab_list.append(self.new_tab.widget)
             self.param_tabs.addTab(self.new_tab.widget, param)
-            i += 1
             #self.param_tabs.setCurrentIndex(self.tab_index)
 
         #self.param_tabs.currentChanged['int'].connect(self.tabChange)
@@ -793,9 +780,20 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
                 index = 0
         self.param_tabs.setCurrentIndex(index)
 
-    def calculateValues(self, param, sample):
-        pass
-    
+    def calculateErrors(self):
+        threads = []
+        values = {}
+        i = 0
+        for param in self.sample.parameters:
+            thread = TabThread(i, self.sample, param.replace(" ",""))
+            threads.append(thread)
+            thread.start()
+            i+=1
+
+        for thread in threads:
+           values[thread.param] = thread.join()
+        return values
+
     def tabChange(self):
         #This function is called whenever a parameter 
         self.tab_index = self.param_tabs.currentIndex()
