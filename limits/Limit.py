@@ -10,6 +10,8 @@ class Limit:
         self.parameter = parameter
         self.parseClauses(clauses)
         self.bounds = bounds
+        self.resultsDict = None
+        self.resultsList = None
 
     def __str__(self):
         return self.clauses[0]
@@ -35,32 +37,33 @@ class Limit:
                     if neg:
                         return -1 * N(function.subs(vals))
                     else:
-                        return N(function.subs(vals))
+                        return N(function.subs(vals), 2)
                 except:
                     print(self.parameter)
             i += 1
         return 0
 
     def evaluateDict(self, vals, nb, neg=False):
-        results = {}
-        if not (self.functions is []):
-            for i in range(0, nb):
-                valsDict = {}
-                for param in vals:
-                    valsDict[param] = vals[param][i]
-                if self.bounds[0] <= vals['f'][i] and vals['f'][i] <= self.bounds[-1]:
-                    results[vals['f'][i]] = self.evaluate(valsDict, neg)
-        return results
+        if not self.resultsDict:
+            self.evaluatePoints(vals, nb, neg)        
+
+        return self.resultsDict
 
     def evaluateArray(self, vals, nb, neg=False):
-        results = []
+        if not self.resultsList:
+            self.evaluatePoints(vals, nb, neg)
+
+        return self.resultsList
+        
+    def evaluatePoints(self, vals, nb, neg=False):
         if not (self.functions is []):
+            self.resultsDict = {}
+            self.resultsList = []
             for i in range(0, nb):
                 valsDict = {}
                 for param in vals:
                     valsDict[param] = vals[param][i]
                 if self.bounds[0] <= vals['f'][i] and vals['f'][i] <= self.bounds[-1]:
-                    results.append((vals['f'][i], self.evaluate(valsDict, neg)))
-        return results
-        
+                    self.resultsDict[vals['f'][i]] = self.evaluate(valsDict, neg)
+                    self.resultsList.append((vals['f'][i], self.resultsDict[vals['f'][i]]))
         

@@ -48,7 +48,8 @@ class Sample(SNPManipulations):
             for i in range((self.getNumPorts(self.dd)//2), self.getNumPorts(self.dd)):
                 self.port_name[i] = "(r)"+self.pair_combo[i-self.getNumPorts(self.dd)//2]  #{4:"(r)12",  :"(r)36", 6:"(r)45", 7:"(r)78", 0:"12", 1:"36", 2:"45", 3:"78"}
             self.parameters = ["RL", "IL", "NEXT", "Propagation Delay", "PSNEXT","FEXT", "PSFEXT", "ACRF", "PSACRF", "LCL", "LCTL", "TCL", "TCTL", "ELTCTL","CMRL", "CMNEXT", "CMDMNEXT", "CMDMRL", "DMCMNEXT", "DMCMRL"]
-
+        self.worstValue = {}
+        self.worstMargin = {}
             
 
         #print self.port_name
@@ -125,6 +126,8 @@ class Sample(SNPManipulations):
 
 
     def getWorstMargin(self, parameter):
+        if parameter in self.worstMargin:
+            return self.worstMargin[parameter]
         PassFail = "Pass"
         param = getattr(self, parameter)
         pairs = param.keys()
@@ -150,13 +153,13 @@ class Sample(SNPManipulations):
                             PassFail = "Fail"
                 
                 worst[pair] = (value, freq, lim, worstMargin)
-    
+            self.worstMargin[parameter] = (worst, PassFail)
         return worst, PassFail
 
     def getWorstValue(self, parameter):
-
+        if parameter in self.worstValue:
+            return self.worstValue[parameter]
         PassFail = "Pass"
-        
         param = getattr(self, parameter)
         pairs = param.keys()
         worst = {}
@@ -184,9 +187,7 @@ class Sample(SNPManipulations):
                         lim = ''
                         validMin = True
                 worst[pair] = (worstValue, freq, lim, margin)
-
-    
-
+            self.worstValue[parameter] = (worst, PassFail)
         return worst, PassFail
 
 
@@ -212,6 +213,11 @@ class Sample(SNPManipulations):
                 values.append(val)
             i+=1
         return margins, freq, values
+
+    def setStandard(self, standard):
+        self.standard = standard
+        self.worstMargin = {}
+        self.worstValue = {}
 
 if __name__ == "__main__":
     

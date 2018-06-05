@@ -139,7 +139,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
             item = limitDialog.getSelection().internalPointer().standard
 
             for sample in self.selected:
-                self.Project.getSampleByName(sample).standard = item
+                self.Project.getSampleByName(sample).setStandard(item)
                 for i in range(0, len(self.Project.measurements)):
                     if self.sampleTable.item(i,0).text() == sample:
                         self.sampleTable.setItem(i, 2, QtWidgets.QTableWidgetItem(item.name))
@@ -769,7 +769,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
 
         self.tab_list = []
         self.tab_list.append(self.mainTab)
-        values = self.calculateErrors(pool=8)
+        values = self.calculateErrors(pool=os.cpu_count())
         allPass = True
         failedParams = []
         for param in self.sample.parameters:
