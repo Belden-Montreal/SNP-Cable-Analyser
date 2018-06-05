@@ -131,29 +131,7 @@ class Sample(SNPManipulations):
         PassFail = "Pass"
         param = getattr(self, parameter)
         pairs = param.keys()
-        worst = {}
-
-        try:
-            limit = self.standard.limits[parameter].evaluateArray({"f": self.freq} , len(self.freq), neg=True)
-            maxLen = max(len(limit), len(param[pairs[0]]))
-
-            limit = np.array(limit[0:maxLen])
-            
-            
-        except Exception as e:
-            return 
-        for pair in pairs:
-            if self.standard:
-                param[pair] = np.array(param[pair][0:maxLen])
-                margins = abs(param[pair] - limit)
-                worstMargin, index = self.advancedMax(margins) 
-                value = param[pair][index]
-                freq = self.freq[index]
-                lim = limit[index]
-
-                if value > limit:
-                    PassFail = "Fail"
-                    
+        worst = {}  
         limit = None
         if self.standard:
             if parameter in self.standard.limits:
