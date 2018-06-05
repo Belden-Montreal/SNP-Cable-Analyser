@@ -148,22 +148,30 @@
 			</Hardware>
 		</Category>
 		<Category name="CAT5e">
-			<Hardware name="Connecting Hardware"></Hardware>
-			<Hardware name="Cord Cable"></Hardware>
+			<Hardware name="Connecting Hardware">
+			</Hardware>
+			<Hardware name="Cord Cable">
+			</Hardware>
 		</Category>
 	</Standard>
 	<Standard name="Iso">
 		<Category name="CAT6A">
-			<Hardware name="Connecting Hardware"></Hardware>
-			<Hardware name="Cord Cable"></Hardware>
+			<Hardware name="Connecting Hardware">
+			</Hardware>
+			<Hardware name="Cord Cable">
+			</Hardware>
 		</Category>
 		<Category name="CAT6">
-			<Hardware name="Connecting Hardware"></Hardware>
-			<Hardware name="Cord Cable"></Hardware>
+			<Hardware name="Connecting Hardware">
+			</Hardware>
+			<Hardware name="Cord Cable">
+			</Hardware>
 		</Category>
 		<Category name="CAT5e">
-			<Hardware name="Connecting Hardware"></Hardware>
-			<Hardware name="Cord Cable"></Hardware>
+			<Hardware name="Connecting Hardware">
+			</Hardware>
+			<Hardware name="Cord Cable">
+			</Hardware>
 		</Category>
 	</Standard>
 </Root>

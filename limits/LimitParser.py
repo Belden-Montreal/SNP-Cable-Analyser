@@ -1,17 +1,18 @@
 import xmltodict
 from limits.TreeItem import TreeItem
 from limits.Limit import Limit
-
 class LimitParser():
+
     def __init__(self, url):
         self.url = url
+        self.NAME_BY_LEVEL = ["Category", "Hardware", "Limit", "Part"]
 
     def parseFile(self):
-        file = open(self.url, "r")
-        dictData = xmltodict.parse(file.read())
+        dataFile = open(self.url, "r")
+        dictData = xmltodict.parse(dataFile.read())
         rootItem = TreeItem(dictData["Root"]["@name"])
         self.parseProperty("Standard", rootItem, dictData["Root"])
-        file.close()
+        dataFile.close()
         return rootItem
 
     def parseProperty(self, name, parent, data):
@@ -38,47 +39,35 @@ class LimitParser():
                 self.parseProperty("Part", parent.standard.limits[prop["@param"]], prop)
 
     def writeToFile(self, root):
-        file = open(self.url, "w")
+        dataFile = open(self.url, "w")
         dictData = self.updateDict(root)
-        xmltodict.unparse(dictData, file, pretty=True)
-        file.close()
+        xmltodict.unparse(dictData, dataFile, pretty=True)
+        dataFile.close()
 
     def updateDict(self, root):
         dictData = {}
-        standardItems = []
-        for standard in root.children:
-            categoryItems = []
-            for category in standard.children:
-                hardwareItems = []
-                for hardware in category.children:
-                    limitItems = []
-                    for limit in hardware.standard.limits.values():
-                        if not (limit.clauses[0] == ""):
-                            partItems = []
-                            i = 0
-                            for part in limit.clauses:
-                                if i == 0:
-                                    partEntry = {"@min": limit.bounds[i], "@max": limit.bounds[i+1], "#text": part}
-                                else:
-                                    partEntry = {"@max": limit.bounds[i+1], "#text": part}                                        
-                                partItems.append(partEntry)
-                                i += 1
-                            limitEntry = {"@param": limit.parameter, "Part": partItems}
-                            limitItems.append(limitEntry)
-                    if len(limitItems) > 0:
-                        hardwareItems.append({"@name": hardware.name, "Limit": limitItems})
-                    else:
-                        hardwareItems.append({"@name": hardware.name})
-                if len(hardwareItems) > 0:
-                    categoryItems.append({"@name": category.name, "Hardware": hardwareItems})
-                else:
-                    categoryItems.append({"@name": category.name})
-            if len(categoryItems) > 0: 
-                standardItems.append({"@name": standard.name, "Category": categoryItems})
-            else:
-                standardItems.append({"@name": standard.name})
+        standardItems = self.constructDict(root, 0)
         if len(standardItems) > 0:
             dictData = {"Root": {"@name": "Standard", "Standard": standardItems}}
         else:
             dictData = {"Root": {"@name": "Standard"}}
+        print(dictData)
         return dictData
+
+    def constructDict(self, parent, k):
+        items = []
+        if k >= len(self.NAME_BY_LEVEL):
+            for i, part in enumerate(parent.clauses):
+                if i == 0:
+                    partEntry = {"@min": parent.bounds[i], "@max": parent.bounds[i+1], "#text": part}
+                else:
+                    partEntry = {"@max": parent.bounds[i+1], "#text": part}                                        
+                items.append(partEntry)
+        elif parent.childCount() == 0:
+            for limit in parent.standard.limits.values():
+                if not (limit.clauses[0] == ""):
+                    items.append({"@param": limit.parameter, self.NAME_BY_LEVEL[k]: self.constructDict(limit, k+1)})
+        else:
+            for child in parent.children:
+                items.append({"@name": child.name, self.NAME_BY_LEVEL[k]: self.constructDict(child, k+1)})
+        return items
