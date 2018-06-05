@@ -142,14 +142,16 @@ class Sample(SNPManipulations):
                 lim = ''
                 worstMargin = ''
                 if limit:
-                    margins, frequencies, values = self.getMargins(param[pair], limit)
+                    margins, frequencies, values = self.getMargins(param[pair], limit, parameter)
                     if len(margins) > 0:
                         worstMargin, index = self.advancedMin(margins)
                         worstMargin = abs(worstMargin)
                         value = values[index]
                         freq = frequencies[index]
                         lim = limit[freq]
-                        if value > lim:
+                        if value > lim and not parameter == "IL":
+                            PassFail = "Fail"
+                        elif value < lim and parameter == "IL":
                             PassFail = "Fail"
                 
                 worst[pair] = (value, freq, lim, worstMargin)
@@ -177,7 +179,9 @@ class Sample(SNPManipulations):
                         if freq in limit:
                             lim = limit[freq]
                             margin = abs(worstValue - limit[freq])
-                            if  worstValue > lim:
+                            if worstValue > lim and not parameter == "IL":
+                                PassFail = "Fail"
+                            elif worstValue < lim and parameter == "IL":
                                 PassFail = "Fail"
                             validMin = True
                         else:
@@ -201,14 +205,17 @@ class Sample(SNPManipulations):
     def advancedMax(self , vals):
         return max(vals), list(vals).index(max(vals))
 
-    def getMargins(self, measurements, limit):
+    def getMargins(self, measurements, limit, parameter):
         margins = []
         freq = []
         values = []
         i = 0
         for val in measurements:
             if self.freq[i] in limit:
-                margins.append(limit[self.freq[i]] - val)
+                if parameter == "IL":
+                    margins.append(val - limit[self.freq[i]])
+                else:
+                    margins.append(limit[self.freq[i]] - val)
                 freq.append(self.freq[i])
                 values.append(val)
             i+=1

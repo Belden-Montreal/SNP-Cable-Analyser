@@ -831,7 +831,6 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
     def displaySampleParams(self, sample):
 
         currentTab =  self.activeParameter
-        print(currentTab)
 
         if sample == None:
             self.param_tabs.clear()
@@ -884,33 +883,25 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
         self.progressBar.setValue(0)
         if multithreading:
             threads = []
-            i = 0
-            for param in self.sample.parameters:
+            for i, param in enumerate(self.sample.parameters):
                 thread = TabThread(i, self.sample, param.replace(" ",""))
                 threads.append(thread)
                 thread.start()
-                i+=1
 
-            i = 1
-            for thread in threads:
+            for i, thread in enumerate(threads):
                 values[thread.param] = thread.join()
                 self.progressBar.setValue(100*i/len(threads))
-                i += 1
         elif pool:
             pool = ThreadPool(processes=pool)
             results = pool.map(self.poolCalculate, self.sample.parameters)
             self.progressBar.setValue(100)
-            i = 0
-            for param in self.sample.parameters:
+            for i, param in enumerate(self.sample.parameters):
                 values[param.replace(" ","")] = results[i]
-                i+=1
         else:
-            i = 1
-            for parameter in self.sample.parameters:
+            for i, parameter in enumerate(self.sample.parameters):
                 param = parameter.replace(" ","")
                 values[param] = (self.sample.getWorstValue(param), self.sample.getWorstMargin(param))
-                self.progressBar.setValue(100*i/len(self.sample.parameters))
-                i+=1
+                self.progressBar.setValue(100*(i+1)/len(self.sample.parameters))
         return values
 
     progressLock = threading.Lock()

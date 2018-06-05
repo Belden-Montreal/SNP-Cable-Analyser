@@ -27,8 +27,7 @@ class Limit:
                 self.functions.append(parse_expr(clause, local_dict={"log":lambda x: log(x, 10)}, transformations=transformation))
 
     def evaluate(self, vals, neg=False):
-        i = 0
-        for function in self.functions:
+        for i, function in enumerate(self.functions):
             for symbol in function.free_symbols:
                 if not(symbol.__str__() in vals):
                     return 0
@@ -39,8 +38,7 @@ class Limit:
                     else:
                         return N(function.subs(vals), 2)
                 except:
-                    print(self.parameter)
-            i += 1
+                    print("Eval error")
         return 0
 
     def evaluateDict(self, vals, nb, neg=False):

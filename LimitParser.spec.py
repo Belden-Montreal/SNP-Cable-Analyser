@@ -29,8 +29,9 @@ class TestLimitParser(unittest.TestCase):
         hdw.standard.limits["RL"] = Limit("RL", ["30"], [1.0, 50.0])
         self.parser.writeToFile(root)
         file = open("limits/test.xml", "r")
-        self.assertEqual(self.initialFile, file.read())
+        data = file.read()
         file.close()
+        self.assertEqual(self.initialFile, data)
 
     def tearDown(self):
         file = open("limits/test.xml", "w")
