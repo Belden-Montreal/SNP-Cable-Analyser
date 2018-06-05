@@ -35,6 +35,7 @@ from Sample import Sample
 import numpy as np
 
 import threading
+import multiprocessing
 
 #import thread
 
@@ -48,6 +49,9 @@ import addplug
 
 import matplotlib.ticker
 
+from tabThread import TabThread
+
+from multiprocessing.dummy import Pool as ThreadPool
 
 class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, QtWidgets.QFileDialog, QtWidgets.QListView, QtWidgets.QDialog, QtCore.Qt):
 
@@ -765,15 +769,22 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
 
         self.tab_list = []
         self.tab_list.append(self.mainTab)
-
+        values = self.calculateErrors(pool=8)
+        allPass = True
+        failedParams = []
         for param in self.sample.parameters:
-            #print(param)
-            self.new_tab = ParameterWidget(param.replace(" ", ''), self.sample)
+
+            self.new_tab = ParameterWidget(param.replace(" ", ''), self.sample, values[param.replace(" ","")])
             self.tab_list.append(self.new_tab.widget)
             self.param_tabs.addTab(self.new_tab.widget, param)
-            #self.param_tabs.setCurrentIndex(self.tab_index)
-
-        #self.param_tabs.currentChanged['int'].connect(self.tabChange)
+            allPass = allPass and self.new_tab.hasPassed
+            if not self.new_tab.hasPassed:
+                failedParams.append(param)
+        if allPass:
+            self.mainTabWidget.passLabel.setText("Pass")
+        else:
+            self.mainTabWidget.passLabel.setText("Fail")
+        self.mainTabWidget.failsLabel.setText(str(failedParams))
 
         for i in range(0,self.param_tabs.count()):
             if self.param_tabs.tabText(i) == currentTab:
@@ -782,6 +793,48 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
             else:
                 index = 0
         self.param_tabs.setCurrentIndex(index)
+
+    def calculateErrors(self, multithreading=False, pool=0):
+        values = {}
+        self.progressBar.setValue(0)
+        if multithreading:
+            threads = []
+            i = 0
+            for param in self.sample.parameters:
+                thread = TabThread(i, self.sample, param.replace(" ",""))
+                threads.append(thread)
+                thread.start()
+                i+=1
+
+            i = 1
+            for thread in threads:
+                values[thread.param] = thread.join()
+                self.progressBar.setValue(100*i/len(threads))
+                i += 1
+        elif pool:
+            pool = ThreadPool(processes=pool)
+            results = pool.map(self.poolCalculate, self.sample.parameters)
+            self.progressBar.setValue(100)
+            i = 0
+            for param in self.sample.parameters:
+                values[param.replace(" ","")] = results[i]
+                i+=1
+        else:
+            i = 1
+            for parameter in self.sample.parameters:
+                param = parameter.replace(" ","")
+                values[param] = (self.sample.getWorstValue(param), self.sample.getWorstMargin(param))
+                self.progressBar.setValue(100*i/len(self.sample.parameters))
+                i+=1
+        return values
+
+    progressLock = threading.Lock()
+    def poolCalculate(self, param):
+        value = (self.sample.getWorstValue(param.replace(" ","")), self.sample.getWorstMargin(param.replace(" ","")))
+        self.progressLock.acquire()
+        self.progressBar.setValue(self.progressBar.value()+100/len(self.sample.parameters))
+        self.progressLock.release()
+        return value
 
     def tabChange(self):
         #This function is called whenever a parameter 
@@ -802,7 +855,6 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
                 if sample.standard is not None:
                     if self.activeParameter in sample.standard.limits:
                         limit = sample.standard.limits[self.activeParameter].evaluateArray({"f": sample.freq} , len(sample.freq), neg=True)
-                        print(limit[0])
                     #print(sample.freq)
                 self.plot(self.sample.freq, getattr(self.sample, self.activeParameter.replace(" ", "")), limit = limit , unit = sample.freq_unit)
                 #print(self.sample.frequency.unit)
