@@ -129,7 +129,6 @@ class Sample(SNPManipulations):
         param = getattr(self, parameter)
         pairs = param.keys()
         worst = {}
-<<<<<<< HEAD
 
         try:
             limit = self.standard.limits[parameter].evaluateArray({"f": self.freq} , len(self.freq), neg=True)
@@ -151,7 +150,7 @@ class Sample(SNPManipulations):
 
                 if value > limit:
                     PassFail = "Fail"
-=======
+                    
         limit = None
         if self.standard:
             if parameter in self.standard.limits:
@@ -171,7 +170,6 @@ class Sample(SNPManipulations):
                         lim = limit[freq]
                         if value > lim:
                             PassFail = "Fail"
->>>>>>> 9a7b67f71759a085a85aa846fb85de5823bfce05
                 
                 worst[pair] = (value, freq, lim, worstMargin)
     

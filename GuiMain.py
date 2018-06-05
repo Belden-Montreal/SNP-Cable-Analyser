@@ -393,7 +393,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
 
             ax.grid(which="both")
 
-            ax.set_xlabel('Freq (Hz)')
+            ax.set_xlabel('Freq (MHz)')
             ax.set_ylabel('dB')
             ax.set_title(activeParameter)
 
