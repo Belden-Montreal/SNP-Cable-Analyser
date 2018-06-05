@@ -31,11 +31,15 @@ class TestLimits(unittest.TestCase):
 
     def test_parse_array(self):
         limit = Limit("RL", ["2*f"])
-        self.assertListEqual([2,4,6,8], limit.evaluateArray({'f':[1,2,3,4]}, 4))
+        self.assertListEqual([(1,2),(2,4),(3,6),(4,8)], limit.evaluateArray({'f':[1,2,3,4]}, 4))
 
     def test_parse_array_2(self):
         limit = Limit("RL", ["2*f*x"])
-        self.assertListEqual([8,12,12,8], limit.evaluateArray({'f':[1,2,3,4], 'x':[4,3,2,1]}, 4))
+        self.assertListEqual([(1, 8),(2, 12),(3, 12),(4, 8)], limit.evaluateArray({'f':[1,2,3,4], 'x':[4,3,2,1]}, 4))
+
+    def test_parse_dict(self):
+        limit = Limit("RL", ["2*f"])
+        self.assertEqual({1:2, 2:4, 3:6, 4:8}, limit.evaluateDict({'f':[1,2,3,4]}, 4))
 
     def test_parse_neg(self):
         limit = Limit("RL", ["2*f"], [1,10])

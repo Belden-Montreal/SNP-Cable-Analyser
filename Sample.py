@@ -141,7 +141,7 @@ class Sample(SNPManipulations):
                 if limit:
                     margins, frequencies, values = self.getMargins(param[pair], limit)
                     if len(margins) > 0:
-                        worstMargin, index = self.advancedMax(margins)
+                        worstMargin, index = self.advancedMin(margins)
                         worstMargin = abs(worstMargin)
                         value = values[index]
                         freq = frequencies[index]
@@ -207,7 +207,7 @@ class Sample(SNPManipulations):
         i = 0
         for val in measurements:
             if self.freq[i] in limit:
-                margins.append(val - limit[self.freq[i]])
+                margins.append(limit[self.freq[i]] - val)
                 freq.append(self.freq[i])
                 values.append(val)
             i+=1

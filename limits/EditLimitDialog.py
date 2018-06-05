@@ -132,7 +132,6 @@ class EditLimitDialog():
             for box in self.boxes:
                 box.blockSignals(False)
             self.model.endResetModel()
-            self.model.updateDict()
             self.updateExampleTable()
             if closeDialog:
                 self.dialog.accept()

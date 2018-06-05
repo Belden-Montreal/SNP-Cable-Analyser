@@ -11,7 +11,8 @@
 					<Part min="1.0" max="500.0">0.02*sqrt(f)</Part>
 				</Limit>
 				<Limit param="NEXT">
-					<Part min="1.0" max="250.0">54-20*log(f/100)</Part>
+					<Part min="1.0" max="8.91">75</Part>
+					<Part max="250.0">54-20*log(f/100)</Part>
 					<Part max="500.0">46.04-40*log(f/250)</Part>
 				</Limit>
 				<Limit param="PSNEXT">
