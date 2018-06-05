@@ -658,7 +658,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
     def tableContextMenu(self, pos):
         #print self.selected
 
-        if len(self.selected) > 0 and self.Project.getSampleByName(self.selected[0]).__retr__() == "SNP":
+        if len(self.selected) > 0 and all("SNP" in  self.Project.getSampleByName(sample).__retr__()  for sample in self.selected):
             #Start by getting info on the sample. (If they're all the same type or not)
 
             menu = QtWidgets.QMenu()
@@ -728,6 +728,37 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
                 self.setLimit()
             #self.Project.activeMeasurements = selected
             return 1
+
+
+        elif len(self.selected) > 0 and not all("SNP" in  self.Project.getSampleByName(sample).__retr__()  for sample in self.selected):
+
+            menu = QtWidgets.QMenu()
+            setLimit = menu.addAction("Set Limit")
+            setPortName = menu.addAction("Rename Ports")
+
+            exportExcel = menu.addAction("Export To Excel")
+            delete = menu.addAction("Delete")
+
+            #get test type for samples. If theyre all one sided, all
+            #end-end or all different.
+            #To start get the test type of the first sample
+
+            action = menu.exec_(QtGui.QCursor.pos())
+
+            if action == exportExcel:
+                print(self.selected)
+                file, _ = self.getSaveFileName(self,"Export Excel Repport", "","Excel File (*.xlsx)")
+                self.Project.generateExcel(file , self.selected, True)
+
+            elif action == delete:
+                self.deleteSample()
+
+            elif action == setLimit:
+                self.setLimit()
+            #self.Project.activeMeasurements = selected
+            return 1
+
+
 
         menu = QtWidgets.QMenu()
         addSNP = menu.addAction("Add Sample")
