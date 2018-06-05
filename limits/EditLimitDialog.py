@@ -84,8 +84,7 @@ class EditLimitDialog():
             if param in item.standard.limits:
                 self.editLimitDialog.limitsTable.clearContents()
                 self.editLimitDialog.limitsTable.setRowCount(len(item.standard.limits[param].clauses))
-                i = 0
-                for clause in item.standard.limits[param].clauses:
+                for i, clause in enumerate(item.standard.limits[param].clauses):
                     minimum = item.standard.limits[param].bounds[i]
                     if minimum == float('-inf'):
                         minimum = "-"
@@ -96,7 +95,6 @@ class EditLimitDialog():
                     self.editLimitDialog.limitsTable.setItem(i, 1, QtWidgets.QTableWidgetItem(maximum.__str__()))
                     self.editLimitDialog.limitsTable.setItem(i, 2, QtWidgets.QTableWidgetItem(clause))
                     self.editLimitDialog.limitsTable.resizeColumnToContents(2)
-                    i+=1
                 self.updateExampleTable()
 
     def saveLimit(self, closeDialog):

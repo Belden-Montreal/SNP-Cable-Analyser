@@ -51,7 +51,6 @@ class LimitParser():
             dictData = {"Root": {"@name": "Standard", "Standard": standardItems}}
         else:
             dictData = {"Root": {"@name": "Standard"}}
-        print(dictData)
         return dictData
 
     def constructDict(self, parent, k):
