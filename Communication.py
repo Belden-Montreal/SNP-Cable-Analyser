@@ -18,9 +18,6 @@ class Communication(object):
 
         self.vna_settings_file = 'VNA_SETTINGS.ini'
 
-
-
-            
         open(self.vna_settings_file, 'a').close()
 
         self.config = configparser.ConfigParser()
@@ -38,17 +35,25 @@ class Communication(object):
             self.visa_address = None
             self.average = 1
             self.test_name = " "
+
+            self.connected = False
+
             with open(self.vna_settings_file, 'w') as configfile:
                 print("Write to INI")
                 self.config.write(configfile)
 
     def connectToVNA(self, VNA_ADDRESS):
-        self.VNAAddress = VNA_ADDRESS
-        self.rm = visa.ResourceManager()
-        self.session = self.rm.open_resource(self.VNAAddress)
-        with open(self.vna_settings_file, 'w') as configfile:
-            print("Write to INI")
-            self.config.write(configfile)
+        try:
+            self.VNAAddress = VNA_ADDRESS
+            self.rm = visa.ResourceManager()
+            self.session = self.rm.open_resource(self.VNAAddress)
+            with open(self.vna_settings_file, 'w') as configfile:
+                print("Write to INI")
+                self.config.write(configfile)
+            self.connected = True
+        except Exception as e:
+            print(e)
+
 	 
     @property
     def VNAAddress(self):
@@ -252,6 +257,7 @@ class Communication(object):
     def close(self):
         self.session.close()
         self.rm.close()
+        self.connected = False
 
 
  
