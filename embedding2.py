@@ -90,8 +90,8 @@ class Embedding(SNPManipulations):
         num_samples = len(self.freq)
         for pair in pairs:
             #first Find 100MHz and 500MHz
-            f100 = list(self.openSample.freq).index(100400400.4004)
-            f500 = list(self.openSample.freq).index(500000000)
+            f100 = list(self.openSample.freq.astype(int)).index(100)
+            f500 = list(self.openSample.freq.astype(int)).index(500)
             openAvg = np.mean(openDelay[pair][f100:f500])
             shortAvg = np.mean(shortDelay[pair][f100:f500])
             self.directFixtureDelay[pair] = (openAvg + shortAvg)/4
@@ -120,8 +120,8 @@ class Embedding(SNPManipulations):
 
                
         for pair in pairs:
-            f100 = list(self.openSample.freq).index(100400400.4004)
-            f500 = list(self.openSample.freq).index(500000000)
+            f100 = list(self.openSample.freq.astype(int)).index(100)
+            f500 = list(self.openSample.freq.astype(int)).index(500)
             #print("f100 ", f100)
             openAvg = np.mean(openDelay[pair][f100:f500])
             shortAvg = np.mean(shortDelay[pair][f100:f500]) 
@@ -174,7 +174,7 @@ class Embedding(SNPManipulations):
                 #Using the old phase and the delay, we will calculate the corrected phase
                 phase_corrected = phase_calib + 360 * self.loadSample.freq[f] * self.plugNextDelay[key]
 
-                if(key == "45-36" and self.loadSample.freq[f] == 100400400.4004):
+                if(key == "45-36" and self.loadSample.freq[f] == 100):
                     print("freq: ", self.loadSample.freq[f])
                     print("Next No corr : ", plugNextNoCorrection[key][f])
                     print("Correct Plug Phase :", phase_corrected)
@@ -190,7 +190,7 @@ class Embedding(SNPManipulations):
                 #And finally we add the new next with the corrected phase to the corrected plug dictionary
                 self.correctedPlugVector[key].append(complex(real, imag))
 
-                if(key == "45-36" and self.loadSample.freq[f] == 100400400.4004):
+                if(key == "45-36" and self.loadSample.freq[f] == 100):
                     print("Correct Plug Vect = "+  str(self.correctedPlugVector[key][f]) + "@ pair :" + key)
                     print("Correct Vect: ", complex(real, imag))         
         
@@ -250,16 +250,16 @@ class Embedding(SNPManipulations):
         num_samples = len(freq)
         self.matedNextNoCorrection = {}
         for pair in pairs:
-            f100 = list(self.openSample.freq).index(100400400.4004)
-            f500 = list(self.openSample.freq).index(500000000)
+            f100 = list(self.openSample.freq.astype(int)).index(100)
+            f500 = list(self.openSample.freq.astype(int)).index(500)
             print("f100 ", f100)
             openAvg = np.mean(openDelay[pair][f100:f500])
             shortAvg = np.mean(shortDelay[pair][f100:f500]) 
             print(self.correctedPlugVector.keys())
             #correctedPlug = np.mean(self.correctedPlugVector[pair][f100:f500])
 
-
-            self.jackDelay[pair] = ((openAvg + shortAvg - self.k1 - self.k2 )/4)  - self.plugDelay[pair] + self.k3
+            print(self.k3)
+            self.jackDelay[pair] = ((openAvg + shortAvg - float(self.k1) - float(self.k2) )/4)  - self.plugDelay[pair] + float(self.k3)
             
             
         self.jackNextDelay["12-36"] = self.jackDelay["12"] + self.jackDelay["36"]
@@ -302,35 +302,35 @@ class Embedding(SNPManipulations):
     def setPlugVectors(self, cat):
 
         if cat == "6A" or cat == "6":
-            self.case1  = lambda f: (-(38.1-20*np.log10((f/1e6)/100)), np.angle(self.correctedPlugVector["45-36"][list(self.loadSample.freq).index(f)], deg=True))
-            self.case2  = lambda f: (-(38.6-20*np.log10((f/1e6)/100)), np.angle(self.correctedPlugVector["45-36"][list(self.loadSample.freq).index(f)], deg=True))
-            self.case3  = lambda f: (-(39.0 -20*np.log10((f/1e6)/100)), np.angle(self.correctedPlugVector["45-36"][list(self.loadSample.freq).index(f)], deg=True))
-            self.case4  = lambda f: (-(39.5-20*np.log10((f/1e6)/100)), np.angle(self.correctedPlugVector["45-36"][list(self.loadSample.freq).index(f)], deg=True))
-            self.case5  = lambda f: (-(46.5-20*np.log10((f/1e6)/100)), np.angle(self.correctedPlugVector["12-36"][list(self.loadSample.freq).index(f)], deg=True)) 
-            self.case6  = lambda f: (-(49.5-20*np.log10((f/1e6)/100)), np.angle(self.correctedPlugVector["12-36"][list(self.loadSample.freq).index(f)], deg=True))
-            self.case7  = lambda f: (-(46.5-20*np.log10((f/1e6)/100)), np.angle(self.correctedPlugVector["36-78"][list(self.loadSample.freq).index(f)], deg=True)) 
-            self.case8  = lambda f: (-(49.5-20*np.log10((f/1e6)/100)), np.angle(self.correctedPlugVector["36-78"][list(self.loadSample.freq).index(f)], deg=True)) 
-            self.case9  = lambda f: (-(57.0-20*np.log10((f/1e6)/100)), 90) 
-            self.case10 = lambda f: (-(70.0-20*np.log10((f/1e6)/100)), -90)  
-            self.case11 = lambda f: (-(57.0-20*np.log10((f/1e6)/100)), 90) 
-            self.case12 = lambda f: (-(70.0-20*np.log10((f/1e6)/100)), -90) 
-            self.case13 = lambda f: (-(66.0-20*np.log10((f/1e6)/100)), np.angle(self.correctedPlugVector["12-78"][list(self.loadSample.freq).index(f)], deg=True)) 
-            self.case14 = lambda f: (-(66.0-20*np.log10((f/1e6)/100)), np.angle(self.correctedPlugVector["12-78"][list(self.loadSample.freq).index(f)], deg=True)-180)
+            self.case1  = lambda f: (-(38.1-20*np.log10((f)/100)), np.angle(self.correctedPlugVector["45-36"][list(self.loadSample.freq).index(f)], deg=True))
+            self.case2  = lambda f: (-(38.6-20*np.log10((f)/100)), np.angle(self.correctedPlugVector["45-36"][list(self.loadSample.freq).index(f)], deg=True))
+            self.case3  = lambda f: (-(39.0 -20*np.log10((f)/100)), np.angle(self.correctedPlugVector["45-36"][list(self.loadSample.freq).index(f)], deg=True))
+            self.case4  = lambda f: (-(39.5-20*np.log10((f)/100)), np.angle(self.correctedPlugVector["45-36"][list(self.loadSample.freq).index(f)], deg=True))
+            self.case5  = lambda f: (-(46.5-20*np.log10((f)/100)), np.angle(self.correctedPlugVector["12-36"][list(self.loadSample.freq).index(f)], deg=True)) 
+            self.case6  = lambda f: (-(49.5-20*np.log10((f)/100)), np.angle(self.correctedPlugVector["12-36"][list(self.loadSample.freq).index(f)], deg=True))
+            self.case7  = lambda f: (-(46.5-20*np.log10((f)/100)), np.angle(self.correctedPlugVector["36-78"][list(self.loadSample.freq).index(f)], deg=True)) 
+            self.case8  = lambda f: (-(49.5-20*np.log10((f)/100)), np.angle(self.correctedPlugVector["36-78"][list(self.loadSample.freq).index(f)], deg=True)) 
+            self.case9  = lambda f: (-(57.0-20*np.log10((f)/100)), 90) 
+            self.case10 = lambda f: (-(70.0-20*np.log10((f)/100)), -90)  
+            self.case11 = lambda f: (-(57.0-20*np.log10((f)/100)), 90) 
+            self.case12 = lambda f: (-(70.0-20*np.log10((f)/100)), -90) 
+            self.case13 = lambda f: (-(66.0-20*np.log10((f)/100)), np.angle(self.correctedPlugVector["12-78"][list(self.loadSample.freq).index(f)], deg=True)) 
+            self.case14 = lambda f: (-(66.0-20*np.log10((f)/100)), np.angle(self.correctedPlugVector["12-78"][list(self.loadSample.freq).index(f)], deg=True)-180)
 
         elif cat == "5":
-            self.case1  = lambda f: (-35.8- 20 * np.log10((f/1e6)/100), np.angle(self.correctedPlugVector["45-36"][list(self.loadSample.freq).index(f)], deg=True)) 
+            self.case1  = lambda f: (-35.8- 20 * np.log10((f)/100), np.angle(self.correctedPlugVector["45-36"][list(self.loadSample.freq).index(f)], deg=True)) 
             self.case2  = lambda f:([], [])
             self.case3  = lambda f:([], [])
-            self.case4  = lambda f: (-39.5- 20 * np.log10((f/1e6)/100), np.angle(self.correctedPlugVector["45-36"][list(self.loadSample.freq).index(f)], deg=True)) 
-            self.case5  = lambda f: (-42.0- 20 * np.log10((f/1e6)/100), np.angle(self.correctedPlugVector["12-36"][list(self.loadSample.freq).index(f)], deg=True)) 
-            self.case6  = lambda f: (-50.0- 20 * np.log10((f/1e6)/100), np.angle(self.correctedPlugVector["12-36"][list(self.loadSample.freq).index(f)], deg=True))
-            self.case7  = lambda f: (-42.0- 20 * np.log10((f/1e6)/100), np.angle(self.correctedPlugVector["12-36"][list(self.loadSample.freq).index(f)], deg=True)) 
-            self.case8  = lambda f: (-50.0- 20 * np.log10((f/1e6)/100), np.angle(self.correctedPlugVector["36-78"][list(self.loadSample.freq).index(f)], deg=True))
-            self.case9  = lambda f: (-50.0- 20 * np.log10((f/1e6)/100), np.angle(self.correctedPlugVector["45-12"][list(self.loadSample.freq).index(f)], deg=True))
+            self.case4  = lambda f: (-39.5- 20 * np.log10((f)/100), np.angle(self.correctedPlugVector["45-36"][list(self.loadSample.freq).index(f)], deg=True)) 
+            self.case5  = lambda f: (-42.0- 20 * np.log10((f)/100), np.angle(self.correctedPlugVector["12-36"][list(self.loadSample.freq).index(f)], deg=True)) 
+            self.case6  = lambda f: (-50.0- 20 * np.log10((f)/100), np.angle(self.correctedPlugVector["12-36"][list(self.loadSample.freq).index(f)], deg=True))
+            self.case7  = lambda f: (-42.0- 20 * np.log10((f)/100), np.angle(self.correctedPlugVector["12-36"][list(self.loadSample.freq).index(f)], deg=True)) 
+            self.case8  = lambda f: (-50.0- 20 * np.log10((f)/100), np.angle(self.correctedPlugVector["36-78"][list(self.loadSample.freq).index(f)], deg=True))
+            self.case9  = lambda f: (-50.0- 20 * np.log10((f)/100), np.angle(self.correctedPlugVector["45-12"][list(self.loadSample.freq).index(f)], deg=True))
             self.case10 = lambda f:([],[])
-            self.case11 = lambda f: (-50.0- 20 * np.log10((f/1e6)/100), np.angle(self.correctedPlugVector["45-78"][list(self.loadSample.freq).index(f)], deg=True))
+            self.case11 = lambda f: (-50.0- 20 * np.log10((f)/100), np.angle(self.correctedPlugVector["45-78"][list(self.loadSample.freq).index(f)], deg=True))
             self.case12 = lambda f:([], [])
-            self.case13 = lambda f: (-60.0- 20 * np.log10((f/1e6)/100), np.angle(self.correctedPlugVector["12-78"][list(self.loadSample.freq).index(f)], deg=True))
+            self.case13 = lambda f: (-60.0- 20 * np.log10((f)/100), np.angle(self.correctedPlugVector["12-78"][list(self.loadSample.freq).index(f)], deg=True))
             self.case14 = lambda f:([], [])
 
     def reembed(self):
@@ -359,11 +359,11 @@ class Embedding(SNPManipulations):
                 key = ["45-36", "45-36", "45-36", "45-36", "12-36", "12-36", "36-78", "36-78", "45-12", "45-12", "45-78", "45-78", "12-78", "12-78"][i-1]
                 reembed = plugRI + self.jackVector[key][j]
                 self.reembeded[i].append(20*np.log10(reembed))
-                
-        f10 = list(self.loadSample.freq).index(10490490.49049)
-        f100 = list(self.loadSample.freq).index(100400400.4004)
+        print(list(self.loadSample.freq))        
+        f10 = list(self.loadSample.freq.astype(int)).index(10)
+        f100 = list(self.loadSample.freq.astype(int)).index(100)
 
-        f500 = list(self.loadSample.freq).index(500000000)
+        f500 = list(self.loadSample.freq.astype(int)).index(500)
 
 
     def addPlug(self, dfOpen, dfShort, pdfOpen, pdfShort, pdfLoad, plugName = None ):

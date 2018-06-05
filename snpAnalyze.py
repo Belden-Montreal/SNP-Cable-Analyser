@@ -11,7 +11,7 @@ class SNPManipulations(rf):
         
         #self.sMat = self.rs.s   #Scattering parameter matrix.
         #self.zMat = self.rs.z   #Impedance parameter matrix.
-        self.freq = self.f   #Array containing all frequency
+        self.freq = np.array(self.f)   #Array containing all frequency
         self.se = self.s #single ended
 
         self.num_ports = self.rs.number_of_ports
@@ -25,6 +25,8 @@ class SNPManipulations(rf):
         self.one_sided = False
 
         self.freq_unit = 'mhz'
+
+        
 
     def getRL(self, matrix, z=True ):
         '''
@@ -617,6 +619,8 @@ class SNPManipulations(rf):
 
         self.freq = self.freq * (1000 ** (current_unit - desired_unit))
         self.frequency.unit = unit
+
+        print("F Was: {}, F Now:{}".format(unit, self.frequency.unit))
 
         
 

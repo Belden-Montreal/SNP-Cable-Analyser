@@ -118,8 +118,8 @@ class AddPlug(QtWidgets.QMainWindow, plugDialog.Ui_Dialog, QtWidgets.QAction, Qt
     def getPhaseLimits(self):
         tpLim = {}
 
-        f100 = list(self.em.freq).index(100400400.4004)
-        f500 = list(self.em.freq).index(500000000)
+        f100 = list(self.em.freq).index(100)
+        f500 = list(self.em.freq).index(500)
 
         freq = np.array(self.em.freq[f100:f500]) / 1e6
         tpLim["45-36"] = {}
@@ -153,8 +153,8 @@ class AddPlug(QtWidgets.QMainWindow, plugDialog.Ui_Dialog, QtWidgets.QAction, Qt
         
         self.graphicsView.figure.clear()
         for i, pair in enumerate(self.correctedPlugVectorPhase):
-            f100 = list(self.em.freq).index(100400400.4004)
-            f500 = list(self.em.freq).index(500000000)
+            f100 = list(self.em.freq.astype(int)).index(100)
+            f500 = list(self.em.freq.astype(int)).index(500)
 
             ax=self.graphicsView.figure.add_subplot(3, 2, i+1)
             ax.semilogx(self.em.freq[f100: f500], self.correctedPlugVectorPhase[pair][f100: f500])

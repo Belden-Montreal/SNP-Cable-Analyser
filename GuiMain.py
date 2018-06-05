@@ -393,7 +393,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
 
             ax.grid(which="both")
 
-            ax.set_xlabel('Freq (Hz)')
+            ax.set_xlabel('Freq (MHz)')
             ax.set_ylabel('dB')
             ax.set_title(activeParameter)
 
@@ -426,7 +426,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
         self.alienWidget.alienEnd1.setChecked(True)
 
         self.alienWidget.alienVictimButton.clicked.connect(self.alienImportVictimSNP)
-        self.alienWidget.alienDisturberButton.clicked.connect(self.alienAddDisturber)
+        #self.alienWidget.alienDisturberButton.clicked.connect(self.alienAddDisturber)
         self.alienWidget.alienImportSNP.clicked.connect(self.alienImportSNP)
         self.alienWidget.alienDisturbers.itemChanged.connect(self.alienPlot) 
         
@@ -503,8 +503,10 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
             print(file)
             alien = self.Project.getSampleByName(self.selected[0])
             alien.addDisturbed(file)
+            self.alienUpdateDisturberList()
+            self.alienPlot()
 
-    def alienAddDisturber(self):
+    """def alienAddDisturber(self):
         print("Add Disturber")
         alien = self.Project.getSampleByName(self.selected[0])
 
@@ -523,9 +525,13 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
                 name, extension = splitext(os.path.basename(file))
                 alien.addDisturber(name)
                 
-            self.alienUpdateDisturberList()
+            self.alienUpdateDisturberList()"""
 
     def alienUpdateDisturberList(self):
+
+        end = "end1"
+        testType = "ANEXT"
+
         alien = self.Project.getSampleByName(self.selected[0])
         self.alienWidget.alienDisturbers.clear()
 
@@ -541,13 +547,16 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
         elif self.alienWidget.alienPSAACRF.isChecked():
             testType = "AFEXT"
 
-        for disturber in alien.disturbers.keys():
+        print(end)
+        print(testType)
+
+        for disturber in alien.disturbers[end][testType].keys():
             item = QtWidgets.QListWidgetItem()
             item.setText(disturber)
             try:
-                print(alien.disturbers[disturber][end].keys())
+                #print(alien.disturbers[disturber][end].keys())
 
-                alien.disturbers[disturber][end][testType] #See if defined
+                alien.disturbers[end][testType][disturber] #See if defined
             except Exception as e:
                 print("Doesnt Exist")
             else:
@@ -570,29 +579,22 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
         elif self.alienWidget.alienPSAACRF.isChecked():
             testType = "AFEXT"
         try:
-            selectedDisturber = self.alienWidget.alienDisturbers.currentItem().text()
-
-            print(selectedDisturber)
-
-            try:
-                alien.disturbers[selectedDisturber][end][testType] #See if defined
-            except Exception as e:
-                print("Sample doesnt have an SNP")
-            else:
-                print("Sample already has an attributed SNP file")
-                
+               
             options = self.Options()
             options |= self.DontUseNativeDialog
-            file, _ = self.getOpenFileName(self,"Select ALlien test", "","sNp Files (*.s*p)", options=options)
+            files, _ = self.getOpenFileNames(self,"Select ALlien test", "","sNp Files (*.s*p)", options=options)
 
-            alien.addDisturberMeasurement(end, testType, file, selectedDisturber)
+            import os.path
+            for file in files:
+                alien.addDisturberMeasurement(end, testType, file, os.path.basename(file))
             self.alienUpdateDisturberList()
             self.alienPlot()
             
         except Exception as e:
+            print(e)
             msg = QtWidgets.QMessageBox()
             msg.setIcon(QtWidgets.QMessageBox.Information)
-            msg.setText("Please select disturber to add")
+            msg.setText("Please select disturber to add ")
             msg.setWindowTitle("Warning")
             msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
             msg.setFixedSize(msg.sizeHint())

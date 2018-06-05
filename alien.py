@@ -22,7 +22,6 @@ class Alien(object):
 
         self.powerSum = {}
         self.averagePowerSum = {}
-        self.disturbers = {}
 
         #self.port_name = {0:"12", 1:"36", 2:"45", 3:"78",4:"12", 5:"36", 6:"45", 7:"78"}
 
@@ -40,27 +39,23 @@ class Alien(object):
         print(self.port_name)
 
         self.disturbersList = []
+
+        self.disturbers = {}
+        self.disturbers["end1"] = {}
+        self.disturbers["end2"] = {}
+
+        self.disturbers["end1"]["ANEXT"]   = {}
+        self.disturbers["end1"]["AFEXT"]   = {}
+        self.disturbers["end1"]["PSANEXT"] = {}
+        self.disturbers["end1"]["PSAFEXT"] = {}
+        self.disturbers["end1"]["PSAACRF"] = {}
+        
+        self.disturbers["end2"]["ANEXT"]   = {}
+        self.disturbers["end2"]["AFEXT"]   = {}
+        self.disturbers["end2"]["PSANEXT"] = {}
+        self.disturbers["end2"]["PSAFEXT"] = {}
+        self.disturbers["end2"]["PSAACRF"] = {}
             
-
-
-    def addDisturber(self, name, snpFile = None):
-
-        self.disturbers[name] = {}
-        self.disturbers[name]["end1"] = {}
-        self.disturbers[name]["end2"] = {}
-
-        if snpFile:
-
-            self.rs = SNPManipulations(snpFile)
-            self.rs.oneSided = False
-    
-            #vna_out.renumber([1,2], [2,1])
-
-            self.rs.s2mm()
-
-            self.rs.port_name = self.port_name
-            self.disturbers[name]["IL"] = self.rs.getIL(self.rs.dd)
-
 
     def addDisturbed(self, snpFile):
         self.rs = SNPManipulations(snpFile)
@@ -75,6 +70,7 @@ class Alien(object):
         self.distrubedIL = self.rs.getIL(self.rs.dd , z = False)
         
     def addDisturberMeasurement(self, end, testType, snpFile, name = ""):
+
         '''
         This function accepts as parameters the following:
             -end : the end of the cable 
@@ -84,12 +80,11 @@ class Alien(object):
             Once a measured value has been added, this function will procede to call the desired functions (getANEXT, getPSANEXT, getAveragePSANEXT).    
         '''
 
-
         alien = self.getAlien(snpFile)   #Wether its ANEXT or AFEXT, the method to extract from the SNP is the same. 
 
-        self.disturbers[name][end][testType] = alien
+        self.disturbers[end][testType][name] = alien
 
-        print(self.disturbers[name][end][testType].keys())
+        print(self.disturbers[end][testType][name].keys())
  
 
     def getAlien(self, snpFile):
@@ -120,8 +115,6 @@ class Alien(object):
         s = "Example String"
         replaced = re.sub('[ES]', 'a', s)
         print ("IL Keys : ", ILKeys)
-
-        
 
         for key in ILKeys:
             IL[re.sub('[(d)]', '', key) + "-(d)" + key] = IL[key]
@@ -156,7 +149,7 @@ class Alien(object):
 
                     innerSum = 0
                     for disturbing_pair in range(numPairs//2, numPairs):
-                        ALIEN = self.disturbers[disturber][end][Test][self.port_name[disturbed_pair] + '-' + self.port_name[disturbing_pair]][f]
+                        ALIEN = self.disturbers[end][Test][disturber][self.port_name[disturbed_pair] + '-' + self.port_name[disturbing_pair]][f]
 
                         if f == 0:
                             print(str(disturbed_pair) + '-' + str(disturbing_pair), ALIEN)
@@ -169,14 +162,12 @@ class Alien(object):
 
                         innerSum += 10**(ALIEN/10)
                     outterSum += innerSum
-                    if f == 0 and  disturbed_pair == 0:
+                    if f == 0 and disturbed_pair == 0:
                         print("inner", innerSum)
                 PSK = 10*np.log10(outterSum)
                 self.PSAlien[self.port_name[disturbed_pair]].append(PSK)
                 
-
         return self.PSAlien
-                
                 
     def getPSAACRX(self, end, Test):
 
@@ -198,9 +189,7 @@ class Alien(object):
                 if f == 0:
                     print("disturbed pair: ", self.port_name[disturbed_pair], self.distrubedIL[self.port_name[disturbed_pair]][f])
 
-
         return PSAACRX
-    
 
     def __retr__(self):
         return "Alien"
