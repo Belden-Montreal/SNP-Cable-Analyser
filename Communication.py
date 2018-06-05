@@ -205,6 +205,8 @@ class Communication(object):
             #rm.list_resources()
             with open(self.vna_settings_file, 'w') as configfile:
                 self.config.write(configfile)
+
+            return 
             
         except visa.Error as ex:
             print(ex)
@@ -255,6 +257,6 @@ class Communication(object):
  
 if __name__ == '__main__':
 
-    comm = Communication("TCPIP0::10.29.48.46::hislip0::INSTR")
+    comm = Communication()
     comm.aquire("123", 8)
 

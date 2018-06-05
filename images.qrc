@@ -8,5 +8,8 @@
 
 <file>Pictures/Icons/calibrate.png</file>
 <file>Pictures/Icons/calibrate_disabled.png</file>
+<file>Pictures/Icons/deembed.png</file>
+<file>Pictures/Icons/alien.png</file>
+
 </qresource>
 </RCC>

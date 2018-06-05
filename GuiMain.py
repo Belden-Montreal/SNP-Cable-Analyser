@@ -1,7 +1,7 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
 import sys
 import scipy
-import MW3
+import MW4
 import VNA_addr_dialog
 from limits.LimitDialog import LimitDialog
 import TestParameters
@@ -53,7 +53,7 @@ from tabThread import TabThread
 
 from multiprocessing.dummy import Pool as ThreadPool
 
-class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, QtWidgets.QFileDialog, QtWidgets.QListView, QtWidgets.QDialog, QtCore.Qt):
+class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, QtWidgets.QFileDialog, QtWidgets.QListView, QtWidgets.QDialog, QtCore.Qt):
 
     '''
     This class handles all of the user sent commands from the GUI.   
@@ -123,7 +123,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
     def newProject(self):
         
         self.Project = Project()
-        self.sampleTable.setRowCount(0);
+        self.sampleTable.setRowCount(0)
 
     def deleteSample(self):
         
@@ -203,6 +203,11 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
         self.embedWidget.importOpen.clicked.connect(self.importOpen)
         self.embedWidget.importShort.clicked.connect(self.importShort)
         self.embedWidget.importLoad.clicked.connect(self.importLoad)
+
+        self.embedWidget.acquireOpen.clicked.connect(self.acquireOpen)
+        self.embedWidget.acquireShort.clicked.connect(self.acquireShort)
+        self.embedWidget.acquireLoad.clicked.connect(self.acquireLoad)
+
         self.embedWidget.reembedButton.clicked.connect(self.reembed)
 
         self.embedWidget.addPlug.clicked.connect(self.addPlugDialog)
@@ -223,12 +228,12 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
 
         embeddedSample.getPlugParams(plugFile)
         print(embeddedSample.plugNextDelay)
-        self.embedWidget.dnext12_36.setText(str(embeddedSample.plugNextDelay["12-36"]))
+        '''self.embedWidget.dnext12_36.setText(str(embeddedSample.plugNextDelay["12-36"]))
         self.embedWidget.dnext45_12.setText(str(embeddedSample.plugNextDelay["45-12"]))
         self.embedWidget.dnext12_78.setText(str(embeddedSample.plugNextDelay["12-78"]))
         self.embedWidget.dnext45_36.setText(str(embeddedSample.plugNextDelay["45-36"]))
         self.embedWidget.dnext36_78.setText(str(embeddedSample.plugNextDelay["36-78"]))
-        self.embedWidget.dnext45_78.setText(str(embeddedSample.plugNextDelay["45-78"]))
+        self.embedWidget.dnext45_78.setText(str(embeddedSample.plugNextDelay["45-78"]))'''
         
     def importOpen(self):
         embeddedSample = self.Project.getSampleByName(self.selected[0])
@@ -243,6 +248,22 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
     def importLoad(self):
         embeddedSample = self.Project.getSampleByName(self.selected[0])
         embeddedSample.embeddedLoad = self.embedImportSNP()
+        self.embedUpdateTab()
+
+
+    def acquireOpen(self):
+        embeddedSample = self.Project.getSampleByName(self.selected[0])
+        embeddedSample.embeddedOpen = self.simpleAquire()
+        self.embedUpdateTab()
+
+    def acquireShort(self):
+        embeddedSample = self.Project.getSampleByName(self.selected[0])
+        embeddedSample.embeddedShort = self.simpleAquire()
+        self.embedUpdateTab()
+        
+    def acquireLoad(self):
+        embeddedSample = self.Project.getSampleByName(self.selected[0])
+        embeddedSample.embeddedLoad = self.simpleAquire()
         self.embedUpdateTab()
         
     def reembed(self):
@@ -287,12 +308,8 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
                 embeddedSample.getJackVector(embeddedSample.embeddedLoad)
                 embeddedSample.reembed()
                 self.embedUpdateTab()
+       
 
-        #embeddedSample.reembed()
-        #self.embedUpdateTab()
-        '''self.embedPlugUpdate()'''
-        
-    
     def embedImportSNP(self):
         
         options = self.Options()
@@ -428,6 +445,8 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
         self.alienWidget.alienVictimButton.clicked.connect(self.alienImportVictimSNP)
         #self.alienWidget.alienDisturberButton.clicked.connect(self.alienAddDisturber)
         self.alienWidget.alienImportSNP.clicked.connect(self.alienImportSNP)
+        self.alienWidget.alienRun.clicked.connect(self.alienRun)
+        
         self.alienWidget.alienDisturbers.itemChanged.connect(self.alienPlot) 
         
         self.alienWidget.alienPSANEXT.toggled.connect(self.alienRadioChange)
@@ -564,6 +583,39 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
                 item.setCheckState(QtCore.Qt.Checked)
             self.alienWidget.alienDisturbers.addItem(item)
             
+
+    def alienRun(self):
+        alien = self.Project.getSampleByName(self.selected[0])
+
+        if self.alienWidget.alienEnd1.isChecked():
+            end = "end1"
+        elif self.alienWidget.alienEnd2.isChecked():
+            end = "end2"
+            
+        if self.alienWidget.alienPSANEXT.isChecked():
+            testType = "ANEXT"
+        elif self.alienWidget.alienPSAACRF.isChecked():
+            testType = "AFEXT"
+        try:
+               
+            file = self.simpleAquire()
+            print("here")
+            import os.path
+            print(file)
+            alien.addDisturberMeasurement(end, testType, file, os.path.basename(file))
+            self.alienUpdateDisturberList()
+            self.alienPlot()
+            
+        except Exception as e:
+            print(e)
+            msg = QtWidgets.QMessageBox()
+            msg.setIcon(QtWidgets.QMessageBox.Information)
+            msg.setText("Please select disturber to add ")
+            msg.setWindowTitle("Warning")
+            msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+            msg.setFixedSize(msg.sizeHint())
+            msg.exec_()
+                   
 
     def alienImportSNP(self):
         
@@ -978,6 +1030,29 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW3.Ui_MainWindow, QtWidgets.QAction, 
             except Exception as e:
                 print("Cancel")
 
+
+
+    def simpleAquire(self):
+            try:
+                testName, numPorts, IF, start_freq, stop_freq, num_points, average, timeout = Test_Params_Dialog().getParams()
+                if testName:
+                    try:
+                        #comm = Communication(addr)
+                        self.comm.IF = IF
+                        self.comm.min_freq = start_freq
+                        self.comm.max_freq = stop_freq
+                        self.comm.num_points = num_points
+                        self.comm.average = average
+                        print("Aquiring Deembeding")
+                        self.comm.aquire(testName, numPorts)
+
+                        return r"Y:/{}.s{}p".format(testName, numPorts)
+
+                    except Exception as e:
+                        pass
+            except Exception as e:
+                print("Cancel")
+
     def reject(self):
         pass
 
@@ -991,14 +1066,14 @@ class Addr_Dialog:
         dialog = QtWidgets.QDialog()
         addr_dialog = VNA_addr_dialog.Ui_Addr_Dialog()
         addr_dialog.setupUi(dialog)
-        addr_dialog.plainTextEdit.setPlainText(comm.VNAAddress)
+        addr_dialog.plainTextEdit.setText(comm.VNAAddress)
 
         result = dialog.exec_()
         print("here")
         if not result:
             return 0
         if result:
-            addr =  addr_dialog.plainTextEdit.toPlainText()
+            addr =  addr_dialog.plainTextEdit.text()
             print("sent")
             if len(addr) < 1:
                 return 0

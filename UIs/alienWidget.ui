@@ -38,13 +38,6 @@
                 </property>
                </widget>
               </item>
-              <item>
-               <widget class="QPushButton" name="alienDisturberButton">
-                <property name="text">
-                 <string>Add Disturber</string>
-                </property>
-               </widget>
-              </item>
              </layout>
             </item>
            </layout>

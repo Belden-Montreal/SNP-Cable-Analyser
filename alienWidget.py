@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'alienWidget.ui'
+# Form implementation generated from reading ui file 'UIs/alienWidget.ui'
 #
-# Created by: PyQt5 UI code generator 5.10
+# Created by: PyQt5 UI code generator 5.10.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -32,9 +32,6 @@ class Ui_Form(object):
         self.alienVictimButton = QtWidgets.QPushButton(self.alienGeneralInfo)
         self.alienVictimButton.setObjectName("alienVictimButton")
         self.verticalLayout.addWidget(self.alienVictimButton)
-        self.alienDisturberButton = QtWidgets.QPushButton(self.alienGeneralInfo)
-        self.alienDisturberButton.setObjectName("alienDisturberButton")
-        self.verticalLayout.addWidget(self.alienDisturberButton)
         self.horizontalLayout_4.addLayout(self.verticalLayout)
         self.verticalLayout_11.addWidget(self.alienGeneralInfo)
         self.verticalLayout_3.addLayout(self.verticalLayout_11)
@@ -147,7 +144,6 @@ class Ui_Form(object):
         Form.setWindowTitle(_translate("Form", "Form"))
         self.alienGeneralInfo.setTitle(_translate("Form", "General"))
         self.alienVictimButton.setText(_translate("Form", "Victim SNP"))
-        self.alienDisturberButton.setText(_translate("Form", "Add Disturber"))
         self.alienPlots.setTitle(_translate("Form", "Plots"))
         self.alienLimitCheck.setText(_translate("Form", "Limit"))
         self.alienAvgLimitCheck.setText(_translate("Form", "Avg Limit"))
