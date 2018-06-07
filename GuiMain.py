@@ -137,7 +137,13 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
         result = limitDialog.showDialog()
         if result:
             item = limitDialog.getSelection().internalPointer().standard
-
+            for limit in item.limits.values():
+                if not (limit == ""):
+                    for function in limit.functions:
+                        for symbol in function.free_symbols:
+                            if not (str(symbol) == 'f'):
+                                ret = QtWidgets.QInputDialog.getDouble(self, "Enter the parameter value", "Please enter the value for the parameter "+ str(symbol) +" : ")
+                                limit.setParamValue(symbol, ret[0])
             for sample in self.selected:
                 self.Project.getSampleByName(sample).setStandard(item)
                 for i in range(0, len(self.Project.measurements)):

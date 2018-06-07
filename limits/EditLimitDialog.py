@@ -130,11 +130,11 @@ class EditLimitDialog():
             for x in range(0,self.editLimitDialog.limitsTable.rowCount()):
                 limits.append(self.editLimitDialog.limitsTable.item(x, 2).text())
                 if x == 0:
-                    if self.editLimitDialog.limitsTable.item(x, 0).text() == "-":
+                    if self.editLimitDialog.limitsTable.item(x, 0).text() == "-" or self.editLimitDialog.limitsTable.item(x, 0).text() == "":
                         bounds.append(-math.inf)
                     else:
                         bounds.append(float(self.editLimitDialog.limitsTable.item(x, 0).text()))
-                if self.editLimitDialog.limitsTable.item(x,1).text() == "-":
+                if self.editLimitDialog.limitsTable.item(x,1).text() == "-" or self.editLimitDialog.limitsTable.item(x,1).text() == "":
                     bounds.append(math.inf)
                 else:
                     bounds.append(float(self.editLimitDialog.limitsTable.item(x, 1).text()))

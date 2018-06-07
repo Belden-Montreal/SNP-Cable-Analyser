@@ -25,7 +25,7 @@ class Limit:
         self.functions = []
         for clause in clauses:
             if not (clause == ""):
-                self.functions.append(parse_expr(clause, local_dict={"log":lambda x: log(x, 10), "L": 2, "e": E}, transformations=transformation))
+                self.functions.append(parse_expr(clause, local_dict={"log":lambda x: log(x, 10), "e": E}, transformations=transformation))
 
     def evaluate(self, vals, neg=False):
         for i, function in enumerate(self.functions):
@@ -62,26 +62,32 @@ class Limit:
         if not (self.functions is []):
             self.resultsDict = {}
             self.resultsList = []
-            # for i in range(0, nb):
-            #     valsDict = {}
-            #     for param in vals:
-            #         valsDict[param] = vals[param][i]
-            #     if self.bounds[0] <= vals['f'][i] and vals['f'][i] <= self.bounds[-1]:
-            #         self.resultsDict[vals['f'][i]] = self.evaluate(valsDict, neg)
-            #         self.resultsList.append((vals['f'][i], self.resultsDict[vals['f'][i]]))
-            valsList = []
-            for i in range(0,nb):
+            for i in range(0, nb):
                 valsDict = {}
                 for param in vals:
                     valsDict[param] = vals[param][i]
-                valsList.append(valsDict)
-            pool = ThreadPool()
-            results = pool.starmap(self.evaluatePoint, zip(valsList, [neg]*nb))
-            self.resultsList = [x for x in results if x is not None]
-            for res in self.resultsList:
-                if res:
-                    self.resultsDict[res[0]] = res[1]
+                if self.bounds[0] <= vals['f'][i] and vals['f'][i] <= self.bounds[-1]:
+                    self.resultsDict[vals['f'][i]] = self.evaluate(valsDict, neg)
+                    self.resultsList.append((vals['f'][i], self.resultsDict[vals['f'][i]]))
+            # valsList = [] #MULTITHREADING
+            # for i in range(0,nb):
+            #     valsDict = {}
+            #     for param in vals:
+            #         valsDict[param] = vals[param][i]
+            #     valsList.append(valsDict)
+            # pool = ThreadPool()
+            # results = pool.starmap(self.evaluatePoint, zip(valsList, [neg]*nb))
+            # self.resultsList = [x for x in results if x is not None]
+            # for res in self.resultsList:
+            #     if res:
+            #         self.resultsDict[res[0]] = res[1]
         
-    def evaluatePoint(self, valsDict, neg):
-        if self.bounds[0] <= valsDict['f'] and valsDict['f'] <= self.bounds[-1]:
-            return (valsDict['f'], self.evaluate(valsDict, neg))
+    # def evaluatePoint(self, valsDict, neg):
+    #     if self.bounds[0] <= valsDict['f'] and valsDict['f'] <= self.bounds[-1]:
+    #         return (valsDict['f'], self.evaluate(valsDict, neg))
+
+    def setParamValue(self, symbol, value):
+        for i, function in enumerate(self.functions):
+            if symbol in function.free_symbols:
+                self.functions[i] = function.subs(symbol, value)
+                print(str(self.functions[i]))
