@@ -65,6 +65,18 @@
 					<Part min="1.0" max="30.0">35-20*log(f)</Part>
 				</Limit>
 			</Hardware>
+			<Hardware name="Cords and jumpers">
+				<Limit param="RL">
+					<Part min="1.0" max="25.0">24+3*log(f/25)</Part>
+					<Part max="250.0">24-10*log(f/25)</Part>
+					<Part max="500.0">14-15*log(f/250)</Part>
+				</Limit>
+				<Limit param="NEXT">
+					<Max>65.0</Max>
+					<Part min="1.0" max="250.0">-10*log(10^(-(-20*log(10^(-(54 - 20*log(f/100))/20) + 10^(-(54 - 20*log(f/100) + 2 (1.2 (1.82*sqrt(f) + 0.0091f + 0.25/sqrt(f))(L/100) + 0.02*sqrt(f)))/20)))/10)+10^(-(44.3-15*log(f/100)-10*log(1-e^(-0.46(1.2(1.82*sqrt(f)+0.0091f+0.25/sqrt(f))*L/100)))+2*0.02*sqrt(f))/10))-0.5</Part>
+					<Part max="500.0">-10*log(10^(-(-20*log(10^(-(46.04 - 40*log(f/250))/20) + 10^(-(46.04 - 40*log(f/250) + 2 (1.2 (1.82*sqrt(f) + 0.0091f + 0.25/sqrt(f))(L/100) + 0.02*sqrt(f)))/20)))/10)+10^(-(44.3-15*log(f/100)-10*log(1-e^(-0.46(1.2(1.82*sqrt(f)+0.0091f+0.25/sqrt(f))*L/100)))+2*0.02*sqrt(f))/10))-0.5</Part>
+				</Limit>
+			</Hardware>
 		</Category>
 		<Category name="CAT6">
 			<Hardware name="Connecting Hardware">
@@ -166,6 +178,16 @@
 			<Hardware name="Connecting Hardware">
 			</Hardware>
 			<Hardware name="Cord Cable">
+			</Hardware>
+			<Hardware name="Cords and jumpers">
+				<Limit param="RL">
+					<Part min="1.0" max="25.0">24+3*log(f/25)</Part>
+					<Part max="100.0">24-10*log(f/25)</Part>
+				</Limit>
+				<Limit param="NEXT">
+					<Max>65.0</Max>
+					<Part min="1.0" max="100.0">-10*log(10^(-(-20*log(10^(-(47 - 20*log(f/100))/20) + 10^(-(47 - 20*log(f/100) + 2 (1.2 (1.967*sqrt(f) + 0.023f + 0.05/sqrt(f))(L/100) + 0.04*sqrt(f)))/20)))/10)+10^(-(35.3-15*log(f/100)-10*log(1-e^(-0.46(1.2(1.967*sqrt(f)+0.023f+0.05/sqrt(f))*L/100)))+2*0.04*sqrt(f))/10))</Part>
+				</Limit>
 			</Hardware>
 		</Category>
 	</Standard>
