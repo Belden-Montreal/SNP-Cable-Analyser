@@ -119,16 +119,6 @@
     <property name="horizontalSpacing">
      <number>5</number>
     </property>
-    <item row="0" column="0" colspan="2">
-     <widget class="QComboBox" name="parameterBox"/>
-    </item>
-    <item row="1" column="1">
-     <widget class="QPushButton" name="removeButton">
-      <property name="text">
-       <string>Remove</string>
-      </property>
-     </widget>
-    </item>
     <item row="0" column="2" rowspan="2">
      <widget class="QTableWidget" name="limitsTable">
       <property name="rowCount">
@@ -152,14 +142,7 @@
       <column/>
      </widget>
     </item>
-    <item row="1" column="0">
-     <widget class="QPushButton" name="addButton">
-      <property name="text">
-       <string>Add</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="3" rowspan="2">
+    <item row="0" column="3" rowspan="3">
      <widget class="QTableWidget" name="exampleTable">
       <property name="editTriggers">
        <set>QAbstractItemView::NoEditTriggers</set>
@@ -187,9 +170,60 @@
       <column/>
      </widget>
     </item>
+    <item row="2" column="1">
+     <widget class="QPushButton" name="removeButton">
+      <property name="text">
+       <string>Remove</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QPushButton" name="addButton">
+      <property name="text">
+       <string>Add</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0" rowspan="2" colspan="2">
+     <widget class="QComboBox" name="parameterBox"/>
+    </item>
+    <item row="2" column="2">
+     <layout class="QFormLayout" name="formLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="maxLabel">
+        <property name="text">
+         <string>Maximum value : </string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="maxLineEdit"/>
+      </item>
+     </layout>
+    </item>
    </layout>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>standardBox</tabstop>
+  <tabstop>standardEdit</tabstop>
+  <tabstop>delStandardButton</tabstop>
+  <tabstop>categoryBox</tabstop>
+  <tabstop>categoryEdit</tabstop>
+  <tabstop>delCategoryButton</tabstop>
+  <tabstop>hardwareBox</tabstop>
+  <tabstop>hardwareEdit</tabstop>
+  <tabstop>delHardwareButton</tabstop>
+  <tabstop>parameterBox</tabstop>
+  <tabstop>addButton</tabstop>
+  <tabstop>removeButton</tabstop>
+  <tabstop>limitsTable</tabstop>
+  <tabstop>maxLineEdit</tabstop>
+  <tabstop>exampleTable</tabstop>
+  <tabstop>saveButton</tabstop>
+  <tabstop>okButton</tabstop>
+  <tabstop>cancelButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

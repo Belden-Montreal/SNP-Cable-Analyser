@@ -4,37 +4,37 @@
 		<Category name="CAT6A">
 			<Hardware name="Connecting Hardware">
 				<Limit param="RL">
-					<Part min="1.0" max="79.0">30</Part>
-					<Part max="500.0">28-20*log(f/100)</Part>
+					<Max>30.0</Max>
+					<Part min="1.0" max="500.0">28-20*log(f/100)</Part>
 				</Limit>
 				<Limit param="IL">
 					<Part min="1.0" max="500.0">0.02*sqrt(f)</Part>
 				</Limit>
 				<Limit param="NEXT">
-					<Part min="1.0" max="8.91">75</Part>
-					<Part max="250.0">54-20*log(f/100)</Part>
+					<Max>75.0</Max>
+					<Part min="1.0" max="250.0">54-20*log(f/100)</Part>
 					<Part max="500.0">46.04-40*log(f/250)</Part>
 				</Limit>
 				<Limit param="PSNEXT">
-					<Part min="1.0" max="8.91">75</Part>
-					<Part max="250.0">50-20*log(f/100)</Part>
+					<Max>75.0</Max>
+					<Part min="1.0" max="250.0">50-20*log(f/100)</Part>
 					<Part max="500.0">42.04-40*log(f/250)</Part>
 				</Limit>
 				<Limit param="FEXT">
-					<Part min="1.0" max="2.54">75</Part>
-					<Part max="500.0">43.1-20*log(f/100)</Part>
+					<Max>75</Max>
+					<Part min="1.0" max="500.0">43.1-20*log(f/100)</Part>
 				</Limit>
 				<Limit param="PSFEXT">
-					<Part min="1.0" max="2.54">75</Part>
-					<Part max="500.0">40.1-20*log(f/100)</Part>
+					<Max>75</Max>
+					<Part min="1.0" max="500.0">40.1-20*log(f/100)</Part>
 				</Limit>
 				<Limit param="TCL">
-					<Part min="1.0" max="25.12">40</Part>
-					<Part max="500.0">28-20*log(f/100)</Part>
+					<Max>40.0</Max>
+					<Part min="1.0" max="500.0">28-20*log(f/100)</Part>
 				</Limit>
 				<Limit param="TCTL">
-					<Part min="1.0" max="25.12">40</Part>
-					<Part max="500.0">28-20*log(f/100)</Part>
+					<Max>40.0</Max>
+					<Part min="1.0" max="500.0">28-20*log(f/100)</Part>
 				</Limit>
 			</Hardware>
 			<Hardware name="Horizontal cable">
@@ -69,35 +69,35 @@
 		<Category name="CAT6">
 			<Hardware name="Connecting Hardware">
 				<Limit param="RL">
-					<Part min="1.0" max="50.0">30</Part>
-					<Part max="250.0">24-20*log(f/100)</Part>
+					<Max>30.0</Max>
+					<Part min="1.0" max="250.0">24-20*log(f/100)</Part>
 				</Limit>
 				<Limit param="IL">
 					<Part min="1.0" max="250.0">0.02*sqrt(f)</Part>
 				</Limit>
 				<Limit param="NEXT">
-					<Part min="1.0" max="8.91">75</Part>
-					<Part max="250.0">54-20*log(f/100)</Part>
+					<Max>75.0</Max>
+					<Part min="1.0" max="250.0">54-20*log(f/100)</Part>
 				</Limit>
 				<Limit param="PSNEXT">
-					<Part min="1.0" max="5.62">75</Part>
-					<Part max="250.0">50-20*log(f/100)</Part>
+					<Max>75.0</Max>
+					<Part min="1.0" max="250.0">50-20*log(f/100)</Part>
 				</Limit>
 				<Limit param="FEXT">
-					<Part min="1.0" max="2.54">75</Part>
-					<Part max="250.0">43.1-20*log(f/100)</Part>
+					<Max>75.0</Max>
+					<Part min="1.0" max="250.0">43.1-20*log(f/100)</Part>
 				</Limit>
 				<Limit param="PSFEXT">
-					<Part min="1.0" max="1.8">75</Part>
-					<Part max="250.0">40.1-20*log(f/100)</Part>
+					<Max>75.0</Max>
+					<Part min="1.0" max="250.0">40.1-20*log(f/100)</Part>
 				</Limit>
 				<Limit param="TCL">
-					<Part min="1.0" max="25.12">40</Part>
-					<Part max="250.0">28-20*log(f/100)</Part>
+					<Max>40.0</Max>
+					<Part min="1.0" max="250.0">28-20*log(f/100)</Part>
 				</Limit>
 				<Limit param="TCTL">
-					<Part min="1.0" max="25.12">40</Part>
-					<Part max="250.0">28-20*log(f/100)</Part>
+					<Max>40.0</Max>
+					<Part min="1.0" max="250.0">28-20*log(f/100)</Part>
 				</Limit>
 			</Hardware>
 			<Hardware name="Horizontal cable">
@@ -153,7 +153,12 @@
 			</Hardware>
 			<Hardware name="Cords and jumpers">
 				<Limit param="RL">
-					<Part min="-inf" max="inf">24+3*log(f/25)</Part>
+					<Part min="1.0" max="25.0">24+3*log(f/25)</Part>
+					<Part max="250.0">24-10*log(f/25)</Part>
+				</Limit>
+				<Limit param="NEXT">
+					<Max>65.0</Max>
+					<Part min="1.0" max="250.0">-10*log(10^(-(-20*log(10^(-(54 - 20*log(f/100))/20) + 10^(-(54 - 20*log(f/100) + 2 (1.2 (1.808*sqrt(f) + 0.017f + 0.2/sqrt(f))(L/100) + 0.02*sqrt(f)))/20)))/10)+10^(-(44.3-15*log(f/100)-10*log(1-e^(-0.46(1.2(1.808*sqrt(f)+0.017f+0.2/sqrt(f))*L/100)))+2*0.02*sqrt(f))/10))-0.5</Part>
 				</Limit>
 			</Hardware>
 		</Category>

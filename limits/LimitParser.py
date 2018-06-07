@@ -1,4 +1,5 @@
 import xmltodict
+import math
 from limits.TreeItem import TreeItem
 from limits.Limit import Limit
 class LimitParser():
@@ -36,6 +37,8 @@ class LimitParser():
                     parent.parseClauses(parent.clauses)
             elif "Part" in prop:
                 parent.standard.limits[prop["@param"]] = Limit(prop["@param"], [], [])
+                if "Max" in prop:
+                    parent.standard.limits[prop["@param"]].maxValue = float(prop["Max"])
                 self.parseProperty("Part", parent.standard.limits[prop["@param"]], prop)
 
     def writeToFile(self, root):
@@ -65,7 +68,10 @@ class LimitParser():
         elif parent.childCount() == 0:
             for limit in parent.standard.limits.values():
                 if not (limit.clauses[0] == ""):
-                    items.append({"@param": limit.parameter, self.NAME_BY_LEVEL[k]: self.constructDict(limit, k+1)})
+                    if not (limit.maxValue == math.inf):
+                        items.append({"@param": limit.parameter, "Max": limit.maxValue, self.NAME_BY_LEVEL[k]: self.constructDict(limit, k+1)})
+                    else:
+                        items.append({"@param": limit.parameter, self.NAME_BY_LEVEL[k]: self.constructDict(limit, k+1)})
         else:
             for child in parent.children:
                 items.append({"@name": child.name, self.NAME_BY_LEVEL[k]: self.constructDict(child, k+1)})

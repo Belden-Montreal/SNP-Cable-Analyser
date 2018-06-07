@@ -1,12 +1,13 @@
 from sympy.parsing.sympy_parser import parse_expr, standard_transformations, implicit_multiplication_application, convert_xor
-from sympy import N, log
+from sympy import N, log, E
 from sympy import Symbol
 import math
-
+from multiprocessing.dummy import Pool as ThreadPool
 class Limit:
 
-    def __init__(self, parameter, clauses=[""], bounds=[-math.inf, math.inf]):
+    def __init__(self, parameter, clauses=[""], bounds=[-math.inf, math.inf], maxValue=math.inf):
         self.clauses = clauses
+        self.maxValue = maxValue
         self.parameter = parameter
         self.parseClauses(clauses)
         self.bounds = bounds
@@ -24,7 +25,7 @@ class Limit:
         self.functions = []
         for clause in clauses:
             if not (clause == ""):
-                self.functions.append(parse_expr(clause, local_dict={"log":lambda x: log(x, 10)}, transformations=transformation))
+                self.functions.append(parse_expr(clause, local_dict={"log":lambda x: log(x, 10), "L": 2, "e": E}, transformations=transformation))
 
     def evaluate(self, vals, neg=False):
         for i, function in enumerate(self.functions):
@@ -34,9 +35,14 @@ class Limit:
             if self.bounds[i] <= vals['f'] and vals['f'] <= self.bounds[i+1]:
                 try:
                     if neg:
-                        return -1 * N(function.subs(vals))
+                        val = -1 * N(function.subs(vals))
+                        if val < -self.maxValue:
+                            val = -self.maxValue
                     else:
-                        return N(function.subs(vals), 2)
+                        val = N(function.subs(vals))
+                        if val > self.maxValue:
+                            val = self.maxValue
+                    return val
                 except:
                     print("Eval error")
         return 0
@@ -50,18 +56,32 @@ class Limit:
     def evaluateArray(self, vals, nb, neg=False):
         if not self.resultsList:
             self.evaluatePoints(vals, nb, neg)
-
         return self.resultsList
         
     def evaluatePoints(self, vals, nb, neg=False):
         if not (self.functions is []):
             self.resultsDict = {}
             self.resultsList = []
-            for i in range(0, nb):
+            # for i in range(0, nb):
+            #     valsDict = {}
+            #     for param in vals:
+            #         valsDict[param] = vals[param][i]
+            #     if self.bounds[0] <= vals['f'][i] and vals['f'][i] <= self.bounds[-1]:
+            #         self.resultsDict[vals['f'][i]] = self.evaluate(valsDict, neg)
+            #         self.resultsList.append((vals['f'][i], self.resultsDict[vals['f'][i]]))
+            valsList = []
+            for i in range(0,nb):
                 valsDict = {}
                 for param in vals:
                     valsDict[param] = vals[param][i]
-                if self.bounds[0] <= vals['f'][i] and vals['f'][i] <= self.bounds[-1]:
-                    self.resultsDict[vals['f'][i]] = self.evaluate(valsDict, neg)
-                    self.resultsList.append((vals['f'][i], self.resultsDict[vals['f'][i]]))
+                valsList.append(valsDict)
+            pool = ThreadPool()
+            results = pool.starmap(self.evaluatePoint, zip(valsList, [neg]*nb))
+            self.resultsList = [x for x in results if x is not None]
+            for res in self.resultsList:
+                if res:
+                    self.resultsDict[res[0]] = res[1]
         
+    def evaluatePoint(self, valsDict, neg):
+        if self.bounds[0] <= valsDict['f'] and valsDict['f'] <= self.bounds[-1]:
+            return (valsDict['f'], self.evaluate(valsDict, neg))
