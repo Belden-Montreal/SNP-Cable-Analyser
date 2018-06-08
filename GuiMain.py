@@ -370,7 +370,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
         self.embedWidget.openFileName.setFont(font)
         self.embedWidget.shortFileName.setFont(font)
         self.embedWidget.loadFileName.setFont(font)
-        
+
         plugs = embeddedSample.getPlugList()
         
         self.embedWidget.plugList.clear()
@@ -428,15 +428,15 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
                 return
             
             ax=self.graphicsView.figure.add_subplot(111)
-            
+             
             color=iter(cm.rainbow(np.linspace(0,1,len(embededParams[activeParameter]))))
             for case in embededParams[activeParameter]:
                 c = next(color)
                 reembedingNum = int(case.replace("case", ""))
                 ax.semilogx(sample.freq, sample.reembeded[reembedingNum], label=case, c = c)
-                
+                 
             ax.legend(loc='upper left', ncol =  2 )
-
+ 
             #self.figure.tight_layout()
 
             ax.grid(which="both")
