@@ -620,23 +620,30 @@ class SNPManipulations(rf):
         self.freq = self.freq * (1000 ** (current_unit - desired_unit))
         self.frequency.unit = unit
 
-        print("F Was: {}, F Now:{}".format(unit, self.frequency.unit))
+        #print("F Was: {}, F Now:{}".format(unit, self.frequency.unit))
 
         
 
             
 if __name__ == "__main__":
 
-    vna_out = SNPManipulations('testout_mm.s16p')
+    vna_out = SNPManipulations('snps/TestDelay.s8p')
     vna_out.one_sided = False
     
     #vna_out.renumber([1,2], [2,1])
-
+    vna_out.renumber([0,1,2,3,4,5,6,7], [0,2,5,4,3,1,6,7])
+    
     vna_out.s2mm()
 
     vna_out.port_name = {0:"12", 1:"36", 2:"45", 3:"78",4:"(r)12", 5:"(r)36", 6:"(r)45", 7:"(r)78"}
 
-    #vna_out.renumber([1,2], [2,1])
+    vna_out.getRL(vna_out.dd, z=True)
+
+    print("Before ",vna_out.RL_dict["12"][0])
+    
+    vna_out.renumber([0,2,5,4,3,1,6,7], [0,1,2,3,4,5,6,7])
+    vna_out.s2mm()
+    vna_out.port_name = {0:"12", 1:"36", 2:"45", 3:"78",4:"(r)12", 5:"(r)36", 6:"(r)45", 7:"(r)78"}
 
     #print vna_out.cc[0]
 
@@ -644,7 +651,7 @@ if __name__ == "__main__":
         
     vna_out.getRL(vna_out.dd, z=True)
 
-    #print(vna_out.RL_dict["12"][0])
+    print("After ",vna_out.RL_dict["12"][0])
     #print(vna_out.RL_dict["12"][0].real)
     #print(vna_out.RL_dict["12"][0].imag)
 
@@ -652,7 +659,7 @@ if __name__ == "__main__":
     #print(vna_out.freq)
 
     vna_out.freq_unit = "kHz"
-    print(vna_out.freq)
+    #print(vna_out.freq)
     
 
 
@@ -663,4 +670,3 @@ if __name__ == "__main__":
     #for (vals) in vna_out.RL_dict["36"][:1]:
     #    print(-20*np.log10(np.absolute(vals)))
     #print(vna_out.freq[1000-1])
-        

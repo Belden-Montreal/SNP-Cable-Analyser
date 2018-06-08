@@ -734,12 +734,31 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
                 ax.semilogx(*zip(*limit), linestyle = '--', label="limit", c = c)
 
             ax.legend(loc='upper left', ncol = 1 if len(param_dict.keys()) <= 8 else 2 )
-
-                
-                
+     
             #self.ax.legend()
         self.graphicsView.draw()
-        
+
+
+    def setPortNumber(self):
+       sample = self.Project.getSampleByName(self.selected[0])
+       snp = sample.snpFile
+       sided = sample.one_sided
+       portNumbering = str(sample.portNumbering).replace('[', '').replace(']', '')
+       print(portNumbering)
+       fromPort, toPort = Port_Renumbering().getPortNumbering(fromPort = portNumbering)
+       fromPort = np.array(fromPort.split(",")).astype(int)
+       toPort   = np.array(toPort.split(",")).astype(int)
+
+       print(fromPort)
+       print(toPort)
+
+       if fromPort is not None and toPort is not None:
+           sample.__init__(snp, sided, list(fromPort) , list(toPort))
+           sample.getParameters()
+           self.Project.activeSample = self.selected
+           #print self.selected
+           if len(self.selected) == 1:  #Since only one sample can be displayed at a time
+                self.displaySampleParams(self.selected)
 
     def tableContextMenu(self, pos):
         #print self.selected
@@ -749,7 +768,10 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
 
             menu = QtWidgets.QMenu()
             setLimit = menu.addAction("Set Limit")
-            setPortName = menu.addAction("Rename Ports")
+
+            if len(self.selected) == 1: 
+
+                setPortNumber = menu.addAction("Renumber Ports")
 
             test_type = menu.addMenu("Set Test Type") #Set the sub menu to select the different types of matrixes
             one_sided = test_type.addAction("One Sided")
@@ -813,6 +835,9 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
             elif action == setLimit:
                 self.setLimit()
             #self.Project.activeMeasurements = selected
+
+            elif action == setPortNumber and len(self.selected) == 1:
+                self.setPortNumber()
             return 1
 
 
@@ -820,7 +845,9 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
 
             menu = QtWidgets.QMenu()
             setLimit = menu.addAction("Set Limit")
-            setPortName = menu.addAction("Rename Ports")
+
+            if len(self.selected) == 1:
+                setPortNumber = menu.addAction("Renumber Ports")
 
             exportExcel = menu.addAction("Export To Excel")
             delete = menu.addAction("Delete")
@@ -841,10 +868,11 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
 
             elif action == setLimit:
                 self.setLimit()
+
+            elif action == setPortNumber and len(self.selected) == 1:
+                self.setPortNumber()
             #self.Project.activeMeasurements = selected
             return 1
-
-
 
         menu = QtWidgets.QMenu()
         addSNP = menu.addAction("Add Sample")
@@ -1061,8 +1089,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
                     pass
         except Exception as e:
             print(e)
-
-
+            
 
     def simpleAquire(self):
         if self.comm.connected :
@@ -1113,6 +1140,25 @@ class Addr_Dialog:
             if len(addr) < 1:
                 return 0
             return addr
+
+import Port_Renumber
+class Port_Renumbering:
+    def getPortNumbering(self, fromPort):
+        dialog = QtWidgets.QDialog()
+        pr = Port_Renumber.Ui_Dialog()
+        pr.setupUi(dialog)
+        pr.fromLineEdit.setText(str(fromPort))
+        result = dialog.exec_()
+
+        if not result:
+            return None, None
+        if result:
+            _from = pr.fromLineEdit.text()
+            _to = pr.toLineEdit.text()
+            print("sent")
+
+            return _from, _to
+        
 
 class Test_Params_Dialog:
     def getParams(self):
