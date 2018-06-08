@@ -743,18 +743,22 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
        sample = self.Project.getSampleByName(self.selected[0])
        snp = sample.snpFile
        sided = sample.one_sided
+       standard = sample.standard
        try:
-           portNumbering = str(sample.portNumbering).replace('[', '').replace(']', '')
-           print(portNumbering)
-           fromPort, toPort = Port_Renumbering().getPortNumbering(fromPort = portNumbering)
-           fromPort = np.array(fromPort.split(",")).astype(int)
-           toPort   = np.array(toPort.split(",")).astype(int)
+           try:
+               portNumbering = str(sample.portNumbering).replace('[', '').replace(']', '')
+               print(portNumbering)
+               fromPort, toPort = Port_Renumbering().getPortNumbering(fromPort = portNumbering)
+               fromPort = np.array(fromPort.split(",")).astype(int)
+               toPort   = np.array(toPort.split(",")).astype(int)
+           except Exception:
+               print("No") 
 
            print(fromPort)
            print(toPort)
 
            if fromPort is not None and toPort is not None:
-               sample.__init__(snp, sided, list(fromPort) , list(toPort))
+               sample.__init__(snp, sided, standard, list(fromPort) , list(toPort))
                sample.getParameters()
                self.Project.activeSample = self.selected
                #print self.selected
@@ -1152,14 +1156,16 @@ class Port_Renumbering:
         pr = Port_Renumber.Ui_Dialog()
         pr.setupUi(dialog)
         result = dialog.exec_()
-
+        _from = None
+        _to = None
         if not result:
             return None, None
         if result:
             _from = pr.fromLineEdit.text()
             _to = pr.toLineEdit.text()
             print("sent")
-
+            if len(_from) < 1 or len(_to) < 1:
+                return None, None
             return _from, _to
         
 

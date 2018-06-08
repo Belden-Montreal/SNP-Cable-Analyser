@@ -8,7 +8,7 @@ class Sample(SNPManipulations):
 
     '''This class handles the SNP samples for the basic test'''
 
-    def __init__(self, snpFile, one_sided = None, fromPort = None, toPort = None):
+    def __init__(self, snpFile, one_sided = None, standard = None, fromPort = None, toPort = None):
 
 
         self.snpFile = snpFile
@@ -36,7 +36,7 @@ class Sample(SNPManipulations):
         self.date = time.ctime(os.path.getctime(snpFile))
         #print self.date
 
-        self.standard = None
+        self.standard = standard
 
         if one_sided != None:
             self.one_sided = one_sided
