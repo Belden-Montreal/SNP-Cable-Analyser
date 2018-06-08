@@ -370,8 +370,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
         self.embedWidget.openFileName.setFont(font)
         self.embedWidget.shortFileName.setFont(font)
         self.embedWidget.loadFileName.setFont(font)
-
-
+        
         plugs = embeddedSample.getPlugList()
         
         self.embedWidget.plugList.clear()
@@ -414,7 +413,6 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
 
 
     def embedPlotUpdate(self):
-
         tab_index = self.param_tabs.currentIndex()
         activeParameter = self.param_tabs.tabText(self.tab_index)
         print(self.activeParameter)
@@ -454,8 +452,6 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
             self.plot(None, None)
 
     def addPlugDialog(self):
-
-
 
         form = addplug.AddPlug()  # We set the  form to be our ExampleApp (design)
 

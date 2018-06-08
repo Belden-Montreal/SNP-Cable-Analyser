@@ -129,7 +129,6 @@ class Alien(object):
 
     def getPSAlien(self, end, Test, disturbers):
         
-
         #print (self.disturbers["dist_1"][end]["ANEXT"].keys())
         numDisturbers = len(self.disturbers.keys())
         numPairs = self.numPairs
