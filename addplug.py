@@ -57,31 +57,45 @@ class AddPlug(QtWidgets.QMainWindow, plugDialog.Ui_Dialog, QtWidgets.QAction, Qt
         self.dialog.exec_()
 
     def dfOpenImport(self):
-        self.dfOpen = self.importSNP()
-        self.df_open_label.setText(self.dfOpen.split('/')[-1])
-        self.createPlug()
+        try:
+            self.dfOpen = self.importSNP()
+            self.df_open_label.setText(self.dfOpen.split('/')[-1])
+            self.createPlug()
+        except Exception:
+            return
 
     def dfShortImport(self):
-        self.dfShort = self.importSNP()
-        self.df_short_label.setText(self.dfShort.split('/')[-1])
-        self.createPlug()
+        try:
+            self.dfShort = self.importSNP()
+            self.df_short_label.setText(self.dfShort.split('/')[-1])
+            self.createPlug()
+        except Exception:
+            return
 
     def pdfOpenImport(self):
-        self.pdfOpen = self.importSNP()
-        self.pdf_open_label.setText(self.pdfOpen.split('/')[-1])
-        self.createPlug()
+        try:
+            self.pdfOpen = self.importSNP()
+            self.pdf_open_label.setText(self.pdfOpen.split('/')[-1])
+            self.createPlug()
+        except Exception:
+            return
 
     def pdfShortImport(self):
-        self.pdfShort = self.importSNP()
-        self.pdf_short_label.setText(self.pdfShort.split('/')[-1])
-        self.createPlug()
+        try:
+            self.pdfShort = self.importSNP()
+            self.pdf_short_label.setText(self.pdfShort.split('/')[-1])
+            self.createPlug()
+        except Exception:
+            return
 
     def pdfLoadImport(self):
-        self.pdfLoad = self.importSNP()
-        self.pdf_load_label.setText(self.pdfLoad.split('/')[-1])
-        self.createPlug()
+        try:
+            self.pdfLoad = self.importSNP()
+            self.pdf_load_label.setText(self.pdfLoad.split('/')[-1])
+            self.createPlug()
+        except Exception:
+            return
 
-        
 
     def createPlug(self, plugName = None):
 
