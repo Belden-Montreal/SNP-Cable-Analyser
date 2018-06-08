@@ -30,6 +30,7 @@ class Sample(SNPManipulations):
                 raise "Error:No Good"
 
         self.s2mm()
+        print("Converted")
         self.port_name = {0:"12", 1:"36", 2:"45", 3:"78"}
 
         self.name, self.extension = splitext(os.path.basename(snpFile))

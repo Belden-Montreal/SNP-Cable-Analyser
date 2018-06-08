@@ -64,8 +64,6 @@ class Project: #Put (object) later
     def addEmbed(self, testName):
         self.measurements.append(Embedding(testName))
         
-
-
     def addAlien(self, testName):              
  
         self.measurements.append(Alien(testName))

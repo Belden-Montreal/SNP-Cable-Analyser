@@ -110,10 +110,8 @@ class Alien(object):
        
         #we must modify the IL dictionnary keys from 12 - > 12-12
 
-        
         ILKeys = list(IL.keys())
-        s = "Example String"
-        replaced = re.sub('[ES]', 'a', s)
+
         print ("IL Keys : ", ILKeys)
 
         for key in ILKeys:

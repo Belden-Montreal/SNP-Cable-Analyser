@@ -39,7 +39,7 @@ class SNPManipulations(rf):
             >>>  {"RL_11: [RL_1 @ f1, RL_1 @ f2, RL_1 @ f3]"},
                   "RL_22: [RL_2 @ f1, RL_2 @ f2, RL_2 @ f3]"}, ...        
         '''
-        
+
         #initialize RL dictionairy
         self.RL_dict = {}
         numPorts = self.getNumPorts(matrix)
@@ -126,7 +126,6 @@ class SNPManipulations(rf):
                   "NEXT_12: [NEXT_12 @ f1, NEXT_12 @ f2, NEXT_12 @ f3 ... ]"}, ... 
        
         '''
-
         #initialize IL dictionairy
         self.NEXT_dict = {}
         numPorts = self.getNumPorts(matrix)
