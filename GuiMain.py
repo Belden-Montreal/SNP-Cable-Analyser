@@ -760,9 +760,8 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
                #print self.selected
                if len(self.selected) == 1:  #Since only one sample can be displayed at a time
                    self.displaySampleParams(self.selected)
-                   
+
        except Exception:
-           print("Nop")
            self.setPortNumber()
 
     def tableContextMenu(self, pos):
