@@ -14,6 +14,7 @@ class LimitDialog(object):
         button = self.limitDialog.buttonBox.button(QtWidgets.QDialogButtonBox.Ok)
         button.setDisabled(True)
         self.limitDialog.treeView.clicked.connect(lambda index: self.updateButton(index, button))
+        self.limitDialog.treeView.entered.connect(lambda index: self.updateButton(index, button))
         self.limitDialog.treeView.doubleClicked.connect(lambda index: self.doubleClickAccept(index))
         self.limitDialog.treeView.expanded.connect(lambda index: self.resizeColumns(index))
         self.limitDialog.treeView.collapsed.connect(lambda index: self.resizeColumns(index))
