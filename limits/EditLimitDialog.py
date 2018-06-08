@@ -162,9 +162,6 @@ class EditLimitDialog():
         self.editLimitDialog.exampleTable.clearContents()
         limit = self.boxes[Box.HARDW].currentData().standard.limits[self.boxes[Box.PARAM].currentText()]
         for y in range(0, self.editLimitDialog.exampleTable.columnCount()):
-            if limit.parameter == "NEXT":
-                val = limit.evaluate({'f': float(self.editLimitDialog.exampleTable.horizontalHeaderItem(y).text())})
-                print(val)
             self.editLimitDialog.exampleTable.setItem(0, y, QtWidgets.QTableWidgetItem("{0:.2f}".format(limit.evaluate({'f': float(self.editLimitDialog.exampleTable.horizontalHeaderItem(y).text())}))))
 
     def deleteItem(self, buttonIndex):

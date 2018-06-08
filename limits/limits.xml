@@ -40,6 +40,14 @@
 					<Max>40.0</Max>
 					<Part min="1.0" max="500.0">28-20*log(f/100)</Part>
 				</Limit>
+				<Limit param="PSANEXT">
+					<Max>67.0</Max>
+					<Part min="1.0" max="500.0">70.5-20*log(f/100)</Part>
+				</Limit>
+				<Limit param="PSAFEXT">
+					<Max>67.0</Max>
+					<Part min="1.0" max="500.0">67-20*log(f/100)</Part>
+				</Limit>
 			</Hardware>
 			<Hardware name="Horizontal cable">
 				<Limit param="RL">
@@ -59,17 +67,26 @@
 				<Limit param="PSNEXT">
 					<Part min="1.0" max="500.0">42.3-15*log(f/100)</Part>
 				</Limit>
-				<Limit param="PSFEXT">
-					<Part min="1.0" max="500.0">24.8-20*log(f/100)</Part>
-				</Limit>
 				<Limit param="ACRF">
 					<Part min="1.0" max="500.0">27.8-20*log(f/100)</Part>
 				</Limit>
+				<Limit param="PSACRF">
+					<Part min="1.0" max="500.0">24.8-20*log(f/100)</Part>
+				</Limit>
 				<Limit param="TCL">
+					<Max>40.0</Max>
 					<Part min="1.0" max="500.0">30-10*log(f/100)</Part>
 				</Limit>
-				<Limit param="TCTL">
+				<Limit param="ELTCTL">
 					<Part min="1.0" max="30.0">35-20*log(f)</Part>
+				</Limit>
+				<Limit param="PSANEXT">
+					<Max>67.0</Max>
+					<Part min="1.0" max="500.0">62.5-15*log(f/100)</Part>
+				</Limit>
+				<Limit param="PSAACRF">
+					<Max>67.0</Max>
+					<Part min="1.0" max="500.0">38.2-20*log(f/100)</Part>
 				</Limit>
 			</Hardware>
 			<Hardware name="Cords and jumpers">
@@ -125,42 +142,64 @@
 			</Hardware>
 			<Hardware name="Horizontal cable">
 				<Limit param="RL">
-					<Part min="-inf" max="inf">20+5*log(f)</Part>
+					<Part min="1.0" max="250.0">20+5*log(f)</Part>
 				</Limit>
 				<Limit param="IL">
-					<Part min="-inf" max="inf">1.8088*sqrt(f)+0.017*f+0.2/sqrt(f)</Part>
+					<Part min="1.0" max="250.0">1.808*sqrt(f)+0.017*f+0.2/sqrt(f)</Part>
 				</Limit>
 				<Limit param="PropagationDelay">
 					<Part min="1.0" max="250.0">534+36/sqrt(f)</Part>
 				</Limit>
 				<Limit param="NEXT">
-					<Part min="-inf" max="inf">44.3-15*log(f/100)</Part>
+					<Part min="1.0" max="250.0">44.3-15*log(f/100)</Part>
 				</Limit>
 				<Limit param="PSNEXT">
-					<Part min="-inf" max="inf">42.3-15*log(f/100)</Part>
-				</Limit>
-				<Limit param="FEXT">
-					<Part min="-inf" max="inf">43.1-20*log(f/100)</Part>
-				</Limit>
-				<Limit param="PSFEXT">
-					<Part min="-inf" max="inf">24.8-20*log(f/100)</Part>
+					<Part min="1.0" max="250.0">42.3-15*log(f/100)</Part>
 				</Limit>
 				<Limit param="ACRF">
-					<Part min="-inf" max="inf">27.8-20*log(f/100)</Part>
+					<Part min="1.0" max="250.0">27.8-20*log(f/100)</Part>
+				</Limit>
+				<Limit param="PSACRF">
+					<Part min="1.0" max="250.0">24.8-20*log(f/100)</Part>
 				</Limit>
 				<Limit param="TCL">
-					<Part min="-inf" max="inf">30-10*log(f/100)</Part>
+					<Max>40.0</Max>
+					<Part min="1.0" max="250.0">30-10*log(f/100)</Part>
 				</Limit>
 				<Limit param="ELTCTL">
-					<Part min="-inf" max="inf">35-20*log(f)</Part>
+					<Part min="1.0" max="30.0">35-20*log(f)</Part>
 				</Limit>
 			</Hardware>
 			<Hardware name="Cord Cable">
 				<Limit param="RL">
-					<Part min="-inf" max="inf">20+5*log(f)</Part>
+					<Part min="1.0" max="10.0">20+5*log(f)</Part>
+					<Part max="20.0">25</Part>
+					<Part max="250.0">25-8.6*log(f/20)</Part>
 				</Limit>
 				<Limit param="IL">
-					<Part min="-inf" max="inf">1.2*(1.808*sqrt(f)+0.017*f+0.2/sqrt(f))</Part>
+					<Part min="1.0" max="250.0">1.2*(1.808*sqrt(f)+0.017*f+0.2/sqrt(f))</Part>
+				</Limit>
+				<Limit param="PropagationDelay">
+					<Part min="1.0" max="250.0">534+36/sqrt(f)</Part>
+				</Limit>
+				<Limit param="NEXT">
+					<Part min="1.0" max="250.0">44.3-15*log(f/100)</Part>
+				</Limit>
+				<Limit param="PSNEXT">
+					<Part min="1.0" max="250.0">42.3-15*log(f/100)</Part>
+				</Limit>
+				<Limit param="ACRF">
+					<Part min="1.0" max="250.0">27.8-20*log(f/100)</Part>
+				</Limit>
+				<Limit param="PSACRF">
+					<Part min="1.0" max="250.0">24.8-20*log(f/100)</Part>
+				</Limit>
+				<Limit param="TCL">
+					<Max>40.0</Max>
+					<Part min="1.0" max="250.0">30-10*log(f/100)</Part>
+				</Limit>
+				<Limit param="ELTCTL">
+					<Part min="1.0" max="30.0">35-20*log(f)</Part>
 				</Limit>
 			</Hardware>
 			<Hardware name="Backbone cable">

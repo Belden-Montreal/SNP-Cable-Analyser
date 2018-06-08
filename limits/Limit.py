@@ -92,4 +92,3 @@ class Limit:
         for i, function in enumerate(self.functions):
             if symbol in function.free_symbols:
                 self.functions[i] = function.subs(symbol, value)
-                print(str(self.functions[i]))
