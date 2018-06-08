@@ -27,38 +27,40 @@ class Limit:
             if not (clause == ""):
                 self.functions.append(parse_expr(clause, local_dict={"log":lambda x: log(x, 10), "e": E}, transformations=transformation))
 
-    def evaluate(self, vals, neg=False):
+    def evaluate(self, vals):
         for i, function in enumerate(self.functions):
             for symbol in function.free_symbols:
                 if not(symbol.__str__() in vals):
                     return 0
             if self.bounds[i] <= vals['f'] and vals['f'] <= self.bounds[i+1]:
                 try:
-                    if neg:
-                        val = -1 * N(function.subs(vals))
-                        if val < -self.maxValue:
-                            val = -self.maxValue
-                    else:
-                        val = N(function.subs(vals))
-                        if val > self.maxValue:
-                            val = self.maxValue
+                    val = N(function.subs(vals))
+                    if val > self.maxValue:
+                        val = self.maxValue
                     return val
                 except:
                     print("Eval error")
         return 0
 
     def evaluateDict(self, vals, nb, neg=False):
+        if not len(self.functions):
+            return
         if not self.resultsDict:
-            self.evaluatePoints(vals, nb, neg)        
-
+            self.evaluatePoints(vals, nb)        
+        if neg:
+            return {x: -self.resultsDict[x] for x in self.resultsDict.keys()}
         return self.resultsDict
 
     def evaluateArray(self, vals, nb, neg=False):
+        if not len(self.functions):
+            return
         if not self.resultsList:
-            self.evaluatePoints(vals, nb, neg)
+            self.evaluatePoints(vals, nb)
+        if neg:
+            return [(x,-y) for x,y in self.resultsList]
         return self.resultsList
         
-    def evaluatePoints(self, vals, nb, neg=False):
+    def evaluatePoints(self, vals, nb):
         if not (self.functions is []):
             self.resultsDict = {}
             self.resultsList = []
@@ -67,7 +69,7 @@ class Limit:
                 for param in vals:
                     valsDict[param] = vals[param][i]
                 if self.bounds[0] <= vals['f'][i] and vals['f'][i] <= self.bounds[-1]:
-                    self.resultsDict[vals['f'][i]] = self.evaluate(valsDict, neg)
+                    self.resultsDict[vals['f'][i]] = self.evaluate(valsDict)
                     self.resultsList.append((vals['f'][i], self.resultsDict[vals['f'][i]]))
             # valsList = [] #MULTITHREADING
             # for i in range(0,nb):

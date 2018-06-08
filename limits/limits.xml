@@ -8,7 +8,11 @@
 					<Part min="1.0" max="500.0">28-20*log(f/100)</Part>
 				</Limit>
 				<Limit param="IL">
-					<Part min="1.0" max="500.0">0.02*sqrt(f)</Part>
+					<Part min="1.0" max="25.0">0.1</Part>
+					<Part max="500.0">0.02*sqrt(f)</Part>
+				</Limit>
+				<Limit param="PropagationDelay">
+					<Part min="1.0" max="500.0">2.5</Part>
 				</Limit>
 				<Limit param="NEXT">
 					<Max>75.0</Max>
@@ -45,6 +49,9 @@
 				</Limit>
 				<Limit param="IL">
 					<Part min="1.0" max="500.0">1.82*sqrt(f)+0.0091*f+(0.25/sqrt(f))</Part>
+				</Limit>
+				<Limit param="PropagationDelay">
+					<Part min="1.0" max="500.0">534+36/sqrt(f)</Part>
 				</Limit>
 				<Limit param="NEXT">
 					<Part min="1.0" max="500.0">44.3-15*log(f/100)</Part>
@@ -85,7 +92,11 @@
 					<Part min="1.0" max="250.0">24-20*log(f/100)</Part>
 				</Limit>
 				<Limit param="IL">
-					<Part min="1.0" max="250.0">0.02*sqrt(f)</Part>
+					<Part min="1.0" max="25.0">0.1</Part>
+					<Part max="250.0">0.02*sqrt(f)</Part>
+				</Limit>
+				<Limit param="PropagationDelay">
+					<Part min="1.0" max="250.0">2.5</Part>
 				</Limit>
 				<Limit param="NEXT">
 					<Max>75.0</Max>
@@ -119,6 +130,9 @@
 				<Limit param="IL">
 					<Part min="-inf" max="inf">1.8088*sqrt(f)+0.017*f+0.2/sqrt(f)</Part>
 				</Limit>
+				<Limit param="PropagationDelay">
+					<Part min="1.0" max="250.0">534+36/sqrt(f)</Part>
+				</Limit>
 				<Limit param="NEXT">
 					<Part min="-inf" max="inf">44.3-15*log(f/100)</Part>
 				</Limit>
@@ -150,17 +164,23 @@
 				</Limit>
 			</Hardware>
 			<Hardware name="Backbone cable">
-				<Limit param="RL">
-					<Part min="-inf" max="inf">44.3-15*log(f/100)</Part>
+				<Limit param="IL">
+					<Part min="1.0" max="250.0">1.808*sqrt(f)+0.017*f+0.2/sqrt(f)</Part>
+				</Limit>
+				<Limit param="PropagationDelay">
+					<Part min="1.0" max="250.0">534+36/sqrt(f)</Part>
+				</Limit>
+				<Limit param="NEXT">
+					<Part min="1.0" max="250.0">44.3-15*log(f/100)</Part>
 				</Limit>
 				<Limit param="PSNEXT">
-					<Part min="-inf" max="inf">42.3-15*log(f/100)</Part>
+					<Part min="1.0" max="250.0">42.3-15*log(f/100)</Part>
 				</Limit>
 				<Limit param="ACRF">
-					<Part min="-inf" max="inf">27.8-20*log(f/100)</Part>
+					<Part min="1.0" max="250.0">27.8-20*log(f/100)</Part>
 				</Limit>
 				<Limit param="PSACRF">
-					<Part min="-inf" max="inf">24.8-20*log(f/100)</Part>
+					<Part min="1.0" max="250.0">24.8-20*log(f/100)</Part>
 				</Limit>
 			</Hardware>
 			<Hardware name="Cords and jumpers">

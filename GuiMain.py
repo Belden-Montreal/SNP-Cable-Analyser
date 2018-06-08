@@ -935,8 +935,11 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
             else:
                 limit = None
                 if sample.standard is not None:
-                    if self.activeParameter in sample.standard.limits:
-                        limit = sample.standard.limits[self.activeParameter].evaluateArray({"f": sample.freq} , len(sample.freq), neg=True)
+                    if self.activeParameter.replace(" ","") in sample.standard.limits:
+                        if self.activeParameter == "Propagation Delay":
+                            limit = sample.standard.limits[self.activeParameter.replace(" ","")].evaluateArray({"f": sample.freq} , len(sample.freq), neg=False)
+                        else:
+                            limit = sample.standard.limits[self.activeParameter.replace(" ","")].evaluateArray({"f": sample.freq} , len(sample.freq), neg=True)
                     #print(sample.freq)
                 self.plot(self.sample.freq, getattr(self.sample, self.activeParameter.replace(" ", "")), limit = limit , unit = sample.freq_unit)
                 #print(self.sample.frequency.unit)
