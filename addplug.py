@@ -115,7 +115,6 @@ class AddPlug(QtWidgets.QMainWindow, plugDialog.Ui_Dialog, QtWidgets.QAction, Qt
                 for pair in correctedPlugVector.keys():
                     self.correctedPlugVectorPhase[pair] = np.angle(correctedPlugVector[pair], deg = True)
                     
-
                 self.plot()
 
 

@@ -21,12 +21,8 @@ class SNPManipulations(rf):
         #ex: port_names = {0: '1', 1: '2', 2: '3', 3:'4'}.
         #This can be modified.
         self.port_name = {i:str(i+1) for i in range(0,self.num_ports)}
-
         self.one_sided = False
-
         self.freq_unit = 'mhz'
-
-        
 
     def getRL(self, matrix, z=True ):
         '''
