@@ -108,7 +108,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
     def addEmbed(self):
         testName, result = QtWidgets.QInputDialog.getText(self, "Add an Embedded Sample",
                                                                 "Please enter a sample name")
-        if result and len(testName) > 1 and not testName.isspace():
+        if result and len(testName) > 0 and not testName.isspace():
             print("%s!" % testName)
             self.Project.addEmbed(testName)
             self.displaySamplesInTable()
@@ -116,9 +116,14 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
             return
         
     def addAlien(self):
-
-        self.Project.addAlien("Test")
-        self.displaySamplesInTable()
+        testName, result = QtWidgets.QInputDialog.getText(self, "Add an Alien Test",
+                                                                "Please enter a Test name")
+        if result and len(testName) > 1 and not testName.isspace():
+            print("%s!" % testName)
+            self.Project.addAlien(testName)
+            self.displaySamplesInTable()
+        else:
+            return
 
     def newProject(self):
         
