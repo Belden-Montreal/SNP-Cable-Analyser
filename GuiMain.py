@@ -743,22 +743,27 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
        sample = self.Project.getSampleByName(self.selected[0])
        snp = sample.snpFile
        sided = sample.one_sided
-       portNumbering = str(sample.portNumbering).replace('[', '').replace(']', '')
-       print(portNumbering)
-       fromPort, toPort = Port_Renumbering().getPortNumbering(fromPort = portNumbering)
-       fromPort = np.array(fromPort.split(",")).astype(int)
-       toPort   = np.array(toPort.split(",")).astype(int)
+       try:
+           portNumbering = str(sample.portNumbering).replace('[', '').replace(']', '')
+           print(portNumbering)
+           fromPort, toPort = Port_Renumbering().getPortNumbering(fromPort = portNumbering)
+           fromPort = np.array(fromPort.split(",")).astype(int)
+           toPort   = np.array(toPort.split(",")).astype(int)
 
-       print(fromPort)
-       print(toPort)
+           print(fromPort)
+           print(toPort)
 
-       if fromPort is not None and toPort is not None:
-           sample.__init__(snp, sided, list(fromPort) , list(toPort))
-           sample.getParameters()
-           self.Project.activeSample = self.selected
-           #print self.selected
-           if len(self.selected) == 1:  #Since only one sample can be displayed at a time
-                self.displaySampleParams(self.selected)
+           if fromPort is not None and toPort is not None:
+               sample.__init__(snp, sided, list(fromPort) , list(toPort))
+               sample.getParameters()
+               self.Project.activeSample = self.selected
+               #print self.selected
+               if len(self.selected) == 1:  #Since only one sample can be displayed at a time
+                   self.displaySampleParams(self.selected)
+                   
+       except Exception:
+           print("Nop")
+           self.setPortNumber()
 
     def tableContextMenu(self, pos):
         #print self.selected
@@ -1147,7 +1152,6 @@ class Port_Renumbering:
         dialog = QtWidgets.QDialog()
         pr = Port_Renumber.Ui_Dialog()
         pr.setupUi(dialog)
-        pr.fromLineEdit.setText(str(fromPort))
         result = dialog.exec_()
 
         if not result:

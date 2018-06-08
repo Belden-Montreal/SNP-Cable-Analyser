@@ -23,7 +23,11 @@ class Sample(SNPManipulations):
                 self.portNumbering.append(port)
         else:
             self.portNumbering = toPort
-            self.renumber(list(fromPort), list(toPort))
+            try:
+                self.renumber(list(fromPort), list(toPort))
+            except Exception:
+                self.portNumbering = fromPort
+                raise "Error:No Good"
 
         self.s2mm()
         self.port_name = {0:"12", 1:"36", 2:"45", 3:"78"}
