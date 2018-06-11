@@ -38,8 +38,8 @@ class Limit:
                     if val > self.maxValue:
                         val = self.maxValue
                     return val
-                except:
-                    print("Eval error")
+                except Exception as e:
+                    print(e)
         return 0
 
     def evaluateDict(self, vals, nb, neg=False):
