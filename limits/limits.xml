@@ -44,6 +44,9 @@
 					<Max>67.0</Max>
 					<Part min="1.0" max="500.0">70.5-20*log(f/100)</Part>
 				</Limit>
+				<Limit param="AVGPSANEXT">
+					<Part min="1.0" max="500.0">50</Part>
+				</Limit>
 				<Limit param="PSAFEXT">
 					<Max>67.0</Max>
 					<Part min="1.0" max="500.0">67-20*log(f/100)</Part>

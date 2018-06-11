@@ -28,7 +28,8 @@ class Alien(object):
         self.port_name = {}
         self.pair_combo = ["45", "12","36","78"]
         
-  
+        self.standard = None
+        self.freq = []
         for i in range(0, self.numPairs//2):
             self.port_name[i] = self.pair_combo[i]  #{0:"12", 1:"36", 2:"45", 3:"78"}
             print("loop 1", i)
@@ -190,6 +191,11 @@ class Alien(object):
                     print("disturbed pair: ", self.port_name[disturbed_pair], self.distrubedIL[self.port_name[disturbed_pair]][f])
 
         return PSAACRX
+
+    def setStandard(self, standard):
+        self.standard = standard
+        self.worstMargin = {}
+        self.worstValue = {}
 
     def __retr__(self):
         return "Alien"
