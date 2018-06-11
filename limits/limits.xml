@@ -150,6 +150,101 @@
 					<Part min="1.0" max="500.0">41.7-20*log(f/100)</Part>
 				</Limit>
 			</Hardware>
+			<Hardware name="Channel">
+				<Limit param="RL">
+					<Part min="1.0" max="10.0">19</Part>
+					<Part max="40.0">24-5*log(f)</Part>
+					<Part max="398.1">32-10*log(f)</Part>
+					<Part max="500.0">6</Part>
+				</Limit>
+				<Limit param="IL">
+					<Part min="1.0" max="500.0">1.05(1.82*sqrt(f)+0.0091f+0.25/sqrt(f))+4*0.02*sqrt(f)</Part>
+				</Limit>
+				<Limit param="PropagationDelay">
+					<Part min="1.0" max="500.0">534+36/sqrt(f)+4*2.5</Part>
+				</Limit>
+				<Limit param="NEXT">
+					<Max>65.0</Max>
+					<Part min="1.0" max="330.0">-20*log(10^(-(44.3-15*log(f/100))/20)+2*10^(-(54-20*log(f/100))/20))</Part>
+					<Part max="500.0">31-27.15*log(f/330)</Part>
+				</Limit>
+				<Limit param="PSNEXT">
+					<Max>62.0</Max>
+					<Part min="1.0" max="330.0">-20*log(10^(-(42.3-15*log(f/100))/20)+2*10^(-(50-20*log(f/100))/20))</Part>
+					<Part max="500.0">28-26.43*log(f/330)</Part>
+				</Limit>
+				<Limit param="ACRF">
+					<Part min="1.0" max="500.0">-20*log(10^(-(27.8-20*log(f/100))/20)+4*10^(-(43.1-20*log(f/100))/20))</Part>
+				</Limit>
+				<Limit param="PSACRF">
+					<Part min="1.0" max="500.0">-20*log(10^(-(24.8-20*log(f/100))/20)+4*10^(-(40.1-20*log(f/100))/20))</Part>
+				</Limit>
+				<Limit param="TCL">
+					<Max>40.0</Max>
+					<Part min="1.0" max="500.0">50-15*log(f)</Part>
+				</Limit>
+				<Limit param="ELTCTL">
+					<Part min="1.0" max="30.0">30-20*log(f)</Part>
+				</Limit>
+				<Limit param="PSANEXT">
+					<Max>67.0</Max>
+					<Part min="1.0" max="100.0">60-10*log(f/100)</Part>
+					<Part max="500.0">60-15*log(f/100)</Part>
+				</Limit>
+				<Limit param="AVGPSANEXT">
+					<Max>67.0</Max>
+					<Part min="1.0" max="100.0">62.25-10*log(f/100)</Part>
+					<Part max="500.0">62.25-15*log(f/100)</Part>
+				</Limit>
+				<Limit param="PSAACRF">
+					<Max>67.0</Max>
+					<Part min="1.0" max="500.0">37-20*log(f/100)</Part>
+				</Limit>
+				<Limit param="AVGPSAACRF">
+					<Max>67.0</Max>
+					<Part min="1.0" max="500.0">41-20*log(f/100)</Part>
+				</Limit>
+			</Hardware>
+			<Hardware name="Cord Cable">
+				<Limit param="RL">
+					<Part min="1.0" max="10.0">20+5*log(f)</Part>
+					<Part max="20.0">25</Part>
+					<Part max="500.0">25-8.8*log(f/20)</Part>
+				</Limit>
+				<Limit param="IL">
+					<Part min="1.0" max="500.0">1.2(1.82*sqrt(f)+0.0091f+0.25/sqrt(f))</Part>
+				</Limit>
+				<Limit param="PropagationDelay">
+					<Part min="1.0" max="500.0">534+36/sqrt(f)</Part>
+				</Limit>
+				<Limit param="NEXT">
+					<Part min="1.0" max="500.0">44.3-15*log(f/100)</Part>
+				</Limit>
+				<Limit param="PSNEXT">
+					<Part min="1.0" max="500.0">42.3-15*log(f/100)</Part>
+				</Limit>
+				<Limit param="ACRF">
+					<Part min="1.0" max="500.0">27.8-20*log(f/100)</Part>
+				</Limit>
+				<Limit param="PSACRF">
+					<Part min="1.0" max="500.0">24.8-20*log(f/100)</Part>
+				</Limit>
+				<Limit param="TCL">
+					<Max>40.0</Max>
+					<Part min="1.0" max="500.0">30-10*log(f/100)</Part>
+				</Limit>
+				<Limit param="ELTCTL">
+					<Part min="1.0" max="30.0">35-20*log(f)</Part>
+				</Limit>
+				<Limit param="PSANEXT">
+					<Max>67.0</Max>
+					<Part min="1.0" max="500.0">62.5-15*log(f/100)</Part>
+				</Limit>
+				<Limit param="PSAACRF">
+					<Max>67.0</Max>
+					<Part min="1.0" max="500.0">38.2-20*log(f/100)</Part>
+				</Limit>
+			</Hardware>
 		</Category>
 		<Category name="CAT6">
 			<Hardware name="Connecting Hardware">
@@ -279,6 +374,68 @@
 				<Limit param="NEXT">
 					<Max>65.0</Max>
 					<Part min="1.0" max="250.0">-10*log(10^(-(-20*log(10^(-(54 - 20*log(f/100))/20) + 10^(-(54 - 20*log(f/100) + 2 (1.2 (1.808*sqrt(f) + 0.017f + 0.2/sqrt(f))(L/100) + 0.02*sqrt(f)))/20)))/10)+10^(-(44.3-15*log(f/100)-10*log(1-e^(-0.46(1.2(1.808*sqrt(f)+0.017f+0.2/sqrt(f))*L/100)))+2*0.02*sqrt(f))/10))-0.5</Part>
+				</Limit>
+			</Hardware>
+			<Hardware name="Permanent Link">
+				<Limit param="RL">
+					<Part min="1.0" max="3.0">21+4*log(f/3)</Part>
+					<Part max="10.0">21</Part>
+					<Part max="40.0">26-5*log(f)</Part>
+					<Part max="250.0">34-10*log(f)</Part>
+				</Limit>
+				<Limit param="IL">
+					<Part min="1.0" max="250.0">1.687*sqrt(f)+0.0153f+0.18/sqrt(f)+0.00015f^1.5</Part>
+				</Limit>
+				<Limit param="PropagationDelay">
+					<Part min="1.0" max="250.0">0.9(534+36/sqrt(f))+3*2.5</Part>
+				</Limit>
+				<Limit param="NEXT">
+					<Max>65.0</Max>
+					<Part min="1.0" max="250.0">-20*log(10^(-(44.3-15*log(f/100))/20)+10^(-(54-20*log(f/100))/20))</Part>
+				</Limit>
+				<Limit param="PSNEXT">
+					<Max>62.0</Max>
+					<Part min="1.0" max="250.0">-20*log(10^(-(42.3-15*log(f/100))/20)+10^(-(50-20*log(f/100))/20))</Part>
+				</Limit>
+				<Limit param="ACRF">
+					<Part min="1.0" max="250.0">-20*log(10^(-(27.8-20*log(f/100))/20)+3*10^(-(43.1-20*log(f/100))/20))</Part>
+				</Limit>
+				<Limit param="PSACRF">
+					<Part min="1.0" max="250.0">-20*log(10^(-(24.8-20*log(f/100))/20)+3*10^(-(40.1-20*log(f/100))/20))</Part>
+				</Limit>
+			</Hardware>
+			<Hardware name="Channel">
+				<Limit param="RL">
+					<Part min="1.0" max="10.0">19</Part>
+					<Part max="40.0">24-5*log(f)</Part>
+					<Part max="250.0">32-10*log(f)</Part>
+				</Limit>
+				<Limit param="IL">
+					<Part min="1.0" max="250.0">1.02(1.808*sqrt(f)+0.017f+0.2/sqrt(f))+4*0.02*sqrt(f)+0.0003f^1.5</Part>
+				</Limit>
+				<Limit param="PropagationDelay">
+					<Part min="1.0" max="250.0">534+36/sqrt(f)+4*2.5</Part>
+				</Limit>
+				<Limit param="NEXT">
+					<Max>65.0</Max>
+					<Part min="1.0" max="250.0">-20*log(10^(-(44.3-15*log(f/100))/20)+2*10^(-(54-20*log(f/100))/20))</Part>
+				</Limit>
+				<Limit param="PSNEXT">
+					<Max>62.0</Max>
+					<Part min="1.0" max="250.0">-20*log(10^(-(42.3-15*log(f/100))/20)+2*10^(-(50-20*log(f/100))/20))</Part>
+				</Limit>
+				<Limit param="ACRF">
+					<Part min="1.0" max="250.0">-20*log(10^(-(27.8-20*log(f/100))/20)+4*10^(-(43.1-20*log(f/100))/20))</Part>
+				</Limit>
+				<Limit param="PSACRF">
+					<Part min="1.0" max="250.0">-20*log(10^(-(24.8-20*log(f/100))/20)+4*10^(-(40.1-20*log(f/100))/20))</Part>
+				</Limit>
+				<Limit param="TCL">
+					<Max>40.0</Max>
+					<Part min="1.0" max="250.0">50-15*log(f)</Part>
+				</Limit>
+				<Limit param="ELTCTL">
+					<Part min="1.0" max="30.0">30-20*log(f)</Part>
 				</Limit>
 			</Hardware>
 		</Category>
