@@ -291,7 +291,6 @@ class Embedding(SNPManipulations):
                 
         #And then we write the corrected jack Next dictionary to a json file
         print(self.jackVector["12-36"][2])
-        print()
         #testPlugFile = open(self.jackName, "w")
         #testPlugFile.write(json.dumps(self.jackVector))
         #testPlugFile.close

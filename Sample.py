@@ -8,7 +8,7 @@ class Sample(SNPManipulations):
 
     '''This class handles the SNP samples for the basic test'''
 
-    def __init__(self, snpFile, one_sided = None):
+    def __init__(self, snpFile, one_sided = None, standard = None, fromPort = None, toPort = None):
 
 
         self.snpFile = snpFile
@@ -16,14 +16,28 @@ class Sample(SNPManipulations):
         self.rs = super(Sample, self)
         self.rs.__init__(self.snpFile)
         #self.renumber(renumFrom, renumTo)
+        #self.portNumbering = toPort
+        self.portNumbering = []
+        if (fromPort is None and toPort is None):
+            for port in range(0, self.num_ports):
+                self.portNumbering.append(port)
+        else:
+            self.portNumbering = toPort
+            try:
+                self.renumber(list(fromPort), list(toPort))
+            except Exception:
+                self.portNumbering = fromPort
+                raise "Error:No Good"
+
         self.s2mm()
+        print("Converted")
         self.port_name = {0:"12", 1:"36", 2:"45", 3:"78"}
 
         self.name, self.extension = splitext(os.path.basename(snpFile))
         self.date = time.ctime(os.path.getctime(snpFile))
         #print self.date
 
-        self.standard = None
+        self.standard = standard
 
         if one_sided != None:
             self.one_sided = one_sided
@@ -40,23 +54,20 @@ class Sample(SNPManipulations):
         
         if self.one_sided:
             for i in range(0, self.getNumPorts(self.dd)):
-                self.port_name[i] = self.pair_combo[i]  #{0:"12", 1:"36", 2:"45", 3:"78"}
+                self.port_name[i] = self.pair_combo[i]  #{0:"45", 1:"12", 2:"36", 3:"78"}
             self.parameters = ["RL", "NEXT", "Propagation Delay", "PSNEXT", "LCL", "TCL", "CMRL", "CMNEXT", "CMDMNEXT", "CMDMRL", "DMCMNEXT", "DMCMRL"]
         else:
             for i in range(0, self.getNumPorts(self.dd)//2):
-                self.port_name[i] = self.pair_combo[i]  #{0:"12", 1:"36", 2:"45", 3:"78"}
+                self.port_name[i] = self.pair_combo[i]  #{0:"45", 1:"12", 2:"36", 3:"78"}
             for i in range((self.getNumPorts(self.dd)//2), self.getNumPorts(self.dd)):
                 self.port_name[i] = "(r)"+self.pair_combo[i-self.getNumPorts(self.dd)//2]  #{4:"(r)12",  :"(r)36", 6:"(r)45", 7:"(r)78", 0:"12", 1:"36", 2:"45", 3:"78"}
             self.parameters = ["RL", "IL", "NEXT", "Propagation Delay", "PSNEXT","FEXT", "PSFEXT", "ACRF", "PSACRF", "LCL", "LCTL", "TCL", "TCTL", "ELTCTL","CMRL", "CMNEXT", "CMDMNEXT", "CMDMRL", "DMCMNEXT", "DMCMRL"]
+        
         self.worstValue = {}
         self.worstMargin = {}
-            
-
-        #print self.port_name
-        
-        
-        #vna_out.write_touchstone("testout_mm", form="ri")
     
+        #print self.port_name
+        #vna_out.write_touchstone("testout_mm", form="ri")
         #print self.RL["RL_11"][0]
 
     '''@limit.setter

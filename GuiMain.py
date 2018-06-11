@@ -108,7 +108,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
     def addEmbed(self):
         testName, result = QtWidgets.QInputDialog.getText(self, "Add an Embedded Sample",
                                                                 "Please enter a sample name")
-        if result and len(testName) > 1 and not testName.isspace():
+        if result and len(testName) > 0 and not testName.isspace():
             print("%s!" % testName)
             self.Project.addEmbed(testName)
             self.displaySamplesInTable()
@@ -116,9 +116,14 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
             return
         
     def addAlien(self):
-
-        self.Project.addAlien("Test")
-        self.displaySamplesInTable()
+        testName, result = QtWidgets.QInputDialog.getText(self, "Add an Alien Test",
+                                                                "Please enter a Test name")
+        if result and len(testName) > 1 and not testName.isspace():
+            print("%s!" % testName)
+            self.Project.addAlien(testName)
+            self.displaySamplesInTable()
+        else:
+            return
 
     def newProject(self):
         
@@ -264,19 +269,47 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
 
 
     def acquireOpen(self):
-        embeddedSample = self.Project.getSampleByName(self.selected[0])
-        embeddedSample.embeddedOpen = self.simpleAquire()
+        try:
+            embeddedSample = self.Project.getSampleByName(self.selected[0])
+            embeddedSample.embeddedOpen = self.simpleAquire()
+        except Exception:
+            msg = QtWidgets.QMessageBox()
+            msg.setIcon(QtWidgets.QMessageBox.Information)
+            msg.setText("Please Connect to VNA ")
+            msg.setWindowTitle("Warning")
+            msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+            msg.setFixedSize(msg.sizeHint())
+            msg.exec_()
         self.embedUpdateTab()
 
     def acquireShort(self):
-        embeddedSample = self.Project.getSampleByName(self.selected[0])
-        embeddedSample.embeddedShort = self.simpleAquire()
+        try:
+            embeddedSample = self.Project.getSampleByName(self.selected[0])
+            embeddedSample.embeddedShort = self.simpleAquire()
+        except Exception:
+            msg = QtWidgets.QMessageBox()
+            msg.setIcon(QtWidgets.QMessageBox.Information)
+            msg.setText("Please Connect to VNA ")
+            msg.setWindowTitle("Warning")
+            msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+            msg.setFixedSize(msg.sizeHint())
+            msg.exec_()
         self.embedUpdateTab()
         
     def acquireLoad(self):
-        embeddedSample = self.Project.getSampleByName(self.selected[0])
-        embeddedSample.embeddedLoad = self.simpleAquire()
-        self.embedUpdateTab()
+        try:    
+            embeddedSample = self.Project.getSampleByName(self.selected[0])
+            embeddedSample.embeddedLoad = self.simpleAquire()
+            self.embedUpdateTab()
+
+        except Exception:
+            msg = QtWidgets.QMessageBox()
+            msg.setIcon(QtWidgets.QMessageBox.Information)
+            msg.setText("Please Connect to VNA ")
+            msg.setWindowTitle("Warning")
+            msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+            msg.setFixedSize(msg.sizeHint())
+            msg.exec_()
         
     def reembed(self):
         embeddedSample = self.Project.getSampleByName(self.selected[0])
@@ -350,7 +383,6 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
         self.embedWidget.shortFileName.setFont(font)
         self.embedWidget.loadFileName.setFont(font)
 
-
         plugs = embeddedSample.getPlugList()
         
         self.embedWidget.plugList.clear()
@@ -393,7 +425,6 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
 
 
     def embedPlotUpdate(self):
-
         tab_index = self.param_tabs.currentIndex()
         activeParameter = self.param_tabs.tabText(self.tab_index)
         print(self.activeParameter)
@@ -409,15 +440,15 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
                 return
             
             ax=self.graphicsView.figure.add_subplot(111)
-            
+             
             color=iter(cm.rainbow(np.linspace(0,1,len(embededParams[activeParameter]))))
             for case in embededParams[activeParameter]:
                 c = next(color)
                 reembedingNum = int(case.replace("case", ""))
                 ax.semilogx(sample.freq, sample.reembeded[reembedingNum], label=case, c = c)
-                
+                 
             ax.legend(loc='upper left', ncol =  2 )
-
+ 
             #self.figure.tight_layout()
 
             ax.grid(which="both")
@@ -433,8 +464,6 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
             self.plot(None, None)
 
     def addPlugDialog(self):
-
-
 
         form = addplug.AddPlug()  # We set the  form to be our ExampleApp (design)
 
@@ -611,6 +640,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
             
 
     def alienRun(self):
+
         alien = self.Project.getSampleByName(self.selected[0])
 
         if self.alienWidget.alienEnd1.isChecked():
@@ -624,11 +654,11 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
             testType = "AFEXT"
         try:
                
-            file = self.simpleAquire()
+            f = self.simpleAquire()
             print("here")
             import os.path
-            print(file)
-            alien.addDisturberMeasurement(end, testType, file, os.path.basename(file))
+            print(f)
+            alien.addDisturberMeasurement(end, testType, f, os.path.basename(f))
             self.alienUpdateDisturberList()
             self.alienPlot()
             
@@ -636,7 +666,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
             print(e)
             msg = QtWidgets.QMessageBox()
             msg.setIcon(QtWidgets.QMessageBox.Information)
-            msg.setText("Please select disturber to add ")
+            msg.setText("Please Connect to VNA ")
             msg.setWindowTitle("Warning")
             msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
             msg.setFixedSize(msg.sizeHint())
@@ -729,12 +759,39 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
             if avgLimit is not None:
                 ax.semilogx(*zip(*avgLimit), linestyle = '--', label="average limit", c = c)
             ax.legend(loc='upper left', ncol = 1 if len(param_dict.keys()) <= 8 else 2 )
-
-                
-                
+     
             #self.ax.legend()
         self.graphicsView.draw()
-        
+
+
+    def setPortNumber(self):
+       sample = self.Project.getSampleByName(self.selected[0])
+       snp = sample.snpFile
+       sided = sample.one_sided
+       standard = sample.standard
+       try:
+           try:
+               portNumbering = str(sample.portNumbering).replace('[', '').replace(']', '')
+               print(portNumbering)
+               fromPort, toPort = Port_Renumbering().getPortNumbering(fromPort = portNumbering)
+               fromPort = np.array(fromPort.split(",")).astype(int)
+               toPort   = np.array(toPort.split(",")).astype(int)
+           except Exception:
+               print("No") 
+
+           print(fromPort)
+           print(toPort)
+
+           if fromPort is not None and toPort is not None:
+               sample.__init__(snp, sided, standard, list(fromPort) , list(toPort))
+               sample.getParameters()
+               self.Project.activeSample = self.selected
+               #print self.selected
+               if len(self.selected) == 1:  #Since only one sample can be displayed at a time
+                   self.displaySampleParams(self.selected)
+
+       except Exception:
+           self.setPortNumber()
 
     def tableContextMenu(self, pos):
         #print self.selected
@@ -744,7 +801,10 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
 
             menu = QtWidgets.QMenu()
             setLimit = menu.addAction("Set Limit")
-            setPortName = menu.addAction("Rename Ports")
+
+            if len(self.selected) == 1: 
+
+                setPortNumber = menu.addAction("Renumber Ports")
 
             test_type = menu.addMenu("Set Test Type") #Set the sub menu to select the different types of matrixes
             one_sided = test_type.addAction("One Sided")
@@ -808,6 +868,9 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
             elif action == setLimit:
                 self.setLimit()
             #self.Project.activeMeasurements = selected
+
+            elif action == setPortNumber and len(self.selected) == 1:
+                self.setPortNumber()
             return 1
 
 
@@ -815,7 +878,9 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
 
             menu = QtWidgets.QMenu()
             setLimit = menu.addAction("Set Limit")
-            setPortName = menu.addAction("Rename Ports")
+
+            if len(self.selected) == 1:
+                setPortNumber = menu.addAction("Renumber Ports")
 
             exportExcel = menu.addAction("Export To Excel")
             delete = menu.addAction("Delete")
@@ -836,10 +901,11 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
 
             elif action == setLimit:
                 self.setLimit()
+
+            elif action == setPortNumber and len(self.selected) == 1:
+                self.setPortNumber()
             #self.Project.activeMeasurements = selected
             return 1
-
-
 
         menu = QtWidgets.QMenu()
         addSNP = menu.addAction("Add Sample")
@@ -984,6 +1050,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
         while connected is False:
             addr = Addr_Dialog().getAddr()
             if addr:
+                
                 try:
                     print("before")
                     self.comm = Communication()
@@ -998,6 +1065,8 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
                     self.actionDisconnect.setEnabled(True)
                     self.actionRun.setEnabled(True)
                     self.actionConnect.setEnabled(False)
+
+                    self.connected = True
 
                 except Exception as e:
                     print("Error: ",e)
@@ -1020,6 +1089,8 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
                 self.actionDisconnect.setEnabled(False)
                 self.actionRun.setEnabled(False)
                 self.actionConnect.setEnabled(True)
+
+                self.connected = False
             except Exception as e:
                 print(e)
 
@@ -1033,29 +1104,31 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
         msg.exec_()
 
     def aquire(self):
-            try:
-                testName, numPorts, IF, start_freq, stop_freq, num_points, average, timeout = Test_Params_Dialog().getParams()
-                if testName:
-                    try:
-                        #comm = Communication(addr)
-                        self.comm.IF = IF
-                        self.comm.min_freq = start_freq
-                        self.comm.max_freq = stop_freq
-                        self.comm.num_points = num_points
-                        self.comm.average = average
+        try:
+            print(123)
+            testName, numPorts, IF, start_freq, stop_freq, num_points, average, timeout = Test_Params_Dialog().getParams()
+            
+            if testName:
+                try:
+                    #comm = Communication(addr)
+                    self.comm.IF = IF
+                    self.comm.min_freq = start_freq
+                    self.comm.max_freq = stop_freq
+                    self.comm.num_points = num_points
+                    self.comm.average = average
 
-                        self.comm.aquire(testName, numPorts)
-                        print(r"Y:/{}.s{}p".format(testName, numPorts))
-                        self.Project.importSNP([r"Y:/{}.s{}p".format(testName, numPorts)])
-                        self.displaySamplesInTable()
-                    except Exception as e:
-                        pass
-            except Exception as e:
-                print("Cancel")
-
-
+                    self.comm.aquire(testName, numPorts)
+                    print(r"Y:/{}.s{}p".format(testName, numPorts))
+                    self.Project.importSNP([r"Y:/{}.s{}p".format(testName, numPorts)])
+                    self.displaySamplesInTable()
+                except Exception as e:
+                    pass
+        except Exception as e:
+            print(e)
+            
 
     def simpleAquire(self):
+        if self.comm.connected :
             try:
                 testName, numPorts, IF, start_freq, stop_freq, num_points, average, timeout = Test_Params_Dialog().getParams()
                 if testName:
@@ -1076,6 +1149,8 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
             except Exception as e:
                 print("Cancel")
 
+        raise "You Must be connected to VNA"
+
     def reject(self):
         pass
 
@@ -1085,11 +1160,11 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
 
 class Addr_Dialog:
     def getAddr(self):
-        comm = Communication()
+        self.comm = Communication()
         dialog = QtWidgets.QDialog()
         addr_dialog = VNA_addr_dialog.Ui_Addr_Dialog()
         addr_dialog.setupUi(dialog)
-        addr_dialog.plainTextEdit.setText(comm.VNAAddress)
+        addr_dialog.plainTextEdit.setText(self.comm.VNAAddress)
 
         result = dialog.exec_()
         print("here")
@@ -1102,11 +1177,31 @@ class Addr_Dialog:
                 return 0
             return addr
 
+import Port_Renumber
+class Port_Renumbering:
+    def getPortNumbering(self, fromPort):
+        dialog = QtWidgets.QDialog()
+        pr = Port_Renumber.Ui_Dialog()
+        pr.setupUi(dialog)
+        result = dialog.exec_()
+        _from = None
+        _to = None
+        if not result:
+            return None, None
+        if result:
+            _from = pr.fromLineEdit.text()
+            _to = pr.toLineEdit.text()
+            print("sent")
+            if len(_from) < 1 or len(_to) < 1:
+                return None, None
+            return _from, _to
+        
+
 class Test_Params_Dialog:
     def getParams(self):
-
-        comm = Communication()
         
+        comm = Communication()
+        print("Connected")
         dialog = QtWidgets.QDialog()
         params_dialog = TestParameters.Ui_TestParameterDialog()
         params_dialog.setupUi(dialog)
@@ -1139,7 +1234,9 @@ class Test_Params_Dialog:
 
                 return testName, num_ports, IF, start_freq, stop_freq, num_points, average, timeout
             except Exception as e:
-                print("Cancel")
+                print("Cancel123")
+                return
+
 
 def main():
 

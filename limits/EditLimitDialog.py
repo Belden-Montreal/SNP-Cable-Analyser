@@ -75,7 +75,12 @@ class EditLimitDialog():
             self.setBoxesToNew(boxIndex + 1)
             self.boxes[boxIndex].blockSignals(False)
         elif boxIndex < len(self.boxes):
-            self.lineEdits[boxIndex].clear()
+            self.editLimitDialog.limitsTable.clearContents()
+            self.editLimitDialog.limitsTable.setRowCount(1)
+            self.editLimitDialog.limitsTable.setItem(0, 0, QtWidgets.QTableWidgetItem('-'))
+            self.editLimitDialog.limitsTable.setItem(0, 1, QtWidgets.QTableWidgetItem('-'))
+            self.editLimitDialog.limitsTable.setItem(0, 2, QtWidgets.QTableWidgetItem(''))
+
 
     def setTextEdit(self, boxIndex):
         self.lineEdits[boxIndex].setText(self.boxes[boxIndex].currentText())
@@ -162,7 +167,10 @@ class EditLimitDialog():
         self.editLimitDialog.exampleTable.clearContents()
         limit = self.boxes[Box.HARDW].currentData().standard.limits[self.boxes[Box.PARAM].currentText()]
         for y in range(0, self.editLimitDialog.exampleTable.columnCount()):
-            self.editLimitDialog.exampleTable.setItem(0, y, QtWidgets.QTableWidgetItem("{0:.2f}".format(limit.evaluate({'f': float(self.editLimitDialog.exampleTable.horizontalHeaderItem(y).text())}))))
+            try:
+                self.editLimitDialog.exampleTable.setItem(0, y, QtWidgets.QTableWidgetItem("{0:.2f}".format(limit.evaluate({'f': float(self.editLimitDialog.exampleTable.horizontalHeaderItem(y).text())}))))
+            except:
+                self.editLimitDialog.exampleTable.setItem(0, y, QtWidgets.QTableWidgetItem("{0}".format(limit.evaluate({'f': float(self.editLimitDialog.exampleTable.horizontalHeaderItem(y).text())}))))
 
     def deleteItem(self, buttonIndex):
         itemToDelete = self.boxes[buttonIndex].currentData()
