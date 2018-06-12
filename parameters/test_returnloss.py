@@ -1,11 +1,11 @@
 import unittest
 
-from test_parameter import TestParameter
-from returnloss import ReturnLoss
+from parameters.test_parameter import TestParameter
+from parameters.returnloss import ReturnLoss
 
 class TestReturnLoss(TestParameter):
     def testComputeParameter(self):
-        rl = ReturnLoss(self._ports, self._freq, self._matrices, z=False)
+        rl = ReturnLoss(self._ports, self._freq, self._matrices)
         parameter = rl.getParameter()
 
         # there should be a parameter for each ports
