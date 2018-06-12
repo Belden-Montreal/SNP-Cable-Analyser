@@ -1,9 +1,9 @@
 import numpy as np
 
-def complex2db(self, value, degree=True):
+def complex2db(value, degree=True):
     return 20*np.log10(np.abs(value))
 
-def complex2phase(self, value, degree=True):
+def complex2phase(value, degree=True):
     return np.angle(value, degree)
 
 class Parameter(object):

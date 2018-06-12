@@ -4,7 +4,7 @@ class ReturnLoss(Parameter):
     def computeParameter(self):
         # initialize the dictionary for each port
         rl = dict()
-        for port in self._ports:
+        for (i,port) in self._ports.items():
             rl[port] = list()
 
 
