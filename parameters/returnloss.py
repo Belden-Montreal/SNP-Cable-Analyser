@@ -1,12 +1,13 @@
-from parameter import Parameter, complex2db
+from parameters.parameter import Parameter, complex2db
 
 class ReturnLoss(Parameter):
     def computeParameter(self):
         # initialize the dictionary for each port
         rl = dict()
-        for port in self._ports:
+        cpRl = dict()
+        for _,port in self._ports.items():
             rl[port] = list()
-
+            cpRl[port] = list()
 
         # extract the return loss in all matrices
         for (f,_) in enumerate(self._freq):
@@ -15,10 +16,8 @@ class ReturnLoss(Parameter):
                 value = self._matrices[f, i, i]
 
                 # convert to db if specified
-                if self._complex:
-                    value = complex2db(value)
-
+                dbValue = complex2db(value)
                 # add the value to the list
-                rl[port].append(value)
-
-        return rl
+                rl[port].append(dbValue)
+                cpRl[port].append(value)
+        return rl, cpRl
