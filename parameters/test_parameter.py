@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 
-from parameter import Parameter
+from parameters.parameter import Parameter
 
 class TestParameter(unittest.TestCase):
     def setUp(self):
