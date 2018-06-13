@@ -2,12 +2,12 @@ import unittest
 from parameters.test_parameter import TestParameter
 from parameters.psfext import PsFext
 from parameters.insertionloss import InsertionLoss
-from parameters.fext import Fext
+from parameters.fext import FEXT
 from parameters.psacrf import PsAcrf
 
 class TestPsAcrf(TestParameter):
     def testComputeParameter(self):
-        fext = Fext(self._ports, self._freq, self._matrices)
+        fext = FEXT(self._ports, self._freq, self._matrices)
         psfext = PsFext(self._ports, self._freq, self._matrices, fext)
         il = InsertionLoss(self._ports, self._freq, self._matrices, full=True)
 

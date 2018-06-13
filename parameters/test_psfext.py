@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 from parameters.test_parameter import TestParameter
 from parameters.psfext import PsFext
-from parameters.fext import Fext
+from parameters.fext import FEXT
 
 def powersum(fext, f, port):
     keys = fext.keys()
@@ -11,7 +11,7 @@ def powersum(fext, f, port):
 class TestPsFext(TestParameter):
     def testComputeParameter(self):
 
-        fext = Fext(self._ports, self._freq, self._matrices)
+        fext = FEXT(self._ports, self._freq, self._matrices)
         psfext = PsFext(self._ports, self._freq, self._matrices, fext)
         parameter = psfext.getParameter()
         #assume that fext is tested
