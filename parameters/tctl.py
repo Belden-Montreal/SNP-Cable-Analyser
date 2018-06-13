@@ -12,6 +12,9 @@ class TCTL(InsertionLoss):
     3  [ _ _ _ _ ] 
     4  [ _ _ _ _ ] 
     '''
-    
+
+    def __init__(self, ports, freq, matrices):
+        super(TCTL, self).__init__(ports, freq, matrices)
+
     def chooseMatrices(self, matrices):
         return comDiffMatrix(matrices)
