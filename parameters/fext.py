@@ -2,6 +2,18 @@ from parameters.parameter import Parameter, complex2db
 
 class Fext(Parameter):
     def computeParameter(self):
+        '''
+        Example of FEXT loss with 4 wires (double-sided only)
+        
+              1   2   3   4
+        1  [  _   _   _  1-4 ] 
+        2  [  _   _  2-3  _  ] 
+        3  [  _  3-2  _   _  ] 
+        4  [ 4-1  _   _   _  ] 
+        
+        
+        '''
+
         fext = dict()
         cpFext = dict()
         for i,porti in sorted(self._ports.items())[len(self._ports)//2:]:
