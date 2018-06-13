@@ -11,8 +11,8 @@ class TestPSNEXT(TestParameter):
         pPSNEXT = PSNEXT(self._ports, self._freq, self._matrices, pNEXT)
         parameter = pPSNEXT.getParameter()
 
-        # for a 4 ports, there should be 4 PSNEXT parameters
-        self.assertEqual(len(parameter), 4)
+        # there should be a parameter for each ports
+        self.assertEqual(len(parameter), len(self._ports))
 
         # make sure the port were created
         self.assertEqual(0 in parameter, True)
