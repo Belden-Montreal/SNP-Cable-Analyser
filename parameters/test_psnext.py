@@ -2,12 +2,12 @@ import unittest
 
 from parameters.parameter import complex2db
 from parameters.test_parameter import TestParameter
-from parameters.next import NEXTSingleEnded
+from parameters.next import NEXT
 from parameters.psnext import PSNEXT, powerSum
 
 class TestPSNEXT(TestParameter):
     def testComputeParameter(self):
-        pNEXT = NEXTSingleEnded(self._ports, self._freq, self._matrices)
+        pNEXT = NEXT(self._ports, self._freq, self._matrices)
         pPSNEXT = PSNEXT(self._ports, self._freq, self._matrices, pNEXT)
         parameter = pPSNEXT.getParameter()
 
@@ -51,7 +51,7 @@ class TestPSNEXT(TestParameter):
         self.assertAlmostEqual(parameter[3][3], powerSum([pNEXT.getParameter()[(2,3)][3]]))
 
     def testComputeComplexParameter(self):
-        pNEXT = NEXTSingleEnded(self._ports, self._freq, self._matrices)
+        pNEXT = NEXT(self._ports, self._freq, self._matrices)
         pPSNEXT = PSNEXT(self._ports, self._freq, self._matrices, pNEXT)
         parameter = pPSNEXT.getComplexParameter()
 

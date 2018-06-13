@@ -2,12 +2,12 @@ import unittest
 
 from parameters.parameter import complex2db
 from parameters.test_parameter import TestParameter
-from parameters.next import NEXTSingleEnded
+from parameters.next import NEXT
 
-class TestNEXTSingleEnded(TestParameter):
+class TestNEXT(TestParameter):
     def testComputePairs(self):
-        NEXT = NEXTSingleEnded(self._ports, self._freq, self._matrices)
-        pairs = NEXT.getPairs()
+        pNEXT = NEXT(self._ports, self._freq, self._matrices)
+        pairs = pNEXT.getPairs()
 
         # for a 4 ports, there is only 2 NEXT pairs
         self.assertEqual(len(pairs), 2)
@@ -17,8 +17,8 @@ class TestNEXTSingleEnded(TestParameter):
         self.assertEqual((2,3) in pairs, True)
 
     def testComputeParameter(self):
-        NEXT = NEXTSingleEnded(self._ports, self._freq, self._matrices)
-        parameter = NEXT.getParameter()
+        pNEXT = NEXT(self._ports, self._freq, self._matrices)
+        parameter = pNEXT.getParameter()
 
         # for a 4 ports, there is only 2 NEXT parameters
         self.assertEqual(len(parameter), 2)
@@ -44,8 +44,8 @@ class TestNEXTSingleEnded(TestParameter):
         self.assertAlmostEqual(parameter[(2,3)][3], complex2db(self._matrices[3, 2, 3]))
 
     def testComputeComplexParameter(self):
-        NEXT = NEXTSingleEnded(self._ports, self._freq, self._matrices)
-        parameter = NEXT.getComplexParameter()
+        pNEXT = NEXT(self._ports, self._freq, self._matrices)
+        parameter = pNEXT.getComplexParameter()
 
         # for a 4 ports, there is only 2 NEXT parameters
         self.assertEqual(len(parameter), 2)
