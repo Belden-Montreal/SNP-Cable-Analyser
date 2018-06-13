@@ -62,10 +62,10 @@ class Parameter(object):
         return len(self._ports)
 
 class PairedParameter(Parameter):
-    def __init__(self, ports, freq, matrices):
+    def __init__(self, ports, freq, mixedModeMatrices):
         self._ports = ports
         self._freq = freq
-        self._matrices = self.chooseMatrices(matrices)
+        self._matrices = self.chooseMatrices(mixedModeMatrices)
         self._pairs = self.computePairs()
         (self._parameter, self._complexParameter) = self.computeParameter()
         self._limit = Limit(self._parameter)
