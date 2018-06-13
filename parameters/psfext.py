@@ -10,13 +10,13 @@ class PsFext(Parameter):
         where FEXT_i,k is the FEXT loss from wire i to wire k
         '''
         psfext = dict()
-        for _,port in self._ports.items():
+        for port in self._ports:
             psfext[port] = list()
         fext = Fext(self._ports, self._freq, self._matrices).getParameter()
         ports = fext.keys()
 
         for (f,_) in enumerate(self._freq):
-            for (_,port) in self._ports.items():
-                ps = 10.0*np.log10(np.sum([10**(fext[key][f]/10) for key in ports if (key.split("-")[0] == port)]))
+            for port in self._ports:
+                ps = 10.0*np.log10(np.sum([10**(fext[key][f]/10) for key in ports if (key[0] == port)]))
                 psfext[port].append(ps)
         return psfext,_

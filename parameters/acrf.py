@@ -17,6 +17,6 @@ class Acrf(Parameter):
             acrf[port] = list()
         for (f,_) in enumerate(self._freq):
             for port in ports:
-                ilPort = port.split("-")[0]
+                ilPort = port[0]
                 acrf[port].append(fext[port][f]-il[ilPort][f])
         return acrf,_
