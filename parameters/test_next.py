@@ -5,6 +5,17 @@ from parameters.test_parameter import TestParameter
 from parameters.next import NEXTSingleEnded
 
 class TestNEXTSingleEnded(TestParameter):
+    def testComputePairs(self):
+        NEXT = NEXTSingleEnded(self._ports, self._freq, self._matrices)
+        pairs = NEXT.getPairs()
+
+        # for a 4 ports, there is only 2 NEXT pairs
+        self.assertEqual(len(pairs), 2)
+
+        # make sure the two correct pairs are there
+        self.assertEqual((0,1) in pairs, True)
+        self.assertEqual((2,3) in pairs, True)
+
     def testComputeParameter(self):
         NEXT = NEXTSingleEnded(self._ports, self._freq, self._matrices)
         parameter = NEXT.getParameter()
