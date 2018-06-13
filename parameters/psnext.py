@@ -1,10 +1,10 @@
 import numpy as np
 
 from parameters.parameter import Parameter, complex2db
-from parameters.next import NEXTSingleEnded
+from parameters.next import NEXT
 
 def powerSum(values):
-        return 10*np.log10(np.sum(list(map(lambda v: 10**(v/10), values))))
+    return 10*np.log10(np.sum(list(map(lambda v: 10**(v/10), values))))
 
 class PSNEXT(Parameter):
     """
