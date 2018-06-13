@@ -3,6 +3,14 @@ from parameters.returnloss import ReturnLoss
 
 class PropagationDelay(Parameter):
     def computeParameter(self):
+        '''
+        Propagation delay is calculated by taking the numerical derivative of the phase:
+        Delay = -1/360 * dp/df
+
+        where dp = phase[f2] - phase[f1], df = f2 - f1
+        and phase[f] is the phase of the return loss at a given frequency
+        
+        '''
         # initialize the dictionary for each port
         pd = dict()
         for _,port in self._ports.items():

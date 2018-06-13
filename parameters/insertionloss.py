@@ -8,6 +8,18 @@ class InsertionLoss(Parameter):
         
 
     def computeParameter(self):
+        '''
+        Example of Insertion Loss with 4 wires
+        For non-full measurement, only take the top right values (1 and 2 in this case)
+        
+             1 2 3 4
+        1  [ _ _ 1 _ ] 
+        2  [ _ _ _ 2 ] 
+        3  [ 3 _ _ _ ] 
+        4  [ _ 4 _ _ ] 
+        
+        
+        '''
         # initialize the dictionary for each port
         il = dict()
         cpIl = dict()

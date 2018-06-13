@@ -3,6 +3,12 @@ from parameters.fext import Fext
 import numpy as np
 class PsFext(Parameter):
     def computeParameter(self):
+        '''
+        PSFEXT is calculated using the following formula:
+        PSFEXT_k = 10*log10(sum(FEXT_i,k))
+        
+        where FEXT_i,k is the FEXT loss from wire i to wire k
+        '''
         psfext = dict()
         for _,port in self._ports.items():
             psfext[port] = list()
