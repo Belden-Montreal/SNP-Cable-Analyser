@@ -1,4 +1,4 @@
-from parameters.parameter import Parameter, complex2db
+from parameters.parameter import Parameter, complex2db, diffDiffMatrix
 
 class InsertionLoss(Parameter):
     '''
@@ -45,3 +45,6 @@ class InsertionLoss(Parameter):
                         cpIl[port+len(self._ports)//2].append(bottomLeft)
 
         return il, cpIl
+
+    def chooseMatrices(self, matrices):
+        return diffDiffMatrix(matrices)

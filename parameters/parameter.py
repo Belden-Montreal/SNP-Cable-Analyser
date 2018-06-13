@@ -1,6 +1,22 @@
 import numpy as np
 from limits.Limit import Limit
 
+def diffDiffMatrix(matrices):
+    halfway = matrices[0].shape[0]//2
+    return matrices[:,:halfway,:halfway]
+
+def diffComMatrix(matrices):
+    halfway = matrices[0].shape[0]//2
+    return matrices[:,:halfway,halfway:]
+
+def comDiffMatrix(matrices):
+    halfway = matrices[0].shape[0]//2
+    return matrices[:,halfway:,:halfway]
+
+def comComMatrix(matrices):
+    halfway = matrices[0].shape[0]//2
+    return matrices[:,halfway:,halfway:]
+
 def complex2db(value, degree=True):
     return 20*np.log10(np.abs(value))
 
@@ -14,12 +30,15 @@ def order(i,j):
         return (j,i)
 
 class Parameter(object):
-    def __init__(self, ports, freq, matrices):
+    def __init__(self, ports, freq, mixedModeMatrices):
         self._ports = ports
         self._freq = freq
-        self._matrices = matrices
+        self._matrices = self.chooseMatrices(mixedModeMatrices)
         (self._parameter, self._complexParameter) = self.computeParameter()
         self._limit = Limit(self._parameter)
+
+    def chooseMatrices(self, mixedModeMatrices):
+        raise NotImplementedError
 
     def computeParameter(self):
         raise NotImplementedError
@@ -57,7 +76,7 @@ class PairedParameter(Parameter):
 
         :returns: a set of ordered pairs
         """
-        raise NotImplemented
+        raise NotImplementedError
 
     def getPairs(self):
         return self._pairs

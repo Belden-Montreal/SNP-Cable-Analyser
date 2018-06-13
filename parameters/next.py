@@ -1,4 +1,4 @@
-from parameters.parameter import PairedParameter, complex2db, order
+from parameters.parameter import PairedParameter, complex2db, order, diffDiffMatrix
 
 class NEXTSingleEnded(PairedParameter):
     """
@@ -56,3 +56,6 @@ class NEXTSingleEnded(PairedParameter):
                 dbNEXT[(i,j)].append(dbValue)
 
         return (dbNEXT, cpNEXT)
+
+    def chooseMatrices(self, matrices):
+        return diffDiffMatrix(matrices)

@@ -1,4 +1,4 @@
-from parameters.parameter import PairedParameter, complex2db, order
+from parameters.parameter import PairedParameter, complex2db, diffDiffMatrix
 
 class Fext(PairedParameter):
     '''
@@ -47,3 +47,6 @@ class Fext(PairedParameter):
                 cpFext[(i,j)].append(value)
 
         return fext, cpFext
+
+    def chooseMatrices(self, matrices):
+        return diffDiffMatrix(matrices)

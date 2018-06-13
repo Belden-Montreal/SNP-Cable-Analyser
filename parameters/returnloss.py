@@ -1,4 +1,4 @@
-from parameters.parameter import Parameter, complex2db
+from parameters.parameter import Parameter, complex2db, diffDiffMatrix
 
 class ReturnLoss(Parameter):
     '''
@@ -34,3 +34,6 @@ class ReturnLoss(Parameter):
                 rl[port].append(dbValue)
                 cpRl[port].append(value)
         return rl, cpRl
+
+    def chooseMatrices(self, matrices):
+        return diffDiffMatrix(matrices)

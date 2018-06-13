@@ -1,6 +1,6 @@
 import numpy as np
 
-from parameters.parameter import Parameter, complex2db
+from parameters.parameter import Parameter, complex2db, diffDiffMatrix
 from parameters.next import NEXTSingleEnded
 
 def powerSum(values):
@@ -40,3 +40,6 @@ class PSNEXT(Parameter):
                 dbPSNEXT[port].append(psnext)
 
         return (dbPSNEXT, None)
+
+    def chooseMatrices(self, matrices):
+        return diffDiffMatrix(matrices)

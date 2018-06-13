@@ -21,7 +21,7 @@ class TestPropagationDelay(TestParameter):
         super().setUp()
         self._matrices = np.array([
             [
-                [complex(x,2*(z%2-1/2)*x) for x in range(4*y+1,4*(y+1)+1)] for y in range(4*z, 4*(z+1))
+                [complex(x,2*(z%2-1/2)*x) for x in range(8*y+1,8*(y+1)+1)] for y in range(8*z, 8*(z+1))
             ] for z in range(4)
         ], np.complex)
     

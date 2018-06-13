@@ -1,4 +1,4 @@
-from parameters.parameter import Parameter
+from parameters.parameter import Parameter, diffDiffMatrix
 
 class PsAcrf(Parameter):
     '''
@@ -25,3 +25,6 @@ class PsAcrf(Parameter):
             for port in self._ports:
                 psacrf[port].append(psfext[port][f]-il[port][f])
         return psacrf,_
+
+    def chooseMatrices(self, matrices):
+        return diffDiffMatrix(matrices)

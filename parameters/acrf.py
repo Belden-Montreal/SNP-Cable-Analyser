@@ -1,4 +1,4 @@
-from parameters.parameter import Parameter
+from parameters.parameter import Parameter, diffDiffMatrix
 
 class Acrf(Parameter):
     '''
@@ -24,3 +24,6 @@ class Acrf(Parameter):
                 ilPort = port[0]
                 acrf[port].append(dbFext[port][f]-dbIl[ilPort][f])
         return acrf,_
+    
+    def chooseMatrices(self, matrices):
+        return diffDiffMatrix(matrices)

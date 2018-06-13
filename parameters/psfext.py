@@ -1,4 +1,4 @@
-from parameters.parameter import Parameter
+from parameters.parameter import Parameter, diffDiffMatrix
 import numpy as np
 
 class PsFext(Parameter):
@@ -25,3 +25,6 @@ class PsFext(Parameter):
                 ps = 10.0*np.log10(np.sum([10**(dbFext[key][f]/10) for key in ports if (key[0] == port)]))
                 psfext[port].append(ps)
         return psfext,_
+
+    def chooseMatrices(self, matrices):
+        return diffDiffMatrix(matrices)

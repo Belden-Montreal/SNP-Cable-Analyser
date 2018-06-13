@@ -45,3 +45,6 @@ class PropagationDelay(Parameter):
 
 
         return pd,_
+
+    def chooseMatrices(self, matrices):
+        return None
