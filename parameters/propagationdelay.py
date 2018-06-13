@@ -13,7 +13,7 @@ class PropagationDelay(Parameter):
         '''
         # initialize the dictionary for each port
         pd = dict()
-        for _,port in self._ports.items():
+        for port in self._ports:
                 pd[port] = list()
 
         # extract the return loss for calculations
@@ -21,7 +21,7 @@ class PropagationDelay(Parameter):
 
         # extract the propagation delay from the return loss
         for (f,_) in enumerate(self._freq):
-            for (_,port) in self._ports.items():
+            for port in self._ports:
                 delay = 0.0
                 if f < len(self._freq)-1: #if not last frequency
                     phase1 = complex2phase(rl[port][f])

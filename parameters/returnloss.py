@@ -16,15 +16,15 @@ class ReturnLoss(Parameter):
         # initialize the dictionary for each port
         rl = dict()
         cpRl = dict()
-        for (_,port) in self._ports.items():
+        for port in self._ports:
             rl[port] = list()
             cpRl[port] = list()
 
         # extract the return loss in all matrices
         for (f,_) in enumerate(self._freq):
-            for (i,port) in self._ports.items():
+            for port in self._ports:
                 # get the value
-                value = self._matrices[f, i, i]
+                value = self._matrices[f, port, port]
 
                 # convert to db if specified
                 dbValue = complex2db(value)
