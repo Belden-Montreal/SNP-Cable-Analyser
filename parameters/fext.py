@@ -1,9 +1,8 @@
-from parameters.parameter import Parameter, complex2db
+from parameters.parameter import PairedParameter, complex2db, order
 
-class Fext(Parameter):
-    def computeParameter(self):
-        '''
-        Example of FEXT loss with 4 wires (double-sided only)
+class Fext(PairedParameter):
+    '''
+        Example of FEXT loss with 4 wires (double-ended only)
         
               1   2   3   4
         1  [  _   _   _  1-4 ] 
@@ -12,29 +11,39 @@ class Fext(Parameter):
         4  [ 4-1  _   _   _  ] 
         
         
-        '''
+    '''
+    def computePairs(self):
+        numPorts = len(self._ports)
 
+        # create each pair for the NEXT
+        pairs = set()
+        for i in range(0, numPorts//2):
+            for j in range(numPorts//2, numPorts):
+                if i == j or abs(i-j) == numPorts//2:
+                    continue
+
+                # create the pair for the first end of the line
+                port1 = i
+                port2 = j
+                pairs.add((port1, port2))
+
+                # create the pair for the second end of the line
+                pairs.add((port2, port1))
+        return pairs
+
+    def computeParameter(self):
         fext = dict()
         cpFext = dict()
-        for i,porti in sorted(self._ports.items())[len(self._ports)//2:]:
-            for j,portj in sorted(self._ports.items())[:len(self._ports)//2]:
-                if not (i == j) and not (abs(i-j) == len(self._ports)//2):
-                    fext[porti+"-"+portj] = list()
-                    fext[portj+"-"+porti] = list()
-                    cpFext[porti+"-"+portj] = list()
-                    cpFext[portj+"-"+porti] = list()
+        for i,j in self._pairs:
+            fext[(i,j)] = list()
+            cpFext[(i,j)] = list()
 
         # extract the fext in all matrices
         for (f,_) in enumerate(self._freq):
-            for i,porti in sorted(self._ports.items())[len(self._ports)//2:]:
-                for j,portj in sorted(self._ports.items())[:len(self._ports)//2]:
-                    # get the value
-                    if not (i == j) and not (abs(i-j) == len(self._ports)//2):
-                        topRight = self._matrices[f, i, j]
-                        bottomLeft = self._matrices[f, j, i]
-                        fext[porti+"-"+portj].append(complex2db(bottomLeft))
-                        fext[portj+"-"+porti].append(complex2db(topRight))
-                        cpFext[porti+"-"+portj].append(bottomLeft)
-                        cpFext[portj+"-"+porti].append(topRight)
+            for i,j in self._pairs:
+                # get the value
+                value = self._matrices[f, i, j]
+                fext[(i,j)].append(complex2db(value))
+                cpFext[(i,j)].append(value)
 
         return fext, cpFext
