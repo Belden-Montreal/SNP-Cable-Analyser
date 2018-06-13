@@ -65,7 +65,7 @@ class PairedParameter(Parameter):
     def __init__(self, ports, freq, matrices):
         self._ports = ports
         self._freq = freq
-        self._matrices = matrices
+        self._matrices = self.chooseMatrices(matrices)
         self._pairs = self.computePairs()
         (self._parameter, self._complexParameter) = self.computeParameter()
         self._limit = Limit(self._parameter)
