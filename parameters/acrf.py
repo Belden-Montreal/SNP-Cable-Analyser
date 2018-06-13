@@ -1,6 +1,6 @@
 from parameters.parameter import Parameter, diffDiffMatrix
 
-class Acrf(Parameter):
+class ACRF(Parameter):
     '''
         ACRF is calculated using the following formula : 
 
@@ -10,7 +10,7 @@ class Acrf(Parameter):
     def __init__(self, ports, freq, matrices, fext, il):
         self._fext = fext
         self._il = il
-        super(Acrf, self).__init__(ports, freq, matrices)
+        super(ACRF, self).__init__(ports, freq, matrices)
 
     def computeParameter(self):
         acrf = dict()

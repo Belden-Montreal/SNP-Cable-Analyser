@@ -1,7 +1,7 @@
 from parameters.parameter import Parameter, diffDiffMatrix
 import numpy as np
 
-class PsFext(Parameter):
+class PSFEXT(Parameter):
     '''
         PSFEXT is calculated using the following formula:
         PSFEXT_k = 10*log10(sum(FEXT_i,k))
@@ -10,7 +10,7 @@ class PsFext(Parameter):
     '''
     def __init__(self, ports, freq, matrices, fext):
         self._fext = fext
-        super(PsFext, self).__init__(ports, freq, matrices)
+        super(PSFEXT, self).__init__(ports, freq, matrices)
 
     def computeParameter(self):
         

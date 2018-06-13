@@ -1,6 +1,6 @@
 from parameters.parameter import Parameter, diffDiffMatrix
 
-class PsAcrf(Parameter):
+class PSACRF(Parameter):
     '''
         PSACRF is calculated using the following formula:
         PSACRF_k = PSFEXT_k - IL_k
@@ -10,7 +10,7 @@ class PsAcrf(Parameter):
     def __init__(self, ports, freq, matrices, psFext, il):
         self._psFext = psFext
         self._il = il
-        super(PsAcrf, self).__init__(ports, freq, matrices)
+        super(PSACRF, self).__init__(ports, freq, matrices)
     
     def computeParameter(self):
         
