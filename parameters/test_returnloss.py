@@ -6,7 +6,7 @@ from parameters.returnloss import ReturnLoss
 class TestReturnLoss(TestParameter):
     def testComputeParameter(self):
         rl = ReturnLoss(self._ports, self._freq, self._matrices)
-        parameter = rl.getParameter()
+        parameter = rl.getComplexParameter()
 
         # there should be a parameter for each ports
         self.assertEqual(len(parameter), len(self._ports))
