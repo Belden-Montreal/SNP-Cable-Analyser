@@ -39,6 +39,9 @@ class Parameter(object):
     def getWorstValue(self):
         raise NotImplementedError
 
+    def getNumPorts(self):
+        return len(self._ports)
+
 class PairedParameter(Parameter):
     def __init__(self, ports, freq, matrices):
         self._ports = ports
