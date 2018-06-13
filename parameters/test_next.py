@@ -12,7 +12,7 @@ class TestNEXT(TestParameter):
         # for a 4 ports, there is only 4 NEXT pairs (including reverse)
         self.assertEqual(len(pairs), 4)
 
-        # make sure the two correct pairs are there
+        # make sure the correct pairs are there
         self.assertEqual((0,1) in pairs, True)
         self.assertEqual((2,3) in pairs, True)
         self.assertEqual((1,0) in pairs, True)
@@ -22,7 +22,7 @@ class TestNEXT(TestParameter):
         pNEXT = NEXT(self._ports, self._freq, self._matrices)
         parameter = pNEXT.getParameter()
 
-        # for a 4 ports, there is only 2 NEXT parameters
+        # for a 4 ports, there is only 4 NEXT pairs (including reverse)
         self.assertEqual(len(parameter), 4)
 
         # the number of sample should be the same as the number of frequencies
@@ -59,7 +59,7 @@ class TestNEXT(TestParameter):
         pNEXT = NEXT(self._ports, self._freq, self._matrices)
         parameter = pNEXT.getComplexParameter()
 
-        # for a 4 ports, there is only 2 NEXT parameters (including reverse)
+        # for a 4 ports, there is only 4 NEXT pairs (including reverse)
         self.assertEqual(len(parameter), 4)
 
         # the number of sample should be the same as the number of frequencies

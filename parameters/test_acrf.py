@@ -2,12 +2,12 @@ import unittest
 
 from parameters.test_parameter import TestParameter
 from parameters.acrf import Acrf
-from parameters.fext import Fext
+from parameters.fext import FEXT
 from parameters.insertionloss import InsertionLoss
 
 class TestAcrf(TestParameter):
     def testComputeParameter(self):
-        fext = Fext(self._ports, self._freq, self._matrices)
+        fext = FEXT(self._ports, self._freq, self._matrices)
         il = InsertionLoss(self._ports, self._freq, self._matrices, full=True)
 
         acrf = Acrf(self._ports, self._freq, self._matrices, fext, il)

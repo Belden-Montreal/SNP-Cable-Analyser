@@ -1,6 +1,6 @@
 from parameters.parameter import PairedParameter, complex2db, diffDiffMatrix
 
-class Fext(PairedParameter):
+class FEXT(PairedParameter):
     '''
     Example of FEXT loss with 4 wires (double-ended only).
         
@@ -23,30 +23,32 @@ class Fext(PairedParameter):
                     continue
 
                 # create the pair for the first end of the line
-                port1 = i
-                port2 = j
-                pairs.add((port1, port2))
+                pairs.add((i, j))
 
                 # create the pair for the second end of the line
-                pairs.add((port2, port1))
+                pairs.add((j, i))
+
         return pairs
 
     def computeParameter(self):
-        fext = dict()
-        cpFext = dict()
-        for i,j in self._pairs:
-            fext[(i,j)] = list()
-            cpFext[(i,j)] = list()
+        # initialize the dictionaries for each port
+        (dbFEXT, cpFEXT) = (dict(), dict())
+        for (i,j) in self._pairs:
+            dbFEXT[(i,j)] = list()
+            cpFEXT[(i,j)] = list()
 
-        # extract the fext in all matrices
+        # extract the FEXT value from the matrices
         for (f,_) in enumerate(self._freq):
-            for i,j in self._pairs:
-                # get the value
-                value = self._matrices[f, i, j]
-                fext[(i,j)].append(complex2db(value))
-                cpFext[(i,j)].append(value)
+            for (i,j) in self._pairs:
+                # get the value from the matrix
+                cpValue = self._matrices[f, i, j]
+                dbValue = complex2db(cpValue)
 
-        return fext, cpFext
+                # add the value into the FEXT
+                cpFEXT[(i,j)].append(cpValue)
+                dbFEXT[(i,j)].append(dbValue)
+
+        return (dbFEXT, cpFEXT)
 
     def chooseMatrices(self, matrices):
         return diffDiffMatrix(matrices)
