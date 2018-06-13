@@ -27,28 +27,28 @@ class TestPSNEXT(TestParameter):
         self.assertEqual(len(parameter[3]), len(self._freq))
 
         # check the values of the port 0
-        self.assertAlmostEqual(parameter[0][0], powerSum([pNEXT.getParameter()[(0,1)][0]]))
-        self.assertAlmostEqual(parameter[0][1], powerSum([pNEXT.getParameter()[(0,1)][1]]))
-        self.assertAlmostEqual(parameter[0][2], powerSum([pNEXT.getParameter()[(0,1)][2]]))
-        self.assertAlmostEqual(parameter[0][3], powerSum([pNEXT.getParameter()[(0,1)][3]]))
+        self.assertAlmostEqual(parameter[0][0], powerSum([pNEXT.getParameter()[(0,1)][0], pNEXT.getParameter()[(1,0)][0]]))
+        self.assertAlmostEqual(parameter[0][1], powerSum([pNEXT.getParameter()[(0,1)][1], pNEXT.getParameter()[(1,0)][1]]))
+        self.assertAlmostEqual(parameter[0][2], powerSum([pNEXT.getParameter()[(0,1)][2], pNEXT.getParameter()[(1,0)][2]]))
+        self.assertAlmostEqual(parameter[0][3], powerSum([pNEXT.getParameter()[(0,1)][3], pNEXT.getParameter()[(1,0)][3]]))
 
         # check the values of the port 1
-        self.assertAlmostEqual(parameter[1][0], powerSum([pNEXT.getParameter()[(0,1)][0]]))
-        self.assertAlmostEqual(parameter[1][1], powerSum([pNEXT.getParameter()[(0,1)][1]]))
-        self.assertAlmostEqual(parameter[1][2], powerSum([pNEXT.getParameter()[(0,1)][2]]))
-        self.assertAlmostEqual(parameter[1][3], powerSum([pNEXT.getParameter()[(0,1)][3]]))
+        self.assertAlmostEqual(parameter[1][0], powerSum([pNEXT.getParameter()[(1,0)][0], pNEXT.getParameter()[(0,1)][0]]))
+        self.assertAlmostEqual(parameter[1][1], powerSum([pNEXT.getParameter()[(1,0)][1], pNEXT.getParameter()[(0,1)][1]]))
+        self.assertAlmostEqual(parameter[1][2], powerSum([pNEXT.getParameter()[(1,0)][2], pNEXT.getParameter()[(0,1)][2]]))
+        self.assertAlmostEqual(parameter[1][3], powerSum([pNEXT.getParameter()[(1,0)][3], pNEXT.getParameter()[(0,1)][3]]))
 
         # check the values of the port 2
-        self.assertAlmostEqual(parameter[2][0], powerSum([pNEXT.getParameter()[(2,3)][0]]))
-        self.assertAlmostEqual(parameter[2][1], powerSum([pNEXT.getParameter()[(2,3)][1]]))
-        self.assertAlmostEqual(parameter[2][2], powerSum([pNEXT.getParameter()[(2,3)][2]]))
-        self.assertAlmostEqual(parameter[2][3], powerSum([pNEXT.getParameter()[(2,3)][3]]))
+        self.assertAlmostEqual(parameter[2][0], powerSum([pNEXT.getParameter()[(2,3)][0], pNEXT.getParameter()[(3,2)][0]]))
+        self.assertAlmostEqual(parameter[2][1], powerSum([pNEXT.getParameter()[(2,3)][1], pNEXT.getParameter()[(3,2)][1]]))
+        self.assertAlmostEqual(parameter[2][2], powerSum([pNEXT.getParameter()[(2,3)][2], pNEXT.getParameter()[(3,2)][2]]))
+        self.assertAlmostEqual(parameter[2][3], powerSum([pNEXT.getParameter()[(2,3)][3], pNEXT.getParameter()[(3,2)][3]]))
 
         # check the values of the port 3
-        self.assertAlmostEqual(parameter[3][0], powerSum([pNEXT.getParameter()[(2,3)][0]]))
-        self.assertAlmostEqual(parameter[3][1], powerSum([pNEXT.getParameter()[(2,3)][1]]))
-        self.assertAlmostEqual(parameter[3][2], powerSum([pNEXT.getParameter()[(2,3)][2]]))
-        self.assertAlmostEqual(parameter[3][3], powerSum([pNEXT.getParameter()[(2,3)][3]]))
+        self.assertAlmostEqual(parameter[3][0], powerSum([pNEXT.getParameter()[(3,2)][0], pNEXT.getParameter()[(2,3)][0]]))
+        self.assertAlmostEqual(parameter[3][1], powerSum([pNEXT.getParameter()[(3,2)][1], pNEXT.getParameter()[(2,3)][1]]))
+        self.assertAlmostEqual(parameter[3][2], powerSum([pNEXT.getParameter()[(3,2)][2], pNEXT.getParameter()[(2,3)][2]]))
+        self.assertAlmostEqual(parameter[3][3], powerSum([pNEXT.getParameter()[(3,2)][3], pNEXT.getParameter()[(2,3)][3]]))
 
     def testComputeComplexParameter(self):
         pNEXT = NEXT(self._ports, self._freq, self._matrices)

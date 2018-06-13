@@ -13,7 +13,7 @@ class NEXT(PairedParameter):
        5   [ _   _   _  4-5  _  5-6]
        6   [ _   _   _  4-6 5-6  _ ]
 
-    We have the following pairs: (1,2), (1,3), (2,3), (4,5), (4,6), (5,6).
+    We have the following pairs twice: (1,2), (1,3), (2,3), (4,5), (4,6), (5,6).
     """
     def computePairs(self):
         # create each pair for the NEXT
@@ -27,11 +27,13 @@ class NEXT(PairedParameter):
                 port1 = i
                 port2 = j
                 pairs.add((port1, port2))
+                pairs.add((port2, port1))
 
                 # create the pair for the second end of the line
                 port1 = i + self.getNumPorts()//2
                 port2 = j + self.getNumPorts()//2
-                pairs.add(order(port1, port2))
+                pairs.add((port1, port2))
+                pairs.add((port2, port1))
 
         return pairs
 

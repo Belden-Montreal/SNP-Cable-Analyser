@@ -2,24 +2,24 @@ from parameters.parameter import PairedParameter, complex2db, diffDiffMatrix
 
 class Fext(PairedParameter):
     '''
-        Example of FEXT loss with 4 wires (double-ended only)
+    Example of FEXT loss with 4 wires (double-ended only).
         
-              1   2   3   4
-        1  [  _   _   _  1-4 ] 
-        2  [  _   _  2-3  _  ] 
-        3  [  _  3-2  _   _  ] 
-        4  [ 4-1  _   _   _  ] 
-        
-        
+              1   2   3   4   5   6
+        1  [  _   _   _   _  1-5 1-6] 
+        2  [  _   _   _  2-4  _  2-6] 
+        3  [  _   _   _  3-4 3-5  _ ] 
+        4  [  _  2-4 3-4  _   _   _ ] 
+        5  [ 1-5  _  3-5  _   _   _ ] 
+        6  [ 1-6 2-6  _   _   _   _ ]
+
+    We have the following pairs twice: (1,5), (1,6), (2,4), (2,6), (3,4), (3,5).
     '''
     def computePairs(self):
-        numPorts = len(self._ports)
-
         # create each pair for the NEXT
         pairs = set()
-        for i in range(0, numPorts//2):
-            for j in range(numPorts//2, numPorts):
-                if i == j or abs(i-j) == numPorts//2:
+        for i in range(0, self.getNumPorts()//2):
+            for j in range(self.getNumPorts()//2, self.getNumPorts()):
+                if i == j or abs(i-j) == self.getNumPorts()//2:
                     continue
 
                 # create the pair for the first end of the line
