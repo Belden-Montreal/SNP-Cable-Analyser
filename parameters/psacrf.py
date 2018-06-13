@@ -1,18 +1,22 @@
 from parameters.parameter import Parameter
-from parameters.psfext import PsFext
-from parameters.insertionloss import InsertionLoss
 
 class PsAcrf(Parameter):
-    def computeParameter(self):
-        '''
+    '''
         PSACRF is calculated using the following formula:
         PSACRF_k = PSFEXT_k - IL_k
         
         where PSFEXT_k is the PSFEXT on wire k and IL_k is the Insertion Loss on wire k
-        '''
+    '''
+    def __init__(self, ports, freq, matrices, psFext, il):
+        self._psFext = psFext
+        self._il = il
+        super(PsAcrf, self).__init__(ports, freq, matrices)
+    
+    def computeParameter(self):
+        
         psacrf = dict()
-        psfext = PsFext(self._ports, self._freq, self._matrices).getParameter()
-        il = InsertionLoss(self._ports, self._freq, self._matrices, full=True).getParameter()
+        psfext = self._psFext.getParameter()
+        il = self._il.getParameter()
 
         for port in self._ports:
             psacrf[port] = list()

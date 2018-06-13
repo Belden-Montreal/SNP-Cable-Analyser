@@ -2,6 +2,7 @@ import unittest
 from parameters.parameter import complex2phase
 from parameters.test_parameter import TestParameter
 from parameters.propagationdelay import PropagationDelay
+from parameters.returnloss import ReturnLoss
 import numpy as np
 
 def calculateDelay(rl1, rl2, f1, f2, previous=None):
@@ -25,7 +26,7 @@ class TestPropagationDelay(TestParameter):
         ], np.complex)
     
     def testComputeParameter(self):
-        pd = PropagationDelay(self._ports, self._freq, self._matrices)
+        pd = PropagationDelay(self._ports, self._freq, self._matrices, ReturnLoss(self._ports, self._freq, self._matrices))
         parameter = pd.getParameter()
         # there should be a parameter for each ports
         self.assertEqual(len(parameter), len(self._ports))

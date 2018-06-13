@@ -1,14 +1,7 @@
 from parameters.parameter import Parameter, complex2db
 
 class InsertionLoss(Parameter):
-
-    def __init__(self, ports, freq, matrices, full=False):
-        self._full = full
-        super().__init__(ports, freq, matrices)
-        
-
-    def computeParameter(self):
-        '''
+    '''
         Example of Insertion Loss with 4 wires
         For non-full measurement, only take the top right values (1 and 2 in this case)
         
@@ -19,7 +12,14 @@ class InsertionLoss(Parameter):
         4  [ _ 4 _ _ ] 
         
         
-        '''
+    '''
+    
+    def __init__(self, ports, freq, matrices, full=False):
+        self._full = full
+        super().__init__(ports, freq, matrices)
+        
+
+    def computeParameter(self):
         # initialize the dictionary for each port
         il = dict()
         cpIl = dict()

@@ -1,8 +1,7 @@
 from parameters.parameter import Parameter, complex2db
 
 class ReturnLoss(Parameter):
-    def computeParameter(self):
-        '''
+    '''
         Example of Return Loss with 4 wires
         
              1 2 3 4
@@ -12,7 +11,10 @@ class ReturnLoss(Parameter):
         4  [ _ _ _ 4 ] 
         
         
-        '''
+    '''
+    
+    def computeParameter(self):
+        
         # initialize the dictionary for each port
         rl = dict()
         cpRl = dict()
