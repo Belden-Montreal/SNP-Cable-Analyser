@@ -49,5 +49,56 @@ class InsertionLoss(Parameter):
         else:
             return self._complexParameter
 
+    def getMargins(self, values, limit):
+        margins = list()
+        freqs = list()
+        vals = list()
+        for i,value in enumerate(values):
+            if self._freq[i] in limit:
+                margins.append(value-limit[self._freq[i]])
+                freqs.append(self._freq[i])
+                vals.append(value)
+        return margins, freqs, vals
+
+    def getWorstMargin(self):
+        if len(self._worstMargin[0]):
+            return self._worstMargin
+        limit = self._limit.evaluateDict({'f': self._freq}, len(self._freq), neg=True)
+        passed = True
+        worst = dict()
+        if limit:
+            for pair,values in self._parameter.items():
+                margins, freqs, vals = self.getMargins(values, limit)
+                if len(margins):
+                    worstMargin = min(margins)
+                    index = margins.index(worstMargin)
+                    v, f = vals[index], freqs[index]
+                    l = limit[f]
+                    if v < l:
+                        passed = False
+                    worst[pair] = v, f, l, abs(worstMargin)
+            self._worstMargin = worst, passed
+            return self._worstMargin
+
+    def getWorstValue(self):
+        if len(self._worstValue[0]):
+            return self._worstValue
+        limit = self._limit.evaluateDict({'f': self._freq}, len(self._freq), neg=True)
+        passed = True
+        worst = dict()
+        if limit:
+            for pair,values in self._parameter.items():
+                margins, freqs, vals = self.getMargins(values, limit)
+                if len(vals):
+                    worstVal = min(vals)
+                    index = vals.index(worstVal)
+                    m, f = margins[index], freqs[index]
+                    l = limit[f]
+                    if worstVal < l:
+                        passed = False
+                    worst[pair] = worstVal, f, l, abs(m)
+            self._worstValue = worst, passed
+            return self._worstValue
+    
     def chooseMatrices(self, matrices):
         return diffDiffMatrix(matrices)
