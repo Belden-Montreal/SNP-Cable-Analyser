@@ -9,7 +9,7 @@ class TestSingleEnded(TestSample):
 
     def testParametersBuilding(self):
         se = SingleEnded(None)
-        self.setSample(se)
+        self.setMockSample(se)
         self.assertEqual(len(se._parameters), len(self._params))
         self.assertListEqual(list(se._parameters.keys()), self._params)
 

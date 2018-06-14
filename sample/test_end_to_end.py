@@ -9,7 +9,7 @@ class TestEndToEnd(TestSample):
 
     def testParametersBuilding(self):
         ee = EndToEnd(None)
-        self.setSample(ee)
+        self.setMockSample(ee)
         self.assertEqual(len(ee._parameters), len(self._params))
         self.assertListEqual(list(ee._parameters.keys()), self._params)
 
