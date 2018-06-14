@@ -51,3 +51,10 @@ class TestSample(unittest.TestCase):
                 [249, 250, 251, 252, 253, 254, 255, 256],
             ]
         ], np.int32)
+    def setSample(self, s):
+        s._mm = self._mm
+        s._ports = self._ports
+        s._freq = self._freq
+        s._portsNumber = 4
+        s.setPorts()
+        s.addParameters()
