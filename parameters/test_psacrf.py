@@ -9,14 +9,14 @@ class TestPsAcrf(TestParameter):
     def testComputeParameter(self):
         fext = FEXT(self._ports, self._freq, self._matrices)
         psfext = PSFEXT(self._ports, self._freq, self._matrices, fext)
-        il = InsertionLoss(self._ports, self._freq, self._matrices, full=True)
+        il = InsertionLoss(self._ports, self._freq, self._matrices)
 
         psacrf = PSACRF(self._ports, self._freq, self._matrices, psfext, il)
         parameter = psacrf.getParameter()
         #assume that psfext and il are tested
         
         dbPsfext = psfext.getParameter()
-        dbIl = il.getParameter()
+        dbIl = il.getParameter(full=True)
 
         # there should be a parameter for each ports
         self.assertEqual(len(parameter), len(self._ports))

@@ -13,8 +13,5 @@ class LCTL(InsertionLoss):
     4  [ _ _ _ _ ] 
     '''
 
-    def __init__(self, ports, freq, matrices):
-        super(LCTL, self).__init__(ports, freq, matrices)
-
     def chooseMatrices(self, matrices):
         return diffComMatrix(matrices)

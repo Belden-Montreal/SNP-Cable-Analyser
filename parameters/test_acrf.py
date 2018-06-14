@@ -8,14 +8,14 @@ from parameters.insertionloss import InsertionLoss
 class TestAcrf(TestParameter):
     def testComputeParameter(self):
         fext = FEXT(self._ports, self._freq, self._matrices)
-        il = InsertionLoss(self._ports, self._freq, self._matrices, full=True)
+        il = InsertionLoss(self._ports, self._freq, self._matrices)
 
         acrf = ACRF(self._ports, self._freq, self._matrices, fext, il)
         parameter = acrf.getParameter()
         #assume fext and il are tested
         
         dbFext = fext.getParameter()
-        dbIl = il.getParameter()
+        dbIl = il.getParameter(full=True)
 
         fextPorts = list(dbFext.keys())
         # there should be a parameter for each ports

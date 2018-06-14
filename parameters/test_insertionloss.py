@@ -27,8 +27,7 @@ class TestInsertionLoss(TestParameter):
         self.assertEqual(parameter[1][2], self._matrices[2, 1, 1+len(self._ports)//2])
         self.assertEqual(parameter[1][3], self._matrices[3, 1, 1+len(self._ports)//2])
 
-        il = InsertionLoss(self._ports, self._freq, self._matrices, full=True)
-        parameter = il.getComplexParameter()
+        parameter = il.getComplexParameter(full=True)
 
         # the number of sample should be the same as the number of frequencies
         self.assertEqual(len(parameter[2]), len(self._freq))

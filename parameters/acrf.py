@@ -15,7 +15,7 @@ class ACRF(Parameter):
     def computeParameter(self):
         acrf = dict()
         dbFext = self._fext.getParameter()
-        dbIl = self._il.getParameter()
+        dbIl = self._il.getParameter(full=True)
         ports = dbFext.keys()
         for port in ports:
             acrf[port] = list()

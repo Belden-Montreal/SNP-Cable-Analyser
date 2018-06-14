@@ -16,7 +16,7 @@ class PSACRF(Parameter):
         
         psacrf = dict()
         psfext = self._psFext.getParameter()
-        il = self._il.getParameter()
+        il = self._il.getParameter(full=True)
 
         for port in self._ports:
             psacrf[port] = list()

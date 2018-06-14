@@ -12,24 +12,15 @@ class InsertionLoss(Parameter):
         4  [ _ 4 _ _ ] 
         
         
-    '''
-    
-    def __init__(self, ports, freq, matrices, full=False):
-        self._full = full
-        super().__init__(ports, freq, matrices)
-        
+    ''' 
 
     def computeParameter(self):
         # initialize the dictionary for each port
         il = dict()
         cpIl = dict()
         for port in self._ports:
-            if port < len(self._ports)//2:
-                il[port] = list()
-                cpIl[port] = list()
-            elif self._full:
-                il[port] = list()
-                cpIl[port] = list()
+            il[port] = list()
+            cpIl[port] = list()
 
         # extract the insertion loss in all matrices
         for (f,_) in enumerate(self._freq):
@@ -39,12 +30,24 @@ class InsertionLoss(Parameter):
                     topRight = self._matrices[f, port, port+len(self._ports)//2]
                     il[port].append(complex2db(topRight))
                     cpIl[port].append(topRight)
-                    if self._full:
-                        bottomLeft = self._matrices[f, port+len(self._ports)//2, port]
-                        il[port+len(self._ports)//2].append(complex2db(bottomLeft))
-                        cpIl[port+len(self._ports)//2].append(bottomLeft)
+
+                    bottomLeft = self._matrices[f, port+len(self._ports)//2, port]
+                    il[port+len(self._ports)//2].append(complex2db(bottomLeft))
+                    cpIl[port+len(self._ports)//2].append(bottomLeft)
 
         return il, cpIl
+
+    def getParameter(self, full=False):
+        if not full:
+            return {k: self._parameter[k] for k in sorted(self._parameter)[:len(self._ports)//2]}
+        else:
+            return self._parameter
+
+    def getComplexParameter(self, full=False):
+        if not full:
+            return {k: self._complexParameter[k] for k in sorted(self._complexParameter)[:len(self._ports)//2]}
+        else:
+            return self._complexParameter
 
     def chooseMatrices(self, matrices):
         return diffDiffMatrix(matrices)
