@@ -35,7 +35,7 @@ class Parameter(object):
         self._freq = freq
         self._matrices = self.chooseMatrices(mixedModeMatrices)
         (self._parameter, self._complexParameter) = self.computeParameter()
-        self._limit = Limit(self._parameter)
+        self._limit = None
         self._worstMargin = (dict(), None)
         self._worstValue = (dict(), None)
 

@@ -6,8 +6,11 @@ class TestSNPAnalyzer(unittest.TestCase):
 
     def setUp(self):
         self._file = "testout_mm.s8p"
-        rs = rf(self._file)
-        rs.se2gmm(p = int(rs.number_of_ports/2))
+        f = open(self._file, "r")
+        rs = rf()
+        rs.read_touchstone(f)
+        f.close()
+        rs.se2gmm(p = int(rs.number_of_ports//2))
         self._mm = rs.s
 
     def testFileReading(self):
