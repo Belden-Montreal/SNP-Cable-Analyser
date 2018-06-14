@@ -52,6 +52,9 @@ class Parameter(object):
     def getLimit(self):
         return self._limit
 
+    def setLimit(self, limit):
+        self._limit = limit
+
     def getWorstMargin(self):
         raise NotImplementedError
 

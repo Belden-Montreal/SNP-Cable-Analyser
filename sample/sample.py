@@ -21,5 +21,12 @@ class Sample(object):
     def addParameters(self):
         raise NotImplementedError
 
+    def setStandard(self, standard):
+        for name, parameter in self._parameters:
+            parameter.setLimit(standard.limits[name])
+
+    def parameters(self):
+        return self._parameters
+
 
     
