@@ -7,7 +7,7 @@ from parameters.insertionloss import InsertionLoss
 class TestInsertionLoss(TestParameter):
     def testComputeParameter(self):
         il = InsertionLoss(self._ports, self._freq, self._matrices)
-        parameter = il.getComplexParameter()
+        parameter = il.getComplexParameter(full=False)
 
         # there should be a parameter for half the ports
         self.assertEqual(len(parameter), len(self._ports)//2)

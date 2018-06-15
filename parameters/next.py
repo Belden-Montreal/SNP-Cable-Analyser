@@ -15,38 +15,38 @@ class NEXT(PairedParameter):
 
     We have the following pairs twice: (1,2), (1,3), (2,3), (4,5), (4,6), (5,6).
     """
-    def computePairs(self):
+    def computePairs(self, ports):
         # create each pair for the NEXT
-        pairs = set()
-        for i in range(0, self.getNumPorts()//2):
-            for j in range(0, self.getNumPorts()//2):
+        pairs = dict()
+        for i in range(0, len(ports)//2):
+            for j in range(0, len(ports)//2):
                 if i >= j:
                     continue
 
                 # create the pair for the first end of the line
                 port1 = i
                 port2 = j
-                pairs.add((port1, port2))
-                pairs.add((port2, port1))
+                pairs[(port1, port2)] = ports[port1]+"-"+ports[port2]
+                pairs[(port2, port1)] = ports[port2]+"-"+ports[port1]
 
                 # create the pair for the second end of the line
-                port1 = i + self.getNumPorts()//2
-                port2 = j + self.getNumPorts()//2
-                pairs.add((port1, port2))
-                pairs.add((port2, port1))
+                port1 = i + len(ports)//2
+                port2 = j + len(ports)//2
+                pairs[(port1, port2)] = ports[port1]+"-"+ports[port2]
+                pairs[(port2, port1)] = ports[port2]+"-"+ports[port1]
 
         return pairs
 
     def computeParameter(self):
         # initialize the dictionaries for each port
         (dbNEXT, cpNEXT) = (dict(), dict())
-        for (i,j) in self._pairs:
+        for (i,j) in self._ports:
             dbNEXT[(i,j)] = list()
             cpNEXT[(i,j)] = list()
 
         # extract the NEXT values from the matrices
         for (f,_) in enumerate(self._freq):
-            for (i,j) in self._pairs:
+            for (i,j) in self._ports:
                 # get the value from the matrix
                 cpValue = self._matrices[f, i, j]
                 dbValue = complex2db(cpValue)
