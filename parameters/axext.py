@@ -1,9 +1,11 @@
 from parameters.parameter import PairedParameter, complex2db, order, diffDiffMatrix
 
-class ANEXT(PairedParameter):
+class AXEXT(PairedParameter):
     """
-        ANEXT is calculated by taking both the FEXT and the Insertion Loss of the disturbed hardware
-        For ANEXT measurements to be valid, the measurements must be done on the same side :
+        AXEXT represents both the ANEXT and the AFEXT.
+        It is calculated by taking both the FEXT and the Insertion Loss of the disturbed hardware
+        
+        For ANEXT measurements, the measurements must be done on the same side :
 
         measurement (disturbed) []------            --------//[]
                                         |           |
@@ -11,12 +13,21 @@ class ANEXT(PairedParameter):
                                          -----------
                                         |           |
         measurement (disturber) []------            --------//[]
+
+        For AFEXT measurements, the measurements must be done on the opposite side :
+
+        measurement (disturbed) []------            --------//[]
+                                        |           |
+                                         -----------
+                                         -----------
+                                        |           |
+                               []//------            --------[] measurement (disturber) 
     """
 
     def __init__(self, ports, freq, matrices, fext, il):
         self._fext = fext
         self._il = il
-        super(ANEXT, self).__init__(ports, freq, matrices)
+        super(AXEXT, self).__init__(ports, freq, matrices)
 
     def computePairs(self, ports):
         # create each pair for the ANEXT
@@ -39,27 +50,27 @@ class ANEXT(PairedParameter):
 
     def computeParameter(self):
         # initialize the dictionaries for each port
-        (dbANEXT, cpANEXT) = (dict(), dict())
+        (dbAXEXT, cpAXEXT) = (dict(), dict())
         dbIl = self._il.getParameter(full=False)
         cpIl = self._il.getComplexParameter(full=False)
         dbFext = self._fext.getParameter()
         cpFext = self._fext.getComplexParameter()
 
         for (i,j) in self._ports:
-            dbANEXT[(i,j)] = list()
-            cpANEXT[(i,j)] = list()
+            dbAXEXT[(i,j)] = list()
+            cpAXEXT[(i,j)] = list()
 
         # extract the ANEXT values from the fext and il
         for (f,_) in enumerate(self._freq):
             for (i,j) in self._ports:
                 if i==j:
-                    cpANEXT[(i,j)].append(cpIl[i][f])
-                    dbANEXT[(i,j)].append(dbIl[i][f])
+                    cpAXEXT[(i,j)].append(cpIl[i][f])
+                    dbAXEXT[(i,j)].append(dbIl[i][f])
                 else:
-                    cpANEXT[(i,j)].append(cpFext[(i,j)][f])
-                    dbANEXT[(i,j)].append(dbFext[(i,j)][f])
+                    cpAXEXT[(i,j)].append(cpFext[(i,j)][f])
+                    dbAXEXT[(i,j)].append(dbFext[(i,j)][f])
 
-        return (dbANEXT, cpANEXT)
+        return (dbAXEXT, cpAXEXT)
 
     def chooseMatrices(self, matrices):
         return diffDiffMatrix(matrices)

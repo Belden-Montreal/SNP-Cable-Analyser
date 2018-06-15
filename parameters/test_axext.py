@@ -4,14 +4,14 @@ from parameters.parameter import complex2db
 from parameters.test_parameter import TestParameter
 from parameters.fext import FEXT
 from parameters.insertionloss import InsertionLoss
-from parameters.anext import ANEXT
+from parameters.axext import AXEXT
 
-class TestANEXT(TestParameter):
+class TestAXEXT(TestParameter):
     def createParameter(self):
         #we assume that fext and il are tested
         fext = FEXT(self._ports, self._freq, self._matrices)
         il = InsertionLoss(self._ports, self._freq, self._matrices)
-        return ANEXT(self._ports, self._freq, self._matrices, fext, il)
+        return AXEXT(self._ports, self._freq, self._matrices, fext, il)
 
     def testComputePairs(self):
         pairs = self._parameter.getPairs()
