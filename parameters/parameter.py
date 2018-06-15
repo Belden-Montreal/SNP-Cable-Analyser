@@ -1,4 +1,6 @@
 import numpy as np
+import matplotlib.pyplot as plt
+
 from limits.Limit import Limit
 
 def diffDiffMatrix(matrices):
@@ -38,6 +40,7 @@ class Parameter(object):
         self._limit = None
         self._worstMargin = (dict(), None)
         self._worstValue = (dict(), None)
+        self._plot = None
 
     def chooseMatrices(self, mixedModeMatrices):
         raise NotImplementedError
@@ -56,6 +59,12 @@ class Parameter(object):
 
     def setLimit(self, limit):
         self._limit = limit
+
+    def getPorts(self):
+        return self._ports
+
+    def getPlot(self):
+        return self._plot
 
     def getWorstMargin(self):
         if len(self._worstMargin[0]):

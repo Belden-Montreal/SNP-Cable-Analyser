@@ -56,7 +56,18 @@ class TestParameter(unittest.TestCase):
 
         self._parameter = self.createParameter()
 
+    def testDrawPlot(self):
+        if type(self) == TestParameter:
+            return
+
+        # TODO: this should simply not crash
+        #
+        #   plot = self._parameter.getPlot()
+
     def createParameter(self):
+        if type(self) == TestParameter:
+            return
+
         raise NotImplemented
 
 if __name__ == '__main__':
