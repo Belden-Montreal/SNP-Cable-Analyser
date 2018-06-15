@@ -11,7 +11,7 @@ class TestTCTL(TestParameter):
         parameter = self._parameter.getComplexParameter()
 
         # there should be a parameter for each ports
-        self.assertEqual(len(parameter), len(self._ports)//2)
+        self.assertEqual(len(parameter), len(self._ports))
 
         # the number of sample should be the same as the number of frequencies
         self.assertEqual(len(parameter[0]), len(self._freq))

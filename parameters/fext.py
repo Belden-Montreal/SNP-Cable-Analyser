@@ -14,32 +14,32 @@ class FEXT(PairedParameter):
 
     We have the following pairs twice: (1,5), (1,6), (2,4), (2,6), (3,4), (3,5).
     '''
-    def computePairs(self):
+    def computePairs(self, ports):
         # create each pair for the NEXT
-        pairs = set()
-        for i in range(0, self.getNumPorts()//2):
-            for j in range(self.getNumPorts()//2, self.getNumPorts()):
-                if i == j or abs(i-j) == self.getNumPorts()//2:
+        pairs = dict()
+        for i in range(0, len(ports)//2):
+            for j in range(len(ports)//2, len(ports)):
+                if i == j or abs(i-j) == len(ports)//2:
                     continue
 
                 # create the pair for the first end of the line
-                pairs.add((i, j))
+                pairs[(i, j)] = ports[i]+"-"+ports[j]
 
                 # create the pair for the second end of the line
-                pairs.add((j, i))
+                pairs[(j, i)] = ports[j]+"-"+ports[i]
 
         return pairs
 
     def computeParameter(self):
         # initialize the dictionaries for each port
         (dbFEXT, cpFEXT) = (dict(), dict())
-        for (i,j) in self._pairs:
+        for (i,j) in self._ports:
             dbFEXT[(i,j)] = list()
             cpFEXT[(i,j)] = list()
 
         # extract the FEXT value from the matrices
         for (f,_) in enumerate(self._freq):
-            for (i,j) in self._pairs:
+            for (i,j) in self._ports:
                 # get the value from the matrix
                 cpValue = self._matrices[f, i, j]
                 dbValue = complex2db(cpValue)

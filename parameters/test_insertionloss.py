@@ -9,7 +9,7 @@ class TestInsertionLoss(TestParameter):
         return InsertionLoss(self._ports, self._freq, self._matrices)
 
     def testComputeParameter(self):
-        parameter = self._parameter.getComplexParameter()
+        parameter = self._parameter.getComplexParameter(full=False)
 
         # there should be a parameter for half the ports
         self.assertEqual(len(parameter), len(self._ports)//2)

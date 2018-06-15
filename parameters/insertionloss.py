@@ -37,13 +37,13 @@ class InsertionLoss(Parameter):
 
         return il, cpIl
 
-    def getParameter(self, full=False):
+    def getParameter(self, full=True):
         if not full:
             return {k: self._parameter[k] for k in sorted(self._parameter)[:len(self._ports)//2]}
         else:
             return self._parameter
 
-    def getComplexParameter(self, full=False):
+    def getComplexParameter(self, full=True):
         if not full:
             return {k: self._complexParameter[k] for k in sorted(self._complexParameter)[:len(self._ports)//2]}
         else:

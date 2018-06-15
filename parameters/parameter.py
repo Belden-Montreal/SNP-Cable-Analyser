@@ -128,14 +128,13 @@ class Parameter(object):
 
 class PairedParameter(Parameter):
     def __init__(self, ports, freq, mixedModeMatrices):
-        self._ports = ports
         self._freq = freq
         self._matrices = self.chooseMatrices(mixedModeMatrices)
-        self._pairs = self.computePairs()
+        self._ports = self.computePairs(ports)
         (self._parameter, self._complexParameter) = self.computeParameter()
         self._limit = Limit(self._parameter)
-
-    def computePairs(self):
+        
+    def computePairs(self, ports):
         """
         Compute the pairs of this parameter.
 
@@ -144,6 +143,6 @@ class PairedParameter(Parameter):
         raise NotImplementedError
 
     def getPairs(self):
-        return self._pairs
+        return self._ports
 
 
