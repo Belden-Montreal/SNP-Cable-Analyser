@@ -2,18 +2,15 @@ from parameters.parameter import PairedParameter, complex2db, order, diffDiffMat
 
 class ANEXT(PairedParameter):
     """
-    Example of NEXT for a 3 wires network.
-    
-             1   2   3   4   5   6
-    
-       1   [ _  1-2 1-3  _   _   _ ]
-       2   [1-2  _  2-3  _   _   _ ]
-       3   [1-3 2-3  _   _   _   _ ]
-       4   [ _   _   _   _  4-5 4-6]
-       5   [ _   _   _  4-5  _  5-6]
-       6   [ _   _   _  4-6 5-6  _ ]
+        ANEXT is calculated by taking both the FEXT and the Insertion Loss of the disturbed hardware
+        For ANEXT measurements to be valid, the measurements must be done on the same side :
 
-    We have the following pairs twice: (1,2), (1,3), (2,3), (4,5), (4,6), (5,6).
+        measurement (disturbed) []------            --------//[]
+                                        |           |
+                                         -----------
+                                         -----------
+                                        |           |
+        measurement (disturber) []------            --------//[]
     """
 
     def __init__(self, ports, freq, matrices, fext, il):
