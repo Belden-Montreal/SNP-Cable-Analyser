@@ -5,9 +5,11 @@ from parameters.test_parameter import TestParameter
 from parameters.next import NEXT
 
 class TestNEXT(TestParameter):
+    def createParameter(self):
+        return NEXT(self._ports, self._freq, self._matrices)
+
     def testComputePairs(self):
-        pNEXT = NEXT(self._ports, self._freq, self._matrices)
-        pairs = pNEXT.getPairs()
+        pairs = self._parameter.getPairs()
 
         # for a 4 ports, there is only 4 NEXT pairs (including reverse)
         self.assertEqual(len(pairs), 4)
@@ -19,8 +21,7 @@ class TestNEXT(TestParameter):
         self.assertEqual((3,2) in pairs, True)
 
     def testComputeParameter(self):
-        pNEXT = NEXT(self._ports, self._freq, self._matrices)
-        parameter = pNEXT.getParameter()
+        parameter = self._parameter.getParameter()
 
         # for a 4 ports, there is only 4 NEXT pairs (including reverse)
         self.assertEqual(len(parameter), 4)
@@ -56,8 +57,7 @@ class TestNEXT(TestParameter):
         self.assertAlmostEqual(parameter[(3,2)][3], complex2db(self._matrices[3, 3, 2]))
 
     def testComputeComplexParameter(self):
-        pNEXT = NEXT(self._ports, self._freq, self._matrices)
-        parameter = pNEXT.getComplexParameter()
+        parameter = self._parameter.getComplexParameter()
 
         # for a 4 ports, there is only 4 NEXT pairs (including reverse)
         self.assertEqual(len(parameter), 4)
