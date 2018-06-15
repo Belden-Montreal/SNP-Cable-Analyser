@@ -41,7 +41,7 @@ class SNPAnalyzer(object):
         self._snpFile = snpFile
 
     def getMM(self):
-        return self._mm, self._freq, self._rs.number_of_ports
+        return self._mm, self._freq, self._rs.number_of_ports//2
 
     def getFreqUnit(self):
         return self._rs.frequency.unit

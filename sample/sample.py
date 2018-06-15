@@ -10,23 +10,19 @@ class Sample(object):
         if snpFile:
             self._snp = SNPAnalyzer(snpFile)
             self._mm, self._freq, self._portsNumber = self._snp.getMM()
-            self._name, self._extension, self._date = self._snp.getFileInfo()
+            (self._name, self._extension), self._date = self._snp.getFileInfo()
             self._ports = dict()
             self.setPorts()
             self.addParameters()
-
+            self.standard = None
 
     def addParameters(self):
         raise NotImplementedError
 
     def setStandard(self, standard):
-        for name, parameter in self._parameters:
-            parameter.setLimit(standard.limits[name])
-
-    def parameters(self):
-        return self._parameters
+        for name, parameter in self._parameters.items():
+                parameter.setLimit(standard.limits[name])
 
     def setPorts(self):
         for i in range(self._portsNumber):
             self._ports[i] = PORTS_NAME[i]
-    
