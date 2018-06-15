@@ -6,9 +6,11 @@ from limits.Standard import Standard
 from limits.Limit import Limit
 
 class TestReturnLoss(TestParameter):
+    def createParameter(self):
+        return ReturnLoss(self._ports, self._freq, self._matrices)
+
     def testComputeParameter(self):
-        rl = ReturnLoss(self._ports, self._freq, self._matrices)
-        parameter = rl.getParameter()
+        parameter = self._parameter.getParameter()
 
         # there should be a parameter for each ports
         self.assertEqual(len(parameter), len(self._ports))
@@ -44,8 +46,7 @@ class TestReturnLoss(TestParameter):
         self.assertEqual(parameter[3][3], complex2db(self._matrices[3, 3, 3]))
 
     def testComputeComplexParameter(self):
-        rl = ReturnLoss(self._ports, self._freq, self._matrices)
-        parameter = rl.getComplexParameter()
+        parameter = self._parameter.getComplexParameter()
 
         # there should be a parameter for each ports
         self.assertEqual(len(parameter), len(self._ports))
@@ -81,74 +82,72 @@ class TestReturnLoss(TestParameter):
         self.assertEqual(parameter[3][3], self._matrices[3, 3, 3])
 
     def testWorstMargin(self):
-        rl = ReturnLoss(self._ports, self._freq, self._matrices)
         l = complex2db(50)
         limit = Limit("RL", ["-"+str(l)])
-        rl.setLimit(limit)
-        worstMargin = rl.getWorstMargin()
+        self._parameter.setLimit(limit)
+        worstMargin = self._parameter.getWorstMargin()
 
-        #make sure we get a correct tuple
+        # make sure we get a correct tuple
         self.assertEqual(len(worstMargin), 2)
 
-        #margin should not pass
+        # margin should not pass
         self.assertFalse(worstMargin[1])
 
-        #check worst margin for port 1
+        # check worst margin for port 1
         self.assertAlmostEqual(worstMargin[0][0][0], complex2db(193))
         self.assertAlmostEqual(worstMargin[0][0][1], 400)
         self.assertAlmostEqual(worstMargin[0][0][2], l)
         self.assertAlmostEqual(worstMargin[0][0][3], abs(l-complex2db(193)))
 
-        #check worst margin for port 2
+        # check worst margin for port 2
         self.assertAlmostEqual(worstMargin[0][1][0], complex2db(202))
         self.assertAlmostEqual(worstMargin[0][1][1], 400)
         self.assertAlmostEqual(worstMargin[0][1][2], l)
         self.assertAlmostEqual(worstMargin[0][1][3], abs(l-complex2db(202)))
 
-        #check worst margin for port 3
+        # check worst margin for port 3
         self.assertAlmostEqual(worstMargin[0][2][0], complex2db(211))
         self.assertAlmostEqual(worstMargin[0][2][1], 400)
         self.assertAlmostEqual(worstMargin[0][2][2], l)
         self.assertAlmostEqual(worstMargin[0][2][3], abs(l-complex2db(211)))
 
-        #check worst margin for port 4
+        # check worst margin for port 4
         self.assertAlmostEqual(worstMargin[0][3][0], complex2db(220))
         self.assertAlmostEqual(worstMargin[0][3][1], 400)
         self.assertAlmostEqual(worstMargin[0][3][2], l)
         self.assertAlmostEqual(worstMargin[0][3][3], abs(l-complex2db(220)))
 
     def testWorstValue(self):
-        rl = ReturnLoss(self._ports, self._freq, self._matrices)
         l = complex2db(50)
         limit = Limit("RL", ["-"+str(l)])
-        rl.setLimit(limit)
-        worstValue = rl.getWorstValue()
+        self._parameter.setLimit(limit)
+        worstValue = self._parameter.getWorstValue()
 
-        #make sure we get a correct tuple
+        # make sure we get a correct tuple
         self.assertEqual(len(worstValue), 2)
 
-        #margin should not pass
+        # margin should not pass
         self.assertFalse(worstValue[1])
 
-        #check worst margin for port 1
+        # check worst margin for port 1
         self.assertAlmostEqual(worstValue[0][0][0], complex2db(193))
         self.assertAlmostEqual(worstValue[0][0][1], 400)
         self.assertAlmostEqual(worstValue[0][0][2], l)
         self.assertAlmostEqual(worstValue[0][0][3], abs(l-complex2db(193)))
 
-        #check worst margin for port 2
+        # check worst margin for port 2
         self.assertAlmostEqual(worstValue[0][1][0], complex2db(202))
         self.assertAlmostEqual(worstValue[0][1][1], 400)
         self.assertAlmostEqual(worstValue[0][1][2], l)
         self.assertAlmostEqual(worstValue[0][1][3], abs(l-complex2db(202)))
 
-        #check worst margin for port 3
+        # check worst margin for port 3
         self.assertAlmostEqual(worstValue[0][2][0], complex2db(211))
         self.assertAlmostEqual(worstValue[0][2][1], 400)
         self.assertAlmostEqual(worstValue[0][2][2], l)
         self.assertAlmostEqual(worstValue[0][2][3], abs(l-complex2db(211)))
 
-        #check worst margin for port 4
+        # check worst margin for port 4
         self.assertAlmostEqual(worstValue[0][3][0], complex2db(220))
         self.assertAlmostEqual(worstValue[0][3][1], 400)
         self.assertAlmostEqual(worstValue[0][3][2], l)

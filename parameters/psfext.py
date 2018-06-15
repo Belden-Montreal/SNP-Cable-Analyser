@@ -28,3 +28,6 @@ class PSFEXT(Parameter):
 
     def chooseMatrices(self, matrices):
         return diffDiffMatrix(matrices)
+
+    def getFEXT(self):
+        return self._fext

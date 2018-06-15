@@ -4,9 +4,11 @@ from parameters.test_parameter import TestParameter
 from parameters.cmdmrl import CMDMRL
 
 class TestCMDMRL(TestParameter):
+    def createParameter(self):
+        return CMDMRL(self._ports, self._freq, self._matrices)
+
     def testComputeParameter(self):
-        cmdmrl = CMDMRL(self._ports, self._freq, self._matrices)
-        parameter = cmdmrl.getComplexParameter()
+        parameter = self._parameter.getComplexParameter()
 
         # there should be a parameter for each ports
         self.assertEqual(len(parameter), len(self._ports))

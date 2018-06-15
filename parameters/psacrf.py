@@ -7,15 +7,15 @@ class PSACRF(Parameter):
         
         where PSFEXT_k is the PSFEXT on wire k and IL_k is the Insertion Loss on wire k
     '''
-    def __init__(self, ports, freq, matrices, psFext, il):
-        self._psFext = psFext
+    def __init__(self, ports, freq, matrices, psfext, il):
+        self._psfext = psfext
         self._il = il
         super(PSACRF, self).__init__(ports, freq, matrices)
     
     def computeParameter(self):
         
         psacrf = dict()
-        psfext = self._psFext.getParameter()
+        psfext = self._psfext.getParameter()
         il = self._il.getParameter(full=True)
 
         for port in self._ports:
@@ -28,3 +28,9 @@ class PSACRF(Parameter):
 
     def chooseMatrices(self, matrices):
         return diffDiffMatrix(matrices)
+
+    def getPSFEXT(self):
+        return self._psfext
+
+    def getIL(self):
+        return self._il

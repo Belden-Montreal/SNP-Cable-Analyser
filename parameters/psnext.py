@@ -43,3 +43,6 @@ class PSNEXT(Parameter):
 
     def chooseMatrices(self, matrices):
         return diffDiffMatrix(matrices)
+
+    def getNEXT(self):
+        return self._next

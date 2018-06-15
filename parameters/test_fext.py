@@ -5,9 +5,11 @@ from parameters.test_parameter import TestParameter
 from parameters.fext import FEXT
 
 class TestFEXT(TestParameter):
+    def createParameter(self):
+        return FEXT(self._ports, self._freq, self._matrices)
+
     def testComputePairs(self):
-        pFEXT = FEXT(self._ports, self._freq, self._matrices)
-        pairs = pFEXT.getPairs()
+        pairs = self._parameter.getPairs()
 
         # for a 4 ports, there are 4 FEXT pairs (including reverse)
         self.assertEqual(len(pairs), 4)
@@ -19,8 +21,7 @@ class TestFEXT(TestParameter):
         self.assertEqual((2,1) in pairs, True)       
 
     def testComputeParameter(self):
-        pFEXT = FEXT(self._ports, self._freq, self._matrices)
-        parameter = pFEXT.getParameter()
+        parameter = self._parameter.getParameter()
 
         # for a 4 ports, there are 4 FEXT pairs (including reverse)
         self.assertEqual(len(parameter), 4)
@@ -56,8 +57,7 @@ class TestFEXT(TestParameter):
         self.assertEqual(parameter[(0,3)][3], complex2db(self._matrices[3, 0, 3]))
 
     def testComputeComplexParameter(self):
-        pFEXT = FEXT(self._ports, self._freq, self._matrices)
-        parameter = pFEXT.getComplexParameter()
+        parameter = self._parameter.getComplexParameter()
 
         # for a 4 ports, there are 4 FEXT pairs (including reverse)
         self.assertEqual(len(parameter), 4)

@@ -4,9 +4,11 @@ from parameters.test_parameter import TestParameter
 from parameters.lcl import LCL
 
 class TestLCL(TestParameter):
+    def createParameter(self):
+        return LCL(self._ports, self._freq, self._matrices)
+
     def testComputeParameter(self):
-        lcl = LCL(self._ports, self._freq, self._matrices)
-        parameter = lcl.getParameter()
+        parameter = self._parameter.getParameter()
 
         # there should be a parameter for each ports
         self.assertEqual(len(parameter), len(self._ports))
@@ -42,8 +44,7 @@ class TestLCL(TestParameter):
         self.assertAlmostEqual(parameter[3][3], complex2db(self._matrices[3, 3, 7]))
 
     def testComputeComplexParameter(self):
-        lcl = LCL(self._ports, self._freq, self._matrices)
-        parameter = lcl.getComplexParameter()
+        parameter = self._parameter.getComplexParameter()
 
         # there should be a parameter for each ports
         self.assertEqual(len(parameter), len(self._ports))

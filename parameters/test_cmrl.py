@@ -5,9 +5,11 @@ from parameters.test_parameter import TestParameter
 from parameters.cmrl import CMRL
 
 class TestCMRL(TestParameter):
+    def createParameter(self):
+        return CMRL(self._ports, self._freq, self._matrices)
+
     def testComputeParameter(self):
-        pCMRL = CMRL(self._ports, self._freq, self._matrices)
-        parameter = pCMRL.getParameter()
+        parameter = self._parameter.getParameter()
 
         # there should be a parameter for each ports
         self.assertEqual(len(parameter), len(self._ports))
@@ -43,8 +45,7 @@ class TestCMRL(TestParameter):
         self.assertEqual(parameter[3][3], complex2db(self._matrices[3, 7, 7]))
 
     def testComputeComplexParameter(self):
-        pCMRL = CMRL(self._ports, self._freq, self._matrices)
-        parameter = pCMRL.getComplexParameter()
+        parameter = self._parameter.getComplexParameter()
 
         # there should be a parameter for each ports
         self.assertEqual(len(parameter), len(self._ports))

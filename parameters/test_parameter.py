@@ -54,5 +54,10 @@ class TestParameter(unittest.TestCase):
             ]
         ], np.int32)
 
+        self._parameter = self.createParameter()
+
+    def createParameter(self):
+        raise NotImplemented
+
 if __name__ == '__main__':
     unittest.main()

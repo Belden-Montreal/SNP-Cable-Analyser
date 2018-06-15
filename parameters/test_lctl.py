@@ -5,9 +5,12 @@ from parameters.lctl import LCTL
 from parameters.parameter import complex2db
 
 class TestLCTL(TestParameter):
+    def createParameter(self):
+        return LCTL(self._ports, self._freq, self._matrices)
+
+
     def testComputeParameter(self):
-        lctl = LCTL(self._ports, self._freq, self._matrices)
-        parameter = lctl.getParameter()
+        parameter = self._parameter.getParameter()
 
         # there should be a parameter for each ports
         self.assertEqual(len(parameter), len(self._ports))
@@ -29,8 +32,7 @@ class TestLCTL(TestParameter):
         self.assertAlmostEqual(parameter[1][3], complex2db(self._matrices[3, 1, 7]))
 
     def testComputeComplexParameter(self):
-        lctl = LCTL(self._ports, self._freq, self._matrices)
-        parameter = lctl.getComplexParameter()
+        parameter = self._parameter.getComplexParameter()
 
         # there should be a parameter for each ports
         self.assertEqual(len(parameter), len(self._ports))
