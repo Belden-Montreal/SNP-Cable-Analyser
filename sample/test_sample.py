@@ -1,5 +1,6 @@
 import unittest
 import numpy as np
+from parameters.parameter_factory import ParameterFactory
 
 class TestSample(unittest.TestCase):
     def setUp(self):
@@ -58,4 +59,5 @@ class TestSample(unittest.TestCase):
         s._freq = self._freq
         s._portsNumber = 4
         s.setPorts()
+        s._factory = ParameterFactory(self._ports, self._freq, self._mm, s._parameters)
         s.addParameters()

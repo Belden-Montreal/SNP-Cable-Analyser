@@ -19,29 +19,35 @@ from parameters.acrf import ACRF
 from parameters.eltctl import ELTCTL
 from parameters.fext import FEXT
 
-parameters = {
-    "RL":lambda ports, freq, matrix, params: ReturnLoss(ports, freq, matrix),
-    "IL":lambda ports, freq, matrix, params: InsertionLoss(ports, freq, matrix),
-    "NEXT":lambda ports, freq, matrix, params: NEXT(ports, freq, matrix),
-    "PSNEXT":lambda ports, freq, matrix, params: PSNEXT(ports, freq, matrix, params["NEXT"]),
-    "Propagation Delay":lambda ports, freq, matrix, params: PropagationDelay(ports, freq, matrix, params["RL"]),
-    "FEXT":lambda ports, freq, matrix, params: FEXT(ports, freq, matrix),
-    "PSFEXT":lambda ports, freq, matrix, params: PSFEXT(ports, freq, matrix, params["FEXT"]),
-    "ACRF":lambda ports, freq, matrix, params: ACRF(ports, freq, matrix, params["FEXT"], params["IL"]),
-    "PSACRF":lambda ports, freq, matrix, params: PSACRF(ports, freq, matrix, params["PSFEXT"], params["IL"]),
-    "LCL":lambda ports, freq, matrix, params: LCL(ports, freq, matrix),
-    "LCTL":lambda ports, freq, matrix, params: LCTL(ports, freq, matrix),
-    "TCL":lambda ports, freq, matrix, params: TCL(ports, freq, matrix),
-    "TCTL":lambda ports, freq, matrix, params: TCTL(ports, freq, matrix),
-    "ELTCTL":lambda ports, freq, matrix, params: ELTCTL(ports, freq, matrix, params["IL"], params["TCTL"]),
-    "CMRL":lambda ports, freq, matrix, params: CMRL(ports, freq, matrix),
-    "CMNEXT":lambda ports, freq, matrix, params: CMNEXT(ports, freq, matrix),
-    "CMDMNEXT":lambda ports, freq, matrix, params: CMDMNEXT(ports, freq, matrix),
-    "CMDMRL":lambda ports, freq, matrix, params: CMDMRL(ports, freq, matrix),
-    "DMCMNEXT":lambda ports, freq, matrix, params: DMCMNEXT(ports, freq, matrix),
-    "DMCMRL":lambda ports, freq, matrix, params: DMCMRL(ports, freq, matrix),
-}
 class ParameterFactory(object):
 
-    def getParameter(self, name, ports, freq, matrix, params):
-        return parameters[name](ports, freq, matrix, params)
+    def __init__(self, ports, freq, matrix, params):
+        self._ports = ports
+        self._freq = freq
+        self._matrix = matrix
+        self._params = params
+        self.__parameters = {
+            "RL":lambda: ReturnLoss(self._ports, self._freq, self._matrix),
+            "IL":lambda: InsertionLoss(self._ports, self._freq, self._matrix),
+            "NEXT":lambda: NEXT(self._ports, self._freq, self._matrix),
+            "PSNEXT":lambda: PSNEXT(self._ports, self._freq, self._matrix, self._params["NEXT"]),
+            "Propagation Delay":lambda: PropagationDelay(self._ports, self._freq, self._matrix, self._params["RL"]),
+            "FEXT":lambda: FEXT(self._ports, self._freq, self._matrix),
+            "PSFEXT":lambda: PSFEXT(self._ports, self._freq, self._matrix, self._params["FEXT"]),
+            "ACRF":lambda: ACRF(self._ports, self._freq, self._matrix, self._params["FEXT"], self._params["IL"]),
+            "PSACRF":lambda: PSACRF(self._ports, self._freq, self._matrix, self._params["PSFEXT"], self._params["IL"]),
+            "LCL":lambda: LCL(self._ports, self._freq, self._matrix),
+            "LCTL":lambda: LCTL(self._ports, self._freq, self._matrix),
+            "TCL":lambda: TCL(self._ports, self._freq, self._matrix),
+            "TCTL":lambda: TCTL(self._ports, self._freq, self._matrix),
+            "ELTCTL":lambda: ELTCTL(self._ports, self._freq, self._matrix, self._params["IL"], self._params["TCTL"]),
+            "CMRL":lambda: CMRL(self._ports, self._freq, self._matrix),
+            "CMNEXT":lambda: CMNEXT(self._ports, self._freq, self._matrix),
+            "CMDMNEXT":lambda: CMDMNEXT(self._ports, self._freq, self._matrix),
+            "CMDMRL":lambda: CMDMRL(self._ports, self._freq, self._matrix),
+            "DMCMNEXT":lambda: DMCMNEXT(self._ports, self._freq, self._matrix),
+            "DMCMRL":lambda: DMCMRL(self._ports, self._freq, self._matrix),
+        }
+
+    def getParameter(self, name):
+        return self.__parameters[name]

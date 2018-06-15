@@ -16,8 +16,8 @@ class TestSNPAnalyzer(unittest.TestCase):
     def testFileReading(self):
         snp = SNPAnalyzer(self._file)
         mm, freq, nPorts = snp.getMM()
-        #should have 8 ports
-        self.assertEqual(nPorts, 8)
+        #should have 4 pairs
+        self.assertEqual(nPorts, 4)
         
         #first frequency should be 300000
         self.assertAlmostEqual(freq[0], 300000.0)

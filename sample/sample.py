@@ -1,4 +1,5 @@
 from sample.snp_analyzer import SNPAnalyzer
+from parameters.parameter_factory import ParameterFactory
 
 PORTS_NAME = ["45", "12", "36", "78"]
 class Sample(object):
@@ -13,6 +14,7 @@ class Sample(object):
             (self._name, self._extension), self._date = self._snp.getFileInfo()
             self._ports = dict()
             self.setPorts()
+            self._factory = ParameterFactory(self._ports, self._freq, self._mm, self._parameters)
             self.addParameters()
             self.standard = None
 
