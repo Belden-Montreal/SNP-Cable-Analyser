@@ -50,4 +50,4 @@ class ParameterFactory(object):
         }
 
     def getParameter(self, name):
-        return self.__parameters[name]
+        return self.__parameters[name]()
