@@ -12,7 +12,9 @@ class Project(object):
 
     def importSamples(self, fileNames):
         pool = ThreadPool()
-        self._samples.extend(pool.map(self.__createSample, fileNames))
+        samples = pool.map(self.__createSample, fileNames)
+        self._samples.extend(samples)
+        return samples
 
     def removeSamples(self, names):
         self._samples = [x for x in self._samples if x.name not in names]
@@ -65,6 +67,9 @@ class Project(object):
             
                     curPos += numSignals*2
         workbook.close()
+
+    def findSamplesByName(self, names):
+        return [x for x in self._samples if x.name in names]
 
     def __createSample(self, name):
         return EndToEnd(name)
