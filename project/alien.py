@@ -1,5 +1,8 @@
 from project.project import Project
-from sample.end_to_end import EndToEnd
+from sample.disturber import Disturber
+from sample.victim import Victim
+from multiprocessing.dummy import Pool as ThreadPool
+
 
 class Alien(Project):
     '''
@@ -8,19 +11,31 @@ class Alien(Project):
     def __init__(self):
         super(Alien, self).__init__()
         self._victim = None
-        self._disturbers = None
-        self._alienSample = None
+        self._disturbers = list()
+        self._axextd = None
 
     def importSamples(self, fileNames, disturber=False):
         if disturber:
-            self._disturbers = super(Alien, self).importSamples(fileNames)
-            return self._disturbers
+            pool = ThreadPool()
+            self._disturbers.extend(pool.map(self.__createDisturbers, fileNames))
+            self._axextd = self.calculateAXEXTD()
         elif len(fileNames) < 2:
-            self._victim = EndToEnd(fileNames[0])
-            self._samples.append(self._victim)
-            return self._victim
+            if len(self._disturbers):
+                self._victim = self.__createVictim(fileNames[0], self._axextd)
+                self._samples.append(self._victim)
+            else:
+                print("can't import victim before disturbers")
         else:
             print("can't import multiple victims")
 
+    def calculateAXEXTD(self):
+        return [disturber.parameters["AXEXT"] for disturber in self._disturbers]
+
     def generateExcel(self, outputName, sampleNames, z=False):
         raise NotImplementedError
+
+    def __createDisturbers(self, name):
+        return Disturber(name)
+
+    def __createVictim(self, name, axextd):
+        return Victim(name, axextd)

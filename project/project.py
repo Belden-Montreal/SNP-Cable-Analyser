@@ -12,9 +12,7 @@ class Project(object):
 
     def importSamples(self, fileNames):
         pool = ThreadPool()
-        samples = pool.map(self.__createSample, fileNames)
-        self._samples.extend(samples)
-        return samples
+        self._samples.extend(pool.map(self.__createSample, fileNames))
 
     def removeSamples(self, names):
         self._samples = [x for x in self._samples if x.name not in names]
