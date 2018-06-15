@@ -5,9 +5,11 @@ from parameters.test_parameter import TestParameter
 from parameters.insertionloss import InsertionLoss
 
 class TestInsertionLoss(TestParameter):
+    def createParameter(self):
+        return InsertionLoss(self._ports, self._freq, self._matrices)
+
     def testComputeParameter(self):
-        il = InsertionLoss(self._ports, self._freq, self._matrices)
-        parameter = il.getComplexParameter()
+        parameter = self._parameter.getComplexParameter()
 
         # there should be a parameter for half the ports
         self.assertEqual(len(parameter), len(self._ports)//2)
@@ -28,7 +30,11 @@ class TestInsertionLoss(TestParameter):
         self.assertEqual(parameter[1][2], self._matrices[2, 1, 1+len(self._ports)//2])
         self.assertEqual(parameter[1][3], self._matrices[3, 1, 1+len(self._ports)//2])
 
-        parameter = il.getComplexParameter(full=True)
+    def testComputeComplexParameter(self):
+        parameter = self._parameter.getComplexParameter(full=True)
+
+        # there should be a parameter for half the ports
+        self.assertEqual(len(parameter), len(self._ports))
 
         # the number of sample should be the same as the number of frequencies
         self.assertEqual(len(parameter[2]), len(self._freq))
@@ -47,11 +53,10 @@ class TestInsertionLoss(TestParameter):
         self.assertEqual(parameter[3][3], self._matrices[3, 1+len(self._ports)//2, 1])
 
     def testWorstMargin(self):
-        il = InsertionLoss(self._ports, self._freq, self._matrices)
         l = complex2db(50)
         limit = Limit("IL", ["-"+str(l)])
-        il.setLimit(limit)
-        worstMargin = il.getWorstMargin()
+        self._parameter.setLimit(limit)
+        worstMargin = self._parameter.getWorstMargin()
 
         #make sure we get a correct tuple
         self.assertEqual(len(worstMargin), 2)
@@ -84,11 +89,10 @@ class TestInsertionLoss(TestParameter):
         self.assertAlmostEqual(worstMargin[0][3][3], abs(complex2db(26)-l))
 
     def testWorstValue(self):
-        il = InsertionLoss(self._ports, self._freq, self._matrices)
         l = complex2db(50)
         limit = Limit("IL", ["-"+str(l)])
-        il.setLimit(limit)
-        worstValue = il.getWorstValue()
+        self._parameter.setLimit(limit)
+        worstValue = self._parameter.getWorstValue()
 
         #make sure we get a correct tuple
         self.assertEqual(len(worstValue), 2)
