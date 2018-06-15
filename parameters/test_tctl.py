@@ -4,9 +4,11 @@ from parameters.test_parameter import TestParameter
 from parameters.tctl import TCTL
 
 class TestTCTL(TestParameter):
+    def createParameter(self):
+        return TCTL(self._ports, self._freq, self._matrices)
+
     def testComputeParameter(self):
-        tctl = TCTL(self._ports, self._freq, self._matrices)
-        parameter = tctl.getComplexParameter()
+        parameter = self._parameter.getComplexParameter()
 
         # there should be a parameter for each ports
         self.assertEqual(len(parameter), len(self._ports)//2)
