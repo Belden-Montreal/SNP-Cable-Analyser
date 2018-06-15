@@ -18,6 +18,9 @@ from parameters.psfext import PSFEXT
 from parameters.acrf import ACRF
 from parameters.eltctl import ELTCTL
 from parameters.fext import FEXT
+from parameters.axext import AXEXT
+from parameters.psaxext import PSAXEXT
+from parameters.psaacrx import PSAACRX
 
 class ParameterFactory(object):
 
@@ -47,6 +50,9 @@ class ParameterFactory(object):
             "CMDMRL":lambda: CMDMRL(self._ports, self._freq, self._matrix),
             "DMCMNEXT":lambda: DMCMNEXT(self._ports, self._freq, self._matrix),
             "DMCMRL":lambda: DMCMRL(self._ports, self._freq, self._matrix),
+            "AXEXT":lambda: AXEXT(self._ports, self._freq, self._matrix, self._params["FEXT"], self._params["IL"]),
+            "PSAXEXT":lambda: PSAXEXT(self._ports, self._freq, self._matrix, self._params["AXEXTD"]),
+            "PSAACRX":lambda:PSAACRX(self._ports, self._freq, self._matrix, self._params["PSAXEXT"], self._params["IL"]),
         }
 
     def getParameter(self, name):
