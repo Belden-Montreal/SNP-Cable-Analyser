@@ -29,3 +29,9 @@ class ELTCTL(Parameter):
 
     def chooseMatrices(self, matrices):
         return None
+
+    def getIL(self):
+        return self._il
+
+    def getTCTL(self):
+        return self._tctl
