@@ -111,6 +111,12 @@ class Parameter(object):
     def getNumPorts(self):
         return len(self._ports)
 
+    def getName(self):
+        raise NotImplemented
+
+    def getDescription(self):
+        raise NotImplemented
+
 class PairedParameter(Parameter):
     def __init__(self, ports, freq, mixedModeMatrices):
         self._ports = ports
