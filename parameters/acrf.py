@@ -27,3 +27,9 @@ class ACRF(Parameter):
     
     def chooseMatrices(self, matrices):
         return diffDiffMatrix(matrices)
+
+    def getFEXT(self):
+        return self._fext
+
+    def getIL(self):
+        return self._il
