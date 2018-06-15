@@ -28,3 +28,20 @@ class Sample(object):
     def setPorts(self):
         for i in range(self._portsNumber):
             self._ports[i] = PORTS_NAME[i]
+    
+    @property
+    def name(self):
+        return self._name
+
+    @property
+    def freq(self):
+        return self._freq
+
+    @property
+    def parameters(self):
+        return self._parameters
+
+    @property
+    def portsNumber(self):
+        return self._portsNumber
+
