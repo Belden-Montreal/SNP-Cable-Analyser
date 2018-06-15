@@ -6,8 +6,30 @@ class EndToEnd(Sample):
         super(EndToEnd, self).__init__(snpFile)
 
     def addParameters(self):
-        parameters_name = ["RL", "IL", "NEXT", "Propagation Delay", "PSNEXT","FEXT", "PSFEXT", "ACRF", "PSACRF", "LCL", "LCTL", "TCL", "TCTL", "ELTCTL","CMRL", "CMNEXT", "CMDMNEXT", "CMDMRL", "DMCMNEXT", "DMCMRL"]
-        for parameter in parameters_name:
+        parameters = [
+            "RL",
+            "IL",
+            "NEXT",
+            "Propagation Delay",
+            "PSNEXT",
+            "FEXT",
+            "PSFEXT",
+            "ACRF",
+            "PSACRF",
+            "LCL",
+            "LCTL",
+            "TCL",
+            "TCTL",
+            "ELTCTL",
+            "CMRL",
+            "CMNEXT",
+            "CMDMNEXT",
+            "CMDMRL",
+            "DMCMNEXT",
+            "DMCMRL"
+        ]
+
+        for parameter in parameters:
             self._parameters[parameter] = self._factory.getParameter(parameter)
 
     def setPorts(self):
