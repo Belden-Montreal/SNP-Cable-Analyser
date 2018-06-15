@@ -5,9 +5,11 @@ from parameters.test_parameter import TestParameter
 from parameters.dmcmnext import DMCMNEXT
 
 class TestDMCMNEXT(TestParameter):
+    def createParameter(self):
+        return DMCMNEXT(self._ports, self._freq, self._matrices)
+
     def testComputePairs(self):
-        pDMCMNEXT = DMCMNEXT(self._ports, self._freq, self._matrices)
-        pairs = pDMCMNEXT.getPairs()
+        pairs = self._parameter.getPairs()
 
         # for a 4 ports, there is only 4 DMCMNEXT pairs (including reverse)
         self.assertEqual(len(pairs), 4)
@@ -19,8 +21,7 @@ class TestDMCMNEXT(TestParameter):
         self.assertEqual((3,2) in pairs, True)
 
     def testComputeParameter(self):
-        pDMCMNEXT = DMCMNEXT(self._ports, self._freq, self._matrices)
-        parameter = pDMCMNEXT.getParameter()
+        parameter = self._parameter.getParameter()
 
         # for a 4 ports, there is only 4 DMCMNEXT pairs (including reverse)
         self.assertEqual(len(parameter), 4)
@@ -56,8 +57,7 @@ class TestDMCMNEXT(TestParameter):
         self.assertAlmostEqual(parameter[(3,2)][3], complex2db(self._matrices[3, 3, 6]))
 
     def testComputeComplexParameter(self):
-        pDMCMNEXT = DMCMNEXT(self._ports, self._freq, self._matrices)
-        parameter = pDMCMNEXT.getComplexParameter()
+        parameter = self._parameter.getComplexParameter()
 
         # for a 4 ports, there is only 4 DMCMNEXT pairs (including reverse)
         self.assertEqual(len(parameter), 4)
