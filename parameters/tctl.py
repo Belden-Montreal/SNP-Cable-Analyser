@@ -15,3 +15,6 @@ class TCTL(InsertionLoss):
 
     def chooseMatrices(self, matrices):
         return comDiffMatrix(matrices)
+
+    def getName(self):
+        return "TCTL"

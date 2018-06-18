@@ -34,3 +34,6 @@ class PSACRF(Parameter):
 
     def getIL(self):
         return self._il
+
+    def getName(self):
+        return "PSACRF"

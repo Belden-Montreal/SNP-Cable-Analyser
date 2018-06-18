@@ -35,3 +35,6 @@ class ELTCTL(Parameter):
 
     def getTCTL(self):
         return self._tctl
+
+    def getName(self):
+        return "ELTCTL"

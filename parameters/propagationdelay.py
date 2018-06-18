@@ -48,3 +48,6 @@ class PropagationDelay(Parameter):
 
     def chooseMatrices(self, matrices):
         return None
+
+    def getName(self):
+        return "Propagation Delay"

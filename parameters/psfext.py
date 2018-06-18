@@ -31,3 +31,6 @@ class PSFEXT(Parameter):
 
     def getFEXT(self):
         return self._fext
+
+    def getName(self):
+        return "PSFEXT"

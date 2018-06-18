@@ -121,10 +121,10 @@ class Parameter(object):
         return len(self._ports)
 
     def getName(self):
-        raise NotImplemented
+        raise NotImplementedError
 
     def getDescription(self):
-        raise NotImplemented
+        raise NotImplementedError
 
 class PairedParameter(Parameter):
     def __init__(self, ports, freq, mixedModeMatrices):
@@ -133,6 +133,7 @@ class PairedParameter(Parameter):
         self._ports = self.computePairs(ports)
         (self._parameter, self._complexParameter) = self.computeParameter()
         self._limit = Limit(self._parameter)
+        self._plot = None
         
     def computePairs(self, ports):
         """

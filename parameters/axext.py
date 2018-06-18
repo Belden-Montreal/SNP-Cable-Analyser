@@ -74,3 +74,6 @@ class AXEXT(PairedParameter):
 
     def chooseMatrices(self, matrices):
         return diffDiffMatrix(matrices)
+
+    def getName(self):
+        return "AXEXT"

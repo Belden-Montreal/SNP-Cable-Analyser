@@ -49,3 +49,6 @@ class ACRF(PairedParameter):
 
     def getIL(self):
         return self._il
+
+    def getName(self):
+        return "ACRF"

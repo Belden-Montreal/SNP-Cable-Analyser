@@ -15,3 +15,6 @@ class LCTL(InsertionLoss):
 
     def chooseMatrices(self, matrices):
         return diffComMatrix(matrices)
+
+    def getName(self):
+        return "LCTL"

@@ -62,13 +62,18 @@ class TestParameter(unittest.TestCase):
 
         # TODO: this should simply not crash
         #
-        #   plot = self._parameter.getPlot()
+        plot = self._parameter.getPlot()
 
     def createParameter(self):
         if type(self) == TestParameter:
             return
 
-        raise NotImplemented
+        raise NotImplementedError
+
+    def testName(self):
+        if type(self) == TestParameter:
+            return
+        self.assertEqual(isinstance(self._parameter.getName(), str), True)
 
 if __name__ == '__main__':
     unittest.main()

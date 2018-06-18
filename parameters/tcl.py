@@ -16,3 +16,6 @@ class TCL(ReturnLoss):
 
     def chooseMatrices(self, matrices):
         return comDiffMatrix(matrices)
+
+    def getName(self):
+        return "TCL"

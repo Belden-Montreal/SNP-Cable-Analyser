@@ -46,3 +46,6 @@ class PSNEXT(Parameter):
 
     def getNEXT(self):
         return self._next
+
+    def getName(self):
+        return "PSNEXT"

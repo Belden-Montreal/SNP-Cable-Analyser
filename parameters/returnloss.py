@@ -37,3 +37,6 @@ class ReturnLoss(Parameter):
 
     def chooseMatrices(self, matrices):
         return diffDiffMatrix(matrices)
+
+    def getName(self):
+        return "Return Loss"

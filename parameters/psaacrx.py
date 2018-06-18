@@ -36,3 +36,6 @@ class PSAACRX(Parameter):
 
     def getIL(self):
         return self._il
+
+    def getName(self):
+        return "PSAACRX"

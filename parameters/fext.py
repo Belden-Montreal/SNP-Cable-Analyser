@@ -52,3 +52,6 @@ class FEXT(PairedParameter):
 
     def chooseMatrices(self, matrices):
         return diffDiffMatrix(matrices)
+
+    def getName(self):
+        return "FEXT"

@@ -16,3 +16,6 @@ class DMCMRL(ReturnLoss):
 
     def chooseMatrices(self, matrices):
         return diffComMatrix(matrices)
+
+    def getName(self):
+        return "DMCMRL"

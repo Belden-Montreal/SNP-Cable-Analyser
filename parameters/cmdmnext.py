@@ -21,3 +21,6 @@ class CMDMNEXT(NEXT):
 
     def chooseMatrices(self, matrices):
         return comDiffMatrix(matrices)
+
+    def getName(self):
+        return "CMDMNEXT"

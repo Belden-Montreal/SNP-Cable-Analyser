@@ -28,3 +28,6 @@ class PSAXEXT(Parameter):
 
     def getAXEXT(self):
         return self._axextd
+
+    def getName(self):
+        return "PSAXEXT"
