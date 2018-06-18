@@ -11,7 +11,7 @@ class TestProject(unittest.TestCase):
         project = Project()
         project.importSamples(self._fileNames)
 
-        #should create 3 samples
+        #should create 2 samples
         self.assertEqual(len(project._samples), 2)
 
         #samples should have the correct names
@@ -19,7 +19,7 @@ class TestProject(unittest.TestCase):
         self.assertEqual(project._samples[0]._name, "testout_mm")
         self.assertEqual(project._samples[1]._name, "testout_mm1")
 
-        project.removeSamples('testout_mm')
+        project.removeSamples(['testout_mm'])
         #should have removed a sample
         self.assertEqual(len(project._samples), 1)
         self.assertEqual(project._samples[0]._name, "testout_mm1")

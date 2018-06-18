@@ -17,8 +17,12 @@ class Alien(Project):
     def importSamples(self, fileNames, disturber=False):
         if disturber:
             pool = ThreadPool()
-            self._disturbers.extend(pool.map(self.__createDisturbers, fileNames))
+            samples = pool.map(self.__createDisturber, fileNames)
+            self._disturbers.extend(samples)
+            self._samples.extend(samples)
             self._axextd = self.calculateAXEXTD()
+            if self._victim:
+                self._victim.setAxextd(self._axextd)
         elif len(fileNames) < 2:
             if len(self._disturbers):
                 self._victim = self.__createVictim(fileNames[0], self._axextd)
@@ -31,10 +35,17 @@ class Alien(Project):
     def calculateAXEXTD(self):
         return [disturber.parameters["AXEXT"] for disturber in self._disturbers]
 
+    def removeSamples(self, names):
+        super(Alien, self).removeSamples(names)
+        if self._victim.name in names:
+            self._victim = None
+
+        self._disturbers = [x for x in self._disturbers if x.name not in names]
+
     def generateExcel(self, outputName, sampleNames, z=False):
         raise NotImplementedError
 
-    def __createDisturbers(self, name):
+    def __createDisturber(self, name):
         return Disturber(name)
 
     def __createVictim(self, name, axextd):

@@ -24,3 +24,7 @@ class Victim(Sample):
         for i in range(self._portsNumber//2):
             self._ports[i] = PORTS_NAME[i]
             self._ports[i+self._portsNumber//2] = "(d)"+PORTS_NAME[i]
+
+    def setAxextd(self, axextd):
+        self._axextd = axextd
+        self.addParameters()
