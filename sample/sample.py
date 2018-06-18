@@ -29,19 +29,15 @@ class Sample(object):
         for i in range(self._portsNumber):
             self._ports[i] = PORTS_NAME[i]
     
-    @property
-    def name(self):
+    def getName(self):
         return self._name
 
-    @property
-    def freq(self):
+    def getFrequencies(self):
         return self._freq
 
-    @property
-    def parameters(self):
+    def getParameters(self):
         return self._parameters
 
-    @property
-    def portsNumber(self):
+    def getNumPorts(self):
         return self._portsNumber
 

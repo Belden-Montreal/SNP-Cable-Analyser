@@ -33,14 +33,14 @@ class Alien(Project):
             print("can't import multiple victims")
 
     def calculateAXEXTD(self):
-        return [disturber.parameters["AXEXT"] for disturber in self._disturbers]
+        return [disturber.getParameters()["AXEXT"] for disturber in self._disturbers]
 
     def removeSamples(self, names):
         super(Alien, self).removeSamples(names)
-        if self._victim.name in names:
+        if self._victim.getName() in names:
             self._victim = None
 
-        self._disturbers = [x for x in self._disturbers if x.name not in names]
+        self._disturbers = [x for x in self._disturbers if x.getName() not in names]
 
     def generateExcel(self, outputName, sampleNames, z=False):
         raise NotImplementedError

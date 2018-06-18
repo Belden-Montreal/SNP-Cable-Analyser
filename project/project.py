@@ -15,7 +15,7 @@ class Project(object):
         self._samples.extend(pool.map(self.__createSample, fileNames))
 
     def removeSamples(self, names):
-        self._samples = [x for x in self._samples if x.name not in names]
+        self._samples = [x for x in self._samples if x.getName() not in names]
 
     def generateExcel(self, outputName, sampleNames, z=False):
         workbook = xlsxwriter.Workbook(outputName+".xlsx", options={'nan_inf_to_errors': True})
