@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-
+from bisect import bisect_left
 from limits.Limit import Limit
 
 def diffDiffMatrix(matrices):
@@ -30,6 +30,18 @@ def order(i,j):
         return (i,j)
     else:
         return (j,i)
+
+def takeClosest(x, numbers):
+        pos = bisect_left(numbers, x)
+        if pos == 0:
+            return 0
+        if pos == len(numbers):
+            return -1
+        before = numbers[pos-1]
+        after = numbers[pos]
+        if after - x > x - before:
+            return pos-1
+        return pos
 
 class Parameter(object):
     def __init__(self, ports, freq, mixedModeMatrices):

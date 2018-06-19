@@ -1,4 +1,4 @@
-from parameters.parameter import Parameter
+from parameters.parameter import Parameter, takeClosest
 import numpy as np
 
 class PlugDelay(Parameter):
@@ -42,5 +42,4 @@ class PlugDelay(Parameter):
         return "PlugDelay"
 
     def __getFrequenciesIndex(self, f1, f2, f):
-        intList = list(np.array(f).astype(int))
-        return intList.index(f1), intList.index(f2)+1
+        return takeClosest(f1, f), takeClosest(f2, f)+1
