@@ -21,6 +21,11 @@ from parameters.fext import FEXT
 from parameters.axext import AXEXT
 from parameters.psaxext import PSAXEXT
 from parameters.psaacrx import PSAACRX
+from parameters.dfdelay import DFDelay
+from parameters.plugdelay import PlugDelay
+from parameters.nextdelay import NEXTDelay
+from parameters.correctednext import CorrectedNEXT
+from parameters.dnext import DNEXT
 
 class ParameterFactory(object):
 
@@ -52,7 +57,12 @@ class ParameterFactory(object):
             "DMCMRL":lambda: DMCMRL(self._ports, self._freq, self._matrix),
             "AXEXT":lambda: AXEXT(self._ports, self._freq, self._matrix, self._params["FEXT"], self._params["IL"]),
             "PSAXEXT":lambda: PSAXEXT(self._ports, self._freq, self._matrix, self._params["AXEXTD"]),
-            "PSAACRX":lambda:PSAACRX(self._ports, self._freq, self._matrix, self._params["PSAXEXT"], self._params["IL"]),
+            "PSAACRX":lambda: PSAACRX(self._ports, self._freq, self._matrix, self._params["PSAXEXT"], self._params["IL"]),
+            "DFDelay":lambda: DFDelay(self._ports, self._freq, self._matrix, self._params["DFOpenDelay"], self._params["DFShortDelay"]),
+            "PlugDelay":lambda: PlugDelay(self._ports, self._freq, self._matrix, self._params["PlugOpenDelay"], self._params["PlugShortDelay"], self._params["DFDelay"], self._params["k1"], self._params["k2"], self._params["k3"]),
+            "NEXTDelay":lambda: NEXTDelay(self._ports, self._freq, self._matrix, self._params["PlugDelay"]),
+            "CNEXT":lambda: CorrectedNEXT(self._ports, self._freq, self._matrix, self._params["NEXTDelay"]),
+            "DNEXT":lambda: DNEXT(self._ports, self._freq, self._matrix, self._params["NEXTDelay"], self._params["PCNEXT"]),
         }
 
     def getParameter(self, name):
