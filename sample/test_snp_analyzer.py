@@ -20,7 +20,7 @@ class TestSNPAnalyzer(unittest.TestCase):
         self.assertEqual(nPorts, 4)
         
         #first frequency should be 300000
-        self.assertAlmostEqual(freq[0], 300000.0)
+        self.assertAlmostEqual(freq[0], 300000.0/1000**2)
 
         #all values should be the same
         for i,f in enumerate(mm):

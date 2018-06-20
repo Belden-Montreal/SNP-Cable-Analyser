@@ -20,6 +20,8 @@ def comComMatrix(matrices):
     return matrices[:,halfway:,halfway:]
 
 def complex2db(value, degree=True):
+    if value == 0:
+        return -np.Infinity
     return 20*np.log10(np.abs(value))
 
 def complex2phase(value, degree=True):
@@ -36,7 +38,7 @@ def takeClosest(x, numbers):
         if pos == 0:
             return 0
         if pos == len(numbers):
-            return -1
+            return pos-1
         before = numbers[pos-1]
         after = numbers[pos]
         if after - x > x - before:

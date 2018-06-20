@@ -9,6 +9,7 @@ class SNPAnalyzer(object):
         self._freq = self._rs.f #Array containing all the frequencies
         self._se = self._rs.s #single ended
         self.s2mm()
+        self.setFreqUnit('mhz')
         
     def getFileInfo(self):
         return splitext(basename(self._snpFile)), time.ctime(getctime(self._snpFile))
