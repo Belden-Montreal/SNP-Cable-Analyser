@@ -1,10 +1,11 @@
 import matplotlib.pyplot as plt
 
 class ParameterPlot(object):
-    def __init__(self, parameter, selection=[]):
+    def __init__(self, parameter, selection=[], limit=None):
         self._parameter = parameter
         self._figure = None
         self._selection = selection
+        self._limit = limit
 
     def resetSelection(self):
         self._selection = []
@@ -52,7 +53,19 @@ class ParameterPlot(object):
                 figure=self._figure, c=color
             )
 
+        if self._limit:
+            plt.semilogx(
+                *zip(*self._limit.evaluateArray({'f': self._parameter.getFrequencies()},
+                                                len(self._parameter.getFrequencies()), neg=True)),
+                figure=self._figure, c=color
+            )
+
         # set the labels
         plt.title(self._parameter.getName(), figure=self._figure)
         plt.xlabel('Frequency (TODO)', figure=self._figure)
         plt.ylabel('dB'              , figure=self._figure)
+
+    def setLimit(self, limit):
+        self._limit = limit
+        self._figure = None
+        self.drawFigure()

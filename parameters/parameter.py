@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from bisect import bisect_left
 from limits.Limit import Limit
-
+from parameters.plot import ParameterPlot
 def diffDiffMatrix(matrices):
     halfway = matrices[0].shape[0]//2
     return matrices[:,:halfway,:halfway]
@@ -54,7 +54,7 @@ class Parameter(object):
         self._limit = None
         self._worstMargin = (dict(), None)
         self._worstValue = (dict(), None)
-        self._plot = None
+        self._plot = ParameterPlot(self)
 
     def chooseMatrices(self, mixedModeMatrices):
         raise NotImplementedError
@@ -73,6 +73,7 @@ class Parameter(object):
 
     def setLimit(self, limit):
         self._limit = limit
+        self._plot.setLimit(limit)
 
     def getPorts(self):
         return self._ports
@@ -139,6 +140,9 @@ class Parameter(object):
 
     def getDescription(self):
         raise NotImplementedError
+
+    def getFrequencies(self):
+        return self._freq
 
 class PairedParameter(Parameter):
     def __init__(self, ports, freq, mixedModeMatrices):
