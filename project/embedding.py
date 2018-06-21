@@ -1,6 +1,7 @@
 from project.project import Project
 from sample.single_ended import SingleEnded
 from sample.deembed import Deembed
+import numpy as np
 
 class Filetype():
     OPEN = 0
@@ -18,6 +19,24 @@ class Embedding(Project):
         self._deembedded = None
         self._plug = None
 
+        #TODO: choose cases depending on category
+        self._cases = {
+            1:((1,2),(lambda f, cnext: (-38.1+20*np.log10(f/100), np.angle(cnext, deg=True)))),
+            2:((1,2),(lambda f, cnext: (-38.6+20*np.log10(f/100), np.angle(cnext, deg=True)))),
+            3:((1,2),(lambda f, cnext: (-39+20*np.log10(f/100), np.angle(cnext, deg=True)))),
+            4:((1,2),(lambda f, cnext: (-39.5+20*np.log10(f/100), np.angle(cnext, deg=True)))),
+            5:((0,2),(lambda f, cnext: (-46.5+20*np.log10(f/100), np.angle(cnext, deg=True)))),
+            6:((0,2),(lambda f, cnext: (-49.5+20*np.log10(f/100), np.angle(cnext, deg=True)))),
+            7:((2,3),(lambda f, cnext: (-46.5+20*np.log10(f/100), np.angle(cnext, deg=True)))),
+            8:((2,3),(lambda f, cnext: (-49.5+20*np.log10(f/100), np.angle(cnext, deg=True)))),
+            9:((0,1),(lambda f, cnext: (-57+20*np.log10(f/100), 90))),
+            10:((0,1),(lambda f, cnext: (-70+20*np.log10(f/100), -90))),
+            11:((1,3),(lambda f, cnext: (-57+20*np.log10(f/100), 90))),
+            12:((1,3),(lambda f, cnext: (-70+20*np.log10(f/100), -90))),
+            13:((0,3),(lambda f, cnext: (-66+20*np.log10(f/100), np.angle(cnext, deg=True)))),
+            14:((0,3),(lambda f, cnext: (-66+20*np.log10(f/100), np.angle(cnext, deg=True)-180))),
+            }
+
     def importSamples(self, fileName, fileType=Filetype.LOAD):
         if fileType == Filetype.OPEN:
             self._openSample = SingleEnded(fileName)
@@ -26,7 +45,7 @@ class Embedding(Project):
             self._shortSample = SingleEnded(fileName)
             self._samples.append(self._shortSample)
         else:
-            self._deembedded = Deembed(fileName, self._plug.getPlugNext(), self._plug.getNextDelay())
+            self._deembedded = Deembed(fileName, self._plug.getPlugNext(), self._plug.getNextDelay(), self._cases)
             self._samples.append(self._deembedded)
 
     def setPlug(self, plug):

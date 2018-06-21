@@ -28,7 +28,13 @@ class TestEmbedding(unittest.TestCase):
         #self.assertEqual(project._samples[0]._name, "fci")
         self.assertEqual(project._samples[0]._name, "testout_mm")
 
-       #TODO: re-embedding
+        cases = project._deembedded.getParameters()["Case"].getParameter()
+        n= 0
+        for case in cases.values():
+            n += len(case)
+
+        #should have 14 cases
+        self.assertEqual(n, 14)
 
         project.removeSamples("testout_mm")
         #should have removed the samples

@@ -2,9 +2,10 @@ from sample.sample import Sample
 
 class Deembed(Sample):
 
-    def __init__(self, matedLoad, plugNext, plugNextDelay):
+    def __init__(self, matedLoad, plugNext, plugNextDelay, cases):
         self._plugNext = plugNext
         self._plugNextDelay = plugNextDelay
+        self._cases = cases
         super(Deembed, self).__init__(matedLoad)
 
     def addParameters(self):
@@ -12,6 +13,8 @@ class Deembed(Sample):
             "PCNEXT",
             "NEXTDelay",
             "DNEXT",
+            "Cases",
+            "Case",
         ]
 
         for parameter in parameters:
@@ -19,5 +22,7 @@ class Deembed(Sample):
                 self._parameters[parameter] = self._plugNext
             elif parameter == "NEXTDelay":
                 self._parameters[parameter] = self._plugNextDelay
+            elif parameter == "Cases":
+                self._parameters[parameter] = self._cases
             else:
                 self._parameters[parameter] = self._factory.getParameter(parameter)

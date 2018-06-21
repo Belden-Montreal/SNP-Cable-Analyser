@@ -26,6 +26,7 @@ from parameters.plugdelay import PlugDelay
 from parameters.nextdelay import NEXTDelay
 from parameters.correctednext import CorrectedNEXT
 from parameters.dnext import DNEXT
+from parameters.case import Case
 
 class ParameterFactory(object):
 
@@ -63,6 +64,7 @@ class ParameterFactory(object):
             "NEXTDelay":lambda: NEXTDelay(self._ports, self._freq, self._matrix, self._params["PlugDelay"]),
             "CNEXT":lambda: CorrectedNEXT(self._ports, self._freq, self._matrix, self._params["NEXTDelay"]),
             "DNEXT":lambda: DNEXT(self._ports, self._freq, self._matrix, self._params["NEXTDelay"], self._params["PCNEXT"]),
+            "Case":lambda: Case(self._ports, self._freq, self._matrix, self._params["DNEXT"], self._params["PCNEXT"], self._params["Cases"]),
         }
 
     def getParameter(self, name):

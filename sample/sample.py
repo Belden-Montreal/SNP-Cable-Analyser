@@ -1,7 +1,7 @@
 from sample.snp_analyzer import SNPAnalyzer
 from parameters.parameter_factory import ParameterFactory
 
-PORTS_NAME = ["45", "12", "36", "78"]
+PORTS_NAME = ["12", "45", "36", "78"]
 class Sample(object):
     '''
     The sample class contains the measurements for one object
