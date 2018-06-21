@@ -11,14 +11,18 @@ class TestCMDMNEXT(TestParameter):
     def testComputePairs(self):
         pairs = self._parameter.getPairs()
 
-        # for a 4 ports, there is only 4 NEXT pairs (including reverse)
-        self.assertEqual(len(pairs), 4)
+        # for a 4 ports single ended, there are 12 NEXT pairs (including reverse)
+        self.assertEqual(len(pairs), 12)
 
         # make sure the correct pairs are there
         self.assertEqual((0,1) in pairs, True)
         self.assertEqual((2,3) in pairs, True)
         self.assertEqual((1,0) in pairs, True)
         self.assertEqual((3,2) in pairs, True)
+
+        pairs = self._parameter.getParameter(endToEnd=True).keys()
+        #for a 4 ports end-to-end, there are 4 NEXT pairs
+        self.assertEqual(len(pairs), 4)
 
     def testComputeParameter(self):
         parameter = self._parameter.getParameter()

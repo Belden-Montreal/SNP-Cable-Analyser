@@ -53,7 +53,7 @@ class TestCorrectedNEXT(TestParameter):
         pnext = NEXT(self._ports, self._freq, self._matrices).getParameter()
 
         # there should be a parameter for each port combo        
-        self.assertEqual(len(parameter), 4)
+        self.assertEqual(len(parameter), 12)
 
         # check the values of the port 1-2
         self.assertAlmostEqual(parameter[(0,1)][0], correctNEXT(pnext[(0,1)][0], nextDelay[(0,1)], self._freq[0]))

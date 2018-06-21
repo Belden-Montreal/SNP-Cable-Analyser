@@ -32,3 +32,9 @@ class DNEXT(CorrectedNEXT):
 
     def getName(self):
         return "DNEXT"
+
+    def getParameter(self):
+        return self._parameter
+
+    def getComplexParameter(self):
+        return self._complexParameter

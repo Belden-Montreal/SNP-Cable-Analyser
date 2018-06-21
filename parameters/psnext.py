@@ -1,5 +1,5 @@
 import numpy as np
-
+import math
 from parameters.parameter import Parameter, complex2db, diffDiffMatrix
 from parameters.next import NEXT
 
@@ -15,13 +15,16 @@ class PSNEXT(Parameter):
     """
     def __init__(self, ports, freq, matrices, pnext):
         self._next = pnext
+        self._SEParameter = None
         super(PSNEXT, self).__init__(ports, freq, matrices)
 
     def computeParameter(self):
         # initialize the dictionary for each port
         dbPSNEXT = dict()
+        dbEEPSNEXT = dict()
         for port in self._ports:
             dbPSNEXT[port] = list()
+            dbEEPSNEXT[port] = list()
 
         # compute the power sum NEXT
         for (f,_) in enumerate(self._freq):
@@ -31,7 +34,7 @@ class PSNEXT(Parameter):
                 pairs = filter(lambda p: port == p[0] or port == p[1], pairs)
 
                 # get the NEXT values of these pairs
-                values = map(lambda p: self._next.getParameter()[p][f], pairs)
+                values = map(lambda p: self._next.getParameter(endToEnd=False)[p][f], pairs)
 
                 # compute PSNEXT
                 psnext = powerSum(values)
@@ -39,7 +42,21 @@ class PSNEXT(Parameter):
                 # add the value to the list
                 dbPSNEXT[port].append(psnext)
 
-        return (dbPSNEXT, None)
+                # get all NEXT pairs containing this port
+                pairs = self._next.getPairs()
+                n = (1+math.sqrt(4*self._next.getNumPorts()+1))//2
+                pairs = filter(lambda p: (port == p[0] or port == p[1]) and not ((p[0] < n//2 and p[1] >= n//2) or (p[1] < n//2 and p[0] >= n//2)), pairs)
+
+                # get the NEXT values of these pairs
+                values = map(lambda p: self._next.getParameter(endToEnd=True)[p][f], pairs)
+
+                # compute PSNEXT
+                psnext = powerSum(values)
+
+                # add the value to the list
+                dbEEPSNEXT[port].append(psnext)
+        self._SEParameter = dbPSNEXT
+        return (dbEEPSNEXT, None)
 
     def chooseMatrices(self, matrices):
         return diffDiffMatrix(matrices)
@@ -49,3 +66,8 @@ class PSNEXT(Parameter):
 
     def getName(self):
         return "PSNEXT"
+
+    def getParameter(self, endToEnd=True):
+        if endToEnd:
+            return self._parameter
+        return self._SEParameter

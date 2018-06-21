@@ -39,3 +39,9 @@ class CorrectedNEXT(NEXT):
 
     def getName(self):
         return "CNEXT"
+
+    def getParameter(self):
+        return self._parameter
+
+    def getComplexParameter(self):
+        return self._complexParameter

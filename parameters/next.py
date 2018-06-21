@@ -1,4 +1,5 @@
 from parameters.parameter import PairedParameter, complex2db, order, diffDiffMatrix
+import math
 
 class NEXT(PairedParameter):
     """
@@ -18,8 +19,8 @@ class NEXT(PairedParameter):
     def computePairs(self, ports):
         # create each pair for the NEXT
         pairs = dict()
-        for i in range(0, len(ports)//2):
-            for j in range(0, len(ports)//2):
+        for i in range(0, len(ports)):
+            for j in range(0, len(ports)):
                 if i >= j:
                     continue
 
@@ -29,11 +30,11 @@ class NEXT(PairedParameter):
                 pairs[(port1, port2)] = ports[port1]+"-"+ports[port2]
                 pairs[(port2, port1)] = ports[port2]+"-"+ports[port1]
 
-                # create the pair for the second end of the line
-                port1 = i + len(ports)//2
-                port2 = j + len(ports)//2
-                pairs[(port1, port2)] = ports[port1]+"-"+ports[port2]
-                pairs[(port2, port1)] = ports[port2]+"-"+ports[port1]
+                # # create the pair for the second end of the line
+                # port1 = i + len(ports)//2
+                # port2 = j + len(ports)//2
+                # pairs[(port1, port2)] = ports[port1]+"-"+ports[port2]
+                # pairs[(port2, port1)] = ports[port2]+"-"+ports[port1]
 
         return pairs
 
@@ -62,3 +63,15 @@ class NEXT(PairedParameter):
 
     def getName(self):
         return "NEXT"
+
+    def getParameter(self, endToEnd=True):
+        if endToEnd:
+            n = (1+math.sqrt(4*self.getNumPorts()+1))//2
+            return {(i,j): v for (i,j),v in sorted(self._parameter.items()) if not ((i < n//2 and j >= n//2) or (j < n//2 and i >= n//2))}
+        return self._parameter
+
+    def getComplexParameter(self, endToEnd=True):
+        if endToEnd:
+            n = (1+math.sqrt(4*self.getNumPorts()+1))//2
+            return {(i,j): v for (i,j),v in sorted(self._complexParameter.items()) if not ((i < n//2 and j >= n//2) or (j < n//2 and i >= n//2))}
+        return self._complexParameter
