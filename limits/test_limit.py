@@ -6,28 +6,28 @@ import numpy as num
 class TestLimits(unittest.TestCase):
     def test_parse(self):
         limit = Limit("RL", ["2*f"])
-        self.assertEqual(100, limit.evaluate({'f': 50}))
+        self.assertEqual(100, limit.evaluate({'f': 50})[0])
 
     def test_parse_2(self):
         limit = Limit("RL", ["2^fx"])
-        self.assertEqual(12, limit.evaluate({'f': 2, 'x': 3}))
+        self.assertEqual(12, limit.evaluate({'f': 2, 'x': 3})[0])
 
     def test_parse_3(self):
         limit = Limit("RL", ["2/f"], [0, 10])
-        self.assertEqual(0, limit.evaluate({'f': -1}))
+        self.assertEqual(0, limit.evaluate({'f': -1})[0])
 
     def test_parse_4(self):
         limit = Limit("RL", ["f+1-x"])
-        self.assertEqual(0, limit.evaluate({'f': 4, 'z': 8}))
+        self.assertEqual(0, limit.evaluate({'f': 4, 'z': 8})[0])
 
     def test_parse_5(self):
         limit = Limit("RL", ["1.2*(1.808*sqrt(f)+0.017*f+0.2/sqrt(f))"])
-        self.assertEqual(1.2*(1.808*num.sqrt(4)+0.017*4+0.2/num.sqrt(4)), limit.evaluate({'f': 4}))
+        self.assertEqual(1.2*(1.808*num.sqrt(4)+0.017*4+0.2/num.sqrt(4)), limit.evaluate({'f': 4})[0])
 
     def test_parse_multiple(self):
         limit = Limit("RL", ["f*2", "f^2"], [0, 10, 50])
-        self.assertEqual(5*2, limit.evaluate({'f':5}))
-        self.assertEqual(15**2, limit.evaluate({'f':15}))
+        self.assertEqual(5*2, limit.evaluate({'f':5})[0])
+        self.assertEqual(15**2, limit.evaluate({'f':15})[0])
 
     def test_parse_array(self):
         limit = Limit("RL", ["2*f"])
@@ -43,7 +43,15 @@ class TestLimits(unittest.TestCase):
 
     def test_parse_neg(self):
         limit = Limit("RL", ["2*f"], [1,10])
-        self.assertEqual(-4, limit.evaluate({'f':2}, True))
+        self.assertEqual(-4, limit.evaluate({'f':2})[1])
+
+    def test_repeat(self):
+        limit = Limit("RL", ["2*f"])
+        self.assertEqual({1:2, 2:4, 3:6, 4:8}, limit.evaluateDict({'f':[1,2,3,4]}, 4))
+
+        self.assertEqual({1:-2, 2:-4, 3:-6, 4:-8}, limit.evaluateDict({'f':[1,2,3,4]}, 4, True))
+
+        self.assertEqual({1:2, 2:4, 3:6, 4:8}, limit.evaluateDict({'f':[1,2,3,4]}, 4))
 
 if __name__ == '__main__':
     unittest.main()
