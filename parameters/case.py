@@ -3,9 +3,10 @@ import numpy as np
 
 class Case(PairedParameter):
 
-    def __init__(self, ports, freq, matrices, dnext, cases):
+    def __init__(self, ports, freq, matrices, dnext, cnext, cases):
         self._dnext = dnext
         self._cases = cases
+        self._cnext = cnext
         super(Case, self).__init__(ports, freq, matrices)
 
     def computePairs(self, ports):
@@ -33,11 +34,12 @@ class Case(PairedParameter):
                 reembedded[port][n] = list()
 
         dnext = self._dnext.getComplexParameter()
+        cnext = self._cnext.getComplexParameter()
         for f,freq in enumerate(self._freq):
             for port in self._ports:
                 cases = [x for x in self._cases.items() if x[1][0] == port]
                 for n, (_, case) in cases:
-                    plug = case(freq)
+                    plug = case(freq, cnext[port][f])
                     dbPlug = plug[0]
                     phasePlug = plug[1]
                     
@@ -63,3 +65,6 @@ class Case(PairedParameter):
 
     def getDNEXT(self):
         return self._dnext
+
+    def getCNEXT(self):
+        return self._cnext
