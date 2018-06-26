@@ -1,6 +1,7 @@
 from project.project import Project
 from sample.disturber import Disturber
 from sample.victim import Victim
+from project.alien_import_dialog import AlienImportDialog
 from multiprocessing.dummy import Pool as ThreadPool
 
 
@@ -44,6 +45,12 @@ class Alien(Project):
 
     def generateExcel(self, outputName, sampleNames, z=False):
         raise NotImplementedError
+
+    def openImportWindow(self, parent):
+        dial = AlienImportDialog(parent)
+        disturbers, victim = dial.getFiles()
+        self.importSamples(disturbers, disturber=True)
+        self.importSamples([victim], disturber=False)
 
     def __createDisturber(self, name):
         return Disturber(name)
