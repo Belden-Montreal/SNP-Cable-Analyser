@@ -170,9 +170,10 @@ class Main():
     def tabChanged(self):
         try:
             parameter = self._mainWindow.param_tabs.currentWidget().parameter
-            plot = parameter.getPlot()
-            self._mainWindow.graphicsView.figure = plot.getFigure()
-            self._mainWindow.graphicsView.draw()
+            #remove comments when plot works
+            #plot = parameter.getPlot()
+            #self._mainWindow.graphicsView.figure = plot.getFigure()
+            #self._mainWindow.graphicsView.draw() 
         except Exception as e:
             print(e)
 
