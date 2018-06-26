@@ -12,24 +12,27 @@ class ParameterWidget(QtWidgets.QWidget):
         self.paramWidget.paramLabel.setText(param)
         self.param = param
         self.parameter = parameter
-        values = (parameter.getWorstValue(), parameter.getWorstMargin())
-        self.paramWidget.marginListWidget.currentItemChanged.connect(lambda current: self.pairSelected(current, valueType.MARGIN))
-        self.paramWidget.worstListWidget.currentItemChanged.connect(lambda current: self.pairSelected(current, valueType.VALUE))
-        self.setPairsList()
-        if values[0][0] and values[1]:
-            self.worstValue = values[0]
-            self.worstMargin = values[1]
-            if self.worstValue[1] == "Pass" and self.worstMargin[1] == "Pass":
-                self.paramWidget.passLabel.setText("Pass")
-                self.hasPassed = True
+        try:
+            values = (parameter.getWorstValue(), parameter.getWorstMargin())
+            self.paramWidget.marginListWidget.currentItemChanged.connect(lambda current: self.pairSelected(current, valueType.MARGIN))
+            self.paramWidget.worstListWidget.currentItemChanged.connect(lambda current: self.pairSelected(current, valueType.VALUE))
+            self.setPairsList()
+            if values[0][0] and values[1]:
+                self.worstValue = values[0]
+                self.worstMargin = values[1]
+                if self.worstValue[1] == "Pass" and self.worstMargin[1] == "Pass":
+                    self.paramWidget.passLabel.setText("Pass")
+                    self.hasPassed = True
+                else:
+                    self.paramWidget.passLabel.setText("Fail")
+                    self.hasPassed = False
             else:
+                self.worstMargin = None
+                self.worstValue = None
                 self.paramWidget.passLabel.setText("Fail")
                 self.hasPassed = False
-        else:
-            self.worstMargin = None
-            self.worstValue = None
-            self.paramWidget.passLabel.setText("Fail")
-            self.hasPassed = False
+        except:
+            pass
 
 
 

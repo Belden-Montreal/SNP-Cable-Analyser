@@ -80,6 +80,7 @@ class Main():
                 self._projectManager.newEmbeddingProject(projName)
             else:
                 self._projectManager.newProject(projName)
+            self.updateSamplesTable()
             self._mainWindow.actionToolbar_Import_SnP.setDisabled(False)
             self._mainWindow.actionImport_SnP.setDisabled(False)
             self._qmw.setWindowTitle("Belden Network Analyzer Software - "+projName)
@@ -133,7 +134,7 @@ class Main():
 
             elif action == delete:
                 self._projectManager.activeProject().removeSamples(self._selected)
-
+                self.updateSamplesTable()
             elif action == setLimit:
                 self.setLimit()
             #self.Project.activeMeasurements = selected
