@@ -9,7 +9,7 @@ class TestProject(unittest.TestCase):
 
     def testFileImport(self):
         project = Project()
-        project.importSamples(self._fileNames)
+        project.importSamples(self._fileNames, False)
 
         #should create 2 samples
         self.assertEqual(len(project._samples), 2)
