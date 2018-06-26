@@ -20,6 +20,9 @@ class PlugImportDialog(QtWidgets.QDialog):
         self._short = None
         self._load = None
         self._k1, self._k2, self._k3 = None, None, None
+        self._dial.sJ12LineEdit.setText("5e-12")
+        self._dial.sJ36LineEdit.setText("14e-12")
+        self._dial.thruCalibLineEdit.setText("20e-12")
 
     def getFiles(self):
         res = self.exec_()
@@ -56,7 +59,10 @@ class PlugImportDialog(QtWidgets.QDialog):
             self._k1 = float(self._dial.sJ12LineEdit.text())
             self._k2 = float(self._dial.sJ36LineEdit.text())
             self._k3 = float(self._dial.thruCalibLineEdit.text())
-            self.accept()
+            if self._dfOpen and self._dfShort and self._open and self._short and self._load:
+                self.accept()
+            else:
+                raise "No File Error"
         except:
             error = QtWidgets.QErrorMessage(self)
             error.showMessage("Invalid inputs", "Invalid_Inputs")

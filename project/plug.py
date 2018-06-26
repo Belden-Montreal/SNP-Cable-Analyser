@@ -61,15 +61,17 @@ class Plug(Project):
 
     def openImportWindow(self, parent):
         dial = PlugImportDialog(parent)
-        dfOpen, dfShort, plugOpen, plugShort, plugLoad, k1, k2, k3 = dial.getFiles()
-        self._k1 = k1
-        self._k2 = k2
-        self._k3 = k3
-        self.importSamples(dfOpen, Filetype.DFOPEN)
-        self.importSamples(dfShort, Filetype.DFSHORT)
-        self.importSamples(plugOpen, Filetype.OPEN)
-        self.importSamples(plugShort, Filetype.SHORT)
-        self.importSamples(plugLoad, Filetype.LOAD)
+        files = dial.getFiles()
+        if files:
+            dfOpen, dfShort, plugOpen, plugShort, plugLoad, k1, k2, k3 = files
+            self._k1 = k1
+            self._k2 = k2
+            self._k3 = k3
+            self.importSamples(dfOpen, Filetype.DFOPEN)
+            self.importSamples(dfShort, Filetype.DFSHORT)
+            self.importSamples(plugOpen, Filetype.OPEN)
+            self.importSamples(plugShort, Filetype.SHORT)
+            self.importSamples(plugLoad, Filetype.LOAD)
 
     def importFromXML(self):
         raise NotImplementedError #TODO: read pre-calculated values from XML
