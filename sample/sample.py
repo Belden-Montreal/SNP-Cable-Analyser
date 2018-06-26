@@ -32,6 +32,9 @@ class Sample(object):
     def getName(self):
         return self._name
 
+    def getDate(self):
+        return self._date
+
     def getFrequencies(self):
         return self._freq
 
