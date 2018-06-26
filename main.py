@@ -4,6 +4,8 @@ import MW4
 import new_project_dialog
 from app.project_manager import ProjectManager
 from app.import_dialog import ImportSNPDialog
+from app.vna_manager import VNAManager
+
 class Main():
 
     def __init__(self):
@@ -16,6 +18,8 @@ class Main():
         self._projectManager = ProjectManager()
         self._mainWindow.actionToolbar_Import_SnP.setDisabled(True)
         self._mainWindow.actionImport_SnP.setDisabled(True)
+        self._vnaManager = VNAManager()
+
         #Here, we process any arguments that might be sent the program from outside of the interface.
         #In other words, when ever a user right click on an SNP files, rather than opening them in Notepad, it would be opened in this interface.
         arguments = sys.argv[1:] 
@@ -27,13 +31,13 @@ class Main():
         self._mainWindow.actionToolbar_Import_SnP.triggered.connect(lambda:self.importSNP())
         self._mainWindow.actionNew_Project.triggered.connect(lambda:self.newProject())
         # self.sampleTable.itemSelectionChanged.connect(MainWindow.setActiveSample)
-        # self.actionRun.triggered.connect(MainWindow.aquire)
-        # self.actionImport_SnP.triggered.connect(MainWindow.importSnp)
-        # self.actionConnect.triggered.connect(MainWindow.connect)
-        # self.actionWho_am_I.triggered.connect(MainWindow.whoAmI)
+        self._mainWindow.actionRun.triggered.connect(lambda:self._vnaManager.acquire())
+        self._mainWindow.actionImport_SnP.triggered.connect(lambda:self._vnaManager.acquire())
+        self._mainWindow.actionConnect.triggered.connect(lambda:self._vnaManager.connect())
+        self._mainWindow.actionWho_am_I.triggered.connect(lambda:self._vnaManager.whoAmI())
         # self.actionMeasure.triggered.connect(MainWindow.aquire)
-        # self.actionCalibrate_2.triggered.connect(MainWindow.calibrate)
-        # self.actionDisconnect.triggered.connect(MainWindow.disconnect)
+        self._mainWindow.actionCalibrate_2.triggered.connect(lambda:self._vnaManager.calibrate())
+        self._mainWindow.actionDisconnect.triggered.connect(lambda:self._vnaManager.disconnect())
         # self.actionAlien.triggered.connect(MainWindow.addAlien)
         # self.actionDeembed.triggered.connect(MainWindow.addEmbed)
         # self.param_tabs.currentChanged['int'].connect(MainWindow.tabChange)
