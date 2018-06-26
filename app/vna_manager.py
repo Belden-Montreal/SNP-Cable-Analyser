@@ -28,7 +28,13 @@ class VNAManager(object):
                 print(e)
 
     def whoAmI(self):
-        return self._comm.whoAmI()
+        msg = QtWidgets.QMessageBox()
+        msg.setIcon(QtWidgets.QMessageBox.Information)
+        msg.setText(self._comm.whoAmI())
+        msg.setWindowTitle("VNA Info")
+        msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        msg.setFixedSize(msg.sizeHint())
+        msg.exec_()
 
     def acquire(self):
         if self._comm.connected :
