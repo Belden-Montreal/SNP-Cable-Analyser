@@ -5,15 +5,16 @@ class valueType():
     VALUE = 1
 
 class ParameterWidget():
-    def __init__(self, param, sample, values):
+    def __init__(self, param, parameter):
         self.widget  = QtWidgets.QWidget()
         self.paramWidget = Parameter_Widget.Ui_ParameterWidget()
         self.paramWidget.setupUi(self.widget)
         self.paramWidget.paramLabel.setText(param)
         self.param = param
-        self.sample = sample
-        self.paramWidget.marginListWidget.currentTextChanged.connect(lambda text: self.pairSelected(text, valueType.MARGIN))
-        self.paramWidget.worstListWidget.currentTextChanged.connect(lambda text: self.pairSelected(text, valueType.VALUE))
+        self.parameter = parameter
+        values = (parameter.getWorstValue(), parameter.getWorstMargin())
+        self.paramWidget.marginListWidget.currentItemChanged.connect(lambda current: self.pairSelected(current, valueType.MARGIN))
+        self.paramWidget.worstListWidget.currentItemChanged.connect(lambda current: self.pairSelected(current, valueType.VALUE))
         self.setPairsList()
         if values[0][0] and values[1]:
             self.worstValue = values[0]
@@ -34,27 +35,30 @@ class ParameterWidget():
 
 
     def setPairsList(self):
-        try:
-            self.paramWidget.marginListWidget.addItems(getattr(self.sample, self.param))
-            self.paramWidget.marginListWidget.sortItems()
-            self.paramWidget.worstListWidget.addItems(getattr(self.sample, self.param))
-            self.paramWidget.worstListWidget.sortItems()
-        except Exception as e:
-            return
+        for num, port in self.parameter.getPorts().items():
+            self.paramWidget.marginListWidget.addItem(PairItem(port, num))
+            self.paramWidget.worstListWidget.addItem(PairItem(port, num))
+        self.paramWidget.marginListWidget.sortItems()            
+        self.paramWidget.worstListWidget.sortItems()
+
 
     def pairSelected(self, pair, listIndex):
         self.setLabels(listIndex, pair)
 
     def setLabels(self, listIndex, pair):
         if self.worstMargin and listIndex == valueType.MARGIN: #Worst margin
-            self.paramWidget.marginValueLabel.setText(self.worstMargin[0][pair][0].__str__())
-            self.paramWidget.marginFreqLabel.setText(self.worstMargin[0][pair][1].__str__())
-            self.paramWidget.marginLimitLabel.setText(self.worstMargin[0][pair][2].__str__())
-            self.paramWidget.marginLabel.setText(self.worstMargin[0][pair][3].__str__())
+            self.paramWidget.marginValueLabel.setText(self.worstMargin[0][pair.number][0].__str__())
+            self.paramWidget.marginFreqLabel.setText(self.worstMargin[0][pair.number][1].__str__())
+            self.paramWidget.marginLimitLabel.setText(self.worstMargin[0][pair.number][2].__str__())
+            self.paramWidget.marginLabel.setText(self.worstMargin[0][pair.number][3].__str__())
         elif self.worstValue: #worst value
-            self.paramWidget.worstValueLabel.setText(self.worstValue[0][pair][0].__str__())
-            self.paramWidget.worstFreqLabel.setText(self.worstValue[0][pair][1].__str__())
-            self.paramWidget.worstLimitLabel.setText(self.worstValue[0][pair][2].__str__())
-            self.paramWidget.worstMarginLabel.setText(self.worstValue[0][pair][3].__str__())
+            self.paramWidget.worstValueLabel.setText(self.worstValue[0][pair.number][0].__str__())
+            self.paramWidget.worstFreqLabel.setText(self.worstValue[0][pair.number][1].__str__())
+            self.paramWidget.worstLimitLabel.setText(self.worstValue[0][pair.number][2].__str__())
+            self.paramWidget.worstMarginLabel.setText(self.worstValue[0][pair.number][3].__str__())
 
+class PairItem(QtWidgets.QListWidgetItem):
+    def __init__(self, text, number, parent = None, type = QtWidgets.QListWidgetItem.Type):
+        super(PairItem, self).__init__(text, parent, type)
+        self.number = number
 

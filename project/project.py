@@ -70,7 +70,7 @@ class Project(object):
         workbook.close()
 
     def findSamplesByName(self, names):
-        return [x for x in self._samples if x.name in names]
+        return [x for x in self._samples if x.getName() in names]
 
     def numSamples(self):
         return len(self._samples)

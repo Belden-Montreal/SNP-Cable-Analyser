@@ -73,7 +73,7 @@ class Parameter(object):
 
     def setLimit(self, limit):
         self._limit = limit
-        self._plot.setLimit(limit)
+        #self._plot.setLimit(limit)
 
     def getPorts(self):
         return self._ports
@@ -84,6 +84,8 @@ class Parameter(object):
     def getWorstMargin(self):
         if len(self._worstMargin[0]):
             return self._worstMargin
+        if self._limit is None:
+            return (None, None)
         limit = self._limit.evaluateDict({'f': self._freq}, len(self._freq), neg=True)
         passed = True
         worst = dict()
@@ -115,6 +117,8 @@ class Parameter(object):
     def getWorstValue(self):
         if len(self._worstValue[0]):
             return self._worstValue
+        if self._limit is None:
+            return (None, None)
         limit = self._limit.evaluateDict({'f': self._freq}, len(self._freq), neg=True)
         passed = True
         worst = dict()
@@ -150,7 +154,9 @@ class PairedParameter(Parameter):
         self._matrices = self.chooseMatrices(mixedModeMatrices)
         self._ports = self.computePairs(ports)
         (self._parameter, self._complexParameter) = self.computeParameter()
-        self._limit = Limit(self._parameter)
+        self._limit = None
+        self._worstMargin = (dict(), None)
+        self._worstValue = (dict(), None)
         self._plot = None
         
     def computePairs(self, ports):

@@ -63,6 +63,8 @@ class InsertionLoss(Parameter):
     def getWorstMargin(self):
         if len(self._worstMargin[0]):
             return self._worstMargin
+        if self._limit is None:
+            return (None, None)
         limit = self._limit.evaluateDict({'f': self._freq}, len(self._freq), neg=True)
         passed = True
         worst = dict()
@@ -83,6 +85,8 @@ class InsertionLoss(Parameter):
     def getWorstValue(self):
         if len(self._worstValue[0]):
             return self._worstValue
+        if self._limit is None:
+            return (None, None)
         limit = self._limit.evaluateDict({'f': self._freq}, len(self._freq), neg=True)
         passed = True
         worst = dict()

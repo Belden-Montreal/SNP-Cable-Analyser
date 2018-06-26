@@ -23,6 +23,7 @@ class Sample(object):
 
     def setStandard(self, standard):
         for name, parameter in self._parameters.items():
+            if name in standard.limits:
                 parameter.setLimit(standard.limits[name])
 
     def setPorts(self):
