@@ -4,11 +4,11 @@ class valueType():
     MARGIN = 0
     VALUE = 1
 
-class ParameterWidget():
+class ParameterWidget(QtWidgets.QWidget):
     def __init__(self, param, parameter):
-        self.widget  = QtWidgets.QWidget()
+        super(ParameterWidget, self).__init__()
         self.paramWidget = Parameter_Widget.Ui_ParameterWidget()
-        self.paramWidget.setupUi(self.widget)
+        self.paramWidget.setupUi(self)
         self.paramWidget.paramLabel.setText(param)
         self.param = param
         self.parameter = parameter

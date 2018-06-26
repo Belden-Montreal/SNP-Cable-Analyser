@@ -46,19 +46,20 @@ class Main():
         self._mainWindow.actionDisconnect.triggered.connect(lambda:self._vnaManager.disconnect())
         # self.actionAlien.triggered.connect(MainWindow.addAlien)
         # self.actionDeembed.triggered.connect(MainWindow.addEmbed)
-        # self.param_tabs.currentChanged['int'].connect(MainWindow.tabChange)
+        self._mainWindow.param_tabs.currentChanged['int'].connect(lambda:self.tabChanged())
         # QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
 
     def updateSamplesTable(self):
         project = self._projectManager.activeProject()
-        num = project.numSamples()
-        self._mainWindow.sampleTable.setRowCount(num)
-        for i in range(num):
-            print(project.samples()[i].getName())
-            self._mainWindow.sampleTable.setItem(i, 0, QtWidgets.QTableWidgetItem(project.samples()[i].getName()))
-            self._mainWindow.sampleTable.setItem(i, 1, QtWidgets.QTableWidgetItem(project.samples()[i].getDate()))
-        self._mainWindow.sampleTable.resizeColumnsToContents()
+        if project:
+            num = project.numSamples()
+            self._mainWindow.sampleTable.setRowCount(num)
+            for i in range(num):
+                print(project.samples()[i].getName())
+                self._mainWindow.sampleTable.setItem(i, 0, QtWidgets.QTableWidgetItem(project.samples()[i].getName()))
+                self._mainWindow.sampleTable.setItem(i, 1, QtWidgets.QTableWidgetItem(project.samples()[i].getDate()))
+            self._mainWindow.sampleTable.resizeColumnsToContents()
 
 
     def newProject(self):
@@ -109,7 +110,7 @@ class Main():
 
         for name, param in sample.getParameters().items():
             newTab = ParameterWidget(name, param)
-            self._mainWindow.param_tabs.addTab(newTab.widget, name)
+            self._mainWindow.param_tabs.addTab(newTab, name)
 
     def tableContextMenu(self, pos):
         if len(self._selected) > 0 and self._projectManager.activeProject():
@@ -127,7 +128,7 @@ class Main():
 
             if action == exportExcel:
                 print(self._selected)
-                file, _ = QtWidgets.getSaveFileName(self,"Export Excel Repport", "","Excel File (*.xlsx)")
+                file, _ = QtWidgets.getSaveFileName(self,"Export Excel Report", "","Excel File (*.xlsx)")
                 self._projectManager.activeProject().generateExcel(file , self._selected, True)
 
             elif action == delete:
@@ -164,7 +165,16 @@ class Main():
                         self._mainWindow.sampleTable.setItem(i, 2, QtWidgets.QTableWidgetItem(item.name))
             self._mainWindow.sampleTable.resizeColumnsToContents()
             self.displaySampleParams(self._selected[0])
-    
+
+    def tabChanged(self):
+        try:
+            parameter = self._mainWindow.param_tabs.currentWidget().parameter
+            plot = parameter.getPlot()
+            self._mainWindow.graphicsView.figure = plot.getFigure()
+            self._mainWindow.graphicsView.draw()
+        except Exception as e:
+            print(e)
+
     def showMaximized(self):
         self._qmw.showMaximized()
 
