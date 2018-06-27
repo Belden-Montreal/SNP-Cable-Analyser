@@ -128,7 +128,7 @@ class Communication(object):
     def ip_address(self):
         return self._ip
 
-    @num_points.setter
+    @ip_address.setter
     def ip_address(self, ip):
         self._ip = ip
 
@@ -174,7 +174,7 @@ class Communication(object):
     def whoAmI(self):
         return(self.session.query('*IDN?'))
 
-    def aquire(self, testName, portNum):
+    def acquire(self, testName, portNum):
         try:
             self.test_name = testName
             self.port_num = portNum

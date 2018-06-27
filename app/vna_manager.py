@@ -47,7 +47,8 @@ class VNAManager(object):
                         self._comm.max_freq = stop_freq
                         self._comm.num_points = num_points
                         self._comm.average = average
-                        self._comm.aquire(testName, numPorts)
+                        self._comm.timeout = timeout
+                        self._comm.acquire(testName, numPorts)
 
                         return r"Y:/{}.s{}p".format(testName, numPorts)
 
@@ -108,12 +109,10 @@ class Addr_Dialog:
         addr_dialog.plainTextEdit.setText(comm.VNAAddress)
 
         result = dialog.exec_()
-        print("here")
         if not result:
             return 0
         if result:
             addr =  addr_dialog.plainTextEdit.text()
-            print("sent")
             if len(addr) < 1:
                 return 0
             return addr
