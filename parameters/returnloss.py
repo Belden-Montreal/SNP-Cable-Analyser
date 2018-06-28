@@ -12,7 +12,6 @@ class ReturnLoss(PairedParameter):
         
         
     '''
-
     def computePairs(self, ports):
         pairs = dict()
         for i in range(len(ports)):
@@ -21,7 +20,6 @@ class ReturnLoss(PairedParameter):
         return pairs
     
     def computeParameter(self):
-        
         # initialize the dictionary for each port
         rl = dict()
         cpRl = dict()
