@@ -1,6 +1,7 @@
 import unittest
 import numpy as np
 
+from sample.port import Port, PortConfiguration
 from parameters.parameter import Parameter
 
 class TestParameter(unittest.TestCase):
@@ -18,6 +19,13 @@ class TestParameter(unittest.TestCase):
             2: ("Port 3", True),
             3: ("Port 4", True),
         }
+
+        self._remote = {
+            2: Port("Cable 1"),
+            3: Port("Cable 2"),
+        }
+
+        self._ports = PortConfiguration(self._main, self._remote)
 
         self._freq = [100, 200, 300, 400]
 
