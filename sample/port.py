@@ -13,9 +13,20 @@ class PortConfiguration(object):
 
         self._main = main
         self._remote = remote
+        self._ports = dict(main)
+        self._ports.update(remote)
 
     def getMainPorts(self):
         return self._main
 
     def getRemotePorts(self):
         return self._remote
+
+    def getAllPorts(self):
+        return self._ports
+
+    def __getitem__(self, key):
+        return self.getAllPorts()[key]
+
+    def __iter__(self):
+        return self._ports.items().__iter__()
