@@ -104,14 +104,29 @@ class Main():
         
         self._mainWindow.param_tabs.clear()
         sample = self._projectManager.activeProject().findSamplesByName([sampleName])[0]
-        mainTab = QtWidgets.QWidget()
-        mainTabWidget = MainWidget.Ui_MainWidget()
-        mainTabWidget.setupUi(mainTab)
-        self._mainWindow.param_tabs.addTab(mainTab, "Main")
+        mainTab = self.setupMainTab(sample)
 
+        failParams = list()
         for name, param in sample.getParameters().items():
             newTab = ParameterWidget(name, param)
             self._mainWindow.param_tabs.addTab(newTab, name)
+            if not newTab.hasPassed:
+                failParams.append(name)
+        if len(failParams) > 0:
+            mainTab.passLabel.setText("Fail")
+        else:
+            mainTab.passLabel.setText("Pass")
+        mainTab.failsLabel.setText(str(failParams))
+
+    def setupMainTab(self, sample):
+        mainTab = QtWidgets.QWidget()
+        mainTabWidget = MainWidget.Ui_MainWidget()
+        mainTabWidget.setupUi(mainTab)
+        mainTabWidget.testNameLabel.setText(sample.getName()+":")
+        mainTabWidget.dateLabel.setText(sample.getDate())
+        mainTabWidget.limitLabel.setText(str(sample.getStandard()))
+        self._mainWindow.param_tabs.addTab(mainTab, "Main")
+        return mainTabWidget
 
     def tableContextMenu(self, pos):
         if len(self._selected) > 0 and self._projectManager.activeProject():

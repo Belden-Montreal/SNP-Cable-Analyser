@@ -16,12 +16,13 @@ class Sample(object):
             self.setPorts()
             self._factory = ParameterFactory(self._ports, self._freq, self._mm, self._parameters)
             self.addParameters()
-            self.standard = None
+            self._standard = None
 
     def addParameters(self):
         raise NotImplementedError
 
     def setStandard(self, standard):
+        self._standard = standard
         for name, parameter in self._parameters.items():
             if name in standard.limits:
                 parameter.setLimit(standard.limits[name])
@@ -47,4 +48,7 @@ class Sample(object):
 
     def getNumPorts(self):
         return self._portsNumber
+
+    def getStandard(self):
+        return self._standard
 
