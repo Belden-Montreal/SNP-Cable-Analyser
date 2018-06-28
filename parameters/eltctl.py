@@ -1,6 +1,6 @@
-from parameters.parameter import Parameter
+from parameters.parameter import PairedParameter
 
-class ELTCTL(Parameter):
+class ELTCTL(PairedParameter):
     '''
     ELTCTL (Equal Level Transverse Conversion Transfer Loss) is calculated using the following formula:
 
@@ -11,18 +11,28 @@ class ELTCTL(Parameter):
         self._tctl = tctl
         super(ELTCTL, self).__init__(ports, freq, matrices)
 
+    def computePairs(self, ports):
+        pairs = dict()
+        for i in range(len(ports)//2):
+            port1, isRemote1 = ports[i]
+            port2, isRemote2 = ports[i+len(ports)//2]
+
+            if isRemote1 is not isRemote2:
+                pairs[(i, i+len(ports)//2)] = (port1+"-"+port2, isRemote1)
+                pairs[(i+len(ports)//2, i)] = (port2+"-"+port1, isRemote2)
+
+        return pairs
+
     def computeParameter(self):
         eltctl = dict()
         dbIl = self._il.getParameter()
         dbTctl = self._tctl.getParameter()
 
-        ports = dbIl.keys()
-
-        for port in ports:
+        for port in self._ports:
             eltctl[port] = list()
 
         for f,_ in enumerate(self._freq):
-            for port in ports:
+            for port in self._ports:
                 eltctl[port].append(dbTctl[port][f] - dbIl[port][f])
 
         return eltctl,_

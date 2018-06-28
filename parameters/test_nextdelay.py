@@ -11,10 +11,10 @@ import numpy as np
 class TestNEXTDelay(TestParameter):
     def setUp(self):
         self._ports = {
-            0: "Port 1",
-            1: "Port 2",
-            2: "Port 3",
-            3: "Port 4",
+            0: ("Port 1", False),
+            1: ("Port 2", False),
+            2: ("Port 3", False),
+            3: ("Port 4", False),
         }
         self._matrices = np.array([
             [
@@ -42,17 +42,17 @@ class TestNEXTDelay(TestParameter):
         self.assertEqual(len(parameter), 6)
 
         # check the values of the port 1-2
-        self.assertAlmostEqual(parameter[(0,1)], plugDelay[0]+plugDelay[1])
+        self.assertAlmostEqual(parameter[(0,1)], plugDelay[(0,0)]+plugDelay[(1,1)])
         # check the values of the port 1-3
-        self.assertAlmostEqual(parameter[(0,2)], plugDelay[0]+plugDelay[2])
+        self.assertAlmostEqual(parameter[(0,2)], plugDelay[(0,0)]+plugDelay[(2,2)])
         # check the values of the port 1-4
-        self.assertAlmostEqual(parameter[(0,3)], plugDelay[0]+plugDelay[3])
+        self.assertAlmostEqual(parameter[(0,3)], plugDelay[(0,0)]+plugDelay[(3,3)])
         # check the values of the port 2-3
-        self.assertAlmostEqual(parameter[(1,2)], plugDelay[1]+plugDelay[2])
+        self.assertAlmostEqual(parameter[(1,2)], plugDelay[(1,1)]+plugDelay[(2,2)])
         # check the values of the port 2-4
-        self.assertAlmostEqual(parameter[(1,3)], plugDelay[1]+plugDelay[3])
+        self.assertAlmostEqual(parameter[(1,3)], plugDelay[(1,1)]+plugDelay[(3,3)])
         # check the values of the port 3-4
-        self.assertAlmostEqual(parameter[(2,3)], plugDelay[2]+plugDelay[3])
+        self.assertAlmostEqual(parameter[(2,3)], plugDelay[(2,2)]+plugDelay[(3,3)])
 
 if __name__ == '__main__':
     unittest.main()

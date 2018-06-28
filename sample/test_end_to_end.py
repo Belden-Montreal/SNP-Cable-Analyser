@@ -13,6 +13,5 @@ class TestEndToEnd(TestSample):
         self.assertEqual(len(ee._parameters), len(self._params))
         self.assertListEqual(list(ee._parameters.keys()), self._params)
 
-
 if __name__ == '__main__':
     unittest.main()

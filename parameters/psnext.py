@@ -31,32 +31,17 @@ class PSNEXT(Parameter):
             for port in self._ports:
                 # get all NEXT pairs containing this port
                 pairs = self._next.getPairs()
-                pairs = filter(lambda p: port == p[0] or port == p[1], pairs)
+                pairs = filter(lambda p: port == p[1], pairs)
 
                 # get the NEXT values of these pairs
-                values = map(lambda p: self._next.getParameter(endToEnd=False)[p][f], pairs)
+                values = map(lambda p: self._next.getParameter()[p][f], pairs)
 
                 # compute PSNEXT
                 psnext = powerSum(values)
 
                 # add the value to the list
                 dbPSNEXT[port].append(psnext)
-
-                # get all NEXT pairs containing this port
-                pairs = self._next.getPairs()
-                n = (1+math.sqrt(4*self._next.getNumPorts()+1))//2
-                pairs = filter(lambda p: (port == p[0] or port == p[1]) and not ((p[0] < n//2 and p[1] >= n//2) or (p[1] < n//2 and p[0] >= n//2)), pairs)
-
-                # get the NEXT values of these pairs
-                values = map(lambda p: self._next.getParameter(endToEnd=True)[p][f], pairs)
-
-                # compute PSNEXT
-                psnext = powerSum(values)
-
-                # add the value to the list
-                dbEEPSNEXT[port].append(psnext)
-        self._SEParameter = dbPSNEXT
-        return (dbEEPSNEXT, None)
+        return (dbPSNEXT, None)
 
     def chooseMatrices(self, matrices):
         return diffDiffMatrix(matrices)
@@ -66,8 +51,3 @@ class PSNEXT(Parameter):
 
     def getName(self):
         return "PSNEXT"
-
-    def getParameter(self, endToEnd=True):
-        if endToEnd:
-            return self._parameter
-        return self._SEParameter

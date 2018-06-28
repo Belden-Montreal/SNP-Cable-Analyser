@@ -15,16 +15,16 @@ class NEXTDelay(PairedParameter):
                     continue
 
                 # create the pair for the first end of the line
-                port1 = i
-                port2 = j
-                pairs[(port1, port2)] = ports[port1]+"-"+ports[port2]
-                pairs[(port2, port1)] = ports[port2]+"-"+ports[port1]
+                port1,isRemote1 = ports[i]
+                port2,isRemote2 = ports[j]
+                pairs[(i, j)] = (port1+"-"+port2, isRemote1)
+                pairs[(j, i)] = (port2+"-"+port1, isRemote2)
 
                 # create the pair for the second end of the line
-                port1 = i + len(ports)//2
-                port2 = j + len(ports)//2
-                pairs[(port1, port2)] = ports[port1]+"-"+ports[port2]
-                pairs[(port2, port1)] = ports[port2]+"-"+ports[port1]
+                port1,isRemote1 = ports[i + len(ports)//2]
+                port2,isRemote2 = ports[j + len(ports)//2]
+                pairs[(i+ len(ports)//2, j+ len(ports)//2)] = (port1+"-"+port2, isRemote1)
+                pairs[(j+ len(ports)//2, i+ len(ports)//2)] = (port2+"-"+port1, isRemote2)
 
         return pairs
 
@@ -32,9 +32,9 @@ class NEXTDelay(PairedParameter):
         nextDelay = dict()
         plugDelay = self._plugDelay.getParameter()
 
-        for i in plugDelay:
-            for j in range(i+1, len(plugDelay)):
-                nextDelay[(i,j)] = plugDelay[i] + plugDelay[j]
+        for (i,j) in plugDelay:
+            for k in range(i+1, len(plugDelay)):
+                nextDelay[(i,k)] = plugDelay[(i,j)] + plugDelay[(k,k)]
 
         return nextDelay,None
 

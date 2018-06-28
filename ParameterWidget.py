@@ -38,9 +38,9 @@ class ParameterWidget(QtWidgets.QWidget):
 
 
     def setPairsList(self):
-        for num, port in self.parameter.getPorts().items():
-            self.paramWidget.marginListWidget.addItem(PairItem(port, num))
-            self.paramWidget.worstListWidget.addItem(PairItem(port, num))
+        for num, (port, isRemote) in self.parameter.getPorts().items():
+            self.paramWidget.marginListWidget.addItem(PairItem(port, num, isRemote))
+            self.paramWidget.worstListWidget.addItem(PairItem(port, num, isRemote))
         self.paramWidget.marginListWidget.sortItems()            
         self.paramWidget.worstListWidget.sortItems()
 
@@ -61,7 +61,8 @@ class ParameterWidget(QtWidgets.QWidget):
             self.paramWidget.worstMarginLabel.setText(self.worstValue[0][pair.number][3].__str__())
 
 class PairItem(QtWidgets.QListWidgetItem):
-    def __init__(self, text, number, parent = None, type = QtWidgets.QListWidgetItem.Type):
+    def __init__(self, text, number, isRemote, parent = None, type = QtWidgets.QListWidgetItem.Type):
         super(PairItem, self).__init__(text, parent, type)
         self.number = number
+        self.isRemote = isRemote
 

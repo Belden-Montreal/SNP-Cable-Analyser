@@ -5,10 +5,17 @@ from parameters.parameter_factory import ParameterFactory
 class TestSample(unittest.TestCase):
     def setUp(self):
         self._ports = {
-            0: "Port 1",
-            1: "Port 2",
-            2: "Port 3",
-            3: "Port 4",
+            0: ("Port 1", False),
+            1: ("Port 2", False),
+            2: ("Port 3", False),
+            3: ("Port 4", False),
+        }
+
+        self._e2ePorts = {
+            0: ("Port 1", False),
+            1: ("Port 2", False),
+            2: ("Port 3", True),
+            3: ("Port 4", True),
         }
 
         self._freq = [100, 200, 300, 400]

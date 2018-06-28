@@ -6,14 +6,14 @@ from parameters.fext import FEXT
 
 def powersum(fext, f, port):
     keys = fext.keys()
-    return 10*np.log10(np.sum([10**(fext[key][f]/10) for key in keys if (key[0] == port ) ]))
+    return 10*np.log10(np.sum([10**(fext[key][f]/10) for key in keys if (key[1] == port ) ]))
 
 class TestPsFEXT(TestParameter):
     def createParameter(self):
         # we assume that FEXT is tested
-        fext = FEXT(self._ports, self._freq, self._matrices)
+        fext = FEXT(self._e2ePorts, self._freq, self._matrices)
 
-        return PSFEXT(self._ports, self._freq, self._matrices, fext)
+        return PSFEXT(self._e2ePorts, self._freq, self._matrices, fext)
 
     def testComputeParameter(self):
         parameter = self._parameter.getParameter()

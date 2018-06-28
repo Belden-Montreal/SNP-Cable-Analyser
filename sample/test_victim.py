@@ -11,9 +11,9 @@ class TestVictim(TestSample):
         self._params = ["IL", "AXEXTD", "PSAXEXT", "PSAACRX"]
 
     def testParametersBuilding(self):
-        il = InsertionLoss(self._ports, self._freq, self._mm)
-        fext = FEXT(self._ports, self._freq, self._mm)
-        axextd = [AXEXT(self._ports, self._freq, self._mm, fext, il) for i in range(4)]
+        il = InsertionLoss(self._e2ePorts, self._freq, self._mm)
+        fext = FEXT(self._e2ePorts, self._freq, self._mm)
+        axextd = [AXEXT(self._e2ePorts, self._freq, self._mm, fext, il) for i in range(4)]
         v = Victim(None, axextd)
         self.setMockSample(v)
         self.assertEqual(len(v._parameters), len(self._params))

@@ -16,9 +16,9 @@ class Case(PairedParameter):
                 if i >= j:
                     continue
 
-                port1 = i
-                port2 = j
-                pairs[(port1, port2)] = ports[port1]+"-"+ports[port2]
+                port1,isRemote1 = ports[i]
+                port2,_ = ports[j]
+                pairs[(i, j)] = (port1+"-"+port2, isRemote1)
 
         return pairs
 

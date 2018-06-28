@@ -12,11 +12,11 @@ def powersum(axextd, f, port):
 class TestPSAXEXT(TestParameter):
     def createParameter(self):
         # we assume that ANEXT, fext and il are tested
-        il = InsertionLoss(self._ports, self._freq, self._matrices)
-        fext = FEXT(self._ports, self._freq, self._matrices)
-        axextd = [AXEXT(self._ports, self._freq, self._matrices, fext, il) for x in range(4)]
+        il = InsertionLoss(self._e2ePorts, self._freq, self._matrices)
+        fext = FEXT(self._e2ePorts, self._freq, self._matrices)
+        axextd = [AXEXT(self._e2ePorts, self._freq, self._matrices, fext, il) for x in range(4)]
 
-        return PSAXEXT(self._ports, self._freq, self._matrices, axextd)
+        return PSAXEXT(self._e2ePorts, self._freq, self._matrices, axextd)
 
     def testComputeParameter(self):
         parameter = self._parameter.getParameter()

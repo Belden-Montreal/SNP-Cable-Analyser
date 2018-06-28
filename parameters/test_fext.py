@@ -6,7 +6,7 @@ from parameters.fext import FEXT
 
 class TestFEXT(TestParameter):
     def createParameter(self):
-        return FEXT(self._ports, self._freq, self._matrices)
+        return FEXT(self._e2ePorts, self._freq, self._matrices)
 
     def testComputePairs(self):
         pairs = self._parameter.getPairs()

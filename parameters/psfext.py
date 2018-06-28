@@ -22,7 +22,7 @@ class PSFEXT(Parameter):
 
         for (f,_) in enumerate(self._freq):
             for port in self._ports:
-                ps = 10.0*np.log10(np.sum([10**(dbFext[key][f]/10) for key in ports if (key[0] == port)]))
+                ps = 10.0*np.log10(np.sum([10**(dbFext[key][f]/10) for key in ports if (key[1] == port)]))
                 psfext[port].append(ps)
         return psfext,_
 

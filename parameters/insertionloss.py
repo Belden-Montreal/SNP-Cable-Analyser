@@ -1,6 +1,6 @@
-from parameters.parameter import Parameter, complex2db, diffDiffMatrix
+from parameters.parameter import PairedParameter, complex2db, diffDiffMatrix
 
-class InsertionLoss(Parameter):
+class InsertionLoss(PairedParameter):
     '''
         Example of Insertion Loss with 4 wires
         For non-full measurement, only take the top right values (1 and 2 in this case)
@@ -14,6 +14,18 @@ class InsertionLoss(Parameter):
         
     ''' 
 
+    def computePairs(self, ports):
+        pairs = dict()
+        for i in range(len(ports)//2):
+            port1, isRemote1 = ports[i]
+            port2, isRemote2 = ports[i+len(ports)//2]
+
+            if isRemote1 is not isRemote2:
+                pairs[(i, i+len(ports)//2)] = (port1+"-"+port2, isRemote1)
+                pairs[(i+len(ports)//2, i)] = (port2+"-"+port1, isRemote2)
+
+        return pairs
+
     def computeParameter(self):
         # initialize the dictionary for each port
         il = dict()
@@ -24,28 +36,23 @@ class InsertionLoss(Parameter):
 
         # extract the insertion loss in all matrices
         for (f,_) in enumerate(self._freq):
-            for port in self._ports:
+            for (i,j) in self._ports:
                 # get the value
-                if port < len(self._ports)//2:
-                    topRight = self._matrices[f, port, port+len(self._ports)//2]
-                    il[port].append(complex2db(topRight))
-                    cpIl[port].append(topRight)
-
-                    bottomLeft = self._matrices[f, port+len(self._ports)//2, port]
-                    il[port+len(self._ports)//2].append(complex2db(bottomLeft))
-                    cpIl[port+len(self._ports)//2].append(bottomLeft)
+                value = self._matrices[f, i, j]
+                il[(i,j)].append(complex2db(value))
+                cpIl[(i,j)].append(value)
 
         return il, cpIl
 
     def getParameter(self, full=True):
         if not full:
-            return {k: self._parameter[k] for k in sorted(self._parameter)[:len(self._ports)//2]}
+            return {(i,j): self._parameter[(i,j)] for (i,j) in self._parameter if i < j}
         else:
             return self._parameter
 
     def getComplexParameter(self, full=True):
         if not full:
-            return {k: self._complexParameter[k] for k in sorted(self._complexParameter)[:len(self._ports)//2]}
+            return {(i,j): self._complexParameter[(i,j)] for (i,j) in self._complexParameter if i < j}
         else:
             return self._complexParameter
 

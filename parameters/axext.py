@@ -32,44 +32,25 @@ class AXEXT(PairedParameter):
     def computePairs(self, ports):
         # create each pair for the ANEXT
         pairs = dict()
-        for i in range(0, len(ports)//2):
-            for j in range(len(ports)//2, len(ports)):
-                if i == j or abs(i-j) == len(ports)//2:
-                    continue
-
-                # create the pair for the il
-                pairs[(i, i)] = ports[i]+"-"+ports[i]
-
-                # create the pair for the first end of the line
-                pairs[(i, j)] = ports[i]+"-"+ports[j]
-
-                # create the pair for the second end of the line
-                pairs[(j, i)] = ports[j]+"-"+ports[i]
+        
+        pairs.update(self._fext.getPairs())
+        pairs.update(self._il.getPairs())
 
         return pairs
 
     def computeParameter(self):
         # initialize the dictionaries for each port
         (dbAXEXT, cpAXEXT) = (dict(), dict())
-        dbIl = self._il.getParameter(full=False)
-        cpIl = self._il.getComplexParameter(full=False)
+        dbIl = self._il.getParameter(full=True)
+        cpIl = self._il.getComplexParameter(full=True)
         dbFext = self._fext.getParameter()
         cpFext = self._fext.getComplexParameter()
-
-        for (i,j) in self._ports:
-            dbAXEXT[(i,j)] = list()
-            cpAXEXT[(i,j)] = list()
-
+        
         # extract the ANEXT values from the fext and il
-        for (f,_) in enumerate(self._freq):
-            for (i,j) in self._ports:
-                if i==j:
-                    cpAXEXT[(i,j)].append(cpIl[i][f])
-                    dbAXEXT[(i,j)].append(dbIl[i][f])
-                else:
-                    cpAXEXT[(i,j)].append(cpFext[(i,j)][f])
-                    dbAXEXT[(i,j)].append(dbFext[(i,j)][f])
-
+        dbAXEXT.update(dbFext)
+        cpAXEXT.update(cpFext)
+        dbAXEXT.update(dbIl)
+        cpAXEXT.update(cpIl)        
         return (dbAXEXT, cpAXEXT)
 
     def chooseMatrices(self, matrices):

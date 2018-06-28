@@ -2,7 +2,7 @@ from sample.end_to_end import EndToEnd
 from sample.single_ended import SingleEnded
 from multiprocessing.dummy import Pool as ThreadPool
 from app.import_dialog import ImportSNPDialog
-
+from os.path import splitext
 import xlsxwriter
 
 class Project(object):
@@ -13,9 +13,9 @@ class Project(object):
     def __init__(self):
         self._samples = list()
 
-    def importSamples(self, fileNames, singleEnded):
+    def importSamples(self, fileNames):
         pool = ThreadPool()
-        self._samples.extend(pool.starmap(self.__createSample, zip(fileNames, [singleEnded]*len(fileNames))))
+        self._samples.extend(pool.map(self.__createSample, fileNames))
 
     def removeSamples(self, names):
         self._samples = [x for x in self._samples if x.getName() not in names]
@@ -82,10 +82,11 @@ class Project(object):
         dial = ImportSNPDialog(parent)
         res = dial.getFiles()
         if res:
-            self.importSamples(res[1], res[0])
+            self.importSamples(res[1])
 
-    def __createSample(self, name, singleEnded):
-        if singleEnded:
+    def __createSample(self, name):
+        _, extension = splitext(name)
+        if extension[2] == "8":
             return SingleEnded(name)
         return EndToEnd(name)
         

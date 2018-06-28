@@ -1,7 +1,7 @@
-from parameters.parameter import Parameter, takeClosest
+from parameters.parameter import PairedParameter, takeClosest
 import numpy as np
 
-class PlugDelay(Parameter):
+class PlugDelay(PairedParameter):
 
     def __init__(self, ports, freq, matrices, openDelay, shortDelay, dfDelay, k1, k2, k3):
         self._openDelay = openDelay
@@ -11,6 +11,13 @@ class PlugDelay(Parameter):
         self._k2 = k2
         self._k3 = k3
         super(PlugDelay, self).__init__(ports, freq, matrices)
+
+    def computePairs(self, ports):
+        pairs = dict()
+        for i in range(len(ports)):
+            port,isRemote = ports[i]
+            pairs[(i,i)] = (port, isRemote)
+        return pairs
 
     def computeParameter(self):
         dfDelay = self._dfDelay.getParameter()

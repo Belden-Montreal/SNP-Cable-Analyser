@@ -1,6 +1,6 @@
-from parameters.parameter import Parameter, complex2phase
+from parameters.parameter import PairedParameter, complex2phase
 
-class PropagationDelay(Parameter):
+class PropagationDelay(PairedParameter):
     '''
         Propagation delay is calculated by taking the numerical derivative of the return loss phase:
         Delay = -1/360 * dp/df
@@ -13,6 +13,13 @@ class PropagationDelay(Parameter):
     def __init__(self, ports, freq, matrices, rl):
         self._rl = rl
         super(PropagationDelay, self).__init__(ports, freq, matrices)
+
+    def computePairs(self, ports):
+        pairs = dict()
+        for i in range(len(ports)):
+            port,isRemote = ports[i]
+            pairs[(i,i)] = (port, isRemote)
+        return pairs
 
     def computeParameter(self):
         # initialize the dictionary for each port

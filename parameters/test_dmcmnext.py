@@ -6,10 +6,11 @@ from parameters.dmcmnext import DMCMNEXT
 
 class TestDMCMNEXT(TestParameter):
     def createParameter(self):
-        return DMCMNEXT(self._ports, self._freq, self._matrices)
+        return DMCMNEXT(self._e2ePorts, self._freq, self._matrices)
 
     def testComputePairs(self):
-        pairs = self._parameter.getPairs()
+        seDmcmnext = DMCMNEXT(self._ports, self._freq, self._matrices)
+        pairs = seDmcmnext.getPairs()
 
         # for a 4 ports single ended, there are 12 DMCMNEXT pairs (including reverse)
         self.assertEqual(len(pairs), 12)
@@ -20,7 +21,7 @@ class TestDMCMNEXT(TestParameter):
         self.assertEqual((1,0) in pairs, True)
         self.assertEqual((3,2) in pairs, True)
 
-        pairs = self._parameter.getParameter(endToEnd=True).keys()
+        pairs = self._parameter.getParameter().keys()
         #for a 4 ports end-to-end, there are 4 NEXT pairs
         self.assertEqual(len(pairs), 4)
 

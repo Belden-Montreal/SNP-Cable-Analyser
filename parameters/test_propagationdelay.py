@@ -38,49 +38,49 @@ class TestPropagationDelay(TestParameter):
         self.assertEqual(len(parameter), len(self._ports))
 
         # the number of sample should be the same as the number of frequencies
-        self.assertEqual(len(parameter[0]), len(self._freq))
-        self.assertEqual(len(parameter[1]), len(self._freq))
-        self.assertEqual(len(parameter[2]), len(self._freq))
-        self.assertEqual(len(parameter[3]), len(self._freq))
+        self.assertEqual(len(parameter[(0,0)]), len(self._freq))
+        self.assertEqual(len(parameter[(1,1)]), len(self._freq))
+        self.assertEqual(len(parameter[(2,2)]), len(self._freq))
+        self.assertEqual(len(parameter[(3,3)]), len(self._freq))
         # check the values of the port 1
-        self.assertAlmostEqual(parameter[0][0], calculateDelay(self._matrices[0, 0, 0],
+        self.assertAlmostEqual(parameter[(0,0)][0], calculateDelay(self._matrices[0, 0, 0],
             self._matrices[1, 0, 0], self._freq[0], self._freq[1]))
-        self.assertAlmostEqual(parameter[0][1], calculateDelay(self._matrices[1, 0, 0],
-            self._matrices[2, 0, 0], self._freq[1], self._freq[2], parameter[0][0]))
-        self.assertAlmostEqual(parameter[0][2], calculateDelay(self._matrices[2, 0, 0],
-            self._matrices[3, 0, 0], self._freq[2], self._freq[3], parameter[0][1]))
-        self.assertAlmostEqual(parameter[0][3], calculateDelay(self._matrices[2, 0, 0],
-            self._matrices[3, 0, 0], self._freq[2], self._freq[3], parameter[0][1]))
+        self.assertAlmostEqual(parameter[(0,0)][1], calculateDelay(self._matrices[1, 0, 0],
+            self._matrices[2, 0, 0], self._freq[1], self._freq[2], parameter[(0,0)][0]))
+        self.assertAlmostEqual(parameter[(0,0)][2], calculateDelay(self._matrices[2, 0, 0],
+            self._matrices[3, 0, 0], self._freq[2], self._freq[3], parameter[(0,0)][1]))
+        self.assertAlmostEqual(parameter[(0,0)][3], calculateDelay(self._matrices[2, 0, 0],
+            self._matrices[3, 0, 0], self._freq[2], self._freq[3], parameter[(0,0)][1]))
 
         # check the values of the port 2
-        self.assertAlmostEqual(parameter[1][0], calculateDelay(self._matrices[0, 1, 1],
+        self.assertAlmostEqual(parameter[(1,1)][0], calculateDelay(self._matrices[0, 1, 1],
             self._matrices[1, 1, 1], self._freq[0], self._freq[1]))
-        self.assertAlmostEqual(parameter[1][1], calculateDelay(self._matrices[1, 1, 1],
-            self._matrices[2, 1, 1], self._freq[1], self._freq[2], parameter[1][0]))
-        self.assertAlmostEqual(parameter[1][2], calculateDelay(self._matrices[2, 1, 1],
-            self._matrices[3, 1, 1], self._freq[2], self._freq[3], parameter[1][1]))
-        self.assertAlmostEqual(parameter[1][3], calculateDelay(self._matrices[2, 1, 1],
-            self._matrices[3, 1, 1], self._freq[2], self._freq[3], parameter[1][1]))
+        self.assertAlmostEqual(parameter[(1,1)][1], calculateDelay(self._matrices[1, 1, 1],
+            self._matrices[2, 1, 1], self._freq[1], self._freq[2], parameter[(1,1)][0]))
+        self.assertAlmostEqual(parameter[(1,1)][2], calculateDelay(self._matrices[2, 1, 1],
+            self._matrices[3, 1, 1], self._freq[2], self._freq[3], parameter[(1,1)][1]))
+        self.assertAlmostEqual(parameter[(1,1)][3], calculateDelay(self._matrices[2, 1, 1],
+            self._matrices[3, 1, 1], self._freq[2], self._freq[3], parameter[(1,1)][1]))
 
         # check the values of the port 3
-        self.assertAlmostEqual(parameter[2][0], calculateDelay(self._matrices[0, 2, 2],
+        self.assertAlmostEqual(parameter[(2,2)][0], calculateDelay(self._matrices[0, 2, 2],
             self._matrices[1, 2, 2], self._freq[0], self._freq[1]))
-        self.assertAlmostEqual(parameter[2][1], calculateDelay(self._matrices[1, 2, 2],
-            self._matrices[2, 2, 2], self._freq[1], self._freq[2], parameter[2][0]))
-        self.assertAlmostEqual(parameter[2][2], calculateDelay(self._matrices[2, 2, 2],
-            self._matrices[3, 2, 2], self._freq[2], self._freq[3], parameter[2][1]))
-        self.assertAlmostEqual(parameter[2][3], calculateDelay(self._matrices[2, 2, 2],
-            self._matrices[3, 2, 2], self._freq[2], self._freq[3], parameter[2][1]))
+        self.assertAlmostEqual(parameter[(2,2)][1], calculateDelay(self._matrices[1, 2, 2],
+            self._matrices[2, 2, 2], self._freq[1], self._freq[2], parameter[(2,2)][0]))
+        self.assertAlmostEqual(parameter[(2,2)][2], calculateDelay(self._matrices[2, 2, 2],
+            self._matrices[3, 2, 2], self._freq[2], self._freq[3], parameter[(2,2)][1]))
+        self.assertAlmostEqual(parameter[(2,2)][3], calculateDelay(self._matrices[2, 2, 2],
+            self._matrices[3, 2, 2], self._freq[2], self._freq[3], parameter[(2,2)][1]))
 
         # check the values of the port 4
-        self.assertAlmostEqual(parameter[3][0], calculateDelay(self._matrices[0, 3, 3],
+        self.assertAlmostEqual(parameter[(3,3)][0], calculateDelay(self._matrices[0, 3, 3],
             self._matrices[1, 3, 3], self._freq[0], self._freq[1]))
-        self.assertAlmostEqual(parameter[3][1], calculateDelay(self._matrices[1, 3, 3],
-            self._matrices[2, 3, 3], self._freq[1], self._freq[2], parameter[3][0]))
-        self.assertAlmostEqual(parameter[3][2], calculateDelay(self._matrices[2, 3, 3],
-            self._matrices[3, 3, 3], self._freq[2], self._freq[3], parameter[3][1]))
-        self.assertAlmostEqual(parameter[3][3], calculateDelay(self._matrices[2, 3, 3],
-            self._matrices[3, 3, 3], self._freq[2], self._freq[3], parameter[3][1]))
+        self.assertAlmostEqual(parameter[(3,3)][1], calculateDelay(self._matrices[1, 3, 3],
+            self._matrices[2, 3, 3], self._freq[1], self._freq[2], parameter[(3,3)][0]))
+        self.assertAlmostEqual(parameter[(3,3)][2], calculateDelay(self._matrices[2, 3, 3],
+            self._matrices[3, 3, 3], self._freq[2], self._freq[3], parameter[(3,3)][1]))
+        self.assertAlmostEqual(parameter[(3,3)][3], calculateDelay(self._matrices[2, 3, 3],
+            self._matrices[3, 3, 3], self._freq[2], self._freq[3], parameter[(3,3)][1]))
 
 if __name__ == '__main__':
     unittest.main()

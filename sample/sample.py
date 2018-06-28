@@ -26,9 +26,12 @@ class Sample(object):
             if name in standard.limits:
                 parameter.setLimit(standard.limits[name])
 
+    '''
+    Ports follow the following format: {port_number: (port_name, isRemote)}
+    '''
     def setPorts(self):
         for i in range(self._portsNumber):
-            self._ports[i] = PORTS_NAME[i]
+            self._ports[i] = (PORTS_NAME[i], False)
     
     def getName(self):
         return self._name

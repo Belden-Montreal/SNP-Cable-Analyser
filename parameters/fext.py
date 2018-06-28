@@ -22,11 +22,14 @@ class FEXT(PairedParameter):
                 if i == j or abs(i-j) == len(ports)//2:
                     continue
 
-                # create the pair for the first end of the line
-                pairs[(i, j)] = ports[i]+"-"+ports[j]
+                port1, isRemote1 = ports[i]
+                port2, isRemote2 = ports[j]
 
-                # create the pair for the second end of the line
-                pairs[(j, i)] = ports[j]+"-"+ports[i]
+                if isRemote1 is not isRemote2:
+                    # create the pair for the first end of the line
+                    pairs[(i, j)] = (port1+"-"+port2, isRemote1)
+                    # create the pair for the second end of the line
+                    pairs[(j, i)] = (port2+"-"+port1, isRemote2)
 
         return pairs
 

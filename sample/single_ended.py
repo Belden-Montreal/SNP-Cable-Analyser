@@ -1,4 +1,4 @@
-from sample.sample import Sample
+from sample.sample import Sample, PORTS_NAME
 from parameters.parameter_factory import ParameterFactory
 
 class SingleEnded(Sample):
@@ -26,5 +26,9 @@ class SingleEnded(Sample):
 
         for parameter in parameters:
             self._parameters[parameter] = self._factory.getParameter(parameter)
+
+    def setPorts(self):
+        for i in range(self._portsNumber):
+            self._ports[i] = (PORTS_NAME[i], False)
 
         

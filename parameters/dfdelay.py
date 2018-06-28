@@ -1,12 +1,19 @@
-from parameters.parameter import Parameter, takeClosest
+from parameters.parameter import PairedParameter, takeClosest
 import numpy as np
 
-class DFDelay(Parameter):
+class DFDelay(PairedParameter):
 
     def __init__(self, ports, freq, matrices, openDelay, shortDelay):
         self._openDelay = openDelay
         self._shortDelay = shortDelay
         super(DFDelay, self).__init__(ports, freq, matrices)
+
+    def computePairs(self, ports):
+        pairs = dict()
+        for i in range(len(ports)):
+            port,isRemote = ports[i]
+            pairs[(i,i)] = (port,isRemote)
+        return pairs
 
     def computeParameter(self):
         openDelay = self._openDelay.getParameter()

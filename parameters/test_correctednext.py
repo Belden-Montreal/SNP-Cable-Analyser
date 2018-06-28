@@ -22,10 +22,10 @@ def correctNEXT(pnext, nextDelay, f):
 class TestCorrectedNEXT(TestParameter):
     def setUp(self):
         self._ports = {
-            0: "Port 1",
-            1: "Port 2",
-            2: "Port 3",
-            3: "Port 4",
+            0: ("Port 1", False),
+            1: ("Port 2", False),
+            2: ("Port 3", False),
+            3: ("Port 4", False),
         }
         self._matrices = np.array([
             [

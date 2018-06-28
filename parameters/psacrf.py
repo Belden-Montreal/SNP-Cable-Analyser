@@ -22,8 +22,12 @@ class PSACRF(Parameter):
             psacrf[port] = list()
 
         for f,_ in enumerate(self._freq):
-            for port in self._ports:
-                psacrf[port].append(psfext[port][f]-il[port][f])
+            for i in self._ports:
+                if i < len(self._ports)//2:
+                    ilPort = (i, i+len(self._ports)//2)
+                else:
+                    ilPort = (i, i-len(self._ports)//2)
+                psacrf[i].append(psfext[i][f]-il[ilPort][f])
         return psacrf,_
 
     def chooseMatrices(self, matrices):

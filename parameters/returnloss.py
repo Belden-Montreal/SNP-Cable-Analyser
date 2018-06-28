@@ -1,6 +1,6 @@
-from parameters.parameter import Parameter, complex2db, diffDiffMatrix
+from parameters.parameter import PairedParameter, complex2db, diffDiffMatrix
 
-class ReturnLoss(Parameter):
+class ReturnLoss(PairedParameter):
     '''
         Example of Return Loss with 4 wires
         
@@ -12,27 +12,34 @@ class ReturnLoss(Parameter):
         
         
     '''
+
+    def computePairs(self, ports):
+        pairs = dict()
+        for i in range(len(ports)):
+            port, isRemote = ports[i]
+            pairs[(i,i)] = (port, isRemote)
+        return pairs
     
     def computeParameter(self):
         
         # initialize the dictionary for each port
         rl = dict()
         cpRl = dict()
-        for port in self._ports:
-            rl[port] = list()
-            cpRl[port] = list()
+        for (i,j) in self._ports:
+            rl[(i,j)] = list()
+            cpRl[(i,j)] = list()
 
         # extract the return loss in all matrices
         for (f,_) in enumerate(self._freq):
-            for port in self._ports:
+            for (i,j) in self._ports:
                 # get the value
-                value = self._matrices[f, port, port]
+                value = self._matrices[f, i, j]
 
                 # convert to db if specified
                 dbValue = complex2db(value)
                 # add the value to the list
-                rl[port].append(dbValue)
-                cpRl[port].append(value)
+                rl[(i,j)].append(dbValue)
+                cpRl[(i,j)].append(value)
         return rl, cpRl
 
     def chooseMatrices(self, matrices):

@@ -24,17 +24,12 @@ class NEXT(PairedParameter):
                 if i >= j:
                     continue
 
-                # create the pair for the first end of the line
-                port1 = i
-                port2 = j
-                pairs[(port1, port2)] = ports[port1]+"-"+ports[port2]
-                pairs[(port2, port1)] = ports[port2]+"-"+ports[port1]
+                port1, isRemote1 = ports[i]
+                port2, isRemote2 = ports[j]
 
-                # # create the pair for the second end of the line
-                # port1 = i + len(ports)//2
-                # port2 = j + len(ports)//2
-                # pairs[(port1, port2)] = ports[port1]+"-"+ports[port2]
-                # pairs[(port2, port1)] = ports[port2]+"-"+ports[port1]
+                if isRemote1 is isRemote2:
+                    pairs[(i, j)] = (port1+"-"+port2, isRemote1)
+                    pairs[(j, i)] = (port2+"-"+port1, isRemote2)
 
         return pairs
 
@@ -63,15 +58,3 @@ class NEXT(PairedParameter):
 
     def getName(self):
         return "NEXT"
-
-    def getParameter(self, endToEnd=True):
-        if endToEnd:
-            n = (1+math.sqrt(4*self.getNumPorts()+1))//2
-            return {(i,j): v for (i,j),v in sorted(self._parameter.items()) if not ((i < n//2 and j >= n//2) or (j < n//2 and i >= n//2))}
-        return self._parameter
-
-    def getComplexParameter(self, endToEnd=True):
-        if endToEnd:
-            n = (1+math.sqrt(4*self.getNumPorts()+1))//2
-            return {(i,j): v for (i,j),v in sorted(self._complexParameter.items()) if not ((i < n//2 and j >= n//2) or (j < n//2 and i >= n//2))}
-        return self._complexParameter

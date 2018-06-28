@@ -8,10 +8,10 @@ from parameters.insertionloss import InsertionLoss
 class TestELTCTL(TestParameter):
     def createParameter(self):
         # we assume FEXT and IL are tested
-        tctl = TCTL(self._ports, self._freq, self._matrices)
-        il = InsertionLoss(self._ports, self._freq, self._matrices)
+        tctl = TCTL(self._e2ePorts, self._freq, self._matrices)
+        il = InsertionLoss(self._e2ePorts, self._freq, self._matrices)
 
-        return ELTCTL(self._ports, self._freq, self._matrices, il, tctl)
+        return ELTCTL(self._e2ePorts, self._freq, self._matrices, il, tctl)
 
     def testComputeParameter(self):
         parameter = self._parameter.getParameter()

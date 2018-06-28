@@ -34,5 +34,5 @@ class EndToEnd(Sample):
 
     def setPorts(self):
         for i in range(self._portsNumber//2):
-            self._ports[i] = PORTS_NAME[i]
-            self._ports[i+self._portsNumber//2] = "(r)"+PORTS_NAME[i]
+            self._ports[i] = (PORTS_NAME[i], False)
+            self._ports[i+self._portsNumber//2] = ("(r)"+PORTS_NAME[i], True)

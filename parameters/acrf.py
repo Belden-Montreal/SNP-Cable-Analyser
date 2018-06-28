@@ -1,5 +1,5 @@
 from parameters.parameter import PairedParameter, diffDiffMatrix
-
+from math import sqrt, floor
 class ACRF(PairedParameter):
     '''
         ACRF is calculated using the following formula : 
@@ -15,16 +15,8 @@ class ACRF(PairedParameter):
     def computePairs(self, ports):
         # create each pair for the ACRF
         pairs = dict()
-        for i in range(0, len(ports)//2):
-            for j in range(len(ports)//2, len(ports)):
-                if i == j or abs(i-j) == len(ports)//2:
-                    continue
-
-                # create the pair for the first end of the line
-                pairs[(i, j)] = ports[i]+"-"+ports[j]
-
-                # create the pair for the second end of the line
-                pairs[(j, i)] = ports[j]+"-"+ports[i]
+        
+        pairs = self._fext.getPorts()
 
         return pairs
         
@@ -32,13 +24,17 @@ class ACRF(PairedParameter):
         acrf = dict()
         dbFext = self._fext.getParameter()
         dbIl = self._il.getParameter(full=True)
-        ports = dbFext.keys()
-        for port in ports:
+        for port in self._ports:
             acrf[port] = list()
+        half = floor(sqrt(len(self._ports)))
         for (f,_) in enumerate(self._freq):
-            for port in ports:
-                ilPort = port[0]
-                acrf[port].append(dbFext[port][f]-dbIl[ilPort][f])
+            for (i,j) in self._ports:
+                if i < half:
+                    ilPort = (i, i+half)
+                else:
+                    ilPort = (i, i-half)
+                acrf[(i,j)].append(dbFext[(i,j)][f]-dbIl[ilPort][f])
+
         return acrf,_
     
     def chooseMatrices(self, matrices):

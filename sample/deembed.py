@@ -1,6 +1,6 @@
-from sample.sample import Sample
+from sample.single_ended import SingleEnded
 
-class Deembed(Sample):
+class Deembed(SingleEnded):
 
     def __init__(self, matedLoad, plugNext, plugNextDelay, cases):
         self._plugNext = plugNext
