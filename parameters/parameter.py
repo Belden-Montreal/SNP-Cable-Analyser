@@ -75,6 +75,8 @@ class Parameter(object):
     def setLimit(self, limit):
         self._limit = limit
         self._plot.setLimit(limit)
+        self._worstMargin = (dict(), None)
+        self._worstValue = (dict(), None)
 
     def getPorts(self):
         return self._ports
@@ -110,7 +112,10 @@ class Parameter(object):
         vals = list()
         for i,value in enumerate(values):
             if self._freq[i] in limit:
-                margins.append(limit[self._freq[i]]-value)
+                if limit[self._freq[i]]:
+                    margins.append(limit[self._freq[i]]-value)
+                else:
+                    margins.append(None)
                 freqs.append(self._freq[i])
                 vals.append(value)
         return margins, freqs, vals
@@ -118,9 +123,11 @@ class Parameter(object):
     def getWorstValue(self):
         if len(self._worstValue[0]):
             return self._worstValue
-        if self._limit is None:
-            return (None, None)
-        limit = self._limit.evaluateDict({'f': self._freq}, len(self._freq), neg=True)
+
+        if self._limit is not None:
+            limit = self._limit.evaluateDict({'f': self._freq}, len(self._freq), neg=True)
+        else:
+            limit = {freq: None for freq in self._freq}
         passed = True
         worst = dict()
         if limit:
@@ -131,9 +138,11 @@ class Parameter(object):
                     index = vals.index(worstVal)
                     m, f = margins[index], freqs[index]
                     l = limit[f]
-                    if worstVal > l:
+                    if l and worstVal > l:
                         passed = False
-                    worst[pair] = worstVal, f, l, abs(m)
+                    if m:
+                        m = abs(m)
+                    worst[pair] = worstVal, f, l, m
             self._worstValue = worst, passed
             return self._worstValue
 

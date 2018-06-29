@@ -13,30 +13,25 @@ class ParameterWidget(QtWidgets.QWidget):
         self.param = param
         self.parameter = parameter
         self.hasPassed = False
-        try:
-            values = (parameter.getWorstValue(), parameter.getWorstMargin())
-            self.paramWidget.marginListWidget.currentItemChanged.connect(lambda current: self.pairSelected(current, valueType.MARGIN))
-            self.paramWidget.worstListWidget.currentItemChanged.connect(lambda current: self.pairSelected(current, valueType.VALUE))
-            self.setPairsList()
-            if values[0][0] and values[1]:
-                self.worstValue = values[0]
-                self.worstMargin = values[1]
-                if self.worstValue[1] == "Pass" and self.worstMargin[1] == "Pass":
-                    self.paramWidget.passLabel.setText("Pass")
-                    self.hasPassed = True
-                else:
-                    self.paramWidget.passLabel.setText("Fail")
-                    self.hasPassed = False
+
+        values = (parameter.getWorstValue(), parameter.getWorstMargin())
+        self.paramWidget.marginListWidget.currentItemChanged.connect(lambda current: self.pairSelected(current, valueType.MARGIN))
+        self.paramWidget.worstListWidget.currentItemChanged.connect(lambda current: self.pairSelected(current, valueType.VALUE))
+        self.setPairsList()
+        if values[0][0] and values[1]:
+            self.worstValue = values[0]
+            self.worstMargin = values[1]
+            if self.worstValue[1] == "Pass" and self.worstMargin[1] == "Pass":
+                self.paramWidget.passLabel.setText("Pass")
+                self.hasPassed = True
             else:
-                self.worstMargin = None
-                self.worstValue = None
                 self.paramWidget.passLabel.setText("Fail")
                 self.hasPassed = False
-        except Exception as e:
-            print(e)
-
-
-
+        else:
+            self.worstMargin = (None,None)
+            self.worstValue = (None,None)
+            self.paramWidget.passLabel.setText("Fail")
+            self.hasPassed = False
 
     def setPairsList(self):
         for num, (port, isRemote) in self.parameter.getPorts().items():
@@ -50,12 +45,12 @@ class ParameterWidget(QtWidgets.QWidget):
         self.setLabels(listIndex, pair)
 
     def setLabels(self, listIndex, pair):
-        if self.worstMargin and listIndex == valueType.MARGIN: #Worst margin
+        if self.worstMargin[0] and listIndex == valueType.MARGIN: #Worst margin
             self.paramWidget.marginValueLabel.setText(self.worstMargin[0][pair.number][0].__str__())
             self.paramWidget.marginFreqLabel.setText(self.worstMargin[0][pair.number][1].__str__())
             self.paramWidget.marginLimitLabel.setText(self.worstMargin[0][pair.number][2].__str__())
             self.paramWidget.marginLabel.setText(self.worstMargin[0][pair.number][3].__str__())
-        elif self.worstValue: #worst value
+        elif self.worstValue and listIndex == valueType.VALUE: #worst value
             self.paramWidget.worstValueLabel.setText(self.worstValue[0][pair.number][0].__str__())
             self.paramWidget.worstFreqLabel.setText(self.worstValue[0][pair.number][1].__str__())
             self.paramWidget.worstLimitLabel.setText(self.worstValue[0][pair.number][2].__str__())

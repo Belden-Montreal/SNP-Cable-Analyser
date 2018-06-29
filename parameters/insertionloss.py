@@ -62,7 +62,10 @@ class InsertionLoss(PairedParameter):
         vals = list()
         for i,value in enumerate(values):
             if self._freq[i] in limit:
-                margins.append(value-limit[self._freq[i]])
+                if limit[self._freq[i]]:
+                    margins.append(value-limit[self._freq[i]])
+                else:
+                    margins.append(None)
                 freqs.append(self._freq[i])
                 vals.append(value)
         return margins, freqs, vals
@@ -92,9 +95,11 @@ class InsertionLoss(PairedParameter):
     def getWorstValue(self):
         if len(self._worstValue[0]):
             return self._worstValue
-        if self._limit is None:
-            return (None, None)
-        limit = self._limit.evaluateDict({'f': self._freq}, len(self._freq), neg=True)
+        
+        if self._limit is not None:
+            limit = self._limit.evaluateDict({'f': self._freq}, len(self._freq), neg=True)
+        else:
+            limit = {freq: None for freq in self._freq}
         passed = True
         worst = dict()
         if limit:
@@ -105,9 +110,11 @@ class InsertionLoss(PairedParameter):
                     index = vals.index(worstVal)
                     m, f = margins[index], freqs[index]
                     l = limit[f]
-                    if worstVal < l:
+                    if l and worstVal < l:
                         passed = False
-                    worst[pair] = worstVal, f, l, abs(m)
+                    if m:
+                        m = abs(m)
+                    worst[pair] = worstVal, f, l, m
             self._worstValue = worst, passed
             return self._worstValue
     
