@@ -157,7 +157,7 @@ class PairedParameter(Parameter):
         self._limit = None
         self._worstMargin = (dict(), None)
         self._worstValue = (dict(), None)
-        self._plot = None
+        self._plot = ParameterPlot(self)
         
     def computePairs(self, ports):
         """

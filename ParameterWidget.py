@@ -12,6 +12,7 @@ class ParameterWidget(QtWidgets.QWidget):
         self.paramWidget.paramLabel.setText(param)
         self.param = param
         self.parameter = parameter
+        self.hasPassed = False
         try:
             values = (parameter.getWorstValue(), parameter.getWorstMargin())
             self.paramWidget.marginListWidget.currentItemChanged.connect(lambda current: self.pairSelected(current, valueType.MARGIN))
@@ -31,8 +32,8 @@ class ParameterWidget(QtWidgets.QWidget):
                 self.worstValue = None
                 self.paramWidget.passLabel.setText("Fail")
                 self.hasPassed = False
-        except:
-            pass
+        except Exception as e:
+            print(e)
 
 
 

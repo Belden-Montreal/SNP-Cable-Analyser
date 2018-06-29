@@ -183,14 +183,14 @@ class Main():
             self.displaySampleParams(self._selected[0])
 
     def tabChanged(self):
-        try:
-            parameter = self._mainWindow.param_tabs.currentWidget().parameter
-            #remove comments when plot works
-            #plot = parameter.getPlot()
-            #self._mainWindow.graphicsView.figure = plot.getFigure()
-            #self._mainWindow.graphicsView.draw() 
-        except Exception as e:
-            print(e)
+        if self._mainWindow.param_tabs.currentIndex() == 0 or self._mainWindow.param_tabs.count() <= 1:
+            self._mainWindow.graphicsView.setVisible(False)
+            return
+        self._mainWindow.graphicsView.setVisible(True)
+        parameter = self._mainWindow.param_tabs.currentWidget().parameter
+        plot = parameter.getPlot()
+        self._mainWindow.graphicsView.figure = plot.getFigure()
+        self._mainWindow.graphicsView.draw() 
 
     def showMaximized(self):
         self._qmw.showMaximized()
