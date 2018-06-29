@@ -5,6 +5,7 @@ class NEXTDelay(PairedParameter):
     def __init__(self, ports, freq, matrices, plugDelay):
         self._plugDelay = plugDelay
         super(NEXTDelay, self).__init__(ports, freq, matrices)
+        self._visible = False
 
     def computePairs(self, ports):
         # create each pair for the NEXT

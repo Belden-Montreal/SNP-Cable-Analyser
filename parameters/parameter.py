@@ -47,6 +47,7 @@ def takeClosest(x, numbers):
 
 class Parameter(object):
     def __init__(self, ports, freq, mixedModeMatrices):
+        self._visible = True
         self._ports = ports
         self._freq = freq
         self._matrices = self.chooseMatrices(mixedModeMatrices)
@@ -148,8 +149,12 @@ class Parameter(object):
     def getFrequencies(self):
         return self._freq
 
+    def visible(self):
+        return self._visible
+
 class PairedParameter(Parameter):
     def __init__(self, ports, freq, mixedModeMatrices):
+        self._visible = True
         self._freq = freq
         self._matrices = self.chooseMatrices(mixedModeMatrices)
         self._ports = self.computePairs(ports)

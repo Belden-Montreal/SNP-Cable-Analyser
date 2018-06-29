@@ -11,6 +11,7 @@ class PlugDelay(PairedParameter):
         self._k2 = k2
         self._k3 = k3
         super(PlugDelay, self).__init__(ports, freq, matrices)
+        self._visible = False
 
     def computePairs(self, ports):
         pairs = dict()

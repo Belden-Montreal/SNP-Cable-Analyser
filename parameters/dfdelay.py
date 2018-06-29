@@ -7,6 +7,7 @@ class DFDelay(PairedParameter):
         self._openDelay = openDelay
         self._shortDelay = shortDelay
         super(DFDelay, self).__init__(ports, freq, matrices)
+        self._visible = False
 
     def computePairs(self, ports):
         pairs = dict()

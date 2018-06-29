@@ -108,10 +108,14 @@ class Main():
 
         failParams = list()
         for name, param in sample.getParameters().items():
-            newTab = ParameterWidget(name, param)
-            self._mainWindow.param_tabs.addTab(newTab, name)
-            if not newTab.hasPassed:
-                failParams.append(name)
+            try:
+                if param.visible():
+                    newTab = ParameterWidget(name, param)
+                    self._mainWindow.param_tabs.addTab(newTab, name)
+                    if not newTab.hasPassed:
+                        failParams.append(name)
+            except:
+                continue
         if len(failParams) > 0:
             mainTab.passLabel.setText("Fail")
         else:
