@@ -9,7 +9,7 @@ class DummyParameter(object):
         return "Dummy Parameter"
 
     def getPorts(self):
-        return {0: 'Port 1', 1: 'Port 2', 2: 'Port 3', 3: 'Port 4'}
+        return {0: ('Port 1', False), 1: ('Port 2', False), 2: ('Port 3', False), 3: ('Port 4', False)}
 
     def getNumPorts(self):
         return len(self.getPorts())
@@ -82,28 +82,29 @@ class TestParameterPlot(unittest.TestCase):
 
             self._plot.drawFigure()
 
-            mockedplt.figure.assert_called_with()
-            mockedplt.cm.rainbow.assert_called_with(0, 1, 4)
+            mockedplt.figure.assert_called_with(dpi=80, figsize=(18.75, 6.25))
+            arg = mockedplt.cm.rainbow.call_args[0][0]
+            np.testing.assert_array_almost_equal(arg, np.array([0, 0.25, 0.5, 0.75, 1]))
             mockedplt.semilogx.assert_has_calls([
                 call(
                     self._parameter.getFrequencies(),
                     self._parameter.getParameter()[0],
-                    figure=self, c=10
+                    label=self._parameter.getPorts()[0][0], c=10
                 ),
                 call(
                     self._parameter.getFrequencies(),
                     self._parameter.getParameter()[1],
-                    figure=self, c=20
+                    label=self._parameter.getPorts()[1][0], c=20
                 ),
                 call(
                     self._parameter.getFrequencies(),
                     self._parameter.getParameter()[2],
-                    figure=self, c=30
+                    label=self._parameter.getPorts()[2][0], c=30
                 ),
                 call(
                     self._parameter.getFrequencies(),
                     self._parameter.getParameter()[3],
-                    figure=self, c=40
+                    label=self._parameter.getPorts()[3][0], c=40
                 ),
             ], any_order=True)
  
@@ -116,28 +117,29 @@ class TestParameterPlot(unittest.TestCase):
 
             self._plot.drawFigure()
 
-            mockedplt.figure.assert_called_with()
-            mockedplt.cm.rainbow.assert_called_with(0, 1, 4)
+            mockedplt.figure.assert_called_with(dpi=80, figsize=(18.75, 6.25))
+            arg = mockedplt.cm.rainbow.call_args[0][0]
+            np.testing.assert_array_almost_equal(arg, np.array([0, 0.25, 0.5, 0.75, 1]))
             mockedplt.semilogx.assert_has_calls([
                 call(
                     self._parameter.getFrequencies(),
                     self._parameter.getParameter()[0],
-                    figure=self, c=10
+                    label=self._parameter.getPorts()[0][0], c=10
                 ),
                 call(
                     self._parameter.getFrequencies(),
                     self._parameter.getParameter()[1],
-                    figure=self, c=20
+                    label=self._parameter.getPorts()[1][0], c=20
                 ),
                 call(
                     self._parameter.getFrequencies(),
                     self._parameter.getParameter()[2],
-                    figure=self, c='grey'
+                    label=self._parameter.getPorts()[2][0], c='grey'
                 ),
                 call(
                     self._parameter.getFrequencies(),
                     self._parameter.getParameter()[3],
-                    figure=self, c='grey'
+                    label=self._parameter.getPorts()[3][0], c='grey'
                 ),
             ], any_order=True)
 
