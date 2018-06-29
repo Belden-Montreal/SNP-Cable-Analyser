@@ -33,9 +33,6 @@ class ParameterPlot(object):
 
     def drawFigure(self):
         self._figure = plt.figure(figsize=(18.75,6.25), dpi=80) #might not work for all screen resolutions
-        
-        # define the different colors for this plot
-        colors = iter(plt.cm.rainbow(np.linspace(0, 1, self._parameter.getNumPorts())))
 
         #get main and remote ports
         ends = dict()
@@ -44,6 +41,8 @@ class ParameterPlot(object):
 
         for i, (isRemote, end) in enumerate(ends.items()):
             if len(end) > 0:
+                # define the different colors for this plot
+                colors = iter(plt.cm.rainbow(np.linspace(0, 1, len(end)+1)))
                 ax = plt.subplot(1, len(ends), i+1)
                 # set the labels
                 plt.title(self._parameter.getName()+" : "+isRemote)
@@ -74,7 +73,7 @@ class ParameterPlot(object):
                     plt.semilogx(
                         *zip(*self._limit.evaluateArray({'f': self._parameter.getFrequencies()},
                                                         len(self._parameter.getFrequencies()), neg=True)),
-                        c=color
+                        label="limit", c=next(colors), linestyle="--"
                     )
 
     def setLimit(self, limit):

@@ -73,7 +73,7 @@ class Parameter(object):
 
     def setLimit(self, limit):
         self._limit = limit
-        #self._plot.setLimit(limit)
+        self._plot.setLimit(limit)
 
     def getPorts(self):
         return self._ports
