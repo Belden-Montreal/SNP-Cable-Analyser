@@ -54,7 +54,7 @@ class TestDNEXT(TestParameter):
         jnext = NEXT(self._ports, self._freq, self._matrices).getParameter()
 
         # there should be a parameter for each port combo        
-        self.assertEqual(len(parameter), 12)
+        self.assertEqual(len(parameter), 6)
 
         # check the values of the port 1-2
         self.assertAlmostEqual(parameter[(0,1)][0], correctNEXT(jnext[(0,1)][0], nextDelay[(0,1)], self._freq[0])-pnext[(0,1)][0])
@@ -62,23 +62,11 @@ class TestDNEXT(TestParameter):
         self.assertAlmostEqual(parameter[(0,1)][2], correctNEXT(jnext[(0,1)][2], nextDelay[(0,1)], self._freq[2])-pnext[(0,1)][2])
         self.assertAlmostEqual(parameter[(0,1)][3], correctNEXT(jnext[(0,1)][3], nextDelay[(0,1)], self._freq[3])-pnext[(0,1)][3])
 
-        # check the values of the port 2-1
-        self.assertAlmostEqual(parameter[(1,0)][0], correctNEXT(jnext[(1,0)][0], nextDelay[(0,1)], self._freq[0])-pnext[(1,0)][0])
-        self.assertAlmostEqual(parameter[(1,0)][1], correctNEXT(jnext[(1,0)][1], nextDelay[(0,1)], self._freq[1])-pnext[(1,0)][1])
-        self.assertAlmostEqual(parameter[(1,0)][2], correctNEXT(jnext[(1,0)][2], nextDelay[(0,1)], self._freq[2])-pnext[(1,0)][2])
-        self.assertAlmostEqual(parameter[(1,0)][3], correctNEXT(jnext[(1,0)][3], nextDelay[(0,1)], self._freq[3])-pnext[(1,0)][3])
-
         # check the values of the port 3-4
         self.assertAlmostEqual(parameter[(2,3)][0], correctNEXT(jnext[(2,3)][0], nextDelay[(2,3)], self._freq[0])-pnext[(2,3)][0])
         self.assertAlmostEqual(parameter[(2,3)][1], correctNEXT(jnext[(2,3)][1], nextDelay[(2,3)], self._freq[1])-pnext[(2,3)][1])
         self.assertAlmostEqual(parameter[(2,3)][2], correctNEXT(jnext[(2,3)][2], nextDelay[(2,3)], self._freq[2])-pnext[(2,3)][2])
         self.assertAlmostEqual(parameter[(2,3)][3], correctNEXT(jnext[(2,3)][3], nextDelay[(2,3)], self._freq[3])-pnext[(2,3)][3])
-
-        # check the values of the port 4-3
-        self.assertAlmostEqual(parameter[(3,2)][0], correctNEXT(jnext[(3,2)][0], nextDelay[(2,3)], self._freq[0])-pnext[(3,2)][0])
-        self.assertAlmostEqual(parameter[(3,2)][1], correctNEXT(jnext[(3,2)][1], nextDelay[(2,3)], self._freq[1])-pnext[(3,2)][1])
-        self.assertAlmostEqual(parameter[(3,2)][2], correctNEXT(jnext[(3,2)][2], nextDelay[(2,3)], self._freq[2])-pnext[(3,2)][2])
-        self.assertAlmostEqual(parameter[(3,2)][3], correctNEXT(jnext[(3,2)][3], nextDelay[(2,3)], self._freq[3])-pnext[(3,2)][3])
 
 if __name__ == '__main__':
     unittest.main()

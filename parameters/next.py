@@ -29,7 +29,7 @@ class NEXT(PairedParameter):
 
                 if isRemote1 is isRemote2:
                     pairs[(i, j)] = (port1+"-"+port2, isRemote1)
-                    pairs[(j, i)] = (port2+"-"+port1, isRemote2)
+                    #pairs[(j, i)] = (port2+"-"+port1, isRemote2)
 
         return pairs
 

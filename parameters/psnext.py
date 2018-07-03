@@ -31,7 +31,7 @@ class PSNEXT(Parameter):
             for port in self._ports:
                 # get all NEXT pairs containing this port
                 pairs = self._next.getPairs()
-                pairs = filter(lambda p: port == p[1], pairs)
+                pairs = filter(lambda p: port == p[1] or port == p[0], pairs)
 
                 # get the NEXT values of these pairs
                 values = map(lambda p: self._next.getParameter()[p][f], pairs)

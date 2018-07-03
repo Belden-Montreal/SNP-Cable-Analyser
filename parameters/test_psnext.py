@@ -37,10 +37,10 @@ class TestPSNEXT(TestParameter):
         self.assertAlmostEqual(parameter[1][3], powerSum([nnext[(0,1)][3]]))
 
         # check the values of the port 0
-        self.assertAlmostEqual(parameter[0][0], powerSum([nnext[(1,0)][0]]))
-        self.assertAlmostEqual(parameter[0][1], powerSum([nnext[(1,0)][1]]))
-        self.assertAlmostEqual(parameter[0][2], powerSum([nnext[(1,0)][2]]))
-        self.assertAlmostEqual(parameter[0][3], powerSum([nnext[(1,0)][3]]))
+        self.assertAlmostEqual(parameter[0][0], powerSum([nnext[(0,1)][0]]))
+        self.assertAlmostEqual(parameter[0][1], powerSum([nnext[(0,1)][1]]))
+        self.assertAlmostEqual(parameter[0][2], powerSum([nnext[(0,1)][2]]))
+        self.assertAlmostEqual(parameter[0][3], powerSum([nnext[(0,1)][3]]))
 
         # check the values of the port 3
         self.assertAlmostEqual(parameter[3][0], powerSum([nnext[(2,3)][0]]))
@@ -49,10 +49,10 @@ class TestPSNEXT(TestParameter):
         self.assertAlmostEqual(parameter[3][3], powerSum([nnext[(2,3)][3]]))
 
         # check the values of the port 2
-        self.assertAlmostEqual(parameter[2][0], powerSum([nnext[(3,2)][0]]))
-        self.assertAlmostEqual(parameter[2][1], powerSum([nnext[(3,2)][1]]))
-        self.assertAlmostEqual(parameter[2][2], powerSum([nnext[(3,2)][2]]))
-        self.assertAlmostEqual(parameter[2][3], powerSum([nnext[(3,2)][3]]))
+        self.assertAlmostEqual(parameter[2][0], powerSum([nnext[(2,3)][0]]))
+        self.assertAlmostEqual(parameter[2][1], powerSum([nnext[(2,3)][1]]))
+        self.assertAlmostEqual(parameter[2][2], powerSum([nnext[(2,3)][2]]))
+        self.assertAlmostEqual(parameter[2][3], powerSum([nnext[(2,3)][3]]))
 
     def testComputeOneEndedParameter(self):
         pnext = NEXT(self._ports, self._freq, self._matrices)
@@ -62,22 +62,22 @@ class TestPSNEXT(TestParameter):
         nnext = pnext.getParameter()
 
         # check the values of the port 0
-        self.assertAlmostEqual(parameter[0][0], powerSum([nnext[(1,0)][0], nnext[(2,0)][0], nnext[(3,0)][0]]))
-        self.assertAlmostEqual(parameter[0][1], powerSum([nnext[(1,0)][1], nnext[(2,0)][1], nnext[(3,0)][1]]))
-        self.assertAlmostEqual(parameter[0][2], powerSum([nnext[(1,0)][2], nnext[(2,0)][2], nnext[(3,0)][2]]))
-        self.assertAlmostEqual(parameter[0][3], powerSum([nnext[(1,0)][3], nnext[(2,0)][3], nnext[(3,0)][3]]))
+        self.assertAlmostEqual(parameter[0][0], powerSum([nnext[(0,1)][0], nnext[(0,2)][0], nnext[(0,3)][0]]))
+        self.assertAlmostEqual(parameter[0][1], powerSum([nnext[(0,1)][1], nnext[(0,2)][1], nnext[(0,3)][1]]))
+        self.assertAlmostEqual(parameter[0][2], powerSum([nnext[(0,1)][2], nnext[(0,2)][2], nnext[(0,3)][2]]))
+        self.assertAlmostEqual(parameter[0][3], powerSum([nnext[(0,1)][3], nnext[(0,2)][3], nnext[(0,3)][3]]))
 
         # check values of the port 1
-        self.assertAlmostEqual(parameter[1][0], powerSum([nnext[(0,1)][0], nnext[(2,1)][0], nnext[(3,1)][0]]))
-        self.assertAlmostEqual(parameter[1][1], powerSum([nnext[(0,1)][1], nnext[(2,1)][1], nnext[(3,1)][1]]))
-        self.assertAlmostEqual(parameter[1][2], powerSum([nnext[(0,1)][2], nnext[(2,1)][2], nnext[(3,1)][2]]))
-        self.assertAlmostEqual(parameter[1][3], powerSum([nnext[(0,1)][3], nnext[(2,1)][3], nnext[(3,1)][3]]))
+        self.assertAlmostEqual(parameter[1][0], powerSum([nnext[(0,1)][0], nnext[(1,2)][0], nnext[(1,3)][0]]))
+        self.assertAlmostEqual(parameter[1][1], powerSum([nnext[(0,1)][1], nnext[(1,2)][1], nnext[(1,3)][1]]))
+        self.assertAlmostEqual(parameter[1][2], powerSum([nnext[(0,1)][2], nnext[(1,2)][2], nnext[(1,3)][2]]))
+        self.assertAlmostEqual(parameter[1][3], powerSum([nnext[(0,1)][3], nnext[(1,2)][3], nnext[(1,3)][3]]))
 
         # check values of the port 2
-        self.assertAlmostEqual(parameter[2][0], powerSum([nnext[(0,2)][0], nnext[(1,2)][0], nnext[(3,2)][0]]))
-        self.assertAlmostEqual(parameter[2][1], powerSum([nnext[(0,2)][1], nnext[(1,2)][1], nnext[(3,2)][1]]))
-        self.assertAlmostEqual(parameter[2][2], powerSum([nnext[(0,2)][2], nnext[(1,2)][2], nnext[(3,2)][2]]))
-        self.assertAlmostEqual(parameter[2][3], powerSum([nnext[(0,2)][3], nnext[(1,2)][3], nnext[(3,2)][3]]))
+        self.assertAlmostEqual(parameter[2][0], powerSum([nnext[(0,2)][0], nnext[(1,2)][0], nnext[(2,3)][0]]))
+        self.assertAlmostEqual(parameter[2][1], powerSum([nnext[(0,2)][1], nnext[(1,2)][1], nnext[(2,3)][1]]))
+        self.assertAlmostEqual(parameter[2][2], powerSum([nnext[(0,2)][2], nnext[(1,2)][2], nnext[(2,3)][2]]))
+        self.assertAlmostEqual(parameter[2][3], powerSum([nnext[(0,2)][3], nnext[(1,2)][3], nnext[(2,3)][3]]))
 
         #check values of the port 3
         self.assertAlmostEqual(parameter[3][0], powerSum([nnext[(0,3)][0], nnext[(1,3)][0], nnext[(2,3)][0]]))
