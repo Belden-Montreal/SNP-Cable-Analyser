@@ -1,4 +1,4 @@
-from parameters.parameter import Parameter, diffDiffMatrix
+from parameters.parameter import Parameter, diffDiffMatrix, complex2db
 import numpy as np
 
 class PSFEXT(Parameter):
@@ -15,16 +15,20 @@ class PSFEXT(Parameter):
     def computeParameter(self):
         
         psfext = dict()
+        cpPsfext = dict()
         for port in self._ports:
             psfext[port] = list()
+            cpPsfext[port] = list()
         dbFext = self._fext.getParameter()
+        cpFext = self._fext.getComplexParameter()
         ports = dbFext.keys()
-
         for (f,_) in enumerate(self._freq):
             for port in self._ports:
-                ps = 10.0*np.log10(np.sum([10**(dbFext[key][f]/10) for key in ports if (key[1] == port)]))
+                ps = 10.0*np.log10(np.sum([10**(dbFext[key][f]/10) for key in ports if (key[0] == port)]))
                 psfext[port].append(ps)
-        return psfext,_
+                cp = np.sum([cpFext[key][f] for key in ports if (key[0] == port)])
+                cpPsfext[port].append(cp)
+        return psfext,cpPsfext
 
     def chooseMatrices(self, matrices):
         return diffDiffMatrix(matrices)

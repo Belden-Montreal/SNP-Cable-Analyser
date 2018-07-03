@@ -21,27 +21,30 @@ class PSNEXT(Parameter):
     def computeParameter(self):
         # initialize the dictionary for each port
         dbPSNEXT = dict()
-        dbEEPSNEXT = dict()
+        cpPSNEXT = dict()
         for port in self._ports:
             dbPSNEXT[port] = list()
-            dbEEPSNEXT[port] = list()
+            cpPSNEXT[port] = list()
 
         # compute the power sum NEXT
         for (f,_) in enumerate(self._freq):
             for port in self._ports:
                 # get all NEXT pairs containing this port
                 pairs = self._next.getPairs()
-                pairs = filter(lambda p: port == p[1] or port == p[0], pairs)
+                pairs = [p for p in pairs if port == p[1] or port == p[0]]
 
                 # get the NEXT values of these pairs
-                values = map(lambda p: self._next.getParameter()[p][f], pairs)
+                values = [self._next.getParameter()[p][f] for p in pairs]
+                cpValues = [self._next.getComplexParameter()[p][f] for p in pairs]
 
                 # compute PSNEXT
                 psnext = powerSum(values)
+                cpPsnext = np.sum(list(cpValues))
 
                 # add the value to the list
                 dbPSNEXT[port].append(psnext)
-        return (dbPSNEXT, None)
+                cpPSNEXT[port].append(cpPsnext)
+        return (dbPSNEXT, cpPSNEXT)
 
     def chooseMatrices(self, matrices):
         return diffDiffMatrix(matrices)

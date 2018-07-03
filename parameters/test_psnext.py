@@ -54,6 +54,9 @@ class TestPSNEXT(TestParameter):
         self.assertAlmostEqual(parameter[2][2], powerSum([nnext[(2,3)][2]]))
         self.assertAlmostEqual(parameter[2][3], powerSum([nnext[(2,3)][3]]))
 
+        # check complex parameter
+        self.assertAlmostEqual(parameter[1][0], complex2db(self._parameter.getComplexParameter()[1][0]))
+
     def testComputeOneEndedParameter(self):
         pnext = NEXT(self._ports, self._freq, self._matrices)
         sePSNext = PSNEXT(self._ports, self._freq, self._matrices, pnext)

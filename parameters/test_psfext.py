@@ -3,10 +3,10 @@ import numpy as np
 from parameters.test_parameter import TestParameter
 from parameters.psfext import PSFEXT
 from parameters.fext import FEXT
-
+from parameters.parameter import complex2db
 def powersum(fext, f, port):
     keys = fext.keys()
-    return 10*np.log10(np.sum([10**(fext[key][f]/10) for key in keys if (key[1] == port ) ]))
+    return 10*np.log10(np.sum([10**(fext[key][f]/10) for key in keys if (key[0] == port ) ]))
 
 class TestPsFEXT(TestParameter):
     def createParameter(self):
@@ -52,6 +52,9 @@ class TestPsFEXT(TestParameter):
         self.assertAlmostEqual(parameter[3][1], powersum(dbFEXT, 1, 3))
         self.assertAlmostEqual(parameter[3][2], powersum(dbFEXT, 2, 3))
         self.assertAlmostEqual(parameter[3][3], powersum(dbFEXT, 3, 3))
+
+        # check complex parameter
+        self.assertAlmostEqual(parameter[0][0], complex2db(self._parameter.getComplexParameter()[0][0]))
 
 if __name__ == '__main__':
     unittest.main()

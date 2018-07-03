@@ -5,6 +5,7 @@ from parameters.psaxext import PSAXEXT
 from parameters.axext import AXEXT
 from parameters.fext import FEXT
 from parameters.insertionloss import InsertionLoss
+from parameters.parameter import complex2db
 
 def powersum(axextd, f, port):
     return 10*np.log10(np.sum([np.sum([10**(disturber.getParameter()[key][f]/10) for key in disturber.getParameter().keys() if (key[0] == port )]) for disturber in axextd ]))
@@ -56,5 +57,7 @@ class TestPSAXEXT(TestParameter):
         self.assertAlmostEqual(parameter[3][2], powersum(axextd, 2, 3))
         self.assertAlmostEqual(parameter[3][3], powersum(axextd, 3, 3))
 
+        # check complex parameter
+        # self.assertAlmostEqual(parameter[1][0], complex2db(self._parameter.getComplexParameter()[1][0]))
 if __name__ == '__main__':
     unittest.main()
