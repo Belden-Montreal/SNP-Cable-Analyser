@@ -5,7 +5,6 @@ import MainWidget
 import new_project_dialog
 from ParameterWidget import ParameterWidget
 from app.project_manager import ProjectManager
-from app.import_dialog import ImportSNPDialog
 from app.vna_manager import VNAManager
 from limits.LimitDialog import LimitDialog
 
