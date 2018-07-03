@@ -85,7 +85,7 @@ class Project(object):
 
     def __createSample(self, name):
         _, extension = splitext(name)
-        if extension[2] == "8":
+        if extension[2] == "8" or extension[2] == "4":
             return SingleEnded(name)
         return EndToEnd(name)
         
