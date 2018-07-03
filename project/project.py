@@ -1,9 +1,9 @@
 from sample.end_to_end import EndToEnd
 from sample.single_ended import SingleEnded
 from multiprocessing.dummy import Pool as ThreadPool
-from app.import_dialog import ImportSNPDialog
 from os.path import splitext
 import xlsxwriter
+from PyQt5 import QtWidgets
 
 class Project(object):
     '''
@@ -79,10 +79,9 @@ class Project(object):
         return self._samples
 
     def openImportWindow(self, parent):
-        dial = ImportSNPDialog(parent)
-        res = dial.getFiles()
-        if res:
-            self.importSamples(res[1])
+        names,_ = QtWidgets.QFileDialog.getOpenFileNames(parent, caption="Select SNP(s)", directory="",filter="sNp Files (*.s*p)")
+        if names:
+            self.importSamples(names)
 
     def __createSample(self, name):
         _, extension = splitext(name)
