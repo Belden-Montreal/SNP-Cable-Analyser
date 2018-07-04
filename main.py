@@ -147,7 +147,7 @@ class Main():
 
             if action == exportExcel:
                 print(self._selected)
-                file, _ = QtWidgets.getSaveFileName(self,"Export Excel Report", "","Excel File (*.xlsx)")
+                file, _ = QtWidgets.QFileDialog.getSaveFileName(self._qmw,"Export Excel Report", "","Excel File (*.xlsx)")
                 self._projectManager.activeProject().generateExcel(file , self._selected, True)
 
             elif action == delete:
