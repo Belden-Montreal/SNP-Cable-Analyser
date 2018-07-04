@@ -51,7 +51,7 @@ class PropagationDelay(PairedParameter):
                 pd[port].append(delay)
 
 
-        return pd,_
+        return pd,pd
 
     def chooseMatrices(self, matrices):
         return None

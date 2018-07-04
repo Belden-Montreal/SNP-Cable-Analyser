@@ -35,7 +35,7 @@ class ELTCTL(PairedParameter):
             for port in self._ports:
                 eltctl[port].append(dbTctl[port][f] - dbIl[port][f])
 
-        return eltctl,_
+        return eltctl,eltctl
 
     def chooseMatrices(self, matrices):
         return None

@@ -35,7 +35,7 @@ class ACRF(PairedParameter):
                     ilPort = (i, i-half)
                 acrf[(i,j)].append(dbFext[(i,j)][f]-dbIl[ilPort][f])
 
-        return acrf,_
+        return acrf,acrf
     
     def chooseMatrices(self, matrices):
         return diffDiffMatrix(matrices)

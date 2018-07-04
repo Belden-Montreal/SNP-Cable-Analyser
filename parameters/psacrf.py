@@ -28,7 +28,7 @@ class PSACRF(Parameter):
                 else:
                     ilPort = (i, i-len(self._ports)//2)
                 psacrf[i].append(psfext[i][f]-il[ilPort][f])
-        return psacrf,_
+        return psacrf,psacrf
 
     def chooseMatrices(self, matrices):
         return diffDiffMatrix(matrices)
