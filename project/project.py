@@ -21,53 +21,58 @@ class Project(object):
         self._samples = [x for x in self._samples if x.getName() not in names]
 
     def generateExcel(self, outputName, sampleNames, z=False):
-        workbook = xlsxwriter.Workbook(outputName+".xlsx", options={'nan_inf_to_errors': True})
-        samples = [x for x in self._samples if x.name in sampleNames]
+        workbook = xlsxwriter.Workbook(outputName, options={'nan_inf_to_errors': True})
+        samples = [x for x in self._samples if x.getName() in sampleNames]
         for i,sample in enumerate(samples):
             try:
-                worksheet = workbook.add_worksheet(sample.name)
+                worksheet = workbook.add_worksheet(sample.getName())
             except:
-                worksheet = workbook.add_worksheet(sample.name+str(i))
+                worksheet = workbook.add_worksheet(sample.getName()+str(i))
             worksheet.write('A1', 'Sample ID:')
-            worksheet.write('B1', sample.name)
+            worksheet.write('B1', sample.getName())
 
             cell_format = workbook.add_format({'align': 'center',
-                                                'valign': 'vcenter'})
-            worksheet.merge_range('A4:A5', "", cell_format)
-            worksheet.write('A4', "Frequency")
-            for i, f in enumerate(sample.freq):
-                worksheet.write(5+i,0, f)
+                                                'valign': 'vcenter',
+                                                'border': 6,})
+            worksheet.merge_range('A3:A5', "Frequency", cell_format)
 
             curPos = 1
-            numSignals = sample.portsNumber
-            for i, (paramName, parameter) in enumerate(sample.parameters.items()):
-                if z is False:
-                    param = parameter.getParameter()
-                    worksheet.merge_range(3, curPos, 3, curPos+numSignals-1,  "", cell_format)
-                    worksheet.write(3,curPos, paramName)
-                    keys = sorted(param.keys())
-                    for i, key in enumerate(keys):
-                        worksheet.write(4,curPos+i, parameter._ports[key])
+            for i, (paramName, parameter) in enumerate(sample.getParameters().items()):
+                numSignals = len(parameter.getPorts())
+                worksheet.merge_range(2, curPos, 2, curPos+numSignals*2-1,  paramName, cell_format)
+                for i, (key, (portName,_)) in enumerate(parameter.getPorts().items()):
+                    worksheet.merge_range(3, curPos+i*2, 3, curPos+i*2+1, str(portName), cell_format)
+                    if z:
+                        worksheet.write(4,curPos+i*2, "real", cell_format)
+                        worksheet.write(4,curPos+i*2+1, "imaginary", cell_format)
+                        param = parameter.getComplexParameter()
                         for j,data in enumerate(param[key]):
-                            worksheet.write(5+j,curPos+i, data)
-            
-                    curPos += numSignals
-                else:
-                    param = parameter.getComplexParameter()
-                    worksheet.merge_range(2, curPos, 2, curPos+(numSignals-1)*2,  "", cell_format)
-                    worksheet.write(2,curPos, paramName)
-                    keys = sorted(param.keys())
-                    for i, key in enumerate(keys):
-                        worksheet.merge_range(3, curPos+i*2, 3, curPos+i*2+1, "", cell_format)
-                        worksheet.write(3,curPos+i*2, parameter._ports[key])
-                        worksheet.write(4,curPos+i*2, "real")
-                        worksheet.write(4,curPos+i*2+1, "imaginary")
+                            worksheet.write(5+j, 0, sample.getFrequencies()[j])
+                            self.box(workbook, worksheet, param, key, i*2, j, data.real, curPos)
+                            self.box(workbook, worksheet, param, key, i*2+1, j, data.imag, curPos)
+                    else:
+                        worksheet.write(4,curPos+i*2, "mag", cell_format)
+                        worksheet.write(4,curPos+i*2+1, "phase", cell_format)
+                        param = parameter.getParameter()
                         for j,data in enumerate(param[key]):
-                            worksheet.write(5+j,curPos+i*2, data.real)
-                            worksheet.write(5+j, curPos+i*2+1, data.imag)
+                            worksheet.write(5+j, 0, sample.getFrequencies()[j])
+                            self.box(workbook, worksheet, param, key, i*2, j, data, curPos)
+                            self.box(workbook, worksheet, param, key, i*2+1, j, data, curPos)
             
-                    curPos += numSignals*2
+                curPos += numSignals*2
         workbook.close()
+
+    def box(self, workbook, worksheet, parameter, port, i, j, data, curPos):
+        box_form = workbook.add_format()
+        if j == 0:
+            box_form.set_top(6)
+        if i == 0:
+            box_form.set_left(6)
+        if j == len(parameter[port])-1:
+            box_form.set_bottom(6)
+        if i == len(parameter)*2-1:
+            box_form.set_right(6)
+        worksheet.write(j+5, curPos+i, data, box_form)
 
     def findSamplesByName(self, names):
         return [x for x in self._samples if x.getName() in names]
