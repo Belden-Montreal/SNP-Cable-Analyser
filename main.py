@@ -146,9 +146,14 @@ class Main():
             action = menu.exec_(QtGui.QCursor.pos())
 
             if action == exportExcel:
-                print(self._selected)
-                file, _ = QtWidgets.QFileDialog.getSaveFileName(self._qmw,"Export Excel Report", "","Excel File (*.xlsx)")
-                self._projectManager.activeProject().generateExcel(file , self._selected, True)
+                res, ok = QtWidgets.QInputDialog.getItem(self._qmw, "Select the Data type", "Data Type", ["Complex", "magnitude/phase"], editable=False)
+                if ok:
+                    if res == "Complex":
+                        z = True
+                    else:
+                        z = False
+                    file, _ = QtWidgets.QFileDialog.getSaveFileName(self._qmw,"Export Excel Report", "","Excel File (*.xlsx)")
+                    self._projectManager.activeProject().generateExcel(file , self._selected, z)
 
             elif action == delete:
                 self._projectManager.activeProject().removeSamples(self._selected)
