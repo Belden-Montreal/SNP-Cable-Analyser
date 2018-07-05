@@ -25,7 +25,7 @@ class PSAXEXT(Parameter):
                         10**(disturber.getParameter()[key][f][0]/10)
                     for key in disturber.getParameter().keys() if (key[0] == port)])
                 for disturber in self._axextd]))
-                psaxext[port].append(ps)
+                psaxext[port].append((ps, 0))
 
                 # cp = np.sum([
                 #     np.sum([

@@ -29,7 +29,7 @@ class PSAACRX(Parameter):
                     ilPort = (i, i+len(self._ports)//2)
                 else:
                     ilPort = (i, i-len(self._ports)//2)
-                psaacrx[i].append(psaxext[i][f]-il[ilPort][f])
+                psaacrx[i].append((psaxext[i][f][0]-il[ilPort][f][0], 0))
         return psaacrx,_
 
     def chooseMatrices(self, matrices):

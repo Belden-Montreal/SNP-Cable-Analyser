@@ -29,7 +29,7 @@ class CorrectedNEXT(NEXT):
                 im = amp*np.sin(correctedPhase*np.pi/180)
                 correctedNextVal = complex(re,im)
                 cpCorrectedNext[(i,j)].append(correctedNextVal)
-                correctedNext[(i,j)].append(complex2db(correctedNextVal))
+                correctedNext[(i,j)].append((complex2db(correctedNextVal), correctedPhase))
         return correctedNext, cpCorrectedNext
 
     def getNEXTDelay(self):
