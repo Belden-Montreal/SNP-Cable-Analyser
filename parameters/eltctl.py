@@ -25,16 +25,18 @@ class ELTCTL(PairedParameter):
 
     def computeParameter(self):
         eltctl = dict()
+        cpEltctl = dict()
         dbIl = self._il.getParameter()
         dbTctl = self._tctl.getParameter()
 
         for port in self._ports:
             eltctl[port] = list()
+            cpEltctl[port] = list()
 
         for f,_ in enumerate(self._freq):
             for port in self._ports:
-                eltctl[port].append(dbTctl[port][f] - dbIl[port][f])
-
+                eltctl[port].append((dbTctl[port][f][0] - dbIl[port][f][0],0))
+                cpEltctl[port].append(dbTctl[port][f][0] - dbIl[port][f][0])
         return eltctl,eltctl
 
     def chooseMatrices(self, matrices):

@@ -1,4 +1,4 @@
-from parameters.parameter import PairedParameter, complex2db, diffDiffMatrix
+from parameters.parameter import PairedParameter, complex2db, complex2phase, diffDiffMatrix
 
 class InsertionLoss(PairedParameter):
     '''
@@ -39,7 +39,9 @@ class InsertionLoss(PairedParameter):
             for (i,j) in self._ports:
                 # get the value
                 value = self._matrices[f, i, j]
-                il[(i,j)].append(complex2db(value))
+                dbValue = complex2db(value)
+                phase = complex2phase(value)
+                il[(i,j)].append((dbValue, phase))
                 cpIl[(i,j)].append(value)
 
         return il, cpIl
@@ -60,7 +62,7 @@ class InsertionLoss(PairedParameter):
         margins = list()
         freqs = list()
         vals = list()
-        for i,value in enumerate(values):
+        for i,(value,_) in enumerate(values):
             if self._freq[i] in limit:
                 if limit[self._freq[i]]:
                     margins.append(value-limit[self._freq[i]])

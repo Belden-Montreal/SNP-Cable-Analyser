@@ -1,4 +1,4 @@
-from parameters.parameter import PairedParameter, complex2db, diffDiffMatrix
+from parameters.parameter import PairedParameter, complex2db, complex2phase, diffDiffMatrix
 
 class ReturnLoss(PairedParameter):
     '''
@@ -37,8 +37,9 @@ class ReturnLoss(PairedParameter):
 
                 # convert to db if specified
                 dbValue = complex2db(value)
+                phase = complex2phase(value)
                 # add the value to the list
-                rl[(i,j)].append(dbValue)
+                rl[(i,j)].append((dbValue, phase))
                 cpRl[(i,j)].append(value)
         return rl, cpRl
 

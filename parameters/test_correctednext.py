@@ -11,9 +11,8 @@ from parameters.correctednext import CorrectedNEXT
 import numpy as np
 
 def correctNEXT(pnext, nextDelay, f):
-    phase = np.angle(pnext)
+    amp, phase = pnext
     correctedPhase = phase + 360*f*nextDelay
-    amp = np.abs(pnext)
     r = amp*np.cos(correctedPhase*np.pi/180)
     i = amp*np.sin(correctedPhase*np.pi/180)
     correctedNextVal = complex(r,i)
@@ -48,7 +47,7 @@ class TestCorrectedNEXT(TestParameter):
         return CorrectedNEXT(self._ports, self._freq, self._matrices, nextDelay)
 
     def testComputeParameter(self):
-        parameter = self._parameter.getParameter()
+        parameter = self._parameter.getComplexParameter()
         nextDelay = self._parameter.getNEXTDelay().getParameter()
         pnext = NEXT(self._ports, self._freq, self._matrices).getParameter()
 

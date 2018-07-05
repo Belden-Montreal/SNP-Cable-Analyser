@@ -28,15 +28,15 @@ class PropagationDelay(PairedParameter):
                 pd[port] = list()
 
         # extract the return loss for calculations
-        dbRl = self._rl.getComplexParameter()
+        dbRl = self._rl.getParameter()
 
         # extract the propagation delay from the return loss
         for (f,_) in enumerate(self._freq):
             for port in self._ports:
                 delay = 0.0
                 if f < len(self._freq)-1: #if not last frequency
-                    phase1 = complex2phase(dbRl[port][f])
-                    phase2 = complex2phase(dbRl[port][f+1])
+                    _,phase1 = dbRl[port][f]
+                    _,phase2 = dbRl[port][f+1]
 
                     dp = phase2 - phase1
                     df = self._freq[f+1] - self._freq[f]

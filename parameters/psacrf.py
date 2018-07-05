@@ -15,11 +15,13 @@ class PSACRF(Parameter):
     def computeParameter(self):
         
         psacrf = dict()
+        cpPsacrf = dict()
         psfext = self._psfext.getParameter()
         il = self._il.getParameter(full=True)
 
         for port in self._ports:
             psacrf[port] = list()
+            cpPsacrf[port] = list()
 
         for f,_ in enumerate(self._freq):
             for i in self._ports:
@@ -27,8 +29,9 @@ class PSACRF(Parameter):
                     ilPort = (i, i+len(self._ports)//2)
                 else:
                     ilPort = (i, i-len(self._ports)//2)
-                psacrf[i].append(psfext[i][f]-il[ilPort][f])
-        return psacrf,psacrf
+                psacrf[i].append((psfext[i][f][0]-il[ilPort][f][0], 0))
+                cpPsacrf[i].append(psfext[i][f][0]-il[ilPort][f][0])
+        return psacrf,cpPsacrf
 
     def chooseMatrices(self, matrices):
         return diffDiffMatrix(matrices)

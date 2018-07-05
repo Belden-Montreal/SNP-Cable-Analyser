@@ -1,4 +1,4 @@
-from parameters.parameter import PairedParameter, complex2db, order, diffDiffMatrix
+from parameters.parameter import PairedParameter, complex2db, complex2phase, diffDiffMatrix
 import math
 
 class NEXT(PairedParameter):
@@ -46,10 +46,10 @@ class NEXT(PairedParameter):
                 # get the value from the matrix
                 cpValue = self._matrices[f, i, j]
                 dbValue = complex2db(cpValue)
-
+                phase = complex2phase(cpValue)
                 # add the value into the NEXT
                 cpNEXT[(i,j)].append(cpValue)
-                dbNEXT[(i,j)].append(dbValue)
+                dbNEXT[(i,j)].append((dbValue, phase))
 
         return (dbNEXT, cpNEXT)
 

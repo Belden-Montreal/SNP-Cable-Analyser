@@ -1,4 +1,4 @@
-from parameters.parameter import PairedParameter, complex2db, diffDiffMatrix
+from parameters.parameter import PairedParameter, complex2db, complex2phase, diffDiffMatrix
 
 class FEXT(PairedParameter):
     '''
@@ -46,10 +46,10 @@ class FEXT(PairedParameter):
                 # get the value from the matrix
                 cpValue = self._matrices[f, i, j]
                 dbValue = complex2db(cpValue)
-
+                phase = complex2phase(cpValue)
                 # add the value into the FEXT
                 cpFEXT[(i,j)].append(cpValue)
-                dbFEXT[(i,j)].append(dbValue)
+                dbFEXT[(i,j)].append((dbValue,phase))
 
         return (dbFEXT, cpFEXT)
 

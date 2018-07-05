@@ -110,7 +110,7 @@ class Parameter(object):
         margins = list()
         freqs = list()
         vals = list()
-        for i,value in enumerate(values):
+        for i,(value,_) in enumerate(values):
             if self._freq[i] in limit:
                 if limit[self._freq[i]]:
                     margins.append(limit[self._freq[i]]-value)

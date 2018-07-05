@@ -1,10 +1,10 @@
 import numpy as np
 import math
-from parameters.parameter import Parameter, complex2db, diffDiffMatrix
+from parameters.parameter import Parameter, complex2db, complex2phase, diffDiffMatrix
 from parameters.next import NEXT
 
 def powerSum(values):
-    return 10*np.log10(np.sum(list(map(lambda v: 10**(v/10), values))))
+    return 10*np.log10(np.sum(list(map(lambda v: 10**(v[0]/10), values))))
 
 class PSNEXT(Parameter):
     """
@@ -38,11 +38,12 @@ class PSNEXT(Parameter):
                 cpValues = [self._next.getComplexParameter()[p][f] for p in pairs]
 
                 # compute PSNEXT
-                psnext = powerSum(values)
+                #psnext = powerSum(values)
                 cpPsnext = np.sum(list(cpValues))
-
+                ps = powerSum(values)
+                phase = complex2phase(cpPsnext)
                 # add the value to the list
-                dbPSNEXT[port].append(psnext)
+                dbPSNEXT[port].append((ps, phase))
                 cpPSNEXT[port].append(cpPsnext)
         return (dbPSNEXT, cpPSNEXT)
 

@@ -1,6 +1,6 @@
 import unittest
 
-from parameters.parameter import complex2db
+from parameters.parameter import complex2db, complex2phase
 from parameters.test_parameter import TestParameter
 from parameters.next import NEXT
 
@@ -33,16 +33,16 @@ class TestNEXT(TestParameter):
         self.assertEqual(len(parameter[(2,3)]), len(self._freq))
 
         # check the values of the pair (0,1)
-        self.assertAlmostEqual(parameter[(0,1)][0], complex2db(self._matrices[0, 0, 1]))
-        self.assertAlmostEqual(parameter[(0,1)][1], complex2db(self._matrices[1, 0, 1]))
-        self.assertAlmostEqual(parameter[(0,1)][2], complex2db(self._matrices[2, 0, 1]))
-        self.assertAlmostEqual(parameter[(0,1)][3], complex2db(self._matrices[3, 0, 1]))
+        self.assertAlmostEqual(parameter[(0,1)][0], (complex2db(self._matrices[0, 0, 1]), complex2phase(self._matrices[0, 0, 1])))
+        self.assertAlmostEqual(parameter[(0,1)][1], (complex2db(self._matrices[1, 0, 1]), complex2phase(self._matrices[1, 0, 1])))
+        self.assertAlmostEqual(parameter[(0,1)][2], (complex2db(self._matrices[2, 0, 1]), complex2phase(self._matrices[2, 0, 1])))
+        self.assertAlmostEqual(parameter[(0,1)][3], (complex2db(self._matrices[3, 0, 1]), complex2phase(self._matrices[3, 0, 1])))
 
         # check the values of the pair (2,3)
-        self.assertAlmostEqual(parameter[(2,3)][0], complex2db(self._matrices[0, 2, 3]))
-        self.assertAlmostEqual(parameter[(2,3)][1], complex2db(self._matrices[1, 2, 3]))
-        self.assertAlmostEqual(parameter[(2,3)][2], complex2db(self._matrices[2, 2, 3]))
-        self.assertAlmostEqual(parameter[(2,3)][3], complex2db(self._matrices[3, 2, 3]))
+        self.assertAlmostEqual(parameter[(2,3)][0], (complex2db(self._matrices[0, 2, 3]), complex2phase(self._matrices[0, 2, 3])))
+        self.assertAlmostEqual(parameter[(2,3)][1], (complex2db(self._matrices[1, 2, 3]), complex2phase(self._matrices[1, 2, 3])))
+        self.assertAlmostEqual(parameter[(2,3)][2], (complex2db(self._matrices[2, 2, 3]), complex2phase(self._matrices[2, 2, 3])))
+        self.assertAlmostEqual(parameter[(2,3)][3], (complex2db(self._matrices[3, 2, 3]), complex2phase(self._matrices[3, 2, 3])))
 
     def testComputeComplexParameter(self):
         parameter = self._parameter.getComplexParameter()

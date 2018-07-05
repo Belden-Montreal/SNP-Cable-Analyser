@@ -22,10 +22,12 @@ class ACRF(PairedParameter):
         
     def computeParameter(self):
         acrf = dict()
+        cpAcrf = dict()
         dbFext = self._fext.getParameter()
         dbIl = self._il.getParameter(full=True)
         for port in self._ports:
             acrf[port] = list()
+            cpAcrf[port] = list()
         half = floor(sqrt(len(self._ports)))
         for (f,_) in enumerate(self._freq):
             for (i,j) in self._ports:
@@ -33,9 +35,9 @@ class ACRF(PairedParameter):
                     ilPort = (i, i+half)
                 else:
                     ilPort = (i, i-half)
-                acrf[(i,j)].append(dbFext[(i,j)][f]-dbIl[ilPort][f])
-
-        return acrf,acrf
+                acrf[(i,j)].append((dbFext[(i,j)][f][0]-dbIl[ilPort][f][0],0))
+                cpAcrf[(i,j)].append(dbFext[(i,j)][f][0]-dbIl[ilPort][f][0])
+        return acrf,cpAcrf
     
     def chooseMatrices(self, matrices):
         return diffDiffMatrix(matrices)

@@ -10,7 +10,7 @@ class CorrectedNEXT(NEXT):
 
     def computeParameter(self):
         nextDelay = self._nextDelay.getParameter()
-        pnext, cpnext = super(CorrectedNEXT, self).computeParameter()
+        pnext,_ = super(CorrectedNEXT, self).computeParameter()
         correctedNext = dict()
         cpCorrectedNext = dict()
         for i,j in pnext:
@@ -18,14 +18,12 @@ class CorrectedNEXT(NEXT):
             cpCorrectedNext[(i,j)] = list()
             for f,freq in enumerate(self._freq):
                 #phase correction
-                phase = np.angle(cpnext[(i,j)][f])
+                amp, phase = pnext[(i,j)][f]
                 if i > j:
                     pair = (j,i)
                 else:
                     pair = (i,j)
                 correctedPhase = phase + 360*freq*nextDelay[pair]
-
-                amp = np.abs(cpnext[(i,j)][f])
 
                 re = amp*np.cos(correctedPhase*np.pi/180)
                 im = amp*np.sin(correctedPhase*np.pi/180)

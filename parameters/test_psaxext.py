@@ -8,7 +8,7 @@ from parameters.insertionloss import InsertionLoss
 from parameters.parameter import complex2db
 
 def powersum(axextd, f, port):
-    return 10*np.log10(np.sum([np.sum([10**(disturber.getParameter()[key][f]/10) for key in disturber.getParameter().keys() if (key[0] == port )]) for disturber in axextd ]))
+    return 10*np.log10(np.sum([np.sum([10**(disturber.getParameter()[key][f][0]/10) for key in disturber.getParameter().keys() if (key[0] == port )]) for disturber in axextd ]))
 
 class TestPSAXEXT(TestParameter):
     def createParameter(self):

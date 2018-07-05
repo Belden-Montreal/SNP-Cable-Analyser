@@ -1,6 +1,6 @@
 import unittest
 
-from parameters.parameter import complex2db
+from parameters.parameter import complex2db, complex2phase
 from parameters.test_parameter import TestParameter
 from parameters.fext import FEXT
 from parameters.insertionloss import InsertionLoss
@@ -42,40 +42,40 @@ class TestAXEXT(TestParameter):
         self.assertEqual(len(parameter[(2,1)]), len(self._freq))
 
         # check the values of the pair (2,1)
-        self.assertEqual(parameter[(2,1)][0], complex2db(self._matrices[0, 2, 1]))
-        self.assertEqual(parameter[(2,1)][1], complex2db(self._matrices[1, 2, 1]))
-        self.assertEqual(parameter[(2,1)][2], complex2db(self._matrices[2, 2, 1]))
-        self.assertEqual(parameter[(2,1)][3], complex2db(self._matrices[3, 2, 1]))
+        self.assertEqual(parameter[(2,1)][0], (complex2db(self._matrices[0, 2, 1]), complex2phase(self._matrices[0, 2, 1])))
+        self.assertEqual(parameter[(2,1)][1], (complex2db(self._matrices[1, 2, 1]), complex2phase(self._matrices[1, 2, 1])))
+        self.assertEqual(parameter[(2,1)][2], (complex2db(self._matrices[2, 2, 1]), complex2phase(self._matrices[2, 2, 1])))
+        self.assertEqual(parameter[(2,1)][3], (complex2db(self._matrices[3, 2, 1]), complex2phase(self._matrices[3, 2, 1])))
 
         # check the values of the pair (1,2)
-        self.assertEqual(parameter[(1,2)][0], complex2db(self._matrices[0, 1, 2]))
-        self.assertEqual(parameter[(1,2)][1], complex2db(self._matrices[1, 1, 2]))
-        self.assertEqual(parameter[(1,2)][2], complex2db(self._matrices[2, 1, 2]))
-        self.assertEqual(parameter[(1,2)][3], complex2db(self._matrices[3, 1, 2]))
+        self.assertEqual(parameter[(1,2)][0], (complex2db(self._matrices[0, 1, 2]), complex2phase(self._matrices[0, 1, 2])))
+        self.assertEqual(parameter[(1,2)][1], (complex2db(self._matrices[1, 1, 2]), complex2phase(self._matrices[1, 1, 2])))
+        self.assertEqual(parameter[(1,2)][2], (complex2db(self._matrices[2, 1, 2]), complex2phase(self._matrices[2, 1, 2])))
+        self.assertEqual(parameter[(1,2)][3], (complex2db(self._matrices[3, 1, 2]), complex2phase(self._matrices[3, 1, 2])))
 
         # check the values of the pair (3,0)
-        self.assertEqual(parameter[(3,0)][0], complex2db(self._matrices[0, 3, 0]))
-        self.assertEqual(parameter[(3,0)][1], complex2db(self._matrices[1, 3, 0]))
-        self.assertEqual(parameter[(3,0)][2], complex2db(self._matrices[2, 3, 0]))
-        self.assertEqual(parameter[(3,0)][3], complex2db(self._matrices[3, 3, 0]))
+        self.assertEqual(parameter[(3,0)][0], (complex2db(self._matrices[0, 3, 0]), complex2phase(self._matrices[0, 3, 0])))
+        self.assertEqual(parameter[(3,0)][1], (complex2db(self._matrices[1, 3, 0]), complex2phase(self._matrices[1, 3, 0])))
+        self.assertEqual(parameter[(3,0)][2], (complex2db(self._matrices[2, 3, 0]), complex2phase(self._matrices[2, 3, 0])))
+        self.assertEqual(parameter[(3,0)][3], (complex2db(self._matrices[3, 3, 0]), complex2phase(self._matrices[3, 3, 0])))
 
         # check the values of the pair (0,3)
-        self.assertEqual(parameter[(0,3)][0], complex2db(self._matrices[0, 0, 3]))
-        self.assertEqual(parameter[(0,3)][1], complex2db(self._matrices[1, 0, 3]))
-        self.assertEqual(parameter[(0,3)][2], complex2db(self._matrices[2, 0, 3]))
-        self.assertEqual(parameter[(0,3)][3], complex2db(self._matrices[3, 0, 3]))
+        self.assertEqual(parameter[(0,3)][0], (complex2db(self._matrices[0, 0, 3]), complex2phase(self._matrices[0, 0, 3])))
+        self.assertEqual(parameter[(0,3)][1], (complex2db(self._matrices[1, 0, 3]), complex2phase(self._matrices[1, 0, 3])))
+        self.assertEqual(parameter[(0,3)][2], (complex2db(self._matrices[2, 0, 3]), complex2phase(self._matrices[2, 0, 3])))
+        self.assertEqual(parameter[(0,3)][3], (complex2db(self._matrices[3, 0, 3]), complex2phase(self._matrices[3, 0, 3])))
 
         # check the values of the pair (0,2)
-        self.assertEqual(parameter[(0,2)][0], complex2db(self._matrices[0, 0, 2]))
-        self.assertEqual(parameter[(0,2)][1], complex2db(self._matrices[1, 0, 2]))
-        self.assertEqual(parameter[(0,2)][2], complex2db(self._matrices[2, 0, 2]))
-        self.assertEqual(parameter[(0,2)][3], complex2db(self._matrices[3, 0, 2]))
+        self.assertEqual(parameter[(0,2)][0], (complex2db(self._matrices[0, 0, 2]), complex2phase(self._matrices[0, 0, 2])))
+        self.assertEqual(parameter[(0,2)][1], (complex2db(self._matrices[1, 0, 2]), complex2phase(self._matrices[1, 0, 2])))
+        self.assertEqual(parameter[(0,2)][2], (complex2db(self._matrices[2, 0, 2]), complex2phase(self._matrices[2, 0, 2])))
+        self.assertEqual(parameter[(0,2)][3], (complex2db(self._matrices[3, 0, 2]), complex2phase(self._matrices[3, 0, 2])))
 
         # check the values of the pair (1,3)
-        self.assertEqual(parameter[(1,3)][0], complex2db(self._matrices[0, 1, 3]))
-        self.assertEqual(parameter[(1,3)][1], complex2db(self._matrices[1, 1, 3]))
-        self.assertEqual(parameter[(1,3)][2], complex2db(self._matrices[2, 1, 3]))
-        self.assertEqual(parameter[(1,3)][3], complex2db(self._matrices[3, 1, 3]))
+        self.assertEqual(parameter[(1,3)][0], (complex2db(self._matrices[0, 1, 3]), complex2phase(self._matrices[0, 1, 3])))
+        self.assertEqual(parameter[(1,3)][1], (complex2db(self._matrices[1, 1, 3]), complex2phase(self._matrices[1, 1, 3])))
+        self.assertEqual(parameter[(1,3)][2], (complex2db(self._matrices[2, 1, 3]), complex2phase(self._matrices[2, 1, 3])))
+        self.assertEqual(parameter[(1,3)][3], (complex2db(self._matrices[3, 1, 3]), complex2phase(self._matrices[3, 1, 3])))
 
     def testComputeComplexParameter(self):
         parameter = self._parameter.getComplexParameter()

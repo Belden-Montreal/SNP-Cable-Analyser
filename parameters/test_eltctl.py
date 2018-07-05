@@ -27,16 +27,16 @@ class TestELTCTL(TestParameter):
         self.assertEqual(len(parameter[tctlPorts[1]]), len(self._freq))
 
         # check the values of the port 1
-        self.assertAlmostEqual(parameter[tctlPorts[0]][0], dbTCTL[tctlPorts[0]][0]-dbIL[tctlPorts[0]][0])
-        self.assertAlmostEqual(parameter[tctlPorts[0]][1], dbTCTL[tctlPorts[0]][1]-dbIL[tctlPorts[0]][1])
-        self.assertAlmostEqual(parameter[tctlPorts[0]][2], dbTCTL[tctlPorts[0]][2]-dbIL[tctlPorts[0]][2])
-        self.assertAlmostEqual(parameter[tctlPorts[0]][3], dbTCTL[tctlPorts[0]][3]-dbIL[tctlPorts[0]][3])
+        self.assertAlmostEqual(parameter[tctlPorts[0]][0][0], dbTCTL[tctlPorts[0]][0][0]-dbIL[tctlPorts[0]][0][0])
+        self.assertAlmostEqual(parameter[tctlPorts[0]][1][0], dbTCTL[tctlPorts[0]][1][0]-dbIL[tctlPorts[0]][1][0])
+        self.assertAlmostEqual(parameter[tctlPorts[0]][2][0], dbTCTL[tctlPorts[0]][2][0]-dbIL[tctlPorts[0]][2][0])
+        self.assertAlmostEqual(parameter[tctlPorts[0]][3][0], dbTCTL[tctlPorts[0]][3][0]-dbIL[tctlPorts[0]][3][0])
 
         # check the values of the port 2
-        self.assertAlmostEqual(parameter[tctlPorts[1]][0], dbTCTL[tctlPorts[1]][0]-dbIL[tctlPorts[1]][0])
-        self.assertAlmostEqual(parameter[tctlPorts[1]][1], dbTCTL[tctlPorts[1]][1]-dbIL[tctlPorts[1]][1])
-        self.assertAlmostEqual(parameter[tctlPorts[1]][2], dbTCTL[tctlPorts[1]][2]-dbIL[tctlPorts[1]][2])
-        self.assertAlmostEqual(parameter[tctlPorts[1]][3], dbTCTL[tctlPorts[1]][3]-dbIL[tctlPorts[1]][3])
+        self.assertAlmostEqual(parameter[tctlPorts[1]][0][0], dbTCTL[tctlPorts[1]][0][0]-dbIL[tctlPorts[1]][0][0])
+        self.assertAlmostEqual(parameter[tctlPorts[1]][1][0], dbTCTL[tctlPorts[1]][1][0]-dbIL[tctlPorts[1]][1][0])
+        self.assertAlmostEqual(parameter[tctlPorts[1]][2][0], dbTCTL[tctlPorts[1]][2][0]-dbIL[tctlPorts[1]][2][0])
+        self.assertAlmostEqual(parameter[tctlPorts[1]][3][0], dbTCTL[tctlPorts[1]][3][0]-dbIL[tctlPorts[1]][3][0])
 
 
 if __name__ == '__main__':

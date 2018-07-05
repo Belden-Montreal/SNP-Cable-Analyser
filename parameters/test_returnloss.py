@@ -1,5 +1,5 @@
 import unittest
-from parameters.parameter import complex2db
+from parameters.parameter import complex2db, complex2phase
 from parameters.test_parameter import TestParameter
 from parameters.returnloss import ReturnLoss
 from limits.Standard import Standard
@@ -22,28 +22,28 @@ class TestReturnLoss(TestParameter):
         self.assertEqual(len(parameter[(3,3)]), len(self._freq))
 
         # check the values of the port 1
-        self.assertEqual(parameter[(0,0)][0], complex2db(self._matrices[0, 0, 0]))
-        self.assertEqual(parameter[(0,0)][1], complex2db(self._matrices[1, 0, 0]))
-        self.assertEqual(parameter[(0,0)][2], complex2db(self._matrices[2, 0, 0]))
-        self.assertEqual(parameter[(0,0)][3], complex2db(self._matrices[3, 0, 0]))
+        self.assertEqual(parameter[(0,0)][0], (complex2db(self._matrices[0, 0, 0]), complex2phase(self._matrices[0, 0, 0])))
+        self.assertEqual(parameter[(0,0)][1], (complex2db(self._matrices[1, 0, 0]), complex2phase(self._matrices[1, 0, 0])))
+        self.assertEqual(parameter[(0,0)][2], (complex2db(self._matrices[2, 0, 0]), complex2phase(self._matrices[2, 0, 0])))
+        self.assertEqual(parameter[(0,0)][3], (complex2db(self._matrices[3, 0, 0]), complex2phase(self._matrices[3, 0, 0])))
 
         # check the values of the port 2
-        self.assertEqual(parameter[(1,1)][0], complex2db(self._matrices[0, 1, 1]))
-        self.assertEqual(parameter[(1,1)][1], complex2db(self._matrices[1, 1, 1]))
-        self.assertEqual(parameter[(1,1)][2], complex2db(self._matrices[2, 1, 1]))
-        self.assertEqual(parameter[(1,1)][3], complex2db(self._matrices[3, 1, 1]))
+        self.assertEqual(parameter[(1,1)][0], (complex2db(self._matrices[0, 1, 1]), complex2phase(self._matrices[0, 1, 1])))
+        self.assertEqual(parameter[(1,1)][1], (complex2db(self._matrices[1, 1, 1]), complex2phase(self._matrices[1, 1, 1])))
+        self.assertEqual(parameter[(1,1)][2], (complex2db(self._matrices[2, 1, 1]), complex2phase(self._matrices[2, 1, 1])))
+        self.assertEqual(parameter[(1,1)][3], (complex2db(self._matrices[3, 1, 1]), complex2phase(self._matrices[3, 1, 1])))
 
         # check the values of the port 3
-        self.assertEqual(parameter[(2,2)][0], complex2db(self._matrices[0, 2, 2]))
-        self.assertEqual(parameter[(2,2)][1], complex2db(self._matrices[1, 2, 2]))
-        self.assertEqual(parameter[(2,2)][2], complex2db(self._matrices[2, 2, 2]))
-        self.assertEqual(parameter[(2,2)][3], complex2db(self._matrices[3, 2, 2]))
+        self.assertEqual(parameter[(2,2)][0], (complex2db(self._matrices[0, 2, 2]), complex2phase(self._matrices[0, 2, 2])))
+        self.assertEqual(parameter[(2,2)][1], (complex2db(self._matrices[1, 2, 2]), complex2phase(self._matrices[1, 2, 2])))
+        self.assertEqual(parameter[(2,2)][2], (complex2db(self._matrices[2, 2, 2]), complex2phase(self._matrices[2, 2, 2])))
+        self.assertEqual(parameter[(2,2)][3], (complex2db(self._matrices[3, 2, 2]), complex2phase(self._matrices[3, 2, 2])))
 
         # check the values of the port 4
-        self.assertEqual(parameter[(3,3)][0], complex2db(self._matrices[0, 3, 3]))
-        self.assertEqual(parameter[(3,3)][1], complex2db(self._matrices[1, 3, 3]))
-        self.assertEqual(parameter[(3,3)][2], complex2db(self._matrices[2, 3, 3]))
-        self.assertEqual(parameter[(3,3)][3], complex2db(self._matrices[3, 3, 3]))
+        self.assertEqual(parameter[(3,3)][0], (complex2db(self._matrices[0, 3, 3]), complex2phase(self._matrices[0, 3, 3])))
+        self.assertEqual(parameter[(3,3)][1], (complex2db(self._matrices[1, 3, 3]), complex2phase(self._matrices[1, 3, 3])))
+        self.assertEqual(parameter[(3,3)][2], (complex2db(self._matrices[2, 3, 3]), complex2phase(self._matrices[2, 3, 3])))
+        self.assertEqual(parameter[(3,3)][3], (complex2db(self._matrices[3, 3, 3]), complex2phase(self._matrices[3, 3, 3])))
 
     def testComputeComplexParameter(self):
         parameter = self._parameter.getComplexParameter()
