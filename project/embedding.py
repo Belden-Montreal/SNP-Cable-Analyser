@@ -1,4 +1,6 @@
 from project.project import Project
+from project.embedding_import_dialog import EmbedImportDialog
+from app.save_manager import SaveManager
 from sample.single_ended import SingleEnded
 from sample.deembed import Deembed
 import numpy as np
@@ -60,6 +62,17 @@ class Embedding(Project):
         if self._deembedded and self._deembedded.getName() in fileNames:
             self._deembedded = None
 
+    def openImportWindow(self, parent):
+        dial = EmbedImportDialog(parent)
+        files = dial.getFiles()
+        if files:
+            load, plug, k1, k2, k3, openSample, shortSample = files
+            if openSample and shortSample:
+                self.importSamples(openSample, Filetype.OPEN)
+                self.importSamples(shortSample, Filetype.SHORT)
+            plugProject = SaveManager().loadProject(plug)
+            self.setPlug(plugProject)
+            self.importSamples(load, Filetype.LOAD)
 
     def generateExcel(self, outputName, sampleNames, z=False):
         raise NotImplementedError
