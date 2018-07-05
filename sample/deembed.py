@@ -10,6 +10,8 @@ class Deembed(SingleEnded):
 
     def addParameters(self):
         parameters = [
+            "RL",
+            "NEXT",
             "PCNEXT",
             "NEXTDelay",
             "DNEXT",
