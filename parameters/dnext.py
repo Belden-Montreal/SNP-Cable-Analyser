@@ -23,7 +23,7 @@ class DNEXT(CorrectedNEXT):
         for f,_ in enumerate(self._freq):
             for port in self._ports:
                 
-                dnext[port].append(complex2db(cpCorrectedNext[port][f] - plugNext[port][f]))
+                dnext[port].append((complex2db(cpCorrectedNext[port][f] - plugNext[port][f]), complex2phase(cpCorrectedNext[port][f] - plugNext[port][f])))
                 cpDnext[port].append(cpCorrectedNext[port][f] - plugNext[port][f])
         return dnext,cpDnext
 
