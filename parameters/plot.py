@@ -60,10 +60,14 @@ class ParameterPlot(object):
                     else:
                         color = next(colors)
 
+                    try:
+                        data = list(map(lambda val: val[0], self._parameter.getParameter()[port]))
+                    except:
+                        data = self._parameter.getParameter()[port]
                     # draw the data
                     plt.semilogx(
                         self._parameter.getFrequencies(),
-                        self._parameter.getParameter()[port],
+                        data,
                         label=name, c=color
                     )
 

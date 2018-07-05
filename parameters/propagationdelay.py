@@ -53,6 +53,20 @@ class PropagationDelay(PairedParameter):
 
         return pd,pd
 
+    def getMargins(self, values, limit):
+        margins = list()
+        freqs = list()
+        vals = list()
+        for i,value in enumerate(values):
+            if self._freq[i] in limit:
+                if limit[self._freq[i]]:
+                    margins.append(limit[self._freq[i]]-value)
+                else:
+                    margins.append(None)
+                freqs.append(self._freq[i])
+                vals.append(value)
+        return margins, freqs, vals
+
     def chooseMatrices(self, matrices):
         return None
 
