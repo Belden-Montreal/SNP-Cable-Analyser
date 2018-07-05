@@ -12,8 +12,8 @@ class Embedding(Project):
     '''
     This class represents a project for analyzing plug embedding
     '''
-    def __init__(self):
-        super(Embedding, self).__init__()
+    def __init__(self, name):
+        super(Embedding, self).__init__(name)
         self._openSample = None
         self._shortSample = None
         self._deembedded = None

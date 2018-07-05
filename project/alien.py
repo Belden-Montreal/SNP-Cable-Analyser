@@ -9,8 +9,8 @@ class Alien(Project):
     '''
     The Alien class represents a project where multiple samples are disturbing a victim sample
     '''
-    def __init__(self):
-        super(Alien, self).__init__()
+    def __init__(self, name):
+        super(Alien, self).__init__(name)
         self._victim = None
         self._disturbers = list()
         self._axextd = None

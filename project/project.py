@@ -10,7 +10,8 @@ class Project(object):
     The project class represents a simple project containing a number of regular samples.
     '''
 
-    def __init__(self):
+    def __init__(self, name):
+        self._name = name
         self._samples = list()
 
     def importSamples(self, fileNames):
@@ -94,6 +95,9 @@ class Project(object):
         names,_ = QtWidgets.QFileDialog.getOpenFileNames(parent, caption="Select SNP(s)", directory="",filter="sNp Files (*.s*p)")
         if names:
             self.importSamples(names)
+
+    def getName(self):
+        return self._name
 
     def __createSample(self, name):
         _, extension = splitext(name)

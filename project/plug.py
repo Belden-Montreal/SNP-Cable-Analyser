@@ -13,8 +13,8 @@ class Filetype():
 
 class Plug(Project):
 
-    def __init__(self):
-        super(Plug, self).__init__()
+    def __init__(self, name):
+        super(Plug, self).__init__(name)
         self._openDelay = None
         self._shortDelay = None
         self._loadSample = None
