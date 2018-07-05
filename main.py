@@ -47,7 +47,8 @@ class Main():
         # self.actionDeembed.triggered.connect(MainWindow.addEmbed)
         self._mainWindow.param_tabs.currentChanged['int'].connect(lambda:self.tabChanged())
         # QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
+        self._mainWindow.actionImport_Project.triggered.connect(lambda: self.loadProject())
+        self._mainWindow.actionSave_Project.triggered.connect(lambda: self.saveProject())
 
     def updateSamplesTable(self):
         project = self._projectManager.activeProject()
@@ -55,7 +56,6 @@ class Main():
             num = project.numSamples()
             self._mainWindow.sampleTable.setRowCount(num)
             for i in range(num):
-                print(project.samples()[i].getName())
                 self._mainWindow.sampleTable.setItem(i, 0, QtWidgets.QTableWidgetItem(project.samples()[i].getName()))
                 self._mainWindow.sampleTable.setItem(i, 1, QtWidgets.QTableWidgetItem(project.samples()[i].getDate()))
             self._mainWindow.sampleTable.resizeColumnsToContents()
@@ -200,6 +200,20 @@ class Main():
         self._mainWindow.graphicsView.figure = plot.getFigure()
         self._mainWindow.graphicsView.draw() 
 
+    def loadProject(self):
+        f, ok = QtWidgets.QFileDialog.getOpenFileName(self._qmw, caption="Load a project", directory="projects/", filter="Belden Network Analyzer Project file (*.bnap)")
+        if ok:
+            self._projectManager.loadProject(f)
+            self.updateSamplesTable()
+            self._mainWindow.actionToolbar_Import_SnP.setDisabled(False)
+            self._mainWindow.actionImport_SnP.setDisabled(False)
+            self._qmw.setWindowTitle("Belden Network Analyzer Software - " + self._projectManager.activeProject().getName())
+
+    def saveProject(self):
+        f, ok = QtWidgets.QFileDialog.getSaveFileName(self._qmw, caption="Save project", directory="projects/", filter="Belden Network Analyzer Project file (*.bnap)")
+        if ok:
+            self._projectManager.saveProject(f)
+
     def showMaximized(self):
         self._qmw.showMaximized()
 
@@ -223,7 +237,6 @@ def main():
 
     sys._excepthook = sys.excepthook
     def exception_hook(exctype, value, traceback):
-        print(exctype, value, traceback)
         sys._excepthook(exctype, value, traceback)
         sys.exit(1)
     sys.excepthook = exception_hook
