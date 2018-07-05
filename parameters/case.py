@@ -1,4 +1,5 @@
-from parameters.parameter import PairedParameter, complex2db
+from parameters.parameter import PairedParameter, complex2db, complex2phase
+from parameters.case_plot import CasePlot
 import numpy as np
 
 class Case(PairedParameter):
@@ -8,6 +9,7 @@ class Case(PairedParameter):
         self._cases = cases
         self._cnext = cnext
         super(Case, self).__init__(ports, freq, matrices)
+        self._plot = CasePlot(self)
 
     def computePairs(self, ports):
         pairs = dict()
@@ -50,10 +52,23 @@ class Case(PairedParameter):
                     cPlug = complex(re, im)
                     reembed = cPlug + dnext[port][f]
                     cpReembedded[port][n].append(reembed)
-                    reembedded[port][n].append(complex2db(reembed))
+                    reembedded[port][n].append((complex2db(reembed), complex2phase(reembed)))
 
         return reembedded, cpReembedded
 
+    def getMargins(self, values, limit):
+        margins = list()
+        freqs = list()
+        vals = list()
+        for i,(value) in enumerate(values):
+            if self._freq[i] in limit:
+                if limit[self._freq[i]]:
+                    margins.append(limit[self._freq[i]]-value)
+                else:
+                    margins.append(None)
+                freqs.append(self._freq[i])
+                vals.append(value)
+        return margins, freqs, vals
     def chooseMatrices(self, matrices):
         return None
 
