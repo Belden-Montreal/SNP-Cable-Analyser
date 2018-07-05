@@ -42,22 +42,29 @@ class Project(object):
                 worksheet.merge_range(2, curPos, 2, curPos+numSignals*2-1,  paramName, cell_format)
                 for i, (key, (portName,_)) in enumerate(parameter.getPorts().items()):
                     worksheet.merge_range(3, curPos+i*2, 3, curPos+i*2+1, str(portName), cell_format)
-                    if z:
-                        worksheet.write(4,curPos+i*2, "real", cell_format)
-                        worksheet.write(4,curPos+i*2+1, "imaginary", cell_format)
-                        param = parameter.getComplexParameter()
-                        for j,data in enumerate(param[key]):
-                            worksheet.write(5+j, 0, sample.getFrequencies()[j])
-                            self.box(workbook, worksheet, param, key, i*2, j, data.real, curPos)
-                            self.box(workbook, worksheet, param, key, i*2+1, j, data.imag, curPos)
-                    else:
-                        worksheet.write(4,curPos+i*2, "mag", cell_format)
-                        worksheet.write(4,curPos+i*2+1, "phase", cell_format)
+                    if paramName == "Propagation Delay":
+                        worksheet.merge_range(4, curPos+i*2, 4, curPos+i*2+1, "ns", cell_format)
                         param = parameter.getParameter()
-                        for j,data in enumerate(param[key]):
-                            worksheet.write(5+j, 0, sample.getFrequencies()[j])
+                        for j, data in enumerate(param[key]):
+                            worksheet.merge_range(5+j, curPos+i*2, 5+j, curPos+i*2+1, "")
                             self.box(workbook, worksheet, param, key, i*2, j, data, curPos)
-                            self.box(workbook, worksheet, param, key, i*2+1, j, data, curPos)
+                    else:
+                        if z:
+                            worksheet.write(4,curPos+i*2, "real", cell_format)
+                            worksheet.write(4,curPos+i*2+1, "imaginary", cell_format)
+                            param = parameter.getComplexParameter()
+                            for j,data in enumerate(param[key]):
+                                worksheet.write(5+j, 0, sample.getFrequencies()[j])
+                                self.box(workbook, worksheet, param, key, i*2, j, data.real, curPos)
+                                self.box(workbook, worksheet, param, key, i*2+1, j, data.imag, curPos)
+                        else:
+                            worksheet.write(4,curPos+i*2, "mag", cell_format)
+                            worksheet.write(4,curPos+i*2+1, "phase", cell_format)
+                            param = parameter.getParameter()
+                            for j, (mag, phase) in enumerate(param[key]):
+                                worksheet.write(5+j, 0, sample.getFrequencies()[j])
+                                self.box(workbook, worksheet, param, key, i*2, j, mag, curPos)
+                                self.box(workbook, worksheet, param, key, i*2+1, j, phase, curPos)
             
                 curPos += numSignals*2
         workbook.close()
