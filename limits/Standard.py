@@ -1,6 +1,6 @@
 from collections import OrderedDict
 from limits.Limit import Limit
-parameters = ["RL", "IL", "NEXT", "PSNEXT","FEXT", "PSFEXT", "ACRF", "PSACRF", "LCL", "LCTL", "TCL", "TCTL", "ELTCTL","CMRL", "CMNEXT"]
+parameters = ["RL", "IL", "PropagationDelay", "NEXT", "PSNEXT","FEXT", "PSFEXT", "ACRF", "PSACRF", "LCL", "LCTL", "TCL", "TCTL", "ELTCTL","CMRL", "CMNEXT", "ANEXT", "PSANEXT", "AVGPSANEXT", "AFEXT", "PSAFEXT", "PSAACRF", "AVGPSAACRF"]
 
 class Standard():
     def __init__(self, name):

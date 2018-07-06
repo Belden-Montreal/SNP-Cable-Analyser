@@ -146,7 +146,7 @@ class Sample(SNPManipulations):
         limit = None
         if self.standard:
             if parameter in self.standard.limits:
-                limit = self.standard.limits[parameter].evaluateDict({"f": self.freq} , len(self.freq), neg=True)
+                limit = self.standard.limits[parameter].evaluateDict({"f": self.freq} , len(self.freq), neg=not(parameter=="PropagationDelay"))
             for pair in pairs:
                 value = ''
                 freq = ''
@@ -179,7 +179,7 @@ class Sample(SNPManipulations):
         limit = None
         if self.standard:
             if parameter in self.standard.limits:
-                limit = self.standard.limits[parameter].evaluateDict({"f": self.freq} , len(self.freq), neg=True)
+                limit = self.standard.limits[parameter].evaluateDict({"f": self.freq} , len(self.freq), neg=not(parameter=="PropagationDelay"))
             for pair in pairs:
                 validMin = False
                 value = np.array(param[pair])

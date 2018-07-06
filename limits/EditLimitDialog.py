@@ -2,6 +2,7 @@ from PyQt5 import QtWidgets, QtCore
 from limits import Edit_Limit_Dialog
 from limits.TreeItem import TreeItem
 from limits.Limit import Limit
+import math
 
 class Box():
     STAND = 0
@@ -87,6 +88,10 @@ class EditLimitDialog():
     def setTextLimit(self, item, param):
         if item:
             if param in item.standard.limits:
+                if not (item.standard.limits[param].maxValue == math.inf):
+                    self.editLimitDialog.maxLineEdit.setText(str(item.standard.limits[param].maxValue))
+                else:
+                    self.editLimitDialog.maxLineEdit.setText("")
                 self.editLimitDialog.limitsTable.clearContents()
                 self.editLimitDialog.limitsTable.setRowCount(len(item.standard.limits[param].clauses))
                 for i, clause in enumerate(item.standard.limits[param].clauses):
@@ -126,18 +131,21 @@ class EditLimitDialog():
                     parent = newItem
             limits = []
             bounds = []
+            maxVal = math.inf
             for x in range(0,self.editLimitDialog.limitsTable.rowCount()):
                 limits.append(self.editLimitDialog.limitsTable.item(x, 2).text())
                 if x == 0:
-                    if self.editLimitDialog.limitsTable.item(x, 0).text() == '-':
-                        bounds.append(float('-inf'))
+                    if self.editLimitDialog.limitsTable.item(x, 0).text() == "-" or self.editLimitDialog.limitsTable.item(x, 0).text() == "":
+                        bounds.append(-math.inf)
                     else:
                         bounds.append(float(self.editLimitDialog.limitsTable.item(x, 0).text()))
-                if self.editLimitDialog.limitsTable.item(x, 1).text() == '-':
-                        bounds.append(float('inf'))
+                if self.editLimitDialog.limitsTable.item(x,1).text() == "-" or self.editLimitDialog.limitsTable.item(x,1).text() == "":
+                    bounds.append(math.inf)
                 else:
                     bounds.append(float(self.editLimitDialog.limitsTable.item(x, 1).text()))
-            self.boxes[Box.HARDW].currentData().standard.limits[self.boxes[Box.PARAM].currentText()] = Limit(self.boxes[Box.PARAM].currentText(), limits, bounds)
+                if not (self.editLimitDialog.maxLineEdit.text() == ""):
+                    maxVal = float(self.editLimitDialog.maxLineEdit.text())
+            self.boxes[Box.HARDW].currentData().standard.limits[self.boxes[Box.PARAM].currentText()] = Limit(self.boxes[Box.PARAM].currentText(), limits, bounds, maxVal)
             for box in self.boxes:
                 box.blockSignals(False)
             self.model.endResetModel()

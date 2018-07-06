@@ -142,15 +142,27 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
         result = limitDialog.showDialog()
         if result:
             item = limitDialog.getSelection().internalPointer().standard
-
+            for limit in item.limits.values():
+                if not (limit == ""):
+                    for function in limit.functions:
+                        for symbol in function.free_symbols:
+                            if not (str(symbol) == 'f'):
+                                ret = QtWidgets.QInputDialog.getDouble(self, "Enter the parameter value", "Please enter the value for the parameter "+ str(symbol) +" : ")
+                                limit.setParamValue(symbol, ret[0])
             for sample in self.selected:
                 self.Project.getSampleByName(sample).setStandard(item)
                 for i in range(0, len(self.Project.measurements)):
                     if self.sampleTable.item(i,0).text() == sample:
                         self.sampleTable.setItem(i, 2, QtWidgets.QTableWidgetItem(item.name))
             self.sampleTable.resizeColumnsToContents()
-            self.displaySampleParams(self.selected)
-            
+            if self.Project.getSampleByName(self.selected[0]).__retr__() == "Alien":
+                self.setupAlien()
+
+            elif self.Project.getSampleByName(self.selected[0]).__retr__() == "Embed":
+                self.setupEmbed()
+
+            else:
+                self.displaySampleParams(self.selected)            
 
     def setActiveSample(self):
         self.plot(None, None)
@@ -488,6 +500,9 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
         self.alienWidget.alien45.toggled.connect(self.alienPlot)
         self.alienWidget.alien78.toggled.connect(self.alienPlot)
         self.alienWidget.alienAvg.toggled.connect(self.alienPlot)
+        self.alienWidget.alienLimitCheck.toggled.connect(self.alienPlot)
+        self.alienWidget.alienAvgLimitCheck.toggled.connect(self.alienPlot)
+
 
         self.alienUpdateDisturberList()
         self.alienPlot()
@@ -502,7 +517,19 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
         alien = self.Project.getSampleByName(self.selected[0])
 
         disturberList = []
-
+        limit = None
+        avgLimit = None
+        if alien.standard and len(alien.freq):
+            if self.alienWidget.alienPSANEXT.isChecked():
+                if self.alienWidget.alienLimitCheck.isChecked():
+                    limit = alien.standard.limits["PSANEXT"].evaluateArray({'f': alien.freq}, len(alien.freq), neg=True)
+                if self.alienWidget.alienAvgLimitCheck.isChecked():
+                    avgLimit = alien.standard.limits["AVGPSANEXT"].evaluateArray({'f': alien.freq}, len(alien.freq), neg=True)
+            elif self.alienWidget.alienPSAACRF.isChecked():
+                if self.alienWidget.alienLimitCheck.isChecked():
+                    limit = alien.standard.limits["PSAACRF"].evaluateArray({'f': alien.freq}, len(alien.freq), neg=True)
+                if self.alienWidget.alienAvgLimitCheck.isChecked():
+                    avgLimit = alien.standard.limits["AVGPSAACRF"].evaluateArray({'f': alien.freq}, len(alien.freq), neg=True)
         for i in range(self.alienWidget.alienDisturbers.count()):
             dist = self.alienWidget.alienDisturbers.item(i)
             if dist.checkState():
@@ -514,7 +541,6 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
                 end = "end1"
             elif self.alienWidget.alienEnd2.isChecked():
                 end = "end2"
-                
             if self.alienWidget.alienPSANEXT.isChecked():
                 testType = "ANEXT"
                 PS = alien.getPSAlien(end, testType, disturberList)
@@ -522,7 +548,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
                 testType = "PSAFEXT"
                 alien.getPSAlien(end, "AFEXT", disturberList) #Calculate PSAFEXT
                 PS = alien.getPSAACRX(end, testType)
-                
+            
             alienPlots = {}
             
             if self.alienWidget.alien12.isChecked():
@@ -534,8 +560,8 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
             if self.alienWidget.alien78.isChecked():
                 alienPlots["78"] = PS["78"]
             try:
-                self.plot(alien.freq, alienPlots)
-            except Exception as e:
+                self.plot(alien.freq, alienPlots, limit=limit, avgLimit=avgLimit)
+            except:
                 print("No Sample")
 
         except Exception as e:
@@ -696,7 +722,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
 
         self.displaySamplesInTable()
 
-    def plot(self, x=None, param_dict=None, limit = None, unit = "Mhz"):
+    def plot(self, x=None, param_dict=None, limit = None, unit = "Mhz", avgLimit = None):
 
         self.graphicsView.figure.clear()
         #ax.set_xlim(300*(10**3), 10**9)
@@ -710,7 +736,8 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
                 #print key
 
                 #a = scipy.signal.decimate(x, 10)
-                ax.semilogx(x, param_dict[key], label=key, c = c)
+                if len(x) == len(param_dict[key]):
+                    ax.semilogx(x, param_dict[key], label=key, c = c)
                 #print key 
 
             ax.xaxis.set_major_formatter(matplotlib.ticker.ScalarFormatter())
@@ -729,6 +756,8 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
             if limit is not None:
                 ax.semilogx(*zip(*limit), linestyle = '--', label="limit", c = c)
 
+            if avgLimit is not None:
+                ax.semilogx(*zip(*avgLimit), linestyle = '--', label="average limit", c = c)
             ax.legend(loc='upper left', ncol = 1 if len(param_dict.keys()) <= 8 else 2 )
      
             #self.ax.legend()
@@ -995,8 +1024,11 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
             else:
                 limit = None
                 if sample.standard is not None:
-                    if self.activeParameter in sample.standard.limits:
-                        limit = sample.standard.limits[self.activeParameter].evaluateArray({"f": sample.freq} , len(sample.freq), neg=True)
+                    if self.activeParameter.replace(" ","") in sample.standard.limits:
+                        if self.activeParameter == "Propagation Delay":
+                            limit = sample.standard.limits[self.activeParameter.replace(" ","")].evaluateArray({"f": sample.freq} , len(sample.freq), neg=False)
+                        else:
+                            limit = sample.standard.limits[self.activeParameter.replace(" ","")].evaluateArray({"f": sample.freq} , len(sample.freq), neg=True)
                     #print(sample.freq)
                 self.plot(self.sample.freq, getattr(self.sample, self.activeParameter.replace(" ", "")), limit = limit , unit = sample.freq_unit)
                 #print(self.sample.frequency.unit)
