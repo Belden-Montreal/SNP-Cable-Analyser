@@ -34,28 +34,28 @@ class TestPSAXEXT(TestParameter):
         self.assertEqual(len(parameter[3]), len(self._freq))
 
         # check the values of the port 1
-        self.assertAlmostEqual(parameter[0][0], powersum(axextd, 0, 0))
-        self.assertAlmostEqual(parameter[0][1], powersum(axextd, 1, 0))
-        self.assertAlmostEqual(parameter[0][2], powersum(axextd, 2, 0))
-        self.assertAlmostEqual(parameter[0][3], powersum(axextd, 3, 0))
+        self.assertAlmostEqual(parameter[0][0][0], powersum(axextd, 0, 0))
+        self.assertAlmostEqual(parameter[0][1][0], powersum(axextd, 1, 0))
+        self.assertAlmostEqual(parameter[0][2][0], powersum(axextd, 2, 0))
+        self.assertAlmostEqual(parameter[0][3][0], powersum(axextd, 3, 0))
 
         # check the values of the port 2
-        self.assertAlmostEqual(parameter[1][0], powersum(axextd, 0, 1))
-        self.assertAlmostEqual(parameter[1][1], powersum(axextd, 1, 1))
-        self.assertAlmostEqual(parameter[1][2], powersum(axextd, 2, 1))
-        self.assertAlmostEqual(parameter[1][3], powersum(axextd, 3, 1))
+        self.assertAlmostEqual(parameter[1][0][0], powersum(axextd, 0, 1))
+        self.assertAlmostEqual(parameter[1][1][0], powersum(axextd, 1, 1))
+        self.assertAlmostEqual(parameter[1][2][0], powersum(axextd, 2, 1))
+        self.assertAlmostEqual(parameter[1][3][0], powersum(axextd, 3, 1))
 
         # check the values of the port 3
-        self.assertAlmostEqual(parameter[2][0], powersum(axextd, 0, 2))
-        self.assertAlmostEqual(parameter[2][1], powersum(axextd, 1, 2))
-        self.assertAlmostEqual(parameter[2][2], powersum(axextd, 2, 2))
-        self.assertAlmostEqual(parameter[2][3], powersum(axextd, 3, 2))
+        self.assertAlmostEqual(parameter[2][0][0], powersum(axextd, 0, 2))
+        self.assertAlmostEqual(parameter[2][1][0], powersum(axextd, 1, 2))
+        self.assertAlmostEqual(parameter[2][2][0], powersum(axextd, 2, 2))
+        self.assertAlmostEqual(parameter[2][3][0], powersum(axextd, 3, 2))
 
         # check the values of the port 4
-        self.assertAlmostEqual(parameter[3][0], powersum(axextd, 0, 3))
-        self.assertAlmostEqual(parameter[3][1], powersum(axextd, 1, 3))
-        self.assertAlmostEqual(parameter[3][2], powersum(axextd, 2, 3))
-        self.assertAlmostEqual(parameter[3][3], powersum(axextd, 3, 3))
+        self.assertAlmostEqual(parameter[3][0][0], powersum(axextd, 0, 3))
+        self.assertAlmostEqual(parameter[3][1][0], powersum(axextd, 1, 3))
+        self.assertAlmostEqual(parameter[3][2][0], powersum(axextd, 2, 3))
+        self.assertAlmostEqual(parameter[3][3][0], powersum(axextd, 3, 3))
 
         # check complex parameter
         # self.assertAlmostEqual(parameter[1][0], complex2db(self._parameter.getComplexParameter()[1][0]))

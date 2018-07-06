@@ -32,28 +32,28 @@ class TestPSAACRX(TestParameter):
         self.assertEqual(len(parameter[3]), len(self._freq))
 
         # check the values of the port 1
-        self.assertAlmostEqual(parameter[0][0][0], dbPSAXEXT[0][0]-dbIL[(0,2)][0][0])
-        self.assertAlmostEqual(parameter[0][1][0], dbPSAXEXT[0][1]-dbIL[(0,2)][1][0])
-        self.assertAlmostEqual(parameter[0][2][0], dbPSAXEXT[0][2]-dbIL[(0,2)][2][0])
-        self.assertAlmostEqual(parameter[0][3][0], dbPSAXEXT[0][3]-dbIL[(0,2)][3][0])
+        self.assertAlmostEqual(parameter[0][0][0], dbPSAXEXT[0][0][0]-dbIL[(0,2)][0][0])
+        self.assertAlmostEqual(parameter[0][1][0], dbPSAXEXT[0][1][0]-dbIL[(0,2)][1][0])
+        self.assertAlmostEqual(parameter[0][2][0], dbPSAXEXT[0][2][0]-dbIL[(0,2)][2][0])
+        self.assertAlmostEqual(parameter[0][3][0], dbPSAXEXT[0][3][0]-dbIL[(0,2)][3][0])
 
         # check the values of the port 2
-        self.assertAlmostEqual(parameter[1][0][0], dbPSAXEXT[1][0]-dbIL[(1,3)][0][0])
-        self.assertAlmostEqual(parameter[1][1][0], dbPSAXEXT[1][1]-dbIL[(1,3)][1][0])
-        self.assertAlmostEqual(parameter[1][2][0], dbPSAXEXT[1][2]-dbIL[(1,3)][2][0])
-        self.assertAlmostEqual(parameter[1][3][0], dbPSAXEXT[1][3]-dbIL[(1,3)][3][0])
+        self.assertAlmostEqual(parameter[1][0][0], dbPSAXEXT[1][0][0]-dbIL[(1,3)][0][0])
+        self.assertAlmostEqual(parameter[1][1][0], dbPSAXEXT[1][1][0]-dbIL[(1,3)][1][0])
+        self.assertAlmostEqual(parameter[1][2][0], dbPSAXEXT[1][2][0]-dbIL[(1,3)][2][0])
+        self.assertAlmostEqual(parameter[1][3][0], dbPSAXEXT[1][3][0]-dbIL[(1,3)][3][0])
 
         # check the values of the port 3
-        self.assertAlmostEqual(parameter[2][0][0], dbPSAXEXT[2][0]-dbIL[(2,0)][0][0])
-        self.assertAlmostEqual(parameter[2][1][0], dbPSAXEXT[2][1]-dbIL[(2,0)][1][0])
-        self.assertAlmostEqual(parameter[2][2][0], dbPSAXEXT[2][2]-dbIL[(2,0)][2][0])
-        self.assertAlmostEqual(parameter[2][3][0], dbPSAXEXT[2][3]-dbIL[(2,0)][3][0])
+        self.assertAlmostEqual(parameter[2][0][0], dbPSAXEXT[2][0][0]-dbIL[(2,0)][0][0])
+        self.assertAlmostEqual(parameter[2][1][0], dbPSAXEXT[2][1][0]-dbIL[(2,0)][1][0])
+        self.assertAlmostEqual(parameter[2][2][0], dbPSAXEXT[2][2][0]-dbIL[(2,0)][2][0])
+        self.assertAlmostEqual(parameter[2][3][0], dbPSAXEXT[2][3][0]-dbIL[(2,0)][3][0])
 
         # check the values of the port 4
-        self.assertAlmostEqual(parameter[3][0][0], dbPSAXEXT[3][0]-dbIL[(3,1)][0][0])
-        self.assertAlmostEqual(parameter[3][1][0], dbPSAXEXT[3][1]-dbIL[(3,1)][1][0])
-        self.assertAlmostEqual(parameter[3][2][0], dbPSAXEXT[3][2]-dbIL[(3,1)][2][0])
-        self.assertAlmostEqual(parameter[3][3][0], dbPSAXEXT[3][3]-dbIL[(3,1)][3][0])
+        self.assertAlmostEqual(parameter[3][0][0], dbPSAXEXT[3][0][0]-dbIL[(3,1)][0][0])
+        self.assertAlmostEqual(parameter[3][1][0], dbPSAXEXT[3][1][0]-dbIL[(3,1)][1][0])
+        self.assertAlmostEqual(parameter[3][2][0], dbPSAXEXT[3][2][0]-dbIL[(3,1)][2][0])
+        self.assertAlmostEqual(parameter[3][3][0], dbPSAXEXT[3][3][0]-dbIL[(3,1)][3][0])
 
 if __name__ == '__main__':
     unittest.main()

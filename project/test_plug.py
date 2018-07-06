@@ -7,7 +7,7 @@ class TestPlug(unittest.TestCase):
         self._fileName = "testout_mm.s8p"
 
     def testFileImport(self):
-        project = Plug()
+        project = Plug("test")
 
         project.importSamples(self._fileName, Filetype.DFOPEN)
         project.importSamples(self._fileName, Filetype.DFSHORT)

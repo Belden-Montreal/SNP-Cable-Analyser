@@ -7,7 +7,7 @@ class TestEmbedding(unittest.TestCase):
         self._fileName = "testout_mm.s8p"
 
     def testFileImport(self):
-        p = Plug()
+        p = Plug("test")
 
         p.importSamples(self._fileName, Filetype.DFOPEN)
         p.importSamples(self._fileName, Filetype.DFSHORT)
@@ -16,7 +16,7 @@ class TestEmbedding(unittest.TestCase):
         p.setConstants(1,2,3)
         p.importSamples(self._fileName, Filetype.LOAD)
 
-        project = Embedding()
+        project = Embedding("test")
         project.setPlug(p)
         project.importSamples(self._fileName, Filetype.LOAD)
 

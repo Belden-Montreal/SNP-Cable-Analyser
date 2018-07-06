@@ -7,7 +7,7 @@ class TestAlien(unittest.TestCase):
         self._fileNames = ["snps/ALIEN TEST/AlienEnd1_2redo3 _3.s16p", "snps/ALIEN TEST/AlienEnd1_2redo3 _4.s16p"]
 
     def testFileImport(self):
-        project = Alien()
+        project = Alien("test")
 
         project.importSamples(self._fileNames, True)
         #should have added 2 disturber

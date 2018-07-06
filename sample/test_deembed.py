@@ -13,6 +13,8 @@ class TestDeembed(TestSample):
     def setUp(self):
         super(TestDeembed, self).setUp()
         self._params = [
+            "RL",
+            "NEXT",
             "PCNEXT",
             "NEXTDelay",
             "DNEXT",

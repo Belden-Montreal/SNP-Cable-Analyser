@@ -8,7 +8,7 @@ class TestProject(unittest.TestCase):
         self._fileNames = ["testout_mm.s8p", "testout_mm1.s16p"]
 
     def testFileImport(self):
-        project = Project()
+        project = Project("test")
         project.importSamples(self._fileNames)
 
         #should create 2 samples
