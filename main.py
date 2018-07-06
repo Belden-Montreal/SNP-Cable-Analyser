@@ -7,6 +7,7 @@ from ParameterWidget import ParameterWidget
 from app.project_manager import ProjectManager
 from app.vna_manager import VNAManager
 from limits.LimitDialog import LimitDialog
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 
 class Main():
 
@@ -25,6 +26,8 @@ class Main():
         self._mainWindow.actionImport_SnP.setDisabled(True)
         self._vnaManager = VNAManager()
 
+        nav = NavigationToolbar(self._mainWindow.graphicsView, self._qmw)
+        self._mainWindow.verticalLayout_3.addWidget(nav)
         #Here, we process any arguments that might be sent the program from outside of the interface.
         #In other words, when ever a user right click on an SNP files, rather than opening them in Notepad, it would be opened in this interface.
         arguments = sys.argv[1:] 
