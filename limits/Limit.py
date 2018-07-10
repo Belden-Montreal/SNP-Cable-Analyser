@@ -46,7 +46,7 @@ class Limit:
 
     def evaluateDict(self, vals, nb, neg=False):
         if not len(self.functions):
-            return
+            return dict()
         if not self.resultsDict:
             self.evaluatePoints(vals, nb)        
         if neg:
@@ -55,7 +55,7 @@ class Limit:
 
     def evaluateArray(self, vals, nb, neg=False):
         if not len(self.functions):
-            return
+            return list()
         if not self.resultsList:
             self.evaluatePoints(vals, nb)
         if neg:

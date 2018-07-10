@@ -74,11 +74,14 @@ class ParameterPlot(object):
                 ax.xaxis.set_major_formatter(ScalarFormatter())
                 ax.grid(which="both")
                 if self._limit:
-                    plt.semilogx(
-                        *zip(*self._limit.evaluateArray({'f': self._parameter.getFrequencies()},
-                                                        len(self._parameter.getFrequencies()), neg=True)),
-                        label="limit", c=next(colors), linestyle="--"
-                    )
+                    try:
+                        plt.semilogx(
+                            *zip(*self._limit.evaluateArray({'f': self._parameter.getFrequencies()},
+                                                            len(self._parameter.getFrequencies()), neg=True)),
+                            label="limit", c=next(colors), linestyle="--"
+                        )
+                    except:
+                        print(len(self._limit.functions))                       
                 ax.legend(loc='best')
 
     def setLimit(self, limit):

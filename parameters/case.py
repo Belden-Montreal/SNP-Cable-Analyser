@@ -4,8 +4,8 @@ import numpy as np
 
 class Case(PairedParameter):
 
-    def __init__(self, ports, freq, matrices, dnext, cnext, cases):
-        self._dnext = dnext
+    def __init__(self, ports, freq, matrices, jackVector, cnext, cases):
+        self._jackVector = jackVector
         self._cases = cases
         self._cnext = cnext
         super(Case, self).__init__(ports, freq, matrices)
@@ -35,7 +35,7 @@ class Case(PairedParameter):
                 cpReembedded[port][n] = list()
                 reembedded[port][n] = list()
 
-        dnext = self._dnext.getComplexParameter()
+        jackVector = self._jackVector.getComplexParameter()
         cnext = self._cnext.getComplexParameter()
         for f,freq in enumerate(self._freq):
             for port in self._ports:
@@ -50,7 +50,7 @@ class Case(PairedParameter):
                     re = amp*np.cos(phasePlug*np.pi/180)
                     im = amp*np.sin(phasePlug*np.pi/180)
                     cPlug = complex(re, im)
-                    reembed = cPlug + dnext[port][f]
+                    reembed = cPlug + jackVector[port][f]
                     cpReembedded[port][n].append(reembed)
                     reembedded[port][n].append((complex2db(reembed), complex2phase(reembed)))
 
@@ -79,7 +79,7 @@ class Case(PairedParameter):
         return self._cases
 
     def getDNEXT(self):
-        return self._dnext
+        return self._jackVector
 
     def getCNEXT(self):
         return self._cnext

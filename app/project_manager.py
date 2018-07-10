@@ -7,33 +7,44 @@ from app.save_manager import SaveManager
 class ProjectManager(object):
 
     def __init__(self):
-        self._activeProject = None
+        self._projects = list()
         self._saveManager = SaveManager()
 
     def newProject(self, name):
-        self._activeProject = Project(name)
+        self._projects.append(Project(name))
 
     def newPlugProject(self, name):
-        self._activeProject = Plug(name)
+        self._projects.append(Plug(name))
 
     def newAlienProject(self, name):
-        self._activeProject = Alien(name)
+        self._projects.append(Alien(name))
 
     def newEmbeddingProject(self, name):
-        self._activeProject = Embedding(name)
+        self._projects.append(Embedding(name))
     
-    def importFiles(self, parent):
-        if self._activeProject:
-            self._activeProject.openImportWindow(parent)
+    def importFiles(self, parent, projectName):
+        activeProject = self.getProjectByName(projectName)
+        print(activeProject.getName())
+        if activeProject:
+            activeProject.openImportWindow(parent)
 
-    def activeProject(self):
-        return self._activeProject
-
-    def setActiveProject(self, project):
-        self._activeProject = project
-
-    def saveProject(self, name):
-        self._saveManager.saveProject(name, self._activeProject)
+    def saveProject(self, name, projectName):
+        activeProject = self.getProjectByName(projectName)
+        if activeProject:
+            self._saveManager.saveProject(name, activeProject)
 
     def loadProject(self, name):
-        self._activeProject = self._saveManager.loadProject(name)
+        project = self._saveManager.loadProject(name)
+        if project:
+            self._projects.append(project)
+
+    def getProjectByName(self, name):
+        projects = [x for x in self._projects if x.getName() == name]
+        if len(projects) == 1:
+            return projects[0]
+
+    def getProjects(self):
+        return self._projects
+
+    def deleteProjects(self, projectsNames):
+        self._projects = [x for x in self._projects if x.getName() not in projectsNames]
