@@ -1,6 +1,7 @@
-from parameters.parameter import PairedParameter, complex2db, complex2phase, diffDiffMatrix
+from parameters.parameter import Parameter, complex2db, complex2phase, diffDiffMatrix
+from parameters.dataserie import PortPairDataSerie
 
-class InsertionLoss(PairedParameter):
+class InsertionLoss(Parameter):
     '''
         Example of Insertion Loss with 4 wires
         For non-full measurement, only take the top right values (1 and 2 in this case)
@@ -12,51 +13,27 @@ class InsertionLoss(PairedParameter):
         4  [ _ 4 _ _ ] 
         
         
-    ''' 
-
-    def computePairs(self, ports):
-        pairs = dict()
-        for i in range(len(ports)//2):
-            port1, isRemote1 = ports[i]
-            port2, isRemote2 = ports[i+len(ports)//2]
-
-            if isRemote1 is not isRemote2:
-                pairs[(i, i+len(ports)//2)] = (port1+"-"+port2, isRemote1)
-                pairs[(i+len(ports)//2, i)] = (port2+"-"+port1, isRemote2)
-
-        return pairs
+    '''
+    def computeDataSeries(self):
+        return {PortPairDataSerie.fromWire(wire) for wire in self._ports.getWires()}
 
     def computeParameter(self):
         # initialize the dictionary for each port
-        il = dict()
-        cpIl = dict()
-        for port in self._ports:
-            il[port] = list()
-            cpIl[port] = list()
+        dbIL = {serie: list() for serie in self._series}
+        cpIL = {serie: list() for serie in self._series}
 
         # extract the insertion loss in all matrices
         for (f,_) in enumerate(self._freq):
-            for (i,j) in self._ports:
-                # get the value
-                value = self._matrices[f, i, j]
-                dbValue = complex2db(value)
-                phase = complex2phase(value)
-                il[(i,j)].append((dbValue, phase))
-                cpIl[(i,j)].append(value)
+            for serie in self._series:
+                (i,j) = serie.getPortIndices()
 
-        return il, cpIl
+                cpValue = self._matrices[f, i, j]
+                dbValue = (complex2db(cpValue), complex2phase(cpValue))
 
-    def getParameter(self, full=True):
-        if not full:
-            return {(i,j): self._parameter[(i,j)] for (i,j) in self._parameter if i < j}
-        else:
-            return self._parameter
+                cpIL[serie].append(cpValue)
+                dbIL[serie].append(dbValue)
 
-    def getComplexParameter(self, full=True):
-        if not full:
-            return {(i,j): self._complexParameter[(i,j)] for (i,j) in self._complexParameter if i < j}
-        else:
-            return self._complexParameter
+        return (dbIL, cpIL)
 
     def getMargins(self, values, limit):
         margins = list()
