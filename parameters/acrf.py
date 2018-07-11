@@ -1,43 +1,62 @@
-from parameters.parameter import PairedParameter, diffDiffMatrix
+from parameters.parameter import Parameter, diffDiffMatrix
+from parameters.dataserie import PortPairDataSerie
 from math import sqrt, floor
-class ACRF(PairedParameter):
+
+class ACRF(Parameter):
     '''
         ACRF is calculated using the following formula : 
 
         ACRF_k = FEXT_k - IL_k
     '''
-
     def __init__(self, ports, freq, matrices, fext, il):
         self._fext = fext
-        self._il = il
+        self._il   = il
         super(ACRF, self).__init__(ports, freq, matrices)
 
-    def computePairs(self, ports):
-        # create each pair for the ACRF
-        pairs = dict()
-        
-        pairs = self._fext.getPorts()
+    def computeDataSeries(self):
+        # obtains data series from the dependent parameters
+        fextSeries = self._fext.getDataSeries()
+        ilSeries   = self._il.getDataSeries()
 
-        return pairs
-        
+        # create the series for this parameter
+        series = set()
+        for fextSerie in fextSeries:
+            (p1,p2) = fextSerie.getPorts()
+
+            # find the corresponding wire
+            ilSerie = [s for s in ilSeries if s.getPorts()[0] is p1]
+            if len(ilSerie) != 1:
+                raise ValueError
+
+            # create the data serie
+            series.add(PortPairDataSerie.fromSerie(fextSerie, ilSerie[0]))
+
+        return series
+
     def computeParameter(self):
-        acrf = dict()
-        cpAcrf = dict()
-        dbFext = self._fext.getParameter()
-        dbIl = self._il.getParameter(full=True)
-        for port in self._ports:
-            acrf[port] = list()
-            cpAcrf[port] = list()
-        half = floor(sqrt(len(self._ports)))
+        # initialize the dictionaries for each series
+        dbACRF = {serie: list() for serie in self._series}
+        cpACRF = {serie: list() for serie in self._series}
+
+        # get the series from the dependent parameters
+        dbFEXT = self._fext.getParameter()
+        dbIL   = self._il.getParameter()
+
+        # compute the ACRF values from the other parameters
+        wires = self._il.getDataSeries()
         for (f,_) in enumerate(self._freq):
-            for (i,j) in self._ports:
-                if i < half:
-                    ilPort = (i, i+half)
-                else:
-                    ilPort = (i, i-half)
-                acrf[(i,j)].append((dbFext[(i,j)][f][0]-dbIl[ilPort][f][0],0))
-                cpAcrf[(i,j)].append(dbFext[(i,j)][f][0]-dbIl[ilPort][f][0])
-        return acrf,cpAcrf
+            for serie in self._series:
+                ilSerie = serie.getData()
+
+                # compute the value from the other parameter
+                cpValue = (dbFEXT[serie][f][0] - dbIL[ilSerie][f][0])
+                dbValue = (dbFEXT[serie][f][0] - dbIL[ilSerie][f][0], 0)
+
+                # add the value into the ACRF
+                cpACRF[serie].append(cpValue)
+                dbACRF[serie].append(dbValue)
+
+        return (dbACRF, cpACRF)
     
     def chooseMatrices(self, matrices):
         return diffDiffMatrix(matrices)
