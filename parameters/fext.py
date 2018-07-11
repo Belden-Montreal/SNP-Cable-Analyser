@@ -1,6 +1,9 @@
-from parameters.parameter import PairedParameter, complex2db, complex2phase, diffDiffMatrix
+from parameters.parameter import Parameter, complex2db, complex2phase, diffDiffMatrix
+from parameters.dataserie import PortPairDataSerie
 
-class FEXT(PairedParameter):
+import itertools
+
+class FEXT(Parameter):
     '''
     Example of FEXT loss with 4 wires (double-ended only).
         
@@ -14,42 +17,37 @@ class FEXT(PairedParameter):
 
     We have the following pairs twice: (1,5), (1,6), (2,4), (2,6), (3,4), (3,5).
     '''
-    def computePairs(self, ports):
-        # create each pair for the NEXT
-        pairs = dict()
-        for i in range(0, len(ports)//2):
-            for j in range(len(ports)//2, len(ports)):
-                if i == j or abs(i-j) == len(ports)//2:
-                    continue
+    def computeDataSeries(self):
+        # create each pair for the FEXT
+        series = set()
 
-                port1, isRemote1 = ports[i]
-                port2, isRemote2 = ports[j]
+        # get all FEXT pairs
+        wires = self._ports.getFowardWires()
+        for (i,j) in itertools.product(wires, wires):
+            if i is j:
+                continue
+            series.add(PortPairDataSerie(i.getMainPort(), j.getRemotePort()))
+            series.add(PortPairDataSerie(i.getRemotePort(), j.getMainPort()))
 
-                if isRemote1 is not isRemote2:
-                    # create the pair for the first end of the line
-                    pairs[(i, j)] = (port1+"-"+port2, isRemote1)
-                    # create the pair for the second end of the line
-                    pairs[(j, i)] = (port2+"-"+port1, isRemote2)
-
-        return pairs
+        return series
 
     def computeParameter(self):
         # initialize the dictionaries for each port
-        (dbFEXT, cpFEXT) = (dict(), dict())
-        for (i,j) in self._ports:
-            dbFEXT[(i,j)] = list()
-            cpFEXT[(i,j)] = list()
+        dbFEXT = {serie: list() for serie in self._series}
+        cpFEXT = {serie: list() for serie in self._series}
 
         # extract the FEXT value from the matrices
         for (f,_) in enumerate(self._freq):
-            for (i,j) in self._ports:
+            for serie in self._series:
+                (i,j) = serie.getPortIndices()
+
                 # get the value from the matrix
                 cpValue = self._matrices[f, i, j]
-                dbValue = complex2db(cpValue)
-                phase = complex2phase(cpValue)
+                dbValue = (complex2db(cpValue), complex2phase(cpValue))
+
                 # add the value into the FEXT
-                cpFEXT[(i,j)].append(cpValue)
-                dbFEXT[(i,j)].append((dbValue,phase))
+                cpFEXT[serie].append(cpValue)
+                dbFEXT[serie].append(dbValue)
 
         return (dbFEXT, cpFEXT)
 
