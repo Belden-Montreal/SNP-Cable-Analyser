@@ -1,6 +1,7 @@
-from parameters.parameter import PairedParameter, complex2db, complex2phase, diffDiffMatrix
+from parameters.parameter import Parameter, complex2db, complex2phase, diffDiffMatrix
+from parameters.dataserie import PortDataSerie
 
-class ReturnLoss(PairedParameter):
+class ReturnLoss(Parameter):
     '''
         Example of Return Loss with 4 wires
         
@@ -10,36 +11,29 @@ class ReturnLoss(PairedParameter):
         3  [ _ _ 3 _ ] 
         4  [ _ _ _ 4 ] 
         
-        
     '''
-    def computePairs(self, ports):
-        pairs = dict()
-        for i in range(len(ports)):
-            port, isRemote = ports[i]
-            pairs[(i,i)] = (port, isRemote)
-        return pairs
-    
+    def computeDataSeries(self):
+        return {PortDataSerie(port) for port in self._ports.getPorts()}
+
     def computeParameter(self):
         # initialize the dictionary for each port
-        rl = dict()
-        cpRl = dict()
-        for (i,j) in self._ports:
-            rl[(i,j)] = list()
-            cpRl[(i,j)] = list()
+        dbRL = {serie: list() for serie in self._series}
+        cpRL = {serie: list() for serie in self._series}
 
         # extract the return loss in all matrices
         for (f,_) in enumerate(self._freq):
-            for (i,j) in self._ports:
-                # get the value
-                value = self._matrices[f, i, j]
+            for serie in self._series:
+                i = serie.getPort().getIndex()
 
-                # convert to db if specified
-                dbValue = complex2db(value)
-                phase = complex2phase(value)
-                # add the value to the list
-                rl[(i,j)].append((dbValue, phase))
-                cpRl[(i,j)].append(value)
-        return rl, cpRl
+                # get the value
+                cpValue = self._matrices[f, i, i]
+                dbValue = (complex2db(cpValue), complex2phase(cpValue))
+
+                # add the value to the lists
+                dbRL[serie].append(dbValue)
+                cpRL[serie].append(cpValue)
+
+        return (dbRL, cpRL)
 
     def chooseMatrices(self, matrices):
         return diffDiffMatrix(matrices)
