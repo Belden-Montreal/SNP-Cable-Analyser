@@ -1,57 +1,58 @@
-from parameters.parameter import PairedParameter, complex2phase
+from parameters.parameter import Parameter, complex2phase
+from parameters.dataserie import PortDataSerie
 
-class PropagationDelay(PairedParameter):
+class PropagationDelay(Parameter):
     '''
-        Propagation delay is calculated by taking the numerical derivative of the return loss phase:
-        Delay = -1/360 * dp/df
+    Propagation delay is calculated by taking the numerical derivative of the
+    return loss phase:
 
-        where dp = phase[f2] - phase[f1], df = f2 - f1
-        and phase[f] is the phase of the return loss at a given frequency
-        
+        delay = -1/360 * dp/df
+
+    where dp = phase[f2] - phase[f1], df = f2 - f1 and phase[f] is the phase
+    of the return loss at a given frequency
     '''
 
     def __init__(self, ports, freq, matrices, rl):
         self._rl = rl
         super(PropagationDelay, self).__init__(ports, freq, matrices)
 
-    def computePairs(self, ports):
-        pairs = dict()
-        for i in range(len(ports)):
-            port,isRemote = ports[i]
-            pairs[(i,i)] = (port, isRemote)
-        return pairs
+    def computeDataSeries(self):
+        return {PortDataSerie(port) for port in self._ports.getPorts()}
 
     def computeParameter(self):
         # initialize the dictionary for each port
-        pd = dict()
-        for port in self._ports:
-                pd[port] = list()
+        pd = {serie: list() for serie in self._series}
 
         # extract the return loss for calculations
         dbRl = self._rl.getParameter()
 
         # extract the propagation delay from the return loss
         for (f,_) in enumerate(self._freq):
-            for port in self._ports:
+            for serie in self._series:
                 delay = 0.0
-                if f < len(self._freq)-1: #if not last frequency
-                    _,phase1 = dbRl[port][f]
-                    _,phase2 = dbRl[port][f+1]
 
-                    dp = phase2 - phase1
-                    df = self._freq[f+1] - self._freq[f]
-                    delay = -1/360.0 * dp/df
-                    if delay < 0.0:
-                        if f > 0:
-                            delay = pd[port][f-1]
-                        else:
-                            delay = 0.0
-                else:
-                    delay = pd[port][f-1]
-                pd[port].append(delay)
+                # check if it the last frequency
+                if f >= len(self._freq)-1:
+                    delay = pd[serie][f-1]
+                    pd[serie].append(delay)
+                    continue
 
+                # check if it is not the last frequency
+                (_,phase1) = dbRl[serie][f+0]
+                (_,phase2) = dbRl[serie][f+1]
 
-        return pd,pd
+                dp = phase2 - phase1
+                df = self._freq[f+1] - self._freq[f]
+                delay = -1/360.0 * dp/df
+
+                if delay < 0.0:
+                    if f > 0:
+                        delay = pd[serie][f-1]
+                    else:
+                        delay = 0.0
+                pd[serie].append(delay)
+
+        return (pd,pd)
 
     def getMargins(self, values, limit):
         margins = list()
