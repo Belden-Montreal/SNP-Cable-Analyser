@@ -1,10 +1,10 @@
 
-class SubprojectTreeItem():
-    def __init__(self, name, parent=None):
+class ComponentTreeItem():
+    def __init__(self, component, parent=None):
         self.parent = parent
         if parent:
             parent.addChild(self)
-        self._name = name
+        self._component = component
         self.children = []
 
     def addChild(self, item):
@@ -30,6 +30,9 @@ class SubprojectTreeItem():
 
     def data(self, column):
         if column == 0:
-            return self._name
+            return self._component.getName()
         else:
-            return ""
+            return self._component.getDate()
+
+    def getComponent(self):
+        return self._component

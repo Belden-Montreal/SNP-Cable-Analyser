@@ -1,11 +1,11 @@
 from PyQt5 import QtCore
-from app.project_tree_item import ProjectTreeItem
+from app.component_tree_item import ComponentTreeItem
 
-class ProjectTreeModel(QtCore.QAbstractItemModel):
+class ComponentTreeModel(QtCore.QAbstractItemModel):
     def __init__(self, parent = None):
         QtCore.QAbstractItemModel.__init__(self)
         self._header = ["name", "date"]
-        self.rootItem = ProjectTreeItem(None)
+        self.rootItem = ComponentTreeItem(None)
 
 
     def index(self, row, column, parent):
