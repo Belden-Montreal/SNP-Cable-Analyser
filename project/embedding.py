@@ -3,6 +3,8 @@ from project.embedding_import_dialog import EmbedImportDialog
 from app.save_manager import SaveManager
 from sample.single_ended import SingleEnded
 from sample.deembed import Deembed
+from app.subproject_tree_item import SubprojectTreeItem
+from app.project_tree_item import ProjectTreeItem
 import numpy as np
 
 class Filetype():
@@ -14,8 +16,8 @@ class Embedding(Project):
     '''
     This class represents a project for analyzing plug embedding
     '''
-    def __init__(self, name):
-        super(Embedding, self).__init__(name)
+    def __init__(self, name, model):
+        super(Embedding, self).__init__(name, model)
         self._openSample = None
         self._shortSample = None
         self._deembedded = None
@@ -61,6 +63,7 @@ class Embedding(Project):
             self._shortSample = None
         if self._deembedded and self._deembedded.getName() in fileNames:
             self._deembedded = None
+        self._generateProjectTree()
 
     def openImportWindow(self, parent):
         dial = EmbedImportDialog(parent)
@@ -73,6 +76,14 @@ class Embedding(Project):
             plugProject = SaveManager().loadProject(plug)
             self.setPlug(plugProject)
             self.importSamples(load, Filetype.LOAD)
+            self._generateProjectTree()
 
     def generateExcel(self, outputName, sampleNames, z=False):
         raise NotImplementedError
+
+    def _generateProjectTree(self):
+        self._treeItem.children = list()
+        forwardItem = SubprojectTreeItem("Forward", self._treeItem)
+        reverseItem = SubprojectTreeItem("Reverse", self._treeItem)
+        for sample in self._samples:
+            forwardItem.addChild(ProjectTreeItem(sample))

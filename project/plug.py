@@ -13,8 +13,8 @@ class Filetype():
 
 class Plug(Project):
 
-    def __init__(self, name):
-        super(Plug, self).__init__(name)
+    def __init__(self, name, model):
+        super(Plug, self).__init__(name, model)
         self._openDelay = None
         self._shortDelay = None
         self._loadSample = None
@@ -72,6 +72,7 @@ class Plug(Project):
             self.importSamples(plugOpen, Filetype.OPEN)
             self.importSamples(plugShort, Filetype.SHORT)
             self.importSamples(plugLoad, Filetype.LOAD)
+            self._generateProjectTree()
 
     def importFromXML(self):
         raise NotImplementedError #TODO: read pre-calculated values from XML

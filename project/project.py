@@ -3,6 +3,7 @@ from sample.single_ended import SingleEnded
 from multiprocessing.dummy import Pool as ThreadPool
 from os.path import splitext
 import xlsxwriter
+from app.project_tree_item import ProjectTreeItem
 from PyQt5 import QtWidgets
 
 class Project(object):
@@ -10,9 +11,10 @@ class Project(object):
     The project class represents a simple project containing a number of regular samples.
     '''
 
-    def __init__(self, name):
+    def __init__(self, name, model):
         self._name = name
         self._samples = list()
+        self.recreateProjectTree(model)
 
     def importSamples(self, fileNames):
         pool = ThreadPool()
@@ -20,6 +22,7 @@ class Project(object):
 
     def removeSamples(self, names):
         self._samples = [x for x in self._samples if x.getName() not in names]
+        self._generateProjectTree()
 
     def generateExcel(self, outputName, sampleNames, z=False):
         workbook = xlsxwriter.Workbook(outputName, options={'nan_inf_to_errors': True})
@@ -95,9 +98,15 @@ class Project(object):
         names,_ = QtWidgets.QFileDialog.getOpenFileNames(parent, caption="Select SNP(s)", directory="",filter="sNp Files (*.s*p)")
         if names:
             self.importSamples(names)
+            self._generateProjectTree()
+
 
     def getName(self):
         return self._name
+
+    def recreateProjectTree(self, model):
+        self._treeItem = ProjectTreeItem(self, model.rootItem)
+        self._generateProjectTree()
 
     def __createSample(self, name):
         _, extension = splitext(name)
@@ -105,4 +114,7 @@ class Project(object):
             return SingleEnded(name)
         return EndToEnd(name)
         
-
+    def _generateProjectTree(self):
+        self._treeItem.children = list()
+        for sample in self._samples:
+            self._treeItem.addChild(ProjectTreeItem(sample))
