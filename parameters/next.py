@@ -1,7 +1,9 @@
-from parameters.parameter import PairedParameter, complex2db, complex2phase, diffDiffMatrix
-import math
+from parameters.parameter import Parameter, complex2db, complex2phase, diffDiffMatrix
+from parameters.dataserie import PortPairDataSerie
 
-class NEXT(PairedParameter):
+import itertools
+
+class NEXT(Parameter):
     """
     Example of NEXT for a 3 wires network.
     
@@ -16,40 +18,43 @@ class NEXT(PairedParameter):
 
     We have the following pairs twice: (1,2), (1,3), (2,3), (4,5), (4,6), (5,6).
     """
-    def computePairs(self, ports):
+    def computeDataSeries(self):
         # create each pair for the NEXT
-        pairs = dict()
-        for i in range(0, len(ports)):
-            for j in range(0, len(ports)):
-                if i >= j:
-                    continue
+        series = set()
 
-                port1, isRemote1 = ports[i]
-                port2, isRemote2 = ports[j]
+        # get the NEXT pairs between the main ports
+        mains = self._ports.getMainPorts()
+        for (i,j) in itertools.product(mains, mains):
+            if i is j:
+                continue
+            series.add(PortPairDataSerie(i, j))
+ 
+        # get the NEXT pairs between the remote ports
+        remotes = self._ports.getRemotePorts()
+        for (i,j) in itertools.product(remotes, remotes):
+            if i is j:
+                continue
+            series.add(PortPairDataSerie(i, j))
 
-                if isRemote1 is isRemote2:
-                    pairs[(i, j)] = (port1+"-"+port2, isRemote1)
-                    #pairs[(j, i)] = (port2+"-"+port1, isRemote2)
-
-        return pairs
+        return series
 
     def computeParameter(self):
         # initialize the dictionaries for each port
-        (dbNEXT, cpNEXT) = (dict(), dict())
-        for (i,j) in self._ports:
-            dbNEXT[(i,j)] = list()
-            cpNEXT[(i,j)] = list()
+        dbNEXT = {serie: list() for serie in self._series}
+        cpNEXT = {serie: list() for serie in self._series}
 
         # extract the NEXT values from the matrices
         for (f,_) in enumerate(self._freq):
-            for (i,j) in self._ports:
+            for serie in self._series:
+                (i,j) = serie.getPortIndices()
+
                 # get the value from the matrix
                 cpValue = self._matrices[f, i, j]
-                dbValue = complex2db(cpValue)
-                phase = complex2phase(cpValue)
+                dbValue = (complex2db(cpValue), complex2phase(cpValue))
+
                 # add the value into the NEXT
-                cpNEXT[(i,j)].append(cpValue)
-                dbNEXT[(i,j)].append((dbValue, phase))
+                cpNEXT[serie].append(cpValue)
+                dbNEXT[serie].append(dbValue)
 
         return (dbNEXT, cpNEXT)
 
