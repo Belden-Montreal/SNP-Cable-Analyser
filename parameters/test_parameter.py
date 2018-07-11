@@ -1,34 +1,45 @@
 import unittest
 import numpy as np
 
-from sample.port import Port, PortConfiguration
-from parameters.parameter import Parameter
+from parameters.parameter import Parameter, complex2db, complex2phase
+from sample.port import WirePort, Wire, CableConfiguration
 
 class TestParameter(unittest.TestCase):
+    def assertComplexAlmostEqual(self, dbParam, cpExpected):
+        (d1,d2) = dbParam
+        (e1,e2) = (complex2db(cpExpected), complex2phase(cpExpected))
+        self.assertAlmostEqual(d1, e1)
+        self.assertAlmostEqual(d2, e2)
+
     def setUp(self):
+        # create the ports
         self._ports = {
-            0: ("Port 1", False),
-            1: ("Port 2", False),
-            2: ("Port 3", False),
-            3: ("Port 4", False),
+            0: WirePort(0 ,"Port 0", False),
+            1: WirePort(1 ,"Port 1", False),
+            2: WirePort(2 ,"Port 2", True),
+            3: WirePort(3 ,"Port 3", True),
         }
 
-        self._e2ePorts = {
-            0: ("Port 1", False),
-            1: ("Port 2", False),
-            2: ("Port 3", True),
-            3: ("Port 4", True),
+        # create the wires
+        self._wires = {
+            0: Wire("Wire 0", self._ports[0], self._ports[2]),
+            1: Wire("Wire 1", self._ports[1], self._ports[3]),
         }
 
-        self._remote = {
-            2: Port("Cable 1"),
-            3: Port("Cable 2"),
-        }
+        # create the cable configuration
+        self._config = CableConfiguration(set(self._wires.values()))
+        
+        # get the reversed wires
+        for wire in self._config.getReversedWires():
+            if wire.getMainPort().getIndex() == 2 and wire.getRemotePort().getIndex() == 0:
+                self._wires[2] = wire
+            if wire.getMainPort().getIndex() == 3 and wire.getRemotePort().getIndex() == 1:
+                self._wires[3] = wire
 
-        self._ports = PortConfiguration(self._main, self._remote)
-
+        # define the frequencies
         self._freq = [100, 200, 300, 400]
 
+        # define the S parameter matrices
         self._matrices = np.array([
             [
                 [  1,  2,    3,   4,   5,   6,   7,   8],
@@ -69,7 +80,13 @@ class TestParameter(unittest.TestCase):
             ]
         ], np.int32)
 
+        # create the parameter
         self._parameter = self.createParameter()
+        if self._parameter is None:
+            return
+
+        # get the series
+        self._series = self._parameter.getDataSeries()
 
     def testDrawPlot(self):
         if type(self) == TestParameter:

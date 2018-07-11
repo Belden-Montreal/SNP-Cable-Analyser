@@ -53,6 +53,7 @@ class Parameter(object):
         self._ports = ports
         self._freq = freq
         self._matrices = self.chooseMatrices(mixedModeMatrices)
+        self._series = self.computeDataSeries()
         (self._parameter, self._complexParameter) = self.computeParameter()
         self._limit = None
         self._worstMargin = (dict(), None)
@@ -62,8 +63,14 @@ class Parameter(object):
     def chooseMatrices(self, mixedModeMatrices):
         raise NotImplementedError
 
+    def computeDataSeries(self):
+        raise NotImplementedError
+
     def computeParameter(self):
         raise NotImplementedError
+
+    def getDataSeries(self):
+        return self._series
 
     def getParameter(self):
         return self._parameter
@@ -170,7 +177,8 @@ class PairedParameter(Parameter):
         self._visible = True
         self._freq = freq
         self._matrices = self.chooseMatrices(mixedModeMatrices)
-        self._ports = self.computePairs(ports)
+        self._ports = ports
+        self._pairs = self.computePairs(ports)
         (self._parameter, self._complexParameter) = self.computeParameter()
         self._limit = None
         self._worstMargin = (dict(), None)
