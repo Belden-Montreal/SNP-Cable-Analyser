@@ -10,17 +10,18 @@ class Sample(Component):
     '''
     def __init__(self, snpFile):
         self._parameters = dict()
-        self._snp = SNPAnalyzer(snpFile)
-        self._mm, self._freq, self._portsNumber = self._snp.getMM()
-        (name, self._extension), date = self._snp.getFileInfo()
-        super(Sample, self).__init__(name)
-        self._date = date
-        self._ports = dict()
-        self.setPorts()
-        self._factory = ParameterFactory(self._ports, self._freq, self._mm, self._parameters)
-        self.addParameters()
-        self._standard = None
-        self._generateTreeStructure()
+        if snpFile:
+            self._snp = SNPAnalyzer(snpFile)
+            self._mm, self._freq, self._portsNumber = self._snp.getMM()
+            (name, self._extension), date = self._snp.getFileInfo()
+            super(Sample, self).__init__(name)
+            self._date = date
+            self._ports = dict()
+            self.setPorts()
+            self._factory = ParameterFactory(self._ports, self._freq, self._mm, self._parameters)
+            self.addParameters()
+            self._standard = None
+            self._generateTreeStructure()
 
     def addParameters(self):
         raise NotImplementedError

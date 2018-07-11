@@ -28,13 +28,7 @@ class CorrectedNEXT(NEXT):
                 re = amp*np.cos(correctedPhase*np.pi/180)
                 im = amp*np.sin(correctedPhase*np.pi/180)
                 correctedNextVal = complex(re,im)
-                if pair == (0,2) and f == takeClosest(100, self._freq):
-                    print(self._ports[(0,2)])
-                    print(phase)
-                    print(amp)
-                    print(correctedPhase)
-                    print(correctedNextVal)
-                    print(20*np.log10(np.sqrt(re**2+im**2)))
+
                 cpCorrectedNext[(i,j)].append(correctedNextVal)
                 correctedNext[(i,j)].append((complex2db(correctedNextVal), correctedPhase))
         return correctedNext, cpCorrectedNext

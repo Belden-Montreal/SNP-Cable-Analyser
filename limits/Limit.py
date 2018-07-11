@@ -33,7 +33,7 @@ class Limit:
         for i, function in enumerate(self.functions):
             for symbol in function.free_symbols:
                 if not(symbol.__str__() in vals):
-                    return (0,0)
+                    return 0
             if self.bounds[i] <= vals['f'] and vals['f'] <= self.bounds[i+1]:
                 try:
                     val = N(function.subs(vals))

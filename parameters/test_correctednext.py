@@ -12,6 +12,7 @@ import numpy as np
 
 def correctNEXT(pnext, nextDelay, f):
     amp, phase = pnext
+    amp = 10**(amp/20)
     correctedPhase = phase + 360*f*nextDelay
     r = amp*np.cos(correctedPhase*np.pi/180)
     i = amp*np.sin(correctedPhase*np.pi/180)
