@@ -6,6 +6,8 @@ import new_project_dialog
 from ParameterWidget import ParameterWidget
 from app.project_manager import ProjectManager
 from app.vna_manager import VNAManager
+from app.project_tree_model import ProjectTreeModel
+from app.project_tree_item import ProjectTreeItem
 from limits.LimitDialog import LimitDialog
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 
@@ -16,8 +18,12 @@ class Main():
         self._mainWindow = MW4.Ui_MainWindow()
 
         self._mainWindow.setupUi(self._qmw)
-        self._mainWindow.sampleTable.setColumnCount(2)
-        self._mainWindow.sampleTable.setHeaderLabels(["Name","Date"])
+        #self._mainWindow.sampleTable.setColumnCount(2)
+        #self._mainWindow.sampleTable.setHeaderLabels(["Name","Date"])
+        self._model = ProjectTreeModel()
+        self._mainWindow.sampleTable.setModel(self._model)
+        self._mainWindow.sampleTable.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
+        self._mainWindow.sampleTable.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
         self._mainWindow.sampleTable.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self._mainWindow.sampleTable.customContextMenuRequested.connect(lambda pos:self.tableContextMenu(pos))
         self._selected = list()
@@ -38,7 +44,7 @@ class Main():
 
         self._mainWindow.actionToolbar_Import_SnP.triggered.connect(lambda:self.importSNP())
         self._mainWindow.actionNew_Project.triggered.connect(lambda:self.newProject())
-        self._mainWindow.sampleTable.itemSelectionChanged.connect(lambda:self.setActiveSample())
+        self._mainWindow.sampleTable.clicked.connect(lambda:self.setActiveSample())
         self._mainWindow.actionRun.triggered.connect(lambda:self._vnaManager.acquire())
         self._mainWindow.actionImport_SnP.triggered.connect(lambda:self._vnaManager.acquire())
         self._mainWindow.actionConnect.triggered.connect(lambda:self._vnaManager.connect())
@@ -53,24 +59,13 @@ class Main():
         self._mainWindow.actionImport_Project.triggered.connect(lambda: self.loadProject())
         self._mainWindow.actionSave_Project.triggered.connect(lambda: self.saveProject())
 
-    def updateSamplesTable(self):
-        self._mainWindow.sampleTable.clear()
-        self._mainWindow.sampleTable.setHeaderLabels(["Name","Date"])
-        for project in self._projectManager.getProjects():
-            num = project.numSamples()
-            item = QtWidgets.QTreeWidgetItem([project.getName()])
-            for i in range(num):
-                item.addChild(QtWidgets.QTreeWidgetItem([project.samples()[i].getName(), project.samples()[i].getDate()]))
-            self._mainWindow.sampleTable.addTopLevelItem(item)
-            self._mainWindow.sampleTable.resizeColumnToContents(0)
-
-    def getRootProjectName(self):
-         selecteds = self._mainWindow.sampleTable.selectedItems()
+    def getRootProject(self):
+         selecteds = self.getSelected()
          if len(selecteds) > 0:
             selected = selecteds[0]
-            while selected.parent():
-                selected = selected.parent()
-            return selected.text(0)
+            while self._model.parent(selected) != QtCore.QModelIndex():
+                selected = self._model.parent(selected)
+            return selected.internalPointer().getProject()
              
 
     def newProject(self):
@@ -83,48 +78,44 @@ class Main():
         if res:
             projType = newDial.typeBox.currentText()
             projName = newDial.nameEdit.text()
+            self._model.beginResetModel()
             if projType == "Alien":
-                self._projectManager.newAlienProject(projName)
+                self._projectManager.newAlienProject(projName, self._model)
             elif projType == "Plug":
-                self._projectManager.newPlugProject(projName)
+                self._projectManager.newPlugProject(projName, self._model)
             elif projType == "Embedding":
-                self._projectManager.newEmbeddingProject(projName)
+                self._projectManager.newEmbeddingProject(projName, self._model)
             else:
-                self._projectManager.newProject(projName)
-            self.updateSamplesTable()
+                self._projectManager.newProject(projName, self._model)
+            self._model.endResetModel()
             self._mainWindow.actionToolbar_Import_SnP.setDisabled(False)
             self._mainWindow.actionImport_SnP.setDisabled(False)
 
     def importSNP(self):
-        self._projectManager.importFiles(self._qmw, self._mainWindow.sampleTable.topLevelItem(self._mainWindow.sampleTable.currentIndex().row()).text(0))
-        self.updateSamplesTable()
+        self._model.beginResetModel()
+        self._projectManager.importFiles(self._qmw, self.getRootProject())
+        self._model.endResetModel()
 
     def getSelected(self):
-        selected = list()
-        for item in self._mainWindow.sampleTable.selectedItems():
-            selected.append(item)
-        return selected
+        return self._mainWindow.sampleTable.selectionModel().selectedRows()
 
     def setActiveSample(self):
-        print(self._mainWindow.sampleTable.currentIndex().row())
-        selected = [x.text(0) for x in self.getSelected()]
+        selected = self.getSelected()
         
         if len(selected) == 1:
             self.displaySampleParams(selected[0])
 
-    def displaySampleParams(self, sampleName):
-        if not sampleName:
+    def displaySampleParams(self, index):
+        if not index:
             self._mainWindow.param_tabs.clear()
             return
         
         self._mainWindow.param_tabs.clear()
-        project = self._projectManager.getProjectByName(self.getRootProjectName())
-        samples = project.findSamplesByName([sampleName])
-        if len(samples) < 1:
-            return
-        sample = samples[0]
-        mainTab = self.setupMainTab(sample)
-
+        sample = index.internalPointer().getProject()
+        try:
+            mainTab = self.setupMainTab(sample)
+        except:
+            return #TODO: handle selections of projects/subprojects
         failParams = list()
         for name, param in sample.getParameters().items():
             try:
@@ -152,8 +143,8 @@ class Main():
         return mainTabWidget
 
     def tableContextMenu(self, pos):
-        selectedProj = self.getRootProjectName()
-        selected = [x.text(0) for x in self.getSelected()]
+        selectedProj = self.getRootProject()
+        selected = self.getSelected()
         if selectedProj and len(selected) > 0:
     
             menu = QtWidgets.QMenu()
@@ -175,16 +166,18 @@ class Main():
                     else:
                         z = False
                     file, _ = QtWidgets.QFileDialog.getSaveFileName(self._qmw,"Export Excel Report", "","Excel File (*.xlsx)")
-                    self._projectManager.getProjectByName(selectedProj).generateExcel(file , self._selected, z)
+                    selectedProj.generateExcel(file , selected[0], z)
 
             elif action == delete:
-                samples = [x.text(0) for x in self.getSelected() if x.parent() is not None]
-                self._projectManager.getProjectByName(selectedProj).removeSamples(samples)
-                projects = [x.text(0) for x  in self.getSelected() if x.parent() is None]
-                
+                samples = [x.internalPointer().getProject() for x in self.getSelected() if x.internalPointer().parent is not self._model.rootItem]
+                selectedProj.removeSamples(samples)
+                projects = [x.internalPointer().getProject() for x  in self.getSelected() if x.internalPointer().parent is self._model.rootItem]
+
                 self._projectManager.deleteProjects(projects)
+                self._model.beginResetModel()
+                self._model.deleteItems(self.getSelected())
+                self._model.endResetModel()
                 
-                self.updateSamplesTable()
             elif action == setLimit:
                 self.setLimit()
             #self.Project.activeMeasurements = selected
@@ -209,7 +202,7 @@ class Main():
         if result:
             item = limitDialog.getSelection().internalPointer().standard
             selected = [x.text(0) for x in self.getSelected()]
-            project = self._projectManager.getProjectByName(self.getRootProjectName())
+            project = self.getRootProject()
             for sample in selected:
                 project.findSamplesByName(sample)[0].setStandard(item)
             self.displaySampleParams(selected[0])
@@ -227,15 +220,16 @@ class Main():
     def loadProject(self):
         f, ok = QtWidgets.QFileDialog.getOpenFileName(self._qmw, caption="Load a project", directory="projects/", filter="Belden Network Analyzer Project file (*.bnap)")
         if ok:
-            self._projectManager.loadProject(f)
-            self.updateSamplesTable()
+            self._model.beginResetModel()
+            self._projectManager.loadProject(f, self._model)
+            self._model.endResetModel()
             self._mainWindow.actionToolbar_Import_SnP.setDisabled(False)
             self._mainWindow.actionImport_SnP.setDisabled(False)
 
     def saveProject(self):
         f, ok = QtWidgets.QFileDialog.getSaveFileName(self._qmw, caption="Save project", directory="projects/", filter="Belden Network Analyzer Project file (*.bnap)")
         if ok:
-            self._projectManager.saveProject(f, self.getRootProjectName())
+            self._projectManager.saveProject(f, self.getRootProject())
 
     def showMaximized(self):
         self._qmw.showMaximized()
