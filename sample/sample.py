@@ -1,22 +1,26 @@
 from sample.snp_analyzer import SNPAnalyzer
 from parameters.parameter_factory import ParameterFactory
+from app.component import Component
+from app.component_tree_item import ComponentTreeItem
 
 PORTS_NAME = ["45", "12", "36", "78"]
-class Sample(object):
+class Sample(Component):
     '''
     The sample class contains the measurements for one object
     '''
     def __init__(self, snpFile):
         self._parameters = dict()
-        if snpFile:
-            self._snp = SNPAnalyzer(snpFile)
-            self._mm, self._freq, self._portsNumber = self._snp.getMM()
-            (self._name, self._extension), self._date = self._snp.getFileInfo()
-            self._ports = dict()
-            self.setPorts()
-            self._factory = ParameterFactory(self._ports, self._freq, self._mm, self._parameters)
-            self.addParameters()
-            self._standard = None
+        self._snp = SNPAnalyzer(snpFile)
+        self._mm, self._freq, self._portsNumber = self._snp.getMM()
+        (name, self._extension), date = self._snp.getFileInfo()
+        super(Sample, self).__init__(name)
+        self._date = date
+        self._ports = dict()
+        self.setPorts()
+        self._factory = ParameterFactory(self._ports, self._freq, self._mm, self._parameters)
+        self.addParameters()
+        self._standard = None
+        self._generateTreeStructure()
 
     def addParameters(self):
         raise NotImplementedError
@@ -33,12 +37,6 @@ class Sample(object):
     def setPorts(self):
         for i in range(self._portsNumber):
             self._ports[i] = (PORTS_NAME[i], False)
-    
-    def getName(self):
-        return self._name
-
-    def getDate(self):
-        return self._date
 
     def getFrequencies(self):
         return self._freq
@@ -52,3 +50,5 @@ class Sample(object):
     def getStandard(self):
         return self._standard
 
+    def _generateTreeStructure(self):
+        self._treeItem = ComponentTreeItem(self)

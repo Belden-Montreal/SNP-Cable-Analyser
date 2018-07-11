@@ -3,18 +3,19 @@ from sample.single_ended import SingleEnded
 from multiprocessing.dummy import Pool as ThreadPool
 from os.path import splitext
 import xlsxwriter
-from app.project_tree_item import ProjectTreeItem
+from app.component_tree_item import ComponentTreeItem
+from app.component import Component
 from PyQt5 import QtWidgets
 
-class Project(object):
+class Project(Component):
     '''
     The project class represents a simple project containing a number of regular samples.
     '''
 
-    def __init__(self, name, model):
-        self._name = name
+    def __init__(self, name):
+        super(Project, self).__init__(name)
         self._samples = list()
-        self.recreateProjectTree(model)
+        self.recreateTreeStructure()
 
     def importSamples(self, fileNames):
         pool = ThreadPool()
@@ -22,7 +23,7 @@ class Project(object):
 
     def removeSamples(self, names):
         self._samples = [x for x in self._samples if x.getName() not in names]
-        self._generateProjectTree()
+        self._generateTreeStructure()
 
     def generateExcel(self, outputName, sampleNames, z=False):
         workbook = xlsxwriter.Workbook(outputName, options={'nan_inf_to_errors': True})
@@ -98,15 +99,11 @@ class Project(object):
         names,_ = QtWidgets.QFileDialog.getOpenFileNames(parent, caption="Select SNP(s)", directory="",filter="sNp Files (*.s*p)")
         if names:
             self.importSamples(names)
-            self._generateProjectTree()
+            self._generateTreeStructure()
 
-
-    def getName(self):
-        return self._name
-
-    def recreateProjectTree(self, model):
-        self._treeItem = ProjectTreeItem(self, model.rootItem)
-        self._generateProjectTree()
+    def recreateTreeStructure(self):
+        self._treeItem = ComponentTreeItem(self)
+        self._generateTreeStructure()
 
     def __createSample(self, name):
         _, extension = splitext(name)
@@ -114,7 +111,7 @@ class Project(object):
             return SingleEnded(name)
         return EndToEnd(name)
         
-    def _generateProjectTree(self):
+    def _generateTreeStructure(self):
         self._treeItem.children = list()
         for sample in self._samples:
-            self._treeItem.addChild(ProjectTreeItem(sample))
+            self._treeItem.addChild(sample.getTreeItem())

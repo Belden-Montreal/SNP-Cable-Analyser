@@ -1,9 +1,9 @@
 from project.project import Project
 from sample.disturber import Disturber
 from sample.victim import Victim
-from app.project_tree_item import ProjectTreeItem
-from app.subproject_tree_item import SubprojectTreeItem
+from app.component_tree_item import ComponentTreeItem
 from project.alien_import_dialog import AlienImportDialog
+from project.subproject import Subproject
 from multiprocessing.dummy import Pool as ThreadPool
 
 
@@ -11,11 +11,18 @@ class Alien(Project):
     '''
     The Alien class represents a project where multiple samples are disturbing a victim sample
     '''
-    def __init__(self, name, model):
-        super(Alien, self).__init__(name, model)
+    def __init__(self, name):
+        self._ends = dict()
+        self._ends["end1"] = Subproject("End 1")
+        self._ends["end2"] = Subproject("End 2")
+        for end in self._ends.values():
+            end.addComponent(Subproject("ANEXT"))
+            end.addComponent(Subproject("AFEXT"))
+        super(Alien, self).__init__(name)
         self._victim = None
         self._disturbers = list()
         self._axextd = None
+        
 
     def importSamples(self, fileNames, disturber=False):
         if disturber:
@@ -54,15 +61,15 @@ class Alien(Project):
         disturbers, victim = dial.getFiles()
         self.importSamples(disturbers, disturber=True)
         self.importSamples([victim], disturber=False)
-        self._generateProjectTree()
+        component = next((comp for comp in self._ends["end1"].getComponents() if comp.getName() == "ANEXT"), None)
+        component.setComponents(self._samples)
+        self._generateTreeStructure()
 
 
-    def _generateProjectTree(self):
+    def _generateTreeStructure(self):
         self._treeItem.children = list()
-        end1Item = SubprojectTreeItem("End 1", self._treeItem)
-        anextItem = SubprojectTreeItem("ANEXT", end1Item)
-        for sample in self._samples:
-            anextItem.addChild(ProjectTreeItem(sample))
+        for end in self._ends.values():
+            self._treeItem.addChild(end.getTreeItem())
 
     def __createDisturber(self, name):
         return Disturber(name)
