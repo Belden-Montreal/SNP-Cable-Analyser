@@ -10,10 +10,10 @@ class SaveManager(object):
     # def __init__(self):
     #     pass
 
-    def loadProject(self, fileName, model):
+    def loadProject(self, fileName):
         with open(fileName, 'rb') as input:
             project = dill.load(input)
-            project.recreateProjectTree(model)
+            project.recreateTreeStructure()
         return project
 
     def saveProject(self, fileName, project):

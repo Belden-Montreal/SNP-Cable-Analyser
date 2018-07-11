@@ -6,8 +6,8 @@ import new_project_dialog
 from ParameterWidget import ParameterWidget
 from app.project_manager import ProjectManager
 from app.vna_manager import VNAManager
-from app.project_tree_model import ProjectTreeModel
-from app.project_tree_item import ProjectTreeItem
+from app.component_tree_model import ComponentTreeModel
+from app.component_tree_item import ComponentTreeItem
 from limits.LimitDialog import LimitDialog
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 
@@ -20,7 +20,7 @@ class Main():
         self._mainWindow.setupUi(self._qmw)
         #self._mainWindow.sampleTable.setColumnCount(2)
         #self._mainWindow.sampleTable.setHeaderLabels(["Name","Date"])
-        self._model = ProjectTreeModel()
+        self._model = ComponentTreeModel()
         self._mainWindow.sampleTable.setModel(self._model)
         self._mainWindow.sampleTable.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
         self._mainWindow.sampleTable.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
@@ -65,7 +65,7 @@ class Main():
             selected = selecteds[0]
             while self._model.parent(selected) != QtCore.QModelIndex():
                 selected = self._model.parent(selected)
-            return selected.internalPointer().getProject()
+            return selected.internalPointer().getComponent()
              
 
     def newProject(self):
@@ -78,7 +78,6 @@ class Main():
         if res:
             projType = newDial.typeBox.currentText()
             projName = newDial.nameEdit.text()
-            self._model.beginResetModel()
             if projType == "Alien":
                 self._projectManager.newAlienProject(projName, self._model)
             elif projType == "Plug":
@@ -87,7 +86,6 @@ class Main():
                 self._projectManager.newEmbeddingProject(projName, self._model)
             else:
                 self._projectManager.newProject(projName, self._model)
-            self._model.endResetModel()
             self._mainWindow.actionToolbar_Import_SnP.setDisabled(False)
             self._mainWindow.actionImport_SnP.setDisabled(False)
 
@@ -111,11 +109,11 @@ class Main():
             return
         
         self._mainWindow.param_tabs.clear()
-        sample = index.internalPointer().getProject()
+        sample = index.internalPointer().getComponent()
         try:
             mainTab = self.setupMainTab(sample)
         except:
-            return #TODO: handle selections of projects/subprojects
+            return #TODO: handle selections of projects/subprojects with showData()
         failParams = list()
         for name, param in sample.getParameters().items():
             try:
@@ -169,9 +167,9 @@ class Main():
                     selectedProj.generateExcel(file , selected[0], z)
 
             elif action == delete:
-                samples = [x.internalPointer().getProject() for x in self.getSelected() if x.internalPointer().parent is not self._model.rootItem]
+                samples = [x.internalPointer().getComponent() for x in self.getSelected() if x.internalPointer().parent is not self._model.rootItem]
                 selectedProj.removeSamples(samples)
-                projects = [x.internalPointer().getProject() for x  in self.getSelected() if x.internalPointer().parent is self._model.rootItem]
+                projects = [x.internalPointer().getComponent() for x  in self.getSelected() if x.internalPointer().parent is self._model.rootItem]
 
                 self._projectManager.deleteProjects(projects)
                 self._model.beginResetModel()
