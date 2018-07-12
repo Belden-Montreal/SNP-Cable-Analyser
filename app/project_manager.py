@@ -13,22 +13,22 @@ class ProjectManager(object):
     def newProject(self, name):
         project = Project(name)
         self._projects.append(project)
-        return ProjectNode(project)
+        return project.nodeFromProject()
 
     def newPlugProject(self, name):
         project = Plug(name)
         self._projects.append(project)
-        return PlugNode(project)
+        return project.nodeFromProject()
 
     def newAlienProject(self, name):
         project = Alien(name)
         self._projects.append(project)
-        return AlienNode(project)
+        return project.nodeFromProject()
 
     def newEmbeddingProject(self, name):
         project = Embedding(name)
         self._projects.append(project)
-        return EmbeddingNode(project)
+        return project.nodeFromProject()
     
     def importFiles(self, parent, activeProject):
         if activeProject:
@@ -42,6 +42,7 @@ class ProjectManager(object):
         project = self._saveManager.loadProject(name)
         if project:
             self._projects.append(project)
+            return project.nodeFromProject()
 
     def getProjectByName(self, name):
         projects = [x for x in self._projects if x.getName() == name]

@@ -59,12 +59,9 @@ class Main():
         self._mainWindow.actionSave_Project.triggered.connect(lambda: self.saveProject())
 
     def getRootProject(self):
-         selecteds = self.getSelected()
-         if len(selecteds) > 0:
-            selected = selecteds[0]
-            while self._model.parent(selected) != QtCore.QModelIndex():
-                selected = self._model.parent(selected)
-            return selected.internalPointer().getObject()
+         selected = self.getSelected()
+         if len(selected) > 0:
+            return self._model.itemFromIndex(self._model.getRootFromIndex(selected[0]))
              
 
     def newProject(self):
@@ -85,16 +82,12 @@ class Main():
                 node = self._projectManager.newEmbeddingProject(projName)
             else:
                 node = self._projectManager.newProject(projName)
-            self._model.beginResetModel()
-            self._model.rootItem.addChild(node)
-            self._model.endResetModel()
+            self._model.appendRow(node)
             self._mainWindow.actionToolbar_Import_SnP.setDisabled(False)
             self._mainWindow.actionImport_SnP.setDisabled(False)
 
     def importSNP(self):
-        self._model.beginResetModel()
-        self._model.getRootFromIndex(self.getSelected()[0]).internalPointer().openImportWindow(self._qmw)
-        self._model.endResetModel()
+        self.getRootProject().openImportWindow(self._qmw)
 
     def getSelected(self):
         return self._mainWindow.sampleTable.selectionModel().selectedRows()
@@ -109,13 +102,14 @@ class Main():
         if not index:
             self._mainWindow.param_tabs.clear()
             return
-        
+
         self._mainWindow.param_tabs.clear()
-        sample = index.internalPointer().getObject()
+        sample = self._model.itemFromIndex(index).getObject()
+
         try:
             mainTab = self.setupMainTab(sample)
         except:
-            return #TODO: handle selections of projects/subprojects with showData()
+            return #TODO: handle selections of projects/subprojects
         failParams = list()
         for name, param in sample.getParameters().items():
             try:
@@ -143,8 +137,8 @@ class Main():
         return mainTabWidget
 
     def tableContextMenu(self, pos):
-        selectedProj = self.getRootProject()
         selected = self.getSelected()
+        selectedProj = self.getRootProject().getObject()
         if selectedProj and len(selected) > 0:
     
             menu = QtWidgets.QMenu()
@@ -169,10 +163,10 @@ class Main():
                     selectedProj.generateExcel(file , selected[0], z)
 
             elif action == delete:
-                self._model.beginResetModel()
+                # self._model.beginRemoveRows()
                 for s in selected:
-                    s.internalPointer().delete()
-                self._model.endResetModel()
+                    self._model.itemFromIndex(s).delete()
+                # self._model.endRemoveRows()
                 
             elif action == setLimit:
                 self.setLimit()
@@ -198,7 +192,7 @@ class Main():
         if result:
             item = limitDialog.getSelection().internalPointer().standard
             selected = [x.text(0) for x in self.getSelected()]
-            project = self.getRootProject()
+            project = self.getRootProject().getObject()
             for sample in selected:
                 project.findSamplesByName(sample)[0].setStandard(item)
             self.displaySampleParams(selected[0])
@@ -216,16 +210,15 @@ class Main():
     def loadProject(self):
         f, ok = QtWidgets.QFileDialog.getOpenFileName(self._qmw, caption="Load a project", directory="projects/", filter="Belden Network Analyzer Project file (*.bnap)")
         if ok:
-            self._model.beginResetModel()
-            self._projectManager.loadProject(f)
-            self._model.endResetModel()
+            node = self._projectManager.loadProject(f)
+            self._model.appendRow(node)
             self._mainWindow.actionToolbar_Import_SnP.setDisabled(False)
             self._mainWindow.actionImport_SnP.setDisabled(False)
 
     def saveProject(self):
         f, ok = QtWidgets.QFileDialog.getSaveFileName(self._qmw, caption="Save project", directory="projects/", filter="Belden Network Analyzer Project file (*.bnap)")
         if ok:
-            self._projectManager.saveProject(f, self.getRootProject())
+            self._projectManager.saveProject(f, self.getRootProject().getObject())
 
     def showMaximized(self):
         self._qmw.showMaximized()
