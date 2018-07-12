@@ -17,6 +17,11 @@ class FEXT(Parameter):
 
     We have the following pairs twice: (1,5), (1,6), (2,4), (2,6), (3,4), (3,5).
     '''
+    def __init__(self, ports, freq, matrices, forward=True, reverse=True):
+        self._forward = forward
+        self._reverse = reverse
+        super(FEXT, self).__init__(ports, freq, matrices)
+
     def computeDataSeries(self):
         # create each pair for the FEXT
         series = set()
@@ -26,8 +31,12 @@ class FEXT(Parameter):
         for (i,j) in itertools.product(wires, wires):
             if i is j:
                 continue
-            series.add(PortPairDataSerie(i.getMainPort(), j.getRemotePort()))
-            series.add(PortPairDataSerie(i.getRemotePort(), j.getMainPort()))
+
+            if self._forward:
+                series.add(PortPairDataSerie(i.getMainPort(), j.getRemotePort()))
+
+            if self._reverse:
+                series.add(PortPairDataSerie(i.getRemotePort(), j.getMainPort()))
 
         return series
 

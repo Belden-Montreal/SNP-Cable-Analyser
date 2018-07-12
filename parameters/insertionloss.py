@@ -14,14 +14,14 @@ class InsertionLoss(Parameter):
         
         
     '''
-    def __init__(self, ports, freq, matrices, foward=True, reverse=True):
-        self._foward  = foward
+    def __init__(self, ports, freq, matrices, forward=True, reverse=True):
+        self._forward = forward
         self._reverse = reverse
         super(InsertionLoss, self).__init__(ports, freq, matrices)
 
     def computeDataSeries(self):
         series = set()
-        if self._foward:
+        if self._forward:
             wires = self._ports.getFowardWires()
             [series.add(PortPairDataSerie.fromWire(wire)) for wire in wires]
         if self._reverse:
