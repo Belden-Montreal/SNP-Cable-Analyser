@@ -28,6 +28,9 @@ class Plug(Project):
         self._k2 = k2
         self._k3 = k3
 
+    def nodeFromProject(self):
+        return PlugNode(self)
+
 
 from sample.sample import SampleNode
 class PlugNode(ProjectNode):
@@ -56,7 +59,7 @@ class PlugNode(ProjectNode):
 
     def addChildren(self, samples):
         for sample in samples:
-            self.addChild(SampleNode(sample, self._dataObject))
+            self.appendRow(SampleNode(sample, self._dataObject))
 
     def setupInitialData(self):
         self.addChildren(self._dataObject._samples)

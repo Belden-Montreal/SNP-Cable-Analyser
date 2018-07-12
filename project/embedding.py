@@ -61,6 +61,9 @@ class Embedding(Project):
     def generateExcel(self, outputName, sampleNames, z=False):
         raise NotImplementedError
 
+    def nodeFromProject(self):
+        return EmbeddingNode(self)
+
 
 from app.node import Node
 from sample.sample import SampleNode
@@ -89,12 +92,13 @@ class EmbeddingNode(ProjectNode):
             self.addChildren(samples, plugProject, reverse)
 
     def addChildren(self, samples, plug, side):
-        node = next((child for child in self.children if child.getName() == side), Node(side))
-        if not node.parent:
-            self.addChild(node)
-        node.addChild(PlugNode(plug))
+        node = self.hasChild(side)
+        if not node:
+            node = Node(side)
+            self.appendRow(node)
+        node.appendRow(PlugNode(plug))
         for sample in samples:
-            node.addChild(SampleNode(sample, self._dataObject))
+            node.appendRow(SampleNode(sample, self._dataObject))
 
     def setupInitialData(self):
         for side, samples in self._dataObject._sides.items():

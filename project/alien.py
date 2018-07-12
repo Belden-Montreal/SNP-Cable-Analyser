@@ -27,6 +27,8 @@ class Alien(Project):
     def generateExcel(self, outputName, sampleNames, z=False):
         raise NotImplementedError
 
+    def nodeFromProject(self):
+        return AlienNode(self)
 
 from app.node import Node
 from sample.sample import SampleNode
@@ -66,15 +68,17 @@ class AlienNode(ProjectNode):
 
 
     def addChildren(self, samples, end, param):
-        node = next((child for child in self.children if child.getName() == end), Node(end))
-        if not node.parent:
-            self.addChild(node)
-        subNode = next((child for child in node.children if child.getName() == param), Node(param))
-        if not subNode.parent:
-            node.addChild(subNode)
+        node = self.hasChild(end)
+        if not node:
+            node = Node(end)
+            self.appendRow(node)
+        subNode = self.hasChild(param)
+        if not subNode:
+            subNode = Node(param)
+            node.appendRow(subNode)
         subNode.children = list()
         for sample in samples:
-            subNode.addChild(SampleNode(sample, self._dataObject))
+            subNode.appendRow(SampleNode(sample, self._dataObject))
 
     def setupInitialData(self):
         for end, params in self._dataObject._ends.items():

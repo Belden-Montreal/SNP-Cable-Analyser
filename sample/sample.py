@@ -54,11 +54,11 @@ class Sample(object):
 
 from app.node import Node
 class SampleNode(Node):
-    def __init__(self, sample, project, parent=None):
-        super(SampleNode, self).__init__(sample.getName(), parent)
+    def __init__(self, sample, project):
+        super(SampleNode, self).__init__(sample.getName())
         self._dataObject = sample
         self._project = project
 
     def delete(self):
-        self.parent.removeChild(self)
+        self.parent().removeRow(self.row())
         self._project.removeSample(self._dataObject)

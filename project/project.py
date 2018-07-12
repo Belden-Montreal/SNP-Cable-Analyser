@@ -94,17 +94,20 @@ class Project(object):
     def getDate(self):
         return self._date
 
+    def nodeFromProject(self):
+        return ProjectNode(self)
+
 from app.node import Node
 from sample.sample import SampleNode
 class ProjectNode(Node):
-    def __init__(self, project, parent=None):
-        super(ProjectNode, self).__init__(project.getName(), parent)
+    def __init__(self, project):
+        super(ProjectNode, self).__init__(project.getName())
         self._dataObject = project
         self.setupInitialData()
 
     def addChildren(self, samples):
         for sample in samples:
-            self.addChild(SampleNode(sample, self._dataObject))
+            self.appendRow(SampleNode(sample, self._dataObject))
 
     def openImportWindow(self, parent):
         names,_ = QtWidgets.QFileDialog.getOpenFileNames(parent, caption="Select SNP(s)", directory="",filter="sNp Files (*.s*p)")
@@ -122,12 +125,22 @@ class ProjectNode(Node):
         if extension[2] == "8" or extension[2] == "4":
             return SingleEnded(name)
         return EndToEnd(name)
-
-    def removeChild(self, item):
-        self.children.remove(item)
     
     def delete(self):
-        self.parent.removeChild(self)
+        if self.parent():
+            self.parent().removeRow(self.row())
+        else:
+            self.model().removeRow(self.row())
+
+    def removeRow(self, row):
+        super(ProjectNode, self).removeRow(row)
 
     def setupInitialData(self):
         self.addChildren(self._dataObject._samples)
+
+    def hasChild(self, text):
+        for i in range(self.rowCount()):
+            child = self.child(i)
+            if text == child.text():
+                return child
+        return 0
