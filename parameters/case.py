@@ -30,7 +30,7 @@ class Case(PairedParameter):
         for port in self._ports:
             cpReembedded[port] = dict()
             reembedded[port] = dict()
-            cases  = filter(lambda case: case[1][0]==port, self._cases.items())
+            cases  = filter(lambda case: case[1][0]==port and case[1][1] is not None, self._cases.items())
             for n,_ in cases:
                 cpReembedded[port][n] = list()
                 reembedded[port][n] = list()
@@ -39,7 +39,7 @@ class Case(PairedParameter):
         cnext = self._cnext.getComplexParameter()
         for f,freq in enumerate(self._freq):
             for port in self._ports:
-                cases = [x for x in self._cases.items() if x[1][0] == port]
+                cases = [x for x in self._cases.items() if x[1][0] == port and x[1][1] is not None]
                 for n, (_, case) in cases:
                     plug = case(freq, cnext[port][f])
                     dbPlug = plug[0]
