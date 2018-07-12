@@ -1,37 +1,61 @@
 from parameters.parameter import Parameter, diffDiffMatrix
+from parameters.dataserie import PortDataSerie
 
 class PSACRF(Parameter):
     '''
-        PSACRF is calculated using the following formula:
+    PSACRF is calculated using the following formula:
+
         PSACRF_k = PSFEXT_k - IL_k
         
-        where PSFEXT_k is the PSFEXT on wire k and IL_k is the Insertion Loss on wire k
+    where PSFEXT_k is the PSFEXT on wire k and IL_k is the Insertion Loss on wire k
     '''
     def __init__(self, ports, freq, matrices, psfext, il):
         self._psfext = psfext
         self._il = il
         super(PSACRF, self).__init__(ports, freq, matrices)
+
+    def computeDataSeries(self):
+        # obtains the data series from the dependent parameters
+        psfextSeries = self._psfext.getDataSeries()
+        ilSeries     = self._il.getDataSeries()
+
+        # create the series for this parameter
+        series = set()
+        for psfextSerie in psfextSeries:
+            p = psfextSerie.getPort()
+
+            # find the corresponding wire
+            ilSerie =  [s for s in ilSeries if s.getPorts()[0] is p]
+            if len(ilSerie) != 1:
+                raise ValueError
+
+            # create the data serie
+            series.add(PortDataSerie.fromSerie(psfextSerie, data=ilSerie[0]))
+
+        return series
     
     def computeParameter(self):
+        # initialize the dictionaries for each serie
+        dbPSACRF = {serie: list() for serie in self._series}
+        cpPSACRF = {serie: list() for serie in self._series}
         
-        psacrf = dict()
-        cpPsacrf = dict()
-        psfext = self._psfext.getParameter()
-        il = self._il.getParameter(full=True)
+        # get the series frm the dependent parameters
+        dbPSFEXT = self._psfext.getParameter()
+        dbIL     = self._il.getParameter()
 
-        for port in self._ports:
-            psacrf[port] = list()
-            cpPsacrf[port] = list()
+        for (f,_) in enumerate(self._freq):
+            for serie in self._series:
+                ilSerie = serie.getData()
 
-        for f,_ in enumerate(self._freq):
-            for i in self._ports:
-                if i < len(self._ports)//2:
-                    ilPort = (i, i+len(self._ports)//2)
-                else:
-                    ilPort = (i, i-len(self._ports)//2)
-                psacrf[i].append((psfext[i][f][0]-il[ilPort][f][0], 0))
-                cpPsacrf[i].append(psfext[i][f][0]-il[ilPort][f][0])
-        return psacrf,cpPsacrf
+                # compute the value from the ther parameter
+                cpValue = (dbPSFEXT[serie][f][0] - dbIL[ilSerie][f][0])
+                dbValue = (dbPSFEXT[serie][f][0] - dbIL[ilSerie][f][0], 0)
+
+                # add the value into the ACRF
+                cpPSACRF[serie].append(cpValue)
+                dbPSACRF[serie].append(dbValue)
+
+        return (dbPSACRF, cpPSACRF)
 
     def chooseMatrices(self, matrices):
         return diffDiffMatrix(matrices)
