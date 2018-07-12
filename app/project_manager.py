@@ -1,7 +1,7 @@
-from project.project import Project
-from project.plug import Plug
-from project.alien import Alien
-from project.embedding import Embedding
+from project.project import Project, ProjectNode
+from project.plug import Plug, PlugNode
+from project.alien import Alien, AlienNode
+from project.embedding import Embedding, EmbeddingNode
 from app.save_manager import SaveManager
 
 class ProjectManager(object):
@@ -10,25 +10,25 @@ class ProjectManager(object):
         self._projects = list()
         self._saveManager = SaveManager()
 
-    def newProject(self, name, model):
+    def newProject(self, name):
         project = Project(name)
         self._projects.append(project)
-        self.__addProjectToModel(model, project)
+        return ProjectNode(project)
 
-    def newPlugProject(self, name, model):
+    def newPlugProject(self, name):
         project = Plug(name)
         self._projects.append(project)
-        self.__addProjectToModel(model, project)
+        return PlugNode(project)
 
-    def newAlienProject(self, name, model):
+    def newAlienProject(self, name):
         project = Alien(name)
         self._projects.append(project)
-        self.__addProjectToModel(model, project)
+        return AlienNode(project)
 
-    def newEmbeddingProject(self, name, model):
+    def newEmbeddingProject(self, name):
         project = Embedding(name)
         self._projects.append(project)
-        self.__addProjectToModel(model, project)
+        return EmbeddingNode(project)
     
     def importFiles(self, parent, activeProject):
         if activeProject:
@@ -38,8 +38,8 @@ class ProjectManager(object):
         if activeProject:
             self._saveManager.saveProject(name, activeProject)
 
-    def loadProject(self, name, model):
-        project = self._saveManager.loadProject(name, model)
+    def loadProject(self, name):
+        project = self._saveManager.loadProject(name)
         if project:
             self._projects.append(project)
 
@@ -53,8 +53,3 @@ class ProjectManager(object):
 
     def deleteProjects(self, projects):
         self._projects = [x for x in self._projects if x.getName() not in [p.getName() for p in projects]]
-
-    def __addProjectToModel(self, model, project):
-        model.beginResetModel()
-        model.rootItem.addChild(project.getTreeItem())
-        model.endResetModel()

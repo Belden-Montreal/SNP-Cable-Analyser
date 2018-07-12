@@ -13,7 +13,6 @@ class SaveManager(object):
     def loadProject(self, fileName):
         with open(fileName, 'rb') as input:
             project = dill.load(input)
-            project.recreateTreeStructure()
         return project
 
     def saveProject(self, fileName, project):

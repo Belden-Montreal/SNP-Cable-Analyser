@@ -6,8 +6,7 @@ import new_project_dialog
 from ParameterWidget import ParameterWidget
 from app.project_manager import ProjectManager
 from app.vna_manager import VNAManager
-from app.component_tree_model import ComponentTreeModel
-from app.component_tree_item import ComponentTreeItem
+from app.tree_model import TreeModel
 from limits.LimitDialog import LimitDialog
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 
@@ -20,7 +19,7 @@ class Main():
         self._mainWindow.setupUi(self._qmw)
         #self._mainWindow.sampleTable.setColumnCount(2)
         #self._mainWindow.sampleTable.setHeaderLabels(["Name","Date"])
-        self._model = ComponentTreeModel()
+        self._model = TreeModel()
         self._mainWindow.sampleTable.setModel(self._model)
         self._mainWindow.sampleTable.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
         self._mainWindow.sampleTable.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
@@ -65,7 +64,7 @@ class Main():
             selected = selecteds[0]
             while self._model.parent(selected) != QtCore.QModelIndex():
                 selected = self._model.parent(selected)
-            return selected.internalPointer().getComponent()
+            return selected.internalPointer().getObject()
              
 
     def newProject(self):
@@ -79,19 +78,22 @@ class Main():
             projType = newDial.typeBox.currentText()
             projName = newDial.nameEdit.text()
             if projType == "Alien":
-                self._projectManager.newAlienProject(projName, self._model)
+                node = self._projectManager.newAlienProject(projName)
             elif projType == "Plug":
-                self._projectManager.newPlugProject(projName, self._model)
+                node = self._projectManager.newPlugProject(projName)
             elif projType == "Embedding":
-                self._projectManager.newEmbeddingProject(projName, self._model)
+                node = self._projectManager.newEmbeddingProject(projName)
             else:
-                self._projectManager.newProject(projName, self._model)
+                node = self._projectManager.newProject(projName)
+            self._model.beginResetModel()
+            self._model.rootItem.addChild(node)
+            self._model.endResetModel()
             self._mainWindow.actionToolbar_Import_SnP.setDisabled(False)
             self._mainWindow.actionImport_SnP.setDisabled(False)
 
     def importSNP(self):
         self._model.beginResetModel()
-        self._projectManager.importFiles(self._qmw, self.getRootProject())
+        self._model.getRootFromIndex(self.getSelected()[0]).internalPointer().openImportWindow(self._qmw)
         self._model.endResetModel()
 
     def getSelected(self):
@@ -109,7 +111,7 @@ class Main():
             return
         
         self._mainWindow.param_tabs.clear()
-        sample = index.internalPointer().getComponent()
+        sample = index.internalPointer().getObject()
         try:
             mainTab = self.setupMainTab(sample)
         except:
@@ -167,13 +169,9 @@ class Main():
                     selectedProj.generateExcel(file , selected[0], z)
 
             elif action == delete:
-                samples = [x.internalPointer().getComponent() for x in self.getSelected() if x.internalPointer().parent is not self._model.rootItem]
-                selectedProj.removeSamples(samples)
-                projects = [x.internalPointer().getComponent() for x  in self.getSelected() if x.internalPointer().parent is self._model.rootItem]
-
-                self._projectManager.deleteProjects(projects)
                 self._model.beginResetModel()
-                self._model.deleteItems(self.getSelected())
+                for s in selected:
+                    s.internalPointer().delete()
                 self._model.endResetModel()
                 
             elif action == setLimit:
@@ -219,7 +217,7 @@ class Main():
         f, ok = QtWidgets.QFileDialog.getOpenFileName(self._qmw, caption="Load a project", directory="projects/", filter="Belden Network Analyzer Project file (*.bnap)")
         if ok:
             self._model.beginResetModel()
-            self._projectManager.loadProject(f, self._model)
+            self._projectManager.loadProject(f)
             self._model.endResetModel()
             self._mainWindow.actionToolbar_Import_SnP.setDisabled(False)
             self._mainWindow.actionImport_SnP.setDisabled(False)
