@@ -1,10 +1,8 @@
 from sample.snp_analyzer import SNPAnalyzer
 from parameters.parameter_factory import ParameterFactory
-from app.component import Component
-from app.component_tree_item import ComponentTreeItem
 
 PORTS_NAME = ["45", "12", "36", "78"]
-class Sample(Component):
+class Sample(object):
     '''
     The sample class contains the measurements for one object
     '''
@@ -13,15 +11,12 @@ class Sample(Component):
         if snpFile:
             self._snp = SNPAnalyzer(snpFile)
             self._mm, self._freq, self._portsNumber = self._snp.getMM()
-            (name, self._extension), date = self._snp.getFileInfo()
-            super(Sample, self).__init__(name)
-            self._date = date
+            (self._name, self._extension), self._date = self._snp.getFileInfo()
             self._ports = dict()
             self.setPorts()
             self._factory = ParameterFactory(self._ports, self._freq, self._mm, self._parameters)
             self.addParameters()
             self._standard = None
-            self._generateTreeStructure()
 
     def addParameters(self):
         raise NotImplementedError
@@ -51,5 +46,19 @@ class Sample(Component):
     def getStandard(self):
         return self._standard
 
-    def _generateTreeStructure(self):
-        self._treeItem = ComponentTreeItem(self)
+    def getName(self):
+         return self._name
+
+    def getDate(self):
+        return self._date
+
+from app.node import Node
+class SampleNode(Node):
+    def __init__(self, sample, project, parent=None):
+        super(SampleNode, self).__init__(sample.getName(), parent)
+        self._dataObject = sample
+        self._project = project
+
+    def delete(self):
+        self.parent.removeChild(self)
+        self._project.removeSample(self._dataObject)

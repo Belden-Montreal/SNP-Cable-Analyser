@@ -3,27 +3,20 @@ from sample.single_ended import SingleEnded
 from multiprocessing.dummy import Pool as ThreadPool
 from os.path import splitext
 import xlsxwriter
-from app.component_tree_item import ComponentTreeItem
-from app.component import Component
 from PyQt5 import QtWidgets
 
-class Project(Component):
+class Project(object):
     '''
     The project class represents a simple project containing a number of regular samples.
     '''
 
     def __init__(self, name):
-        super(Project, self).__init__(name)
+        self._name = name
+        self._date = ""
         self._samples = list()
-        self.recreateTreeStructure()
 
-    def importSamples(self, fileNames):
-        pool = ThreadPool()
-        self._samples.extend(pool.map(self.__createSample, fileNames))
-
-    def removeSamples(self, names):
-        self._samples = [x for x in self._samples if x.getName() not in names]
-        self._generateTreeStructure()
+    def removeSample(self, sample):
+        self._samples.remove(sample)
 
     def generateExcel(self, outputName, sampleNames, z=False):
         workbook = xlsxwriter.Workbook(outputName, options={'nan_inf_to_errors': True})
@@ -95,23 +88,46 @@ class Project(Component):
     def samples(self):
         return self._samples
 
+    def getName(self):
+        return self._name
+
+    def getDate(self):
+        return self._date
+
+from app.node import Node
+from sample.sample import SampleNode
+class ProjectNode(Node):
+    def __init__(self, project, parent=None):
+        super(ProjectNode, self).__init__(project.getName(), parent)
+        self._dataObject = project
+        self.setupInitialData()
+
+    def addChildren(self, samples):
+        for sample in samples:
+            self.addChild(SampleNode(sample, self._dataObject))
+
     def openImportWindow(self, parent):
         names,_ = QtWidgets.QFileDialog.getOpenFileNames(parent, caption="Select SNP(s)", directory="",filter="sNp Files (*.s*p)")
         if names:
-            self.importSamples(names)
-            self._generateTreeStructure()
-
-    def recreateTreeStructure(self):
-        self._treeItem = ComponentTreeItem(self)
-        self._generateTreeStructure()
+            self.addChildren(self.importSamples(names))
+    
+    def importSamples(self, fileNames):
+        pool = ThreadPool()
+        samples = pool.map(self.__createSample, fileNames)
+        self._dataObject._samples.extend(samples)
+        return samples
 
     def __createSample(self, name):
         _, extension = splitext(name)
         if extension[2] == "8" or extension[2] == "4":
             return SingleEnded(name)
         return EndToEnd(name)
-        
-    def _generateTreeStructure(self):
-        self._treeItem.children = list()
-        for sample in self._samples:
-            self._treeItem.addChild(sample.getTreeItem())
+
+    def removeChild(self, item):
+        self.children.remove(item)
+    
+    def delete(self):
+        self.parent.removeChild(self)
+
+    def setupInitialData(self):
+        self.addChildren(self._dataObject._samples)
