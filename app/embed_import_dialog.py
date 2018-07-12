@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'uis\embedImportDialog.ui'
+# Form implementation generated from reading ui file 'UIs\embedImportDialog.ui'
 #
 # Created by: PyQt5 UI code generator 5.10.1
 #
@@ -29,9 +29,6 @@ class Ui_EmbedImportDialog(object):
         self.shortBtn = QtWidgets.QPushButton(self.formLayoutWidget)
         self.shortBtn.setObjectName("shortBtn")
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.shortBtn)
-        self.revBox = QtWidgets.QCheckBox(self.formLayoutWidget)
-        self.revBox.setObjectName("revBox")
-        self.formLayout.setWidget(0, QtWidgets.QFormLayout.SpanningRole, self.revBox)
         self.shortLabel = QtWidgets.QLabel(self.formLayoutWidget)
         self.shortLabel.setText("")
         self.shortLabel.setObjectName("shortLabel")
@@ -40,6 +37,21 @@ class Ui_EmbedImportDialog(object):
         self.openLabel.setText("")
         self.openLabel.setObjectName("openLabel")
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.openLabel)
+        self.revBox = QtWidgets.QCheckBox(self.formLayoutWidget)
+        self.revBox.setObjectName("revBox")
+        self.formLayout.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.revBox)
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.cat5eButton = QtWidgets.QRadioButton(self.formLayoutWidget)
+        self.cat5eButton.setAutoExclusive(False)
+        self.cat5eButton.setObjectName("cat5eButton")
+        self.horizontalLayout.addWidget(self.cat5eButton)
+        self.cat6Button = QtWidgets.QRadioButton(self.formLayoutWidget)
+        self.cat6Button.setChecked(True)
+        self.cat6Button.setAutoExclusive(False)
+        self.cat6Button.setObjectName("cat6Button")
+        self.horizontalLayout.addWidget(self.cat6Button)
+        self.formLayout.setLayout(0, QtWidgets.QFormLayout.FieldRole, self.horizontalLayout)
         self.formLayoutWidget_2 = QtWidgets.QWidget(EmbedImportDialog)
         self.formLayoutWidget_2.setGeometry(QtCore.QRect(10, 120, 431, 180))
         self.formLayoutWidget_2.setObjectName("formLayoutWidget_2")
@@ -90,6 +102,8 @@ class Ui_EmbedImportDialog(object):
         self.openBtn.setText(_translate("EmbedImportDialog", "Import Open"))
         self.shortBtn.setText(_translate("EmbedImportDialog", "Import Short"))
         self.revBox.setText(_translate("EmbedImportDialog", "Reverse ?"))
+        self.cat5eButton.setText(_translate("EmbedImportDialog", "CAT5e"))
+        self.cat6Button.setText(_translate("EmbedImportDialog", "CAT6/CAT6A"))
         self.loadBtn.setText(_translate("EmbedImportDialog", "Import Load"))
         self.sJ124578Label.setText(_translate("EmbedImportDialog", "SJ 12,45,78"))
         self.sJ36Label.setText(_translate("EmbedImportDialog", "SJ 36"))

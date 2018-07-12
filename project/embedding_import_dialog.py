@@ -2,6 +2,10 @@ import app.embed_import_dialog
 from PyQt5 import QtWidgets, QtCore
 from os.path import basename
 
+class ReverseState():
+    FORWARD = "Forward"
+    REVERSE = "Reverse"
+
 class EmbedImportDialog(QtWidgets.QDialog):
 
     def __init__(self, parent):
@@ -24,11 +28,15 @@ class EmbedImportDialog(QtWidgets.QDialog):
         self._dial.thruCalibLineEdit.setText("20e-12")
         self._dial.openBtn.setDisabled(True)
         self._dial.shortBtn.setDisabled(True)
+        self._reverse = ReverseState.FORWARD
+        self._catGroup = QtWidgets.QButtonGroup(self)
+        self._catGroup.addButton(self._dial.cat5eButton)
+        self._catGroup.addButton(self._dial.cat6Button)
 
     def getFiles(self):
         res = self.exec_()
         if res:
-            return self._load, self._plug, self._k1, self._k2, self._k3, self._open, self._short
+            return self._load, self._plug, self._k1, self._k2, self._k3, self._catGroup.checkedButton().text(), self._reverse, self._open, self._short
 
     def __getOpen(self):
         fileName,_ = QtWidgets.QFileDialog.getOpenFileName(self, "Select SNP", "", "sNp Files (*.s*p)")
@@ -55,7 +63,7 @@ class EmbedImportDialog(QtWidgets.QDialog):
             self._k1 = float(self._dial.sJ12LineEdit.text())
             self._k2 = float(self._dial.sJ36LineEdit.text())
             self._k3 = float(self._dial.thruCalibLineEdit.text())
-            if (self._load and self._dial.revBox.checkState == QtCore.Qt.Unchecked) or (self._open and self._short and self._load and self._dial.revBox.checkState == QtCore.Qt.Checked):
+            if (self._load and self._reverse == ReverseState.FORWARD) or (self._open and self._short and self._load and self._reverse == ReverseState.REVERSE):
                 self.accept()
             # else:
             #     raise Exception("No File Error")
@@ -68,6 +76,8 @@ class EmbedImportDialog(QtWidgets.QDialog):
         if state == QtCore.Qt.Unchecked:
             self._dial.openBtn.setDisabled(True)
             self._dial.shortBtn.setDisabled(True)
+            self._reverse = ReverseState.FORWARD
         elif state == QtCore.Qt.Checked:
             self._dial.openBtn.setDisabled(False)
             self._dial.shortBtn.setDisabled(False)
+            self._reverse = ReverseState.REVERSE

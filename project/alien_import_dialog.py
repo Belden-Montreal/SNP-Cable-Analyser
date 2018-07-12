@@ -8,6 +8,12 @@ class AlienImportDialog(QtWidgets.QDialog):
         super(AlienImportDialog, self).__init__(parent)
         self._dial = app.alien_import_dialog.Ui_AlienImportDialog()
         self._dial.setupUi(self)
+        self._endGroup = QtWidgets.QButtonGroup(self)
+        self._endGroup.addButton(self._dial.end1Button)
+        self._endGroup.addButton(self._dial.end2Button)
+        self._paramGroup = QtWidgets.QButtonGroup(self)
+        self._paramGroup.addButton(self._dial.anextButton)
+        self._paramGroup.addButton(self._dial.afextButton)
         self._dial.disturbersButton.pressed.connect(lambda: self.__getDisturbers())
         self._dial.victimButton.pressed.connect(lambda:self.__getVictim())
         self._disturbers = None
@@ -17,7 +23,7 @@ class AlienImportDialog(QtWidgets.QDialog):
     def getFiles(self):
         res = self.exec_()
         if res:
-            return self._disturbers, self._victim
+            return self._disturbers, self._victim, self._endGroup.checkedButton().text(), self._paramGroup.checkedButton().text()
 
     def __getDisturbers(self):
         files,_ = QtWidgets.QFileDialog.getOpenFileNames(self, "Select disturbers", "", "sNp Files (*.s*p)")
