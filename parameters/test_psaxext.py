@@ -6,58 +6,118 @@ from parameters.axext import AXEXT
 from parameters.fext import FEXT
 from parameters.insertionloss import InsertionLoss
 from parameters.parameter import complex2db
-
-def powersum(axextd, f, port):
-    return 10*np.log10(np.sum([np.sum([10**(disturber.getParameter()[key][f][0]/10) for key in disturber.getParameter().keys() if (key[0] == port )]) for disturber in axextd ]))
+from parameters.dataserie import PortDataSerie, PortPairDataSerie
 
 class TestPSAXEXT(TestParameter):
-    def createParameter(self):
-        # we assume that ANEXT, fext and il are tested
-        il = InsertionLoss(self._e2ePorts, self._freq, self._matrices)
-        fext = FEXT(self._e2ePorts, self._freq, self._matrices)
-        axextd = [AXEXT(self._e2ePorts, self._freq, self._matrices, fext, il) for x in range(4)]
+    def assertIn(self, value, collection):
+        self.assertEqual(value in collection, True)
 
-        return PSAXEXT(self._e2ePorts, self._freq, self._matrices, axextd)
+    def createParameter(self):
+        # we assume that the dependent parameters are tested
+        self._il = InsertionLoss(self._config, self._freq, self._matrices)
+
+        self._fext = FEXT(self._config, self._freq, self._matrices)
+
+        self._axextd = {
+            0: AXEXT(self._config, self._freq, self._matrices, self._fext, self._il),
+            1: AXEXT(self._config, self._freq, self._matrices, self._fext, self._il),
+            2: AXEXT(self._config, self._freq, self._matrices, self._fext, self._il),
+            3: AXEXT(self._config, self._freq, self._matrices, self._fext, self._il),
+        }
+
+        self._dataseries = {
+            0: PortDataSerie(self._ports[0]),
+            1: PortDataSerie(self._ports[1]),
+            2: PortDataSerie(self._ports[2]),
+            3: PortDataSerie(self._ports[3]),
+        }
+
+        self._pairseries = {
+            0: PortPairDataSerie(self._ports[0], self._ports[2]),
+            1: PortPairDataSerie(self._ports[0], self._ports[3]),
+            2: PortPairDataSerie(self._ports[1], self._ports[2]),
+            3: PortPairDataSerie(self._ports[1], self._ports[3]),
+            4: PortPairDataSerie(self._ports[2], self._ports[0]),
+            5: PortPairDataSerie(self._ports[2], self._ports[1]),
+            6: PortPairDataSerie(self._ports[3], self._ports[0]),
+            7: PortPairDataSerie(self._ports[3], self._ports[1]),
+        }
+
+        self._expected = {
+            self._dataseries[0]: {
+                self._axextd[0]: {self._pairseries[0], self._pairseries[1]},
+                self._axextd[1]: {self._pairseries[0], self._pairseries[1]},
+                self._axextd[2]: {self._pairseries[0], self._pairseries[1]},
+                self._axextd[3]: {self._pairseries[0], self._pairseries[1]},
+            },
+            self._dataseries[1]: {
+                self._axextd[0]: {self._pairseries[2], self._pairseries[3]},
+                self._axextd[1]: {self._pairseries[2], self._pairseries[3]},
+                self._axextd[2]: {self._pairseries[2], self._pairseries[3]},
+                self._axextd[3]: {self._pairseries[2], self._pairseries[3]},
+            },
+            self._dataseries[2]: {
+                self._axextd[0]: {self._pairseries[4], self._pairseries[5]},
+                self._axextd[1]: {self._pairseries[4], self._pairseries[5]},
+                self._axextd[2]: {self._pairseries[4], self._pairseries[5]},
+                self._axextd[3]: {self._pairseries[4], self._pairseries[5]},
+            },
+            self._dataseries[3]: {
+                self._axextd[0]: {self._pairseries[6], self._pairseries[7]},
+                self._axextd[1]: {self._pairseries[6], self._pairseries[7]},
+                self._axextd[2]: {self._pairseries[6], self._pairseries[7]},
+                self._axextd[3]: {self._pairseries[6], self._pairseries[7]},
+            },
+        }
+
+        return PSAXEXT(self._config, self._freq, self._matrices, self._axextd.values())
+
+    def assertPowerSum(self, value, port, freq):
+        dbSum = 0
+        for disturber in self._expected[port]:
+            for pair in self._expected[port][disturber]:
+                axext = disturber.getParameter()[pair][freq][0]
+                dbSum += 10.0**(axext/10)
+        result = 10.0*np.log10(dbSum)
+
+        self.assertAlmostEqual(value, result)
+
+    def testComputeDataSeries(self):
+        expected = self._expected
+        self.assertEqual(len(self._series), 4)
+        for serie in self._series:
+            data = serie.getData()
+            disturbers = data.keys()
+
+            self.assertIn(serie, expected)
+            self.assertEqual(len(disturbers), len(expected[serie]))
+            for disturber in disturbers:
+                self.assertIn(disturber, expected[serie])
+                self.assertEqual(len(data[disturber]), len(expected[serie][disturber]))
+                for pair in data[disturber]:
+                    self.assertIn(pair, expected[serie][disturber])
 
     def testComputeParameter(self):
         parameter = self._parameter.getParameter()
 
-        axextd = self._parameter.getAXEXT()
-
         # there should be a parameter for each ports
-        self.assertEqual(len(parameter), len(self._ports)//2)
+        self.assertEqual(len(parameter), 2)
 
         # the number of sample should be the same as the number of frequencies
-        self.assertEqual(len(parameter[0]), len(self._freq))
-        self.assertEqual(len(parameter[1]), len(self._freq))
-        # self.assertEqual(len(parameter[2]), len(self._freq))
-        # self.assertEqual(len(parameter[3]), len(self._freq))
+        self.assertEqual(len(parameter[self._dataseries[0]]), len(self._freq))
+        self.assertEqual(len(parameter[self._dataseries[1]]), len(self._freq))
+
+        # check the values of the port 0
+        self.assertPowerSum(parameter[self._dataseries[0]][0][0], self._dataseries[0], 0)
+        self.assertPowerSum(parameter[self._dataseries[0]][1][0], self._dataseries[0], 1)
+        self.assertPowerSum(parameter[self._dataseries[0]][2][0], self._dataseries[0], 2)
+        self.assertPowerSum(parameter[self._dataseries[0]][3][0], self._dataseries[0], 3)
 
         # check the values of the port 1
-        self.assertAlmostEqual(parameter[0][0][0], powersum(axextd, 0, 0))
-        self.assertAlmostEqual(parameter[0][1][0], powersum(axextd, 1, 0))
-        self.assertAlmostEqual(parameter[0][2][0], powersum(axextd, 2, 0))
-        self.assertAlmostEqual(parameter[0][3][0], powersum(axextd, 3, 0))
+        self.assertPowerSum(parameter[self._dataseries[1]][0][0], self._dataseries[1], 0)
+        self.assertPowerSum(parameter[self._dataseries[1]][1][0], self._dataseries[1], 1)
+        self.assertPowerSum(parameter[self._dataseries[1]][2][0], self._dataseries[1], 2)
+        self.assertPowerSum(parameter[self._dataseries[1]][3][0], self._dataseries[1], 3)
 
-        # check the values of the port 2
-        self.assertAlmostEqual(parameter[1][0][0], powersum(axextd, 0, 1))
-        self.assertAlmostEqual(parameter[1][1][0], powersum(axextd, 1, 1))
-        self.assertAlmostEqual(parameter[1][2][0], powersum(axextd, 2, 1))
-        self.assertAlmostEqual(parameter[1][3][0], powersum(axextd, 3, 1))
-
-        # # check the values of the port 3
-        # self.assertAlmostEqual(parameter[2][0][0], powersum(axextd, 0, 2))
-        # self.assertAlmostEqual(parameter[2][1][0], powersum(axextd, 1, 2))
-        # self.assertAlmostEqual(parameter[2][2][0], powersum(axextd, 2, 2))
-        # self.assertAlmostEqual(parameter[2][3][0], powersum(axextd, 3, 2))
-
-        # # check the values of the port 4
-        # self.assertAlmostEqual(parameter[3][0][0], powersum(axextd, 0, 3))
-        # self.assertAlmostEqual(parameter[3][1][0], powersum(axextd, 1, 3))
-        # self.assertAlmostEqual(parameter[3][2][0], powersum(axextd, 2, 3))
-        # self.assertAlmostEqual(parameter[3][3][0], powersum(axextd, 3, 3))
-
-        # check complex parameter
-        # self.assertAlmostEqual(parameter[1][0], complex2db(self._parameter.getComplexParameter()[1][0]))
 if __name__ == '__main__':
     unittest.main()

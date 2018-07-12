@@ -1,49 +1,99 @@
 from parameters.parameter import Parameter, diffDiffMatrix
+from parameters.dataserie import PortDataSerie
 import numpy as np
 
 class PSAXEXT(Parameter):
     '''
-        PSAXEXT represents both the PSANEXT and the PSAFEXT
-        It is calculated by taking either the ANEXT or the AFEXT of every disturber pair on every pair of the victim and computing the powersum
+    The PSAXEXT parameter can either represent the PSANEXT or the PSAFEXT.
+
+    Assume we have 3 alien measurements for a 2 wires network from 3 different
+    disturbers. Only the remote ports should change between the measurements
+    as shown below.
+
+                       ---------------
+        disturbed 1 ---|             |--- disturber A1
+        disturbed 2 ---|             |--- disturber A2
+                       ---------------
+
+                       ---------------
+        disturbed 1 ---|             |--- disturber B1
+        disturbed 2 ---|             |--- disturber B2
+                       ---------------
+
+                       ---------------
+        disturbed 1 ---|             |--- disturber C1
+        disturbed 2 ---|             |--- disturber C2
+                       ---------------
+
+    For the first wire, we have a total of 6 AXEXT measurements:
+
+        1. (disturbed 1, dirturber A1)
+        2. (disturbed 1, dirturber A2)
+        3. (disturbed 1, dirturber B1)
+        4. (disturbed 1, dirturber B2)
+        5. (disturbed 1, dirturber C1)
+        6. (disturbed 1, dirturber C2)
+
+    For the second wire, we have a total of 6 AXEXT measurements:
+
+        1. (disturbed 2, dirturber A1)
+        2. (disturbed 2, dirturber A2)
+        3. (disturbed 2, dirturber B1)
+        4. (disturbed 2, dirturber B2)
+        5. (disturbed 2, dirturber C1)
+        6. (disturbed 2, dirturber C2)
+
+    The PSAXEXT is calculated using a power sum of every interations like
+    shown above.
     '''
     def __init__(self, ports, freq, matrices, axextd):
         self._axextd = axextd
-        self._ports = dict()
-        for port, (name, isRemote) in ports.items():
-            if not isRemote:
-                self._ports[port] = (name, isRemote)
-        super(PSAXEXT, self).__init__(self._ports, freq, matrices)
+        super(PSAXEXT, self).__init__(ports, freq, matrices)
+
+    def computeDataSeries(self):
+        # create the series for this parameter
+        series = set()
+        for port in self._ports.getPorts():
+            disturberSeries = dict()
+            for disturber in self._axextd:
+                axextSeries = set()
+                for serie in disturber.getDataSeries():
+                    if port != serie.getPorts()[0]:
+                        continue
+                    axextSeries.add(serie)
+                disturberSeries[disturber] = axextSeries
+            series.add(PortDataSerie(port, data=disturberSeries))
+        
+        return series
 
     def computeParameter(self):
-        
-        psaxext = dict()
-        cpPsaxext = dict()
-        for port in self._ports:
-            psaxext[port] = list()
-            cpPsaxext[port] = list()
+        # initialize the dictionaries for each series
+        dbPSAXEXT = {serie: list() for serie in self._series}
+        cpPSAXEXT = {serie: list() for serie in self._series}
 
+        # compute the values 
         for (f,_) in enumerate(self._freq):
-            for port in self._ports:
-                ps = 10.0*np.log10(np.sum([
-                    np.sum([
-                        10**(disturber.getParameter()[key][f][0]/10)
-                    for key in disturber.getParameter().keys() if (key[0] == port)])
-                for disturber in self._axextd]))
-                psaxext[port].append((ps, 0))
+            for serie in self._series:
 
-                # cp = np.sum([
-                #     np.sum([
-                #         disturber.getComplexParameter()[key][f]
-                #     for key in disturber.getComplexParameter().keys() if (key[0] == port)])
-                # for disturber in self._axextd])
-                
-                cpPsaxext[port].append(0)
-        return psaxext,cpPsaxext
+                # compute the PSAXEXT value
+                dbSum = 0
+                for disturber in serie.getData():
+                    for axextSerie in serie.getData()[disturber]:
+                        axext = disturber.getParameter()[axextSerie][f][0]
+                        dbSum += 10.0**(axext/10)
+                dbValue = (10.0*np.log10(dbSum), 0)
+                cpValue = 0
+
+                # add the value to the lists
+                dbPSAXEXT[serie].append(dbValue)
+                cpPSAXEXT[serie].append(cpValue)
+
+        return (dbPSAXEXT, cpPSAXEXT)
 
     def chooseMatrices(self, matrices):
         return diffDiffMatrix(matrices)
 
-    def getAXEXT(self):
+    def getDisturbersAXEXT(self):
         return self._axextd
 
     def getName(self):
@@ -52,4 +102,3 @@ class PSAXEXT(Parameter):
     def recalculate(self, axextd):
         self._axextd = axextd
         (self._parameter, self._complexParameter) = self.computeParameter()
-        
