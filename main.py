@@ -191,11 +191,9 @@ class Main():
         result = limitDialog.showDialog()
         if result:
             item = limitDialog.getSelection().internalPointer().standard
-            selected = [x.text(0) for x in self.getSelected()]
-            project = self.getRootProject().getObject()
+            selected = [self._model.itemFromIndex(x).getObject() for x in self.getSelected()]
             for sample in selected:
-                project.findSamplesByName(sample)[0].setStandard(item)
-            self.displaySampleParams(selected[0])
+                sample.setStandard(item)
 
     def tabChanged(self):
         if self._mainWindow.param_tabs.currentIndex() == 0 or self._mainWindow.param_tabs.count() <= 1:

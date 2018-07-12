@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 from bisect import bisect_left
 from limits.Limit import Limit
 from parameters.plot import ParameterPlot
+from copy import deepcopy
+
 def diffDiffMatrix(matrices):
     halfway = matrices[0].shape[0]//2
     return matrices[:,:halfway,:halfway]
@@ -73,8 +75,8 @@ class Parameter(object):
         return self._limit
 
     def setLimit(self, limit):
-        self._limit = limit
-        self._plot.setLimit(limit)
+        self._limit = deepcopy(limit)
+        self._plot.setLimit(self._limit)
         self._worstMargin = (dict(), None)
         self._worstValue = (dict(), None)
 
@@ -88,7 +90,7 @@ class Parameter(object):
         if len(self._worstMargin[0]):
             return self._worstMargin
         if self._limit is None:
-            return (None, None)
+            return (dict(), None)
         limit = self._limit.evaluateDict({'f': self._freq}, len(self._freq), neg=True)
         passed = True
         worst = dict()
@@ -105,6 +107,7 @@ class Parameter(object):
                     worst[pair] = v, f, l, abs(worstMargin)
             self._worstMargin = worst, passed
             return self._worstMargin
+        return (dict(), None)
 
     def getMargins(self, values, limit):
         margins = list()
@@ -145,6 +148,7 @@ class Parameter(object):
                     worst[pair] = worstVal, f, l, m
             self._worstValue = worst, passed
             return self._worstValue
+        return (dict(), None)
 
     def getNumPorts(self):
         return len(self._ports)

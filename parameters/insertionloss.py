@@ -76,7 +76,7 @@ class InsertionLoss(PairedParameter):
         if len(self._worstMargin[0]):
             return self._worstMargin
         if self._limit is None:
-            return (None, None)
+            return (dict(), None)
         limit = self._limit.evaluateDict({'f': self._freq}, len(self._freq), neg=True)
         passed = True
         worst = dict()
@@ -93,6 +93,7 @@ class InsertionLoss(PairedParameter):
                     worst[pair] = v, f, l, abs(worstMargin)
             self._worstMargin = worst, passed
             return self._worstMargin
+        return (dict(), None)
 
     def getWorstValue(self):
         if len(self._worstValue[0]):
@@ -119,6 +120,7 @@ class InsertionLoss(PairedParameter):
                     worst[pair] = worstVal, f, l, m
             self._worstValue = worst, passed
             return self._worstValue
+        return (dict(), None)
     
     def chooseMatrices(self, matrices):
         return diffDiffMatrix(matrices)
