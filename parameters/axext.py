@@ -2,28 +2,40 @@ from parameters.parameter import Parameter, complex2db, order, diffDiffMatrix
 
 class AXEXT(Parameter):
     """
-        AXEXT represents both the ANEXT and the AFEXT.
-        It is calculated by taking both the FEXT and the Insertion Loss of the disturbed hardware
-        
-        For ANEXT measurements, the measurements must be done on the same side :
+    The AXEXT parameter can either represent the ANEXT or the AFEXT.
 
-        measurement (disturbed) []------            --------//[]
-                                        |           |
-                                         -----------
-                                         -----------
-                                        |           |
-        measurement (disturber) []------            --------//[]
+    The following setup can be used for measuring the ANEXT:
 
-        For AFEXT measurements, the measurements must be done on the opposite side :
+        measurement (disturbed) [ ]----------------[x] terminator
+        measurement (disturber) [ ]----------------[x] terminator
 
-        measurement (disturbed) []------            --------//[]
-                                        |           |
-                                         -----------
-                                         -----------
-                                        |           |
-                               []//------            --------[] measurement (disturber) 
+    The following setup can be used for measuring the AFEXT:
+
+        measurement (disturbed) [ ]----------------[x] terminator
+                     terminator [x]----------------[ ] measurement (disturber)
+
+    In both case, the main ports of the configuration should contains the
+    measurements of the disturbed and the remote ports of the configuration
+    should contains the measurements of the disturber.
+
+    Using this port configuration on 4 twisted pairs cables, we get the
+    equivalent network:
+
+                           -----------------
+            disturbed 1 ---|               |--- disturber 1
+            disturbed 2 ---|               |--- disturber 2
+            disturbed 3 ---|               |--- disturber 3
+            disturbed 4 ---|               |--- disturber 4
+                           -----------------
+
+    In ANEXT or AFEXT, each disturber port affects each disturbed port. This
+    means that either parameter has 16 data series in the network above. Using
+    the equivalent network above, the calculations can be done by reusing
+    other parameters:
+
+        - 12 of these data series are equivalent to a normal FEXT
+        -  4 of these data series are equivalent to a normal insertion loss
     """
-
     def __init__(self, ports, freq, matrices, fext, il):
         self._fext = fext
         self._il   = il
