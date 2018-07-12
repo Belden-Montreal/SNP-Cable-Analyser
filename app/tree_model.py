@@ -1,11 +1,11 @@
 from PyQt5 import QtCore
-from app.component_tree_item import ComponentTreeItem
+from app.node import Node
 
-class ComponentTreeModel(QtCore.QAbstractItemModel):
+class TreeModel(QtCore.QAbstractItemModel):
     def __init__(self, parent = None):
         QtCore.QAbstractItemModel.__init__(self)
         self._header = ["name", "date"]
-        self.rootItem = ComponentTreeItem(None)
+        self.rootItem = Node("root")
 
 
     def index(self, row, column, parent):
@@ -66,6 +66,12 @@ class ComponentTreeModel(QtCore.QAbstractItemModel):
             return self._header[section]
 
         return None
+
+    def getRootFromIndex(self, index):
+        item = index
+        while self.parent(item) != QtCore.QModelIndex():
+            item = self.parent(item)
+        return item
 
     def deleteItems(self, indexes):
         for index in indexes:

@@ -1,11 +1,12 @@
 
-class ComponentTreeItem():
-    def __init__(self, component, parent=None):
+class Node(object):
+    def __init__(self, name, parent=None):
         self.parent = parent
         if parent:
             parent.addChild(self)
-        self._component = component
+        self._name = name
         self.children = []
+        self._dataObject = None
 
     def addChild(self, item):
         self.children.append(item)
@@ -13,6 +14,7 @@ class ComponentTreeItem():
 
     def removeChild(self, item):
         self.children.remove(item)
+        self.delete()
 
     def child(self, row):
         return self.children[row]
@@ -26,13 +28,17 @@ class ComponentTreeItem():
         return 0
     
     def columnCount(self):
-        return 2
+        return 1
 
     def data(self, column):
-        if column == 0:
-            return self._component.getName()
-        else:
-            return self._component.getDate()
+        return self._name
 
-    def getComponent(self):
-        return self._component
+    def getName(self):
+        return self._name
+
+    def getObject(self):
+        return self._dataObject
+
+    def delete(self):
+        if self.childCount() == 0:
+            self.parent.removeChild(self)
