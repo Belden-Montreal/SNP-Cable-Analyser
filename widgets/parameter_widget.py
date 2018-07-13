@@ -1,21 +1,28 @@
 from widgets.tab_widget import TabWidget 
 from widgets import parameter_widget_ui
+from canvas import Canvas
 from PyQt5 import QtWidgets
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
+
 class valueType():
     MARGIN = 0
     VALUE = 1
 
 class ParameterWidget(TabWidget, parameter_widget_ui.Ui_ParameterWidget):
-    def __init__(self, param, parameter):
+    def __init__(self, paramName, parameter):
         super(ParameterWidget, self).__init__(self)
-        self.paramLabel.setText(param)
-        self.paramName = param
+        self.paramLabel.setText(paramName)
+        self.paramName = paramName
         self.parameter = parameter
         self.hasPassed = False
         values = (parameter.getWorstValue(), parameter.getWorstMargin())
         self.marginListWidget.currentItemChanged.connect(lambda current: self.pairSelected(current, valueType.MARGIN))
         self.worstListWidget.currentItemChanged.connect(lambda current: self.pairSelected(current, valueType.VALUE))
         self.setPairsList()
+        self.graphicsView = Canvas(parameter.getPlot().getFigure())
+        self.verticalLayout.insertWidget(0, self.graphicsView)
+        self.navBar = NavigationToolbar(self.graphicsView, self)
+        self.verticalLayout.insertWidget(1, self.navBar)
         if values[0][0] and values[1]:
             self.worstValue = values[0]
             self.worstMargin = values[1]
@@ -53,6 +60,9 @@ class ParameterWidget(TabWidget, parameter_widget_ui.Ui_ParameterWidget):
             self.worstFreqLabel.setText(self.worstValue[0][pair.number][1].__str__())
             self.worstLimitLabel.setText(self.worstValue[0][pair.number][2].__str__())
             self.worstMarginLabel.setText(self.worstValue[0][pair.number][3].__str__())
+
+    def showTab(self):
+        self.graphicsView.draw()
 
 class PairItem(QtWidgets.QListWidgetItem):
     def __init__(self, text, number, isRemote, parent = None, type = QtWidgets.QListWidgetItem.Type):
