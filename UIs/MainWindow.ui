@@ -17,7 +17,13 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Belden Network Analyzer Software </string>
+  </property>
+  <property name="windowOpacity">
+   <double>42.000000000000000</double>
+  </property>
+  <property name="unifiedTitleAndToolBarOnMac">
+   <bool>false</bool>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -40,7 +46,7 @@
         <property name="childrenCollapsible">
          <bool>false</bool>
         </property>
-        <widget class="QTableWidget" name="sampleTable">
+        <widget class="QTreeView" name="sampleTable">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Ignored" vsizetype="Expanding">
            <horstretch>1</horstretch>
@@ -65,12 +71,6 @@
          <property name="selectionBehavior">
           <enum>QAbstractItemView::SelectRows</enum>
          </property>
-         <attribute name="horizontalHeaderVisible">
-          <bool>true</bool>
-         </attribute>
-         <attribute name="verticalHeaderVisible">
-          <bool>false</bool>
-         </attribute>
         </widget>
         <widget class="QWidget" name="verticalLayoutWidget">
          <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -91,36 +91,18 @@
             <property name="childrenCollapsible">
              <bool>false</bool>
             </property>
-            <widget class="Canvas" name="graphicsView">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>250</height>
-              </size>
-             </property>
-             <property name="autoFillBackground">
-              <bool>true</bool>
-             </property>
-            </widget>
-            <widget class="QTabWidget" name="tabWidget">
+            <widget class="QTabWidget" name="param_tabs">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>0</horstretch>
                <verstretch>100</verstretch>
               </sizepolicy>
              </property>
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>150</height>
-              </size>
-             </property>
+             <widget class="QWidget" name="tab">
+              <attribute name="title">
+               <string>Page</string>
+              </attribute>
+             </widget>
             </widget>
            </widget>
           </item>
@@ -129,23 +111,11 @@
        </widget>
       </item>
       <item>
-       <widget class="QTextEdit" name="textEdit">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>15</height>
-         </size>
+       <widget class="QProgressBar" name="progressBar">
+        <property name="value">
+         <number>0</number>
         </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>23</height>
-         </size>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Sunken</enum>
-        </property>
-        <property name="readOnly">
+        <property name="textVisible">
          <bool>true</bool>
         </property>
        </widget>
@@ -169,6 +139,9 @@
    </attribute>
   </widget>
   <widget class="QToolBar" name="toolBar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="font">
     <font>
      <strikeout>false</strikeout>
@@ -190,7 +163,11 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionNew_Project"/>
-   <addaction name="actionImport_Snp"/>
+   <addaction name="actionToolbar_Import_SnP"/>
+   <addaction name="actionRun"/>
+   <addaction name="actionCalibrate_2"/>
+   <addaction name="actionAlien"/>
+   <addaction name="actionDeembed"/>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -198,7 +175,7 @@
      <x>0</x>
      <y>0</y>
      <width>896</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -236,17 +213,26 @@
     <property name="title">
      <string>Settings</string>
     </property>
-    <addaction name="actionConnect_to_VNA"/>
-    <addaction name="separator"/>
-    <addaction name="actionFile_Locations"/>
-    <addaction name="separator"/>
     <addaction name="actionConfigure_Test"/>
     <addaction name="actionConfigure_Reports"/>
     <addaction name="separator"/>
     <addaction name="actionTest"/>
    </widget>
+   <widget class="QMenu" name="menuVNA">
+    <property name="title">
+     <string>VNA</string>
+    </property>
+    <addaction name="actionConnect"/>
+    <addaction name="actionDisconnect"/>
+    <addaction name="separator"/>
+    <addaction name="actionMeasure"/>
+    <addaction name="actionCalibrate"/>
+    <addaction name="separator"/>
+    <addaction name="actionWho_am_I"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
+   <addaction name="menuVNA"/>
    <addaction name="menuSettings"/>
   </widget>
   <action name="actionImport_SnP">
@@ -332,7 +318,7 @@
   </action>
   <action name="actionConnect_to_VNA">
    <property name="text">
-    <string> Connect to VNA</string>
+    <string>Connect</string>
    </property>
   </action>
   <action name="actionConfigure_Reports">
@@ -350,13 +336,13 @@
     <string>Test</string>
    </property>
   </action>
-  <action name="actionImport_Snp">
+  <action name="actionToolbar_Import_SnP">
    <property name="checkable">
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>Pictures/Icons/ImportFile2.png</normaloff>Pictures/Icons/ImportFile2.png</iconset>
+    <iconset resource="../images.qrc">
+     <normaloff>:/Pictures/Icons/ImportFIle2.png</normaloff>:/Pictures/Icons/ImportFIle2.png</iconset>
    </property>
    <property name="text">
     <string>Import Snp</string>
@@ -370,8 +356,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>Pictures/Icons/newProject.png</normaloff>Pictures/Icons/newProject.png</iconset>
+    <iconset resource="../images.qrc">
+     <normaloff>:/Pictures/Icons/newProject.png</normaloff>:/Pictures/Icons/newProject.png</iconset>
    </property>
    <property name="text">
     <string>New Project</string>
@@ -380,73 +366,111 @@
     <string>Create New Project</string>
    </property>
   </action>
-  <action name="actionFile_Locations">
+  <action name="actionConnect">
    <property name="text">
-    <string>Configure Folders</string>
+    <string>Connect</string>
+   </property>
+  </action>
+  <action name="actionWho_am_I">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Who am I ?</string>
+   </property>
+  </action>
+  <action name="actionMeasure">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Measure</string>
+   </property>
+  </action>
+  <action name="actionCalibrate">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Calibrate</string>
+   </property>
+  </action>
+  <action name="actionDisconnect">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Disconnect</string>
+   </property>
+  </action>
+  <action name="actionRun">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../images.qrc">
+     <normaloff>:/Pictures/Icons/Run.png</normaloff>
+     <disabledoff>:/Pictures/Icons/Run_disabled.png</disabledoff>
+     <disabledon>:/Pictures/Icons/Run_disabled.png</disabledon>:/Pictures/Icons/Run.png</iconset>
+   </property>
+   <property name="text">
+    <string>Run</string>
+   </property>
+  </action>
+  <action name="actionCalibrate_2">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../images.qrc">
+     <normaloff>:/Pictures/Icons/calibrate.png</normaloff>
+     <disabledoff>:/Pictures/Icons/calibrate_disabled.png</disabledoff>
+     <disabledon>:/Pictures/Icons/calibrate_disabled.png</disabledon>:/Pictures/Icons/calibrate.png</iconset>
+   </property>
+   <property name="text">
+    <string>Calibrate</string>
+   </property>
+  </action>
+  <action name="actionAlien">
+   <property name="icon">
+    <iconset resource="../images.qrc">
+     <normaloff>:/Pictures/Icons/alien.png</normaloff>:/Pictures/Icons/alien.png</iconset>
+   </property>
+   <property name="text">
+    <string>Alien</string>
+   </property>
+   <property name="toolTip">
+    <string>Alien</string>
+   </property>
+  </action>
+  <action name="actionDeembed">
+   <property name="icon">
+    <iconset resource="../images.qrc">
+     <normaloff>:/Pictures/Icons/deembed.png</normaloff>:/Pictures/Icons/deembed.png</iconset>
+   </property>
+   <property name="text">
+    <string>Deembed</string>
+   </property>
+   <property name="toolTip">
+    <string>Deembed</string>
    </property>
   </action>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>Canvas</class>
-   <extends>QGraphicsView</extends>
-   <header>canvas.h</header>
-  </customwidget>
- </customwidgets>
- <resources/>
- <connections>
-  <connection>
-   <sender>actionImport_Snp</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>importSnp()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>447</x>
-     <y>341</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionNew_Project</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>newProject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>447</x>
-     <y>341</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>sampleTable</sender>
-   <signal>itemSelectionChanged()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>setActiveSample()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>162</x>
-     <y>357</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>447</x>
-     <y>341</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <resources>
+  <include location="../images.qrc"/>
+ </resources>
+ <connections/>
  <slots>
   <slot>importSnp()</slot>
   <slot>newProject()</slot>
   <slot>setActiveSample()</slot>
+  <slot>tabChange()</slot>
+  <slot>connect()</slot>
+  <slot>aquire()</slot>
+  <slot>calibrate()</slot>
+  <slot>disconnect()</slot>
+  <slot>whoAmI()</slot>
+  <slot>newAlien()</slot>
+  <slot>newDeembed()</slot>
  </slots>
 </ui>
