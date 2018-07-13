@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
-plt.rcParams.update({'figure.max_open_warning': 0})
+# plt.rcParams.update({'figure.max_open_warning': 0})
+from matplotlib.figure import Figure
 from matplotlib.ticker import ScalarFormatter
 import numpy as np
 
@@ -33,7 +34,7 @@ class ParameterPlot(object):
         return self._figure
 
     def drawFigure(self):
-        self._figure = plt.figure(figsize=(18.75,6.25), dpi=80) #might not work for all screen resolutions
+        self._figure = Figure(figsize=(18.75,6.25), dpi=80) #might not work for all screen resolutions
 
         #get main and remote ports
         ends = dict()
@@ -44,11 +45,11 @@ class ParameterPlot(object):
             if len(end) > 0:
                 # define the different colors for this plot
                 colors = iter(plt.cm.rainbow(np.linspace(0, 1, len(end)+1)))
-                ax = plt.subplot(1, len(ends), i+1)
+                ax = self._figure.add_subplot(1, len(ends), i+1)
                 # set the labels
-                plt.title(self._parameter.getName()+" : "+isRemote)
-                plt.xlabel('Frequency (TODO)')
-                plt.ylabel('dB')
+                ax.set_title(self._parameter.getName()+" : "+isRemote)
+                ax.set_xlabel('Frequency (TODO)')
+                ax.set_ylabel('dB')
                 # draw each port's data
                 for port, (name, isRemote) in end.items():
                     # get the next color
@@ -65,7 +66,7 @@ class ParameterPlot(object):
                     except:
                         data = self._parameter.getParameter()[port]
                     # draw the data
-                    plt.semilogx(
+                    ax.semilogx(
                         self._parameter.getFrequencies(),
                         data,
                         label=name, c=color
@@ -75,7 +76,7 @@ class ParameterPlot(object):
                 ax.grid(which="both")
                 if self._limit:
                     try:
-                        plt.semilogx(
+                        ax.semilogx(
                             *zip(*self._limit.evaluateArray({'f': self._parameter.getFrequencies()},
                                                             len(self._parameter.getFrequencies()), neg=True)),
                             label="limit", c=next(colors), linestyle="--"
