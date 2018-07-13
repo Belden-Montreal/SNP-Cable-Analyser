@@ -3,8 +3,13 @@ class DataSerie(object):
         raise NotImplementedError
 
 class PortDataSerie(DataSerie):
-    def __init__(self, port):
+    def __init__(self, port, data=None):
         self._port = port
+        self._data = data
+
+    @staticmethod
+    def fromSerie(port, data=None):
+        return PortDataSerie(port.getPort(), data=data)
 
     def getName(self):
         return self._port.getName()
@@ -12,33 +17,14 @@ class PortDataSerie(DataSerie):
     def getPort(self):
         return self._port
 
+    def getData(self):
+        return self._data
+
     def __eq__(self, other):
         return (self._port is other.getPort())
 
     def __hash__(self):
         return self._port.__hash__()
-
-class WireDataSerie(DataSerie):
-    def __init__(self, wire):
-        self._wire = wire
-
-    def getName(self):
-        return self._wire.getName()
-
-    def getWire(self):
-        return self._wire
-
-    def getMainPort(self):
-        return self._wire.getMainPort()
-
-    def getRemotePort(self):
-        return self._wire.getRemotePort()
-
-    def __eq__(self, other):
-        return (self._wire is other.getWire())
-
-    def __hash__(self):
-        return self._wire.__hash__()
 
 class PortPairDataSerie(DataSerie):
     def __init__(self, port1, port2, data=None):
@@ -79,4 +65,30 @@ class PortPairDataSerie(DataSerie):
 
     def __hash__(self):
         return self.getPortIndices().__hash__()
+
+class WireDataSerie(PortPairDataSerie):
+    def __init__(self, wire, data=None):
+        main = wire.getMainPort()
+        remote = wire.getRemotePort()
+        super(WireDataSerie, self).__init__(main, remote, data=data)
+
+        self._wire = wire
+
+    def getName(self):
+        return self._wire.getName()
+
+    def getWire(self):
+        return self._wire
+
+    def getMainPort(self):
+        return self._wire.getMainPort()
+
+    def getRemotePort(self):
+        return self._wire.getRemotePort()
+
+    def __eq__(self, other):
+        return (self._wire is other.getWire())
+
+    def __hash__(self):
+        return self._wire.__hash__()
         

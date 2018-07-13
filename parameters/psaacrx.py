@@ -1,38 +1,68 @@
 from parameters.parameter import Parameter, diffDiffMatrix
+from parameters.dataserie import PortDataSerie
 
 class PSAACRX(Parameter):
     '''
-        PSAACRX represents both PSAACRN and PSAACRF.
+    PSAACRX represents both PSAACRN and PSAACRF.
 
-        It is calculated using the following formula:
+    This parameter assumes that the PSAXEXT (PSANEXT or PSAFEXT) as been
+    calculated prior to this one (see :class: `parameters.psaxext.PSAXEXT`).
+
+    This parameter requires the insertion loss of the entire cable and is
+    calculated using the following formula:
+
         PSAACRX_k = PSAXEXT_k - IL_k
 
-        where PSAXEXT is either the PSANEXT or the PSAFEXT on the disturbed pair k and IL_k is the Insertion Loss on the disturbed pair k
+    where PSAXEXT is either the PSANEXT or the PSAFEXT on the disturbed pair k
+    and IL_k is the Insertion Loss on the disturbed pair k.
     '''
     def __init__(self, ports, freq, matrices, psaxext, il):
         self._psaxext = psaxext
-        self._il = il
-        self._ports = dict()
-        for port, (name, isRemote) in ports.items():
-            if not isRemote:
-                self._ports[port] = (name, isRemote)
-        super(PSAACRX, self).__init__(self._ports, freq, matrices)
+        self._il      = il
+        super(PSAACRX, self).__init__(ports, freq, matrices)
+
+    def computeDataSeries(self):
+        # obtains the data series from the dependent parameters
+        psaxextSeries = self._psaxext.getDataSeries()
+        ilSeries      = self._il.getDataSeries()
+
+        # create the series for this parameter
+        series = set()
+        for psaxextSerie in psaxextSeries:
+            port = psaxextSerie.getPort()
+
+            # find the corresponding wire
+            ilSerie = [s for s in ilSeries if s.getPorts()[0] is port]
+            if len(ilSerie) != 1:
+                raise ValueError
+
+            # create the data serie
+            series.add(PortDataSerie.fromSerie(psaxextSerie, data=ilSerie[0]))
+
+        return series
     
     def computeParameter(self):
-        
-        psaacrx = dict()
-        psaxext = self._psaxext.getParameter()
-        il = self._il.getParameter(full=True)
+        # initialize the dictionaries for each serie
+        dbPSAACRX = {serie: list() for serie in self._series}
+        cpPSAACRX = {serie: list() for serie in self._series}
 
-        for port in self._ports:
-            psaacrx[port] = list()
+        # get the series from the dependent parameters
+        dbPSAXEXT = self._psaxext.getParameter()
+        dbIL      = self._il.getParameter()
 
-        for f,_ in enumerate(self._freq):
-            for i in self._ports:
-                ilPort = (i, i+len(self._ports))
-                psaacrx[i].append((psaxext[i][f][0]-il[ilPort][f][0], 0))
+        for (f,_) in enumerate(self._freq):
+            for serie in self._series:
+                ilSerie = serie.getData()
 
-        return psaacrx,_
+                # compute the value from the other parameters
+                cpValue = (dbPSAXEXT[serie][f][0] - dbIL[ilSerie][f][0])
+                dbValue = (dbPSAXEXT[serie][f][0] - dbIL[ilSerie][f][0], 0)
+
+                # add the value into the PSAACRX
+                cpPSAACRX[serie].append(cpValue)
+                dbPSAACRX[serie].append(dbValue)
+
+        return (dbPSAACRX, cpPSAACRX)
 
     def chooseMatrices(self, matrices):
         return diffDiffMatrix(matrices)

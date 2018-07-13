@@ -5,55 +5,59 @@ from parameters.psaxext import PSAXEXT
 from parameters.psaacrx import PSAACRX
 from parameters.axext import AXEXT
 from parameters.fext import FEXT
+from parameters.dataserie import PortDataSerie, PortPairDataSerie
 
 class TestPSAACRX(TestParameter):
     def createParameter(self):
         # we assume that psfext and il are tested
-        il = InsertionLoss(self._e2ePorts, self._freq, self._matrices)
-        fext = FEXT(self._e2ePorts, self._freq, self._matrices)
-        axextd = [AXEXT(self._e2ePorts, self._freq, self._matrices, fext, il) for i in range(4)]
-        psaxext = PSAXEXT(self._e2ePorts, self._freq, self._matrices, axextd)
+        self._il   = InsertionLoss(self._config, self._freq, self._matrices, reverse=False)
+        self._fext = FEXT(self._config, self._freq, self._matrices, reverse=False)
+        self._axextd  = {
+            0: AXEXT(self._config, self._freq, self._matrices, self._fext, self._il),
+            1: AXEXT(self._config, self._freq, self._matrices, self._fext, self._il),
+            2: AXEXT(self._config, self._freq, self._matrices, self._fext, self._il),
+            3: AXEXT(self._config, self._freq, self._matrices, self._fext, self._il),
+        }
 
-        return PSAACRX(self._e2ePorts, self._freq, self._matrices, psaxext, il)
+        self._dataseries = {
+            0: PortDataSerie(self._ports[0]),
+            1: PortDataSerie(self._ports[1]),
+        }
+
+        self._pairseries = {
+            0: PortPairDataSerie(self._ports[0], self._ports[2]),
+            1: PortPairDataSerie(self._ports[1], self._ports[3]),
+        }
+
+        self._expected = {
+            self._dataseries[0]: self._pairseries[0],
+            self._dataseries[1]: self._pairseries[1],
+        }
+
+        self._psaxext = PSAXEXT(self._config, self._freq, self._matrices, self._axextd.values())
+
+        return PSAACRX(self._config, self._freq, self._matrices, self._psaxext, self._il)
+
+    def testComputeDataSeries(self):
+        for expected in self._expected:
+            self.assertIn(expected, self._series)
 
     def testComputeParameter(self):
         parameter = self._parameter.getParameter()
         
         dbPSAXEXT = self._parameter.getPSAXEXT().getParameter()
-        dbIL = self._parameter.getIL().getParameter(full=True)
+        dbIL      = self._parameter.getIL().getParameter()
 
-        # there should be a parameter for each ports
-        self.assertEqual(len(parameter), len(self._ports)//2)
+        for serie in self._dataseries.values():
+            # the number of sample should be the same as the number of frequencies
+            self.assertEqual(len(parameter[serie]), len(self._freq))
 
-        # the number of sample should be the same as the number of frequencies
-        self.assertEqual(len(parameter[0]), len(self._freq))
-        self.assertEqual(len(parameter[1]), len(self._freq))
-        # self.assertEqual(len(parameter[2]), len(self._freq))
-        # self.assertEqual(len(parameter[3]), len(self._freq))
-
-        # check the values of the port 1
-        self.assertAlmostEqual(parameter[0][0][0], dbPSAXEXT[0][0][0]-dbIL[(0,2)][0][0])
-        self.assertAlmostEqual(parameter[0][1][0], dbPSAXEXT[0][1][0]-dbIL[(0,2)][1][0])
-        self.assertAlmostEqual(parameter[0][2][0], dbPSAXEXT[0][2][0]-dbIL[(0,2)][2][0])
-        self.assertAlmostEqual(parameter[0][3][0], dbPSAXEXT[0][3][0]-dbIL[(0,2)][3][0])
-
-        # check the values of the port 2
-        self.assertAlmostEqual(parameter[1][0][0], dbPSAXEXT[1][0][0]-dbIL[(1,3)][0][0])
-        self.assertAlmostEqual(parameter[1][1][0], dbPSAXEXT[1][1][0]-dbIL[(1,3)][1][0])
-        self.assertAlmostEqual(parameter[1][2][0], dbPSAXEXT[1][2][0]-dbIL[(1,3)][2][0])
-        self.assertAlmostEqual(parameter[1][3][0], dbPSAXEXT[1][3][0]-dbIL[(1,3)][3][0])
-
-        # # check the values of the port 3
-        # self.assertAlmostEqual(parameter[2][0][0], dbPSAXEXT[2][0][0]-dbIL[(2,0)][0][0])
-        # self.assertAlmostEqual(parameter[2][1][0], dbPSAXEXT[2][1][0]-dbIL[(2,0)][1][0])
-        # self.assertAlmostEqual(parameter[2][2][0], dbPSAXEXT[2][2][0]-dbIL[(2,0)][2][0])
-        # self.assertAlmostEqual(parameter[2][3][0], dbPSAXEXT[2][3][0]-dbIL[(2,0)][3][0])
-
-        # # check the values of the port 4
-        # self.assertAlmostEqual(parameter[3][0][0], dbPSAXEXT[3][0][0]-dbIL[(3,1)][0][0])
-        # self.assertAlmostEqual(parameter[3][1][0], dbPSAXEXT[3][1][0]-dbIL[(3,1)][1][0])
-        # self.assertAlmostEqual(parameter[3][2][0], dbPSAXEXT[3][2][0]-dbIL[(3,1)][2][0])
-        # self.assertAlmostEqual(parameter[3][3][0], dbPSAXEXT[3][3][0]-dbIL[(3,1)][3][0])
+            # check the values of this port
+            pair = self._expected[serie]
+            self.assertAlmostEqual(parameter[serie][0][0], dbPSAXEXT[serie][0][0]-dbIL[pair][0][0])
+            self.assertAlmostEqual(parameter[serie][1][0], dbPSAXEXT[serie][1][0]-dbIL[pair][1][0])
+            self.assertAlmostEqual(parameter[serie][2][0], dbPSAXEXT[serie][2][0]-dbIL[pair][2][0])
+            self.assertAlmostEqual(parameter[serie][3][0], dbPSAXEXT[serie][3][0]-dbIL[pair][3][0])
 
 if __name__ == '__main__':
     unittest.main()
