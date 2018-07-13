@@ -3,7 +3,7 @@ from parameters.parameter import diffComMatrix
 
 class LCL(ReturnLoss):
     '''
-    LCL is calculated using the return loss of the differential mode - common mode (dc) matrix
+    LCL is calculated using the return loss in Differential-Common (DC) mode.
     
     Example of LCL with 4 wires
         
