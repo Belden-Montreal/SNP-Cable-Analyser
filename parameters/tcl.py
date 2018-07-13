@@ -3,7 +3,8 @@ from parameters.returnloss import ReturnLoss
 
 class TCL(ReturnLoss):
     '''
-    TCL (Transverse Conversion Loss) is calculated using the return loss of the common mode - differential (cd) matrix
+    TCL (Transverse Conversion Loss) is calculated using the return loss
+    Common-Differential (CD) mode.
     
     Example of TCL with 4 wires:
         
