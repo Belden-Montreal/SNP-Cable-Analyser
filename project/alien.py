@@ -11,18 +11,25 @@ class Alien(Project):
     '''
     def __init__(self, name):
         super(Alien, self).__init__(name)
-        self._ends = dict()
-        self._ends["End 1"] = dict()
-        self._ends["End 2"] = dict()
-        for end in self._ends.values():
-            end["ANEXT"] = list()
-            end["AFEXT"] = list()        
+        self._disturbers = dict()
+        self._victims = dict()
+        self._disturbers["End 1"] = dict()
+        self._disturbers["End 2"] = dict()
+        self._victims["End 1"] = dict()
+        self._victims["End 2"] = dict()
+        for end in self._disturbers:
+            self._disturbers[end]["PSANEXT"] = list()
+            self._disturbers[end]["PSAACRF"] = list()
+            self._victims[end]["PSANEXT"] = None
+            self._victims[end]["PSAACRF"] = None 
 
     def removeSample(self, sample):
-        for end in self._ends.values():
-            for param in end.values():
-                if sample in param:
-                    param.remove(sample)
+        for end in self._disturbers:
+            for param in self._disturbers[end]:
+                if sample in self._disturbers[end][param]:
+                    self._disturbers[end][param].remove(sample)
+                elif sample == self._victims[end][param]:
+                    self._victims[end][param] = None
 
     def generateExcel(self, outputName, sampleNames, z=False):
         raise NotImplementedError
@@ -44,9 +51,8 @@ class AlienNode(ProjectNode):
         victim = self.importSamples([victimFile], disturber=False)
         samples.extend(disturbers)
         samples.append(victim)
-        self._dataObject._ends[end][param] = samples
-        self._dataObject._victim = victim
-        self._dataObject._disturbers = disturbers
+        self._dataObject._disturbers[end][param] = disturbers
+        self._dataObject._victims[end][param] = victim
         self.addChildren(samples, end, param)
 
     def importSamples(self, fileNames, disturber=False):
@@ -83,11 +89,11 @@ class AlienNode(ProjectNode):
             subNode.appendRow(SampleNode(sample, self._dataObject))
 
     def setupInitialData(self):
-        for end, params in self._dataObject._ends.items():
+        for end, params in self._dataObject._disturbers.items():
             for param, samples in params.items():
                 if len(samples):
                     self.addChildren(samples, end, param)
 
     def getWidgets(self):
-        alienTab = AlienWidget()
+        alienTab = AlienWidget(self._dataObject)
         return {"Alien": alienTab}
