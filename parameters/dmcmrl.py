@@ -3,7 +3,7 @@ from parameters.parameter import diffComMatrix
 
 class DMCMRL(ReturnLoss):
     '''
-    DMCMRL is calculated using the Return Loss of the differential mode - common mode (dc) matrix
+    DMCMRL is calculated using the return loss in Differential-Common (DC) mode.
 
     Example of DMCMRL with 4 wires
         
