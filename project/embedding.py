@@ -68,6 +68,8 @@ class Embedding(Project):
 from app.node import Node
 from sample.sample import SampleNode
 from project.plug import PlugNode
+from widgets.embed_widget import EmbedWidget
+from PyQt5 import QtWidgets
 class EmbeddingNode(ProjectNode):
 
     def openImportWindow(self, parent):
@@ -104,3 +106,7 @@ class EmbeddingNode(ProjectNode):
         for side, samples in self._dataObject._sides.items():
             if len(samples):
                 self.addChildren(samples, self._dataObject._plug, side)
+
+    def getWidgets(self):
+        embedTab = EmbedWidget()
+        return {"Embedding": embedTab}

@@ -1,9 +1,7 @@
 import sys
 from PyQt5 import QtWidgets, QtCore, QtGui
 import MW4
-import MainWidget
 import new_project_dialog
-from ParameterWidget import ParameterWidget
 from app.project_manager import ProjectManager
 from app.vna_manager import VNAManager
 from app.tree_model import TreeModel

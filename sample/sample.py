@@ -53,8 +53,8 @@ class Sample(object):
         return self._date
 
 from app.node import Node
-from ParameterWidget import ParameterWidget
-import MainWidget
+from widgets.parameter_widget import ParameterWidget
+from widgets.main_widget import MainWidget
 from PyQt5 import QtWidgets
 class SampleNode(Node):
     def __init__(self, sample, project):
@@ -68,8 +68,7 @@ class SampleNode(Node):
 
     def getWidgets(self):
         widgets = dict()
-        mainTab, mainTabWidget = self.setupMainTab(self._dataObject)
-        widgets["main"] = mainTab
+        widgets["main"] = None
         failParams = list()
         for name, param in self._dataObject.getParameters().items():
             try:
@@ -80,18 +79,5 @@ class SampleNode(Node):
                         failParams.append(name)
             except:
                 continue
-        if len(failParams) > 0:
-            mainTabWidget.passLabel.setText("Fail")
-        else:
-            mainTabWidget.passLabel.setText("Pass")
-        mainTabWidget.failsLabel.setText(str(failParams))
+        widgets["main"] = MainWidget(self._dataObject, failParams)
         return widgets
-
-    def setupMainTab(self, sample):
-        mainTab = QtWidgets.QWidget()
-        mainTabWidget = MainWidget.Ui_MainWidget()
-        mainTabWidget.setupUi(mainTab)
-        mainTabWidget.testNameLabel.setText(sample.getName()+":")
-        mainTabWidget.dateLabel.setText(sample.getDate())
-        mainTabWidget.limitLabel.setText(str(sample.getStandard()))
-        return mainTab, mainTabWidget

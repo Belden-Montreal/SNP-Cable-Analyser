@@ -32,6 +32,8 @@ class Alien(Project):
 
 from app.node import Node
 from sample.sample import SampleNode
+from widgets.alien_widget import AlienWidget
+from PyQt5 import QtWidgets
 class AlienNode(ProjectNode):
 
     def openImportWindow(self, parent):
@@ -85,3 +87,7 @@ class AlienNode(ProjectNode):
             for param, samples in params.items():
                 if len(samples):
                     self.addChildren(samples, end, param)
+
+    def getWidgets(self):
+        alienTab = AlienWidget()
+        return {"Alien": alienTab}
