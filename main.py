@@ -104,37 +104,10 @@ class Main():
             return
 
         self._mainWindow.param_tabs.clear()
-        sample = self._model.itemFromIndex(index).getObject()
-
-        try:
-            mainTab = self.setupMainTab(sample)
-        except:
-            return #TODO: handle selections of projects/subprojects
-        failParams = list()
-        for name, param in sample.getParameters().items():
-            try:
-                if param.visible():
-                    newTab = ParameterWidget(name, param)
-                    self._mainWindow.param_tabs.addTab(newTab, name)
-                    if not newTab.hasPassed:
-                        failParams.append(name)
-            except:
-                continue
-        if len(failParams) > 0:
-            mainTab.passLabel.setText("Fail")
-        else:
-            mainTab.passLabel.setText("Pass")
-        mainTab.failsLabel.setText(str(failParams))
-
-    def setupMainTab(self, sample):
-        mainTab = QtWidgets.QWidget()
-        mainTabWidget = MainWidget.Ui_MainWidget()
-        mainTabWidget.setupUi(mainTab)
-        mainTabWidget.testNameLabel.setText(sample.getName()+":")
-        mainTabWidget.dateLabel.setText(sample.getDate())
-        mainTabWidget.limitLabel.setText(str(sample.getStandard()))
-        self._mainWindow.param_tabs.addTab(mainTab, "Main")
-        return mainTabWidget
+        node = self._model.itemFromIndex(index)
+        tabs = node.getWidgets()
+        for name, tab in tabs.items():
+            self._mainWindow.param_tabs.addTab(tab, name)
 
     def tableContextMenu(self, pos):
         selected = self.getSelected()
