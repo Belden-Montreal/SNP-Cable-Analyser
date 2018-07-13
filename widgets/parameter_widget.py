@@ -1,13 +1,13 @@
-from PyQt5 import QtWidgets
+from widgets.tab_widget import TabWidget 
 from widgets import parameter_widget_ui
+from PyQt5 import QtWidgets
 class valueType():
     MARGIN = 0
     VALUE = 1
 
-class ParameterWidget(QtWidgets.QWidget, parameter_widget_ui.Ui_ParameterWidget):
+class ParameterWidget(TabWidget, parameter_widget_ui.Ui_ParameterWidget):
     def __init__(self, param, parameter):
-        super(ParameterWidget, self).__init__()
-        self.setupUi(self)
+        super(ParameterWidget, self).__init__(self)
         self.paramLabel.setText(param)
         self.paramName = param
         self.parameter = parameter
