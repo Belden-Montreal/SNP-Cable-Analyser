@@ -3,7 +3,7 @@ from parameters.parameter import diffComMatrix
 
 class LCTL(InsertionLoss):
     '''
-    LCTL is calculated using the Insertion Loss of the differential mode - common mode (dc) matrix
+    LCTL is calculated using the insertionlLoss in Differential-Common (DC).
 
     Example of LCTL with 4 wires : 
          1 2 3 4
