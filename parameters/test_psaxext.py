@@ -14,9 +14,9 @@ class TestPSAXEXT(TestParameter):
 
     def createParameter(self):
         # we assume that the dependent parameters are tested
-        self._il = InsertionLoss(self._config, self._freq, self._matrices)
+        self._il = InsertionLoss(self._config, self._freq, self._matrices, reverse=False)
 
-        self._fext = FEXT(self._config, self._freq, self._matrices)
+        self._fext = FEXT(self._config, self._freq, self._matrices, reverse=False)
 
         self._axextd = {
             0: AXEXT(self._config, self._freq, self._matrices, self._fext, self._il),
@@ -28,8 +28,6 @@ class TestPSAXEXT(TestParameter):
         self._dataseries = {
             0: PortDataSerie(self._ports[0]),
             1: PortDataSerie(self._ports[1]),
-            2: PortDataSerie(self._ports[2]),
-            3: PortDataSerie(self._ports[3]),
         }
 
         self._pairseries = {
@@ -56,18 +54,6 @@ class TestPSAXEXT(TestParameter):
                 self._axextd[2]: {self._pairseries[2], self._pairseries[3]},
                 self._axextd[3]: {self._pairseries[2], self._pairseries[3]},
             },
-            self._dataseries[2]: {
-                self._axextd[0]: {self._pairseries[4], self._pairseries[5]},
-                self._axextd[1]: {self._pairseries[4], self._pairseries[5]},
-                self._axextd[2]: {self._pairseries[4], self._pairseries[5]},
-                self._axextd[3]: {self._pairseries[4], self._pairseries[5]},
-            },
-            self._dataseries[3]: {
-                self._axextd[0]: {self._pairseries[6], self._pairseries[7]},
-                self._axextd[1]: {self._pairseries[6], self._pairseries[7]},
-                self._axextd[2]: {self._pairseries[6], self._pairseries[7]},
-                self._axextd[3]: {self._pairseries[6], self._pairseries[7]},
-            },
         }
 
         return PSAXEXT(self._config, self._freq, self._matrices, self._axextd.values())
@@ -84,11 +70,10 @@ class TestPSAXEXT(TestParameter):
 
     def testComputeDataSeries(self):
         expected = self._expected
-        self.assertEqual(len(self._series), 4)
+        self.assertEqual(len(self._series), 2)
         for serie in self._series:
             data = serie.getData()
             disturbers = data.keys()
-
             self.assertIn(serie, expected)
             self.assertEqual(len(disturbers), len(expected[serie]))
             for disturber in disturbers:
