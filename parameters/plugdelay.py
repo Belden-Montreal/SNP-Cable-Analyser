@@ -1,8 +1,9 @@
-from parameters.parameter import PairedParameter, takeClosest
+from parameters.parameter import Parameter, takeClosest
+from parameters.dataserie import PortDataSerie
+
 import numpy as np
 
-class PlugDelay(PairedParameter):
-
+class PlugDelay(Parameter):
     def __init__(self, ports, freq, matrices, openDelay, shortDelay, dfDelay, k1, k2, k3):
         self._openDelay = openDelay
         self._shortDelay = shortDelay
@@ -13,26 +14,33 @@ class PlugDelay(PairedParameter):
         super(PlugDelay, self).__init__(ports, freq, matrices)
         self._visible = False
 
-    def computePairs(self, ports):
-        pairs = dict()
-        for i in range(len(ports)):
-            port,isRemote = ports[i]
-            pairs[(i,i)] = (port, isRemote)
-        return pairs
+    def computeDataSeries(self):
+        series = {PortDataSerie(port) for port in self._ports.getPorts()}
+
+        # make sure all dependent parameters have the same data series
+        if series != self._openDelay.getDataSeries():
+            raise ValueError
+        if series != self._shortDelay.getDataSeries():
+            raise ValueError
+        if series != self._dfDelay.getDataSeries():
+            raise ValueError
+
+        return series
 
     def computeParameter(self):
-        dfDelay = self._dfDelay.getParameter()
-        openDelay = self._openDelay.getParameter()
+        dfDelay    = self._dfDelay.getParameter()
+        openDelay  = self._openDelay.getParameter()
         shortDelay = self._shortDelay.getParameter()
+
         plugDelay = dict()
-        for port in self._ports:
+        for serie in self._series:
             #find the indexes of the points closest to 100 and 500 MHz
             f100, f500 = self.__getFrequenciesIndex(100, 500, self._freq)
-            openAvg = np.mean(openDelay[port][f100:f500])
-            shortAvg = np.mean(shortDelay[port][f100:f500])
-            plugDelay[port] = (openAvg + shortAvg - self._k1 - self._k2)/4.0 - dfDelay[port] + self._k3
+            openAvg = np.mean(openDelay[serie][f100:f500])
+            shortAvg = np.mean(shortDelay[serie][f100:f500])
+            plugDelay[serie] = (openAvg + shortAvg - self._k1 - self._k2)/4.0 - dfDelay[serie] + self._k3
         
-        return plugDelay,None
+        return (plugDelay, None)
 
     def recalculate(self, k1, k2, k3):
         self._k1 = k1
