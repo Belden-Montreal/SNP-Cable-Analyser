@@ -66,6 +66,12 @@ class PortPairDataSerie(DataSerie):
     def __hash__(self):
         return self.getPortIndices().__hash__()
 
+class PortOrderedPairDataSerie(PortPairDataSerie):
+    def __init__(self, port1, port2, data=None):
+        if port1.getIndex() > port2.getIndex():
+            (port2, port1) = (port1, port2)
+        super(PortOrderedPairDataSerie, self).__init__(port1, port2, data=data)
+
 class WireDataSerie(PortPairDataSerie):
     def __init__(self, wire, data=None):
         main = wire.getMainPort()
