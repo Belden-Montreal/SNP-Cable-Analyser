@@ -53,6 +53,9 @@ class Sample(object):
         return self._date
 
 from app.node import Node
+from ParameterWidget import ParameterWidget
+import MainWidget
+from PyQt5 import QtWidgets
 class SampleNode(Node):
     def __init__(self, sample, project):
         super(SampleNode, self).__init__(sample.getName())
@@ -62,3 +65,33 @@ class SampleNode(Node):
     def delete(self):
         self.parent().removeRow(self.row())
         self._project.removeSample(self._dataObject)
+
+    def getWidgets(self):
+        widgets = dict()
+        mainTab, mainTabWidget = self.setupMainTab(self._dataObject)
+        widgets["main"] = mainTab
+        failParams = list()
+        for name, param in self._dataObject.getParameters().items():
+            try:
+                if param.visible():
+                    tab = ParameterWidget(name, param)
+                    widgets[name] = tab
+                    if not tab.hasPassed:
+                        failParams.append(name)
+            except:
+                continue
+        if len(failParams) > 0:
+            mainTabWidget.passLabel.setText("Fail")
+        else:
+            mainTabWidget.passLabel.setText("Pass")
+        mainTabWidget.failsLabel.setText(str(failParams))
+        return widgets
+
+    def setupMainTab(self, sample):
+        mainTab = QtWidgets.QWidget()
+        mainTabWidget = MainWidget.Ui_MainWidget()
+        mainTabWidget.setupUi(mainTab)
+        mainTabWidget.testNameLabel.setText(sample.getName()+":")
+        mainTabWidget.dateLabel.setText(sample.getDate())
+        mainTabWidget.limitLabel.setText(str(sample.getStandard()))
+        return mainTab, mainTabWidget

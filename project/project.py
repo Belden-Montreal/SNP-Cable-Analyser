@@ -144,3 +144,6 @@ class ProjectNode(Node):
             if text == child.text():
                 return child
         return 0
+
+    # def getWidgets(self):
+    #     return list()

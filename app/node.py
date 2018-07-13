@@ -16,3 +16,6 @@ class Node(QtGui.QStandardItem):
     def delete(self):
         if self.rowCount() == 0:
             self.parent().removeRow(self.row())
+
+    def getWidgets(self):
+        return dict()
