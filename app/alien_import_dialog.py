@@ -70,6 +70,6 @@ class Ui_AlienImportDialog(object):
         self.victimButton.setText(_translate("AlienImportDialog", "Import Victim"))
         self.end1Button.setText(_translate("AlienImportDialog", "End 1"))
         self.end2Button.setText(_translate("AlienImportDialog", "End 2"))
-        self.anextButton.setText(_translate("AlienImportDialog", "ANEXT"))
-        self.afextButton.setText(_translate("AlienImportDialog", "AFEXT"))
+        self.anextButton.setText(_translate("AlienImportDialog", "PSANEXT"))
+        self.afextButton.setText(_translate("AlienImportDialog", "PSAACRF"))
 
