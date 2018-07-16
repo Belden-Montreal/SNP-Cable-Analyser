@@ -2,8 +2,8 @@ from sample.sample import Sample, PORTS_NAME
 
 class Victim(Sample):
 
-    def __init__(self, snpFile, axextd):
-        self._axextd = axextd
+    def __init__(self, snpFile, disturbers=list()):
+        self._axextd = [disturber.getParameters()["AXEXT"] for disturber in disturbers]
         super(Victim, self).__init__(snpFile)
 
     def addParameters(self):
@@ -25,6 +25,6 @@ class Victim(Sample):
             self._ports[i] = (PORTS_NAME[i], False)
             self._ports[i+self._portsNumber//2] = ("(d)"+PORTS_NAME[i], True)
 
-    def setAxextd(self, axextd):
-        self._axextd = axextd
+    def calculateAXEXTD(self, disturbers):
+        self._axextd = [disturber.getParameters()["AXEXT"] for disturber in disturbers]
         self.addParameters()
