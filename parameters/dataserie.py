@@ -51,6 +51,11 @@ class PortPairDataSerie(DataSerie):
         (p1,p2) = self._ports
         return (p1.getIndex(), p2.getIndex())
 
+    def getPortSeries(self):
+        serie1 = PortDataSerie(self._ports[0])
+        serie2 = PortDataSerie(self._ports[1])
+        return (serie1, serie2)
+
     def getData(self):
         return self._data
 
