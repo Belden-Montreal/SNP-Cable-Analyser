@@ -26,23 +26,31 @@ class Alien(Project):
     def importSamples(self, fileNames, end, param, disturber=False):
         if disturber:
             pool = ThreadPool()
-            samples = pool.map(self.__createDisturber, fileNames)
+            samples = pool.starmap(self.__createDisturber, zip(fileNames, [param]*len(fileNames)))
             if self._victims[end][param] is not None:
                 self._victims[end][param].calculateAXEXTD(samples)
             self._disturbers[end][param] = samples
             return samples
         elif len(fileNames) < 2:
-            sample = self.__createVictim(fileNames[0], self._disturbers[end][param])
+            sample = self.__createVictim(fileNames[0], param, self._disturbers[end][param])
             if len(self._disturbers[end][param]) > 0:
                 sample.calculateAXEXTD(self._disturbers[end][param])
             self._victims[end][param] = sample
             return sample
 
-    def __createDisturber(self, name):
-        return Disturber(name)
+    def __createDisturber(self, name, param):
+        if param == "PSANEXT":
+            test = "ANEXT"
+        else:
+            test = "AFEXT"
+        return Disturber(name, test)
 
-    def __createVictim(self, name, disturbers):
-        return Victim(name, disturbers)
+    def __createVictim(self, name, param, disturbers):
+        if param == "PSANEXT":
+            test = "ANEXT"
+        else:
+            test = "AFEXT"
+        return Victim(name, test, disturbers)
 
     def removeSample(self, sample):
         for end in self._disturbers:
@@ -68,6 +76,14 @@ class Alien(Project):
 
     def nodeFromProject(self):
         return AlienNode(self)
+
+    def setStandard(self, standard):
+        for end in self._disturbers:
+            for param in self._disturbers[end]:
+                for disturber in self._disturbers[end][param]:
+                    disturber.setStandard(standard)
+                if self._victims[end][param]:
+                    self._victims[end][param].setStandard(standard)
 
 from app.node import Node
 from sample.sample import SampleNode
@@ -109,3 +125,7 @@ class AlienNode(ProjectNode):
     def getWidgets(self):
         self._alienTab = AlienWidget(self)
         return {"Alien": self._alienTab}
+
+    def setStandard(self, standard):
+        self._dataObject.setStandard(standard)
+        self._alienTab.updateWidget()

@@ -26,3 +26,7 @@ class Node(QtGui.QStandardItem):
 
     def getWidgets(self):
         return dict()
+
+    def setStandard(self, standard):
+        for i in range(self.rowCount()):
+            self.child(i).setStandard(standard)

@@ -97,6 +97,10 @@ class Project(object):
     def nodeFromProject(self):
         return ProjectNode(self)
 
+    def setStandard(self, standard):
+        for sample in self._samples:
+            sample.setStandard(standard)
+
 from app.node import Node
 from sample.sample import SampleNode
 class ProjectNode(Node):
@@ -137,6 +141,9 @@ class ProjectNode(Node):
 
     def setupInitialData(self):
         self.addChildren(self._dataObject.samples())
+
+    def setStandard(self, standard):
+        self._dataObject.setStandard(standard)
 
     # def getWidgets(self):
     #     return list()

@@ -162,9 +162,9 @@ class Main():
         result = limitDialog.showDialog()
         if result:
             item = limitDialog.getSelection().internalPointer().standard
-            selected = [self._model.itemFromIndex(x).getObject() for x in self.getSelected()]
-            for sample in selected:
-                sample.setStandard(item)
+            selected = [self._model.itemFromIndex(x) for x in self.getSelected()]
+            for node in selected:
+                node.setStandard(item)
 
     def tabChanged(self):
         # if self._mainWindow.param_tabs.currentIndex() == 0 or self._mainWindow.param_tabs.count() <= 1:
