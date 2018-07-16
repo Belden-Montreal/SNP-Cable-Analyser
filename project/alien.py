@@ -28,29 +28,28 @@ class Alien(Project):
             pool = ThreadPool()
             samples = pool.starmap(self.__createDisturber, zip(fileNames, [param]*len(fileNames)))
             if self._victims[end][param] is not None:
-                self._victims[end][param].calculateAXEXTD(samples)
+                self._victims[end][param].setAXEXTD(self.__calculateAXEXTD(samples, param))
             self._disturbers[end][param] = samples
             return samples
         elif len(fileNames) < 2:
-            sample = self.__createVictim(fileNames[0], param, self._disturbers[end][param])
-            if len(self._disturbers[end][param]) > 0:
-                sample.calculateAXEXTD(self._disturbers[end][param])
+            sample = self.__createVictim(fileNames[0], param, self.__calculateAXEXTD(self._disturbers[end][param], param))
             self._victims[end][param] = sample
             return sample
 
     def __createDisturber(self, name, param):
-        if param == "PSANEXT":
-            test = "ANEXT"
-        else:
-            test = "AFEXT"
-        return Disturber(name, test)
+        return Disturber(name, self.__getParam(param))
 
     def __createVictim(self, name, param, disturbers):
-        if param == "PSANEXT":
-            test = "ANEXT"
+        return Victim(name, self.__getParam(param), disturbers)
+
+    def __calculateAXEXTD(self, disturbers, param):
+        return [x.getParameters()[self.__getParam(param)] for x in disturbers]
+
+    def __getParam(self, name):
+        if name == "PSANEXT":
+            return "ANEXT"
         else:
-            test = "AFEXT"
-        return Victim(name, test, disturbers)
+            return "AFEXT"
 
     def removeSample(self, sample):
         for end in self._disturbers:
@@ -63,7 +62,7 @@ class Alien(Project):
     def updateDisturbers(self, names, end, param):
         disturbers = [x for x in self._disturbers[end][param] if x.getName() in names]
         if self._victims[end][param]:
-            self._victims[end][param].calculateAXEXTD(disturbers)
+            self._victims[end][param].setAXEXTD(self.__calculateAXEXTD(disturbers, param))
 
     def disturbers(self):
         return self._disturbers

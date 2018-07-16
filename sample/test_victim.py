@@ -8,13 +8,13 @@ from parameters.fext import FEXT
 class TestVictim(TestSample):
     def setUp(self):
         super(TestVictim, self).setUp()
-        self._params = ["IL", "AXEXTD", "PSAXEXT", "PSAACRX"]
+        self._params = ["IL", "ANEXTD", "PSANEXT", "PSAACRN"]
 
     def testParametersBuilding(self):
         il = InsertionLoss(self._e2ePorts, self._freq, self._mm)
         fext = FEXT(self._e2ePorts, self._freq, self._mm)
         axextd = [AXEXT(self._e2ePorts, self._freq, self._mm, fext, il) for i in range(4)]
-        v = Victim(None, axextd)
+        v = Victim(None, "ANEXT", axextd)
         self.setMockSample(v)
         self.assertEqual(len(v._parameters), len(self._params))
         self.assertListEqual(list(v._parameters.keys()), self._params)

@@ -5,7 +5,7 @@ class Disturber(Sample):
     '''
     The Disturber class contains the measurements for alien parameters of one disturber on the victim
     '''
-    def __init__(self, snpFile, param):
+    def __init__(self, snpFile, param="ANEXT"):
         self._param = param
         super(Disturber, self).__init__(snpFile)
     

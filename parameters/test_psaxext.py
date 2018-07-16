@@ -25,13 +25,13 @@ class TestPSAXEXT(TestParameter):
         axextd = self._parameter.getAXEXT()
 
         # there should be a parameter for each ports
-        self.assertEqual(len(parameter), len(self._ports))
+        self.assertEqual(len(parameter), len(self._ports)//2)
 
         # the number of sample should be the same as the number of frequencies
         self.assertEqual(len(parameter[0]), len(self._freq))
         self.assertEqual(len(parameter[1]), len(self._freq))
-        self.assertEqual(len(parameter[2]), len(self._freq))
-        self.assertEqual(len(parameter[3]), len(self._freq))
+        # self.assertEqual(len(parameter[2]), len(self._freq))
+        # self.assertEqual(len(parameter[3]), len(self._freq))
 
         # check the values of the port 1
         self.assertAlmostEqual(parameter[0][0][0], powersum(axextd, 0, 0))
@@ -45,17 +45,17 @@ class TestPSAXEXT(TestParameter):
         self.assertAlmostEqual(parameter[1][2][0], powersum(axextd, 2, 1))
         self.assertAlmostEqual(parameter[1][3][0], powersum(axextd, 3, 1))
 
-        # check the values of the port 3
-        self.assertAlmostEqual(parameter[2][0][0], powersum(axextd, 0, 2))
-        self.assertAlmostEqual(parameter[2][1][0], powersum(axextd, 1, 2))
-        self.assertAlmostEqual(parameter[2][2][0], powersum(axextd, 2, 2))
-        self.assertAlmostEqual(parameter[2][3][0], powersum(axextd, 3, 2))
+        # # check the values of the port 3
+        # self.assertAlmostEqual(parameter[2][0][0], powersum(axextd, 0, 2))
+        # self.assertAlmostEqual(parameter[2][1][0], powersum(axextd, 1, 2))
+        # self.assertAlmostEqual(parameter[2][2][0], powersum(axextd, 2, 2))
+        # self.assertAlmostEqual(parameter[2][3][0], powersum(axextd, 3, 2))
 
-        # check the values of the port 4
-        self.assertAlmostEqual(parameter[3][0][0], powersum(axextd, 0, 3))
-        self.assertAlmostEqual(parameter[3][1][0], powersum(axextd, 1, 3))
-        self.assertAlmostEqual(parameter[3][2][0], powersum(axextd, 2, 3))
-        self.assertAlmostEqual(parameter[3][3][0], powersum(axextd, 3, 3))
+        # # check the values of the port 4
+        # self.assertAlmostEqual(parameter[3][0][0], powersum(axextd, 0, 3))
+        # self.assertAlmostEqual(parameter[3][1][0], powersum(axextd, 1, 3))
+        # self.assertAlmostEqual(parameter[3][2][0], powersum(axextd, 2, 3))
+        # self.assertAlmostEqual(parameter[3][3][0], powersum(axextd, 3, 3))
 
         # check complex parameter
         # self.assertAlmostEqual(parameter[1][0], complex2db(self._parameter.getComplexParameter()[1][0]))

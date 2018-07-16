@@ -1,6 +1,6 @@
 import unittest
 from xlrd import open_workbook
-from project.plug import Plug, Filetype
+from project.plug import Plug
 
 class TestPlug(unittest.TestCase):
     def setUp(self):
@@ -9,12 +9,12 @@ class TestPlug(unittest.TestCase):
     def testFileImport(self):
         project = Plug("test")
 
-        project.importSamples(self._fileName, Filetype.DFOPEN)
-        project.importSamples(self._fileName, Filetype.DFSHORT)
-        project.importSamples(self._fileName, Filetype.OPEN)
-        project.importSamples(self._fileName, Filetype.SHORT)
+        # project.importSamples(self._fileName, Filetype.DFOPEN)
+        # project.importSamples(self._fileName, Filetype.DFSHORT)
+        # project.importSamples(self._fileName, Filetype.OPEN)
+        # project.importSamples(self._fileName, Filetype.SHORT)
         project.setConstants(1,2,3)
-        project.importSamples(self._fileName, Filetype.LOAD)
+        # project.importSamples(self._fileName, Filetype.LOAD)
 
         #should have added 5 samples
         self.assertEqual(len(project._samples),5)
@@ -27,7 +27,7 @@ class TestPlug(unittest.TestCase):
         self.assertTrue(project.getPlugNext())
         self.assertTrue(project.getNextDelay())
 
-        project.removeSamples("testout_mm")
+        # project.removeSamples("testout_mm")
         #should have removed the samples
         self.assertEqual(len(project._samples), 0)
 

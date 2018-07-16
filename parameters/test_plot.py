@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 
-from unittest.mock import MagicMock, patch, call
+from unittest.mock import MagicMock, patch, call, DEFAULT
 from parameters.plot import ParameterPlot
 
 class DummyParameter(object):
@@ -74,18 +74,25 @@ class TestParameterPlot(unittest.TestCase):
     def testDrawFigureNoSelection(self):
         self._plot.resetSelection()
 
-        with patch("parameters.plot.plt") as mockedplt:
-            mockedplt.figure = MagicMock(return_value=self)
+        with patch.multiple("parameters.plot", Figure=DEFAULT, plt=DEFAULT) as mocks:
+            mockedplt = mocks['plt']
+            mockedfig = mocks['Figure']
             mockedplt.cm = MagicMock()
             mockedplt.cm.rainbow = MagicMock(return_value=[10,20,30,40])
-            mockedplt.semilogx = MagicMock()
-
+            figure = mockedfig.return_value
+            figure.add_subplot = MagicMock(return_value = MagicMock())
+            ax = figure.add_subplot.return_value
+            ax.semilogx = MagicMock()
             self._plot.drawFigure()
 
-            mockedplt.figure.assert_called_with(dpi=80, figsize=(18.75, 6.25))
+            mockedfig.assert_called_with(dpi=80, figsize=(18.75, 6.25))
             arg = mockedplt.cm.rainbow.call_args[0][0]
             np.testing.assert_array_almost_equal(arg, np.array([0, 0.25, 0.5, 0.75, 1]))
-            mockedplt.semilogx.assert_has_calls([
+            figure.add_subplot.assert_called_with(
+                    1, 2, 1
+                )
+
+            ax.semilogx.assert_has_calls([
                 call(
                     self._parameter.getFrequencies(),
                     self._parameter.getParameter()[0],
@@ -109,18 +116,24 @@ class TestParameterPlot(unittest.TestCase):
             ], any_order=True)
  
     def testDrawFigureWithSelection(self):
-        with patch("parameters.plot.plt") as mockedplt:
-            mockedplt.figure = MagicMock(return_value=self)
+        with patch.multiple("parameters.plot", Figure=DEFAULT, plt=DEFAULT) as mocks:
+            mockedplt = mocks['plt']
+            mockedfig = mocks['Figure']
             mockedplt.cm = MagicMock()
             mockedplt.cm.rainbow = MagicMock(return_value=[10,20,30,40])
-            mockedplt.semilogx = MagicMock()
-
+            figure = mockedfig.return_value
+            figure.add_subplot = MagicMock(return_value = MagicMock())
+            ax = figure.add_subplot.return_value
+            ax.semilogx = MagicMock()
             self._plot.drawFigure()
 
-            mockedplt.figure.assert_called_with(dpi=80, figsize=(18.75, 6.25))
+            mockedfig.assert_called_with(dpi=80, figsize=(18.75, 6.25))
             arg = mockedplt.cm.rainbow.call_args[0][0]
             np.testing.assert_array_almost_equal(arg, np.array([0, 0.25, 0.5, 0.75, 1]))
-            mockedplt.semilogx.assert_has_calls([
+            figure.add_subplot.assert_called_with(
+                    1, 2, 1
+                )
+            ax.semilogx.assert_has_calls([
                 call(
                     self._parameter.getFrequencies(),
                     self._parameter.getParameter()[0],

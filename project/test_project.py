@@ -9,7 +9,7 @@ class TestProject(unittest.TestCase):
 
     def testFileImport(self):
         project = Project("test")
-        project.importSamples(self._fileNames)
+        samples = project.importSamples(self._fileNames)
 
         #should create 2 samples
         self.assertEqual(len(project._samples), 2)
@@ -19,12 +19,12 @@ class TestProject(unittest.TestCase):
         self.assertEqual(project._samples[0]._name, "testout_mm")
         self.assertEqual(project._samples[1]._name, "testout_mm1")
 
-        project.removeSamples(['testout_mm'])
+        project.removeSample(samples[0])
         #should have removed a sample
         self.assertEqual(len(project._samples), 1)
         self.assertEqual(project._samples[0]._name, "testout_mm1")
 
-        project.removeSamples(['testout_mm1'])
+        project.removeSample(samples[1])
         #should have no samples
         self.assertEqual(len(project._samples), 0)
 

@@ -15,8 +15,21 @@ class Project(object):
         self._date = ""
         self._samples = list()
 
+    def importSamples(self, fileNames):
+        pool = ThreadPool()
+        samples = pool.map(self.__createSample, fileNames)
+        self._samples.extend(samples)
+        return samples
+
+    def __createSample(self, name):
+        _, extension = splitext(name)
+        if extension[2] == "8" or extension[2] == "4":
+            return SingleEnded(name)
+        return EndToEnd(name)
+
     def removeSample(self, sample):
-        self._samples.remove(sample)
+        if sample in self._samples:
+            self._samples.remove(sample)
 
     def generateExcel(self, outputName, sampleNames, z=False):
         workbook = xlsxwriter.Workbook(outputName, options={'nan_inf_to_errors': True})
@@ -116,19 +129,7 @@ class ProjectNode(Node):
     def openImportWindow(self, parent):
         names,_ = QtWidgets.QFileDialog.getOpenFileNames(parent, caption="Select SNP(s)", directory="",filter="sNp Files (*.s*p)")
         if names:
-            self.addChildren(self.importSamples(names))
-    
-    def importSamples(self, fileNames):
-        pool = ThreadPool()
-        samples = pool.map(self.__createSample, fileNames)
-        self._dataObject._samples.extend(samples)
-        return samples
-
-    def __createSample(self, name):
-        _, extension = splitext(name)
-        if extension[2] == "8" or extension[2] == "4":
-            return SingleEnded(name)
-        return EndToEnd(name)
+            self.addChildren(self._dataObject.importSamples(names))
     
     def delete(self):
         if self.parent():

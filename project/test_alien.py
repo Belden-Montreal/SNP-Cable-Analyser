@@ -9,25 +9,25 @@ class TestAlien(unittest.TestCase):
     def testFileImport(self):
         project = Alien("test")
 
-        project.importSamples(self._fileNames, True)
+        disturbers = project.importSamples(self._fileNames, "End 1", "PSANEXT", True)
         #should have added 2 disturber
-        self.assertEqual(len(project._disturbers),2)
+        self.assertEqual(len(project._disturbers["End 1"]["PSANEXT"]),2)
 
-        project.importSamples(["snps/ALIEN TEST/Test_ALIEN_VICTIM_REDO_GOOD.s16p"])
+        victim = project.importSamples(["snps/ALIEN TEST/Test_ALIEN_VICTIM_REDO_GOOD.s16p"], "End 1", "PSANEXT")
          #should have added a victim
-        self.assertIsNot(project._victim, None)
+        self.assertIsNot(project._victims["End 1"]["PSANEXT"], None)
 
         #samples should have the correct names
         #self.assertEqual(project._samples[0]._name, "fci")
-        self.assertEqual(project._samples[0]._name, "AlienEnd1_2redo3 _3")
-        self.assertEqual(project._samples[1]._name, "AlienEnd1_2redo3 _4")
+        self.assertEqual(project._disturbers["End 1"]["PSANEXT"][0]._name, "AlienEnd1_2redo3 _3")
+        self.assertEqual(project._disturbers["End 1"]["PSANEXT"][1]._name, "AlienEnd1_2redo3 _4")
 
-        project.removeSamples(['AlienEnd1_2redo3 _3'])
+        project.removeSample(disturbers[0])
         #should have removed a sample
-        self.assertEqual(len(project._samples), 2)
-        self.assertEqual(project._samples[0]._name, "AlienEnd1_2redo3 _4")
+        self.assertEqual(len(project._disturbers["End 1"]["PSANEXT"]), 1)
+        self.assertEqual(project._disturbers["End 1"]["PSANEXT"][0]._name, "AlienEnd1_2redo3 _4")
 
-        project.removeSamples(['Test_ALIEN_VICTIM_REDO_GOOD'])
+        project.removeSample(victim)
         #should have no victim and 1 disturber
-        self.assertEqual(project._victim, None)
-        self.assertEqual(len(project._disturbers), 1)
+        self.assertEqual(project._victims["End 1"]["PSANEXT"], None)
+        self.assertEqual(len(project._disturbers["End 1"]["PSANEXT"]), 1)
