@@ -4,14 +4,23 @@ from parameters.test_parameter import TestParameter
 from parameters.eltctl import ELTCTL
 from parameters.tctl import TCTL
 from parameters.insertionloss import InsertionLoss
+from parameters.dataserie import PortPairDataSerie
 
 class TestELTCTL(TestParameter):
     def createParameter(self):
-        # we assume FEXT and IL are tested
-        tctl = TCTL(self._e2ePorts, self._freq, self._matrices)
-        il = InsertionLoss(self._e2ePorts, self._freq, self._matrices)
+        # we assume TCTL and IL are tested
+        tctl = TCTL(self._config, self._freq, self._matrices, reverse=False)
+        il   = InsertionLoss(self._config, self._freq, self._matrices, reverse=False)
 
-        return ELTCTL(self._e2ePorts, self._freq, self._matrices, il, tctl)
+        self._dataseries = {
+            0: PortPairDataSerie.fromWire(self._wires[0]),
+            1: PortPairDataSerie.fromWire(self._wires[1]),
+        }
+
+        return ELTCTL(self._config, self._freq, self._matrices, il, tctl)
+
+    def testComputeDataSeries(self):
+        self.assertEqual(self._series, set(self._dataseries.values()))
 
     def testComputeParameter(self):
         parameter = self._parameter.getParameter()
@@ -20,8 +29,6 @@ class TestELTCTL(TestParameter):
 
         tctlPorts = list(dbTCTL.keys())
        
-        # there should be a parameter for each ports
-        self.assertEqual(len(parameter), len(tctlPorts))
         # the number of sample should be the same as the number of frequencies
         self.assertEqual(len(parameter[tctlPorts[0]]), len(self._freq))
         self.assertEqual(len(parameter[tctlPorts[1]]), len(self._freq))

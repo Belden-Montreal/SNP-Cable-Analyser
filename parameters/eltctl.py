@@ -1,43 +1,41 @@
-from parameters.parameter import PairedParameter
+from parameters.parameter import Parameter
 
-class ELTCTL(PairedParameter):
+class ELTCTL(Parameter):
     '''
-    ELTCTL (Equal Level Transverse Conversion Transfer Loss) is calculated using the following formula:
+    ELTCTL (Equal Level Transverse Conversion Transfer Loss) is calculated
+    using the following formula:
 
-    ELTCTL_k = TCTL_k - IL_k
+        ELTCTL_k = TCTL_k - IL_k
     '''
     def __init__(self, ports, freq, matrices, il, tctl):
         self._il = il
         self._tctl = tctl
         super(ELTCTL, self).__init__(ports, freq, matrices)
 
-    def computePairs(self, ports):
-        pairs = dict()
-        for i in range(len(ports)//2):
-            port1, isRemote1 = ports[i]
-            port2, isRemote2 = ports[i+len(ports)//2]
+    def computeDataSeries(self):
+        # make sure all dependent parameters have the same data series
+        if self._il.getDataSeries() != self._tctl.getDataSeries():
+            raise ValueError
 
-            if isRemote1 is not isRemote2:
-                pairs[(i, i+len(ports)//2)] = (port1+"-"+port2, isRemote1)
-                pairs[(i+len(ports)//2, i)] = (port2+"-"+port1, isRemote2)
-
-        return pairs
+        # use either IL or TCTL series
+        return self._il.getDataSeries()
 
     def computeParameter(self):
-        eltctl = dict()
-        cpEltctl = dict()
-        dbIl = self._il.getParameter()
-        dbTctl = self._tctl.getParameter()
+        dbELTCTL = {serie: list() for serie in self._series}
+        cpELTCTL = {serie: list() for serie in self._series}
 
-        for port in self._ports:
-            eltctl[port] = list()
-            cpEltctl[port] = list()
+        dbIL   = self._il.getParameter()
+        dbTCTL = self._tctl.getParameter()
 
-        for f,_ in enumerate(self._freq):
-            for port in self._ports:
-                eltctl[port].append((dbTctl[port][f][0] - dbIl[port][f][0],0))
-                cpEltctl[port].append(dbTctl[port][f][0] - dbIl[port][f][0])
-        return eltctl,eltctl
+        for (f,_) in enumerate(self._freq):
+            for serie in self._series:
+                dbValue = (dbTCTL[serie][f][0] - dbIL[serie][f][0], 0)
+                cpValue = (dbTCTL[serie][f][0] - dbIL[serie][f][0])
+
+                dbELTCTL[serie].append(dbValue)
+                cpELTCTL[serie].append(cpValue)
+
+        return (dbELTCTL, cpELTCTL)
 
     def chooseMatrices(self, matrices):
         return None
