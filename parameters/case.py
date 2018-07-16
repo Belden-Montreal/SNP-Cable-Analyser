@@ -1,9 +1,11 @@
-from parameters.parameter import PairedParameter, complex2db, complex2phase
+from parameters.parameter import Parameter, complex2db, complex2phase
 from parameters.case_plot import CasePlot
+from parameters.dataserie import PortOrderedPairDataSerie
+
 import numpy as np
+import itertools
 
-class Case(PairedParameter):
-
+class Case(Parameter):
     def __init__(self, ports, freq, matrices, jackVector, cnext, cases):
         self._jackVector = jackVector
         self._cases = cases
@@ -11,37 +13,34 @@ class Case(PairedParameter):
         super(Case, self).__init__(ports, freq, matrices)
         self._plot = CasePlot(self)
 
-    def computePairs(self, ports):
-        pairs = dict()
-        for i in range(0, len(ports)):
-            for j in range(0, len(ports)):
-                if i >= j:
-                    continue
+    def computeDataSeries(self):
+        series = set()
 
-                port1,isRemote1 = ports[i]
-                port2,_ = ports[j]
-                pairs[(i, j)] = (port1+"-"+port2, isRemote1)
-
-        return pairs
+        ports = self._ports.getPorts()
+        for (i,j) in itertools.product(ports, ports):
+            if i is j:
+                continue
+            series.add(PortOrderedPairDataSerie(i, j))
+            
+        return series
 
     def computeParameter(self):
-        reembedded = dict()
-        cpReembedded = dict()
-        for port in self._ports:
-            cpReembedded[port] = dict()
-            reembedded[port] = dict()
-            cases  = filter(lambda case: case[1][0]==port and case[1][1] is not None, self._cases.items())
-            for n,_ in cases:
-                cpReembedded[port][n] = list()
-                reembedded[port][n] = list()
+        dbReembedded = {serie: dict() for serie in self._series}
+        cpReembedded = {serie: dict() for serie in self._series}
+
+        for serie in self._series:
+            cases = filter(lambda case: case[1][0] == serie and case[1][1] is not None, self._cases.items())
+            for (index,_) in cases:
+                dbReembedded[serie][index] = list()
+                cpReembedded[serie][index] = list()
 
         jackVector = self._jackVector.getComplexParameter()
         cnext = self._cnext.getComplexParameter()
-        for f,freq in enumerate(self._freq):
-            for port in self._ports:
-                cases = [x for x in self._cases.items() if x[1][0] == port and x[1][1] is not None]
-                for n, (_, case) in cases:
-                    plug = case(freq, cnext[port][f])
+        for (f,freq) in enumerate(self._freq):
+            for serie in self._series:
+                cases = [x for x in self._cases.items() if x[1][0] == serie and x[1][1] is not None]
+                for (n, (_, case)) in cases:
+                    plug = case(freq, cnext[serie][f])
                     dbPlug = plug[0]
                     phasePlug = plug[1]
                     
@@ -50,11 +49,11 @@ class Case(PairedParameter):
                     re = amp*np.cos(phasePlug*np.pi/180)
                     im = amp*np.sin(phasePlug*np.pi/180)
                     cPlug = complex(re, im)
-                    reembed = cPlug + jackVector[port][f]
-                    cpReembedded[port][n].append(reembed)
-                    reembedded[port][n].append((complex2db(reembed), complex2phase(reembed)))
+                    reembed = cPlug + jackVector[serie][f]
+                    cpReembedded[serie][n].append(reembed)
+                    dbReembedded[serie][n].append((complex2db(reembed), complex2phase(reembed)))
 
-        return reembedded, cpReembedded
+        return (dbReembedded, cpReembedded)
 
     def getMargins(self, values, limit):
         margins = list()
