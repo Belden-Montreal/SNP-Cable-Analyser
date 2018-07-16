@@ -1,6 +1,7 @@
 import unittest
+
 from parameters.parameter import complex2phase
-from parameters.test_parameter import TestParameter
+from parameters.test_parameter import TestPlugParameter
 from parameters.propagationdelay import PropagationDelay
 from parameters.returnloss import ReturnLoss
 from parameters.dfdelay import DFDelay
@@ -8,6 +9,8 @@ from parameters.plugdelay import PlugDelay
 from parameters.nextdelay import NEXTDelay
 from parameters.next import NEXT
 from parameters.correctednext import CorrectedNEXT
+from parameters.dataserie import PortPairDataSerie
+
 import numpy as np
 
 def correctNEXT(pnext, nextDelay, f):
@@ -16,57 +19,56 @@ def correctNEXT(pnext, nextDelay, f):
     correctedPhase = phase + 360*f*nextDelay
     r = amp*np.cos(correctedPhase*np.pi/180)
     i = amp*np.sin(correctedPhase*np.pi/180)
-    correctedNextVal = complex(r,i)
-    return correctedNextVal
+    cpValue = complex(r,i)
+    dbValue = (amp, correctedPhase)
+    return (dbValue, cpValue)
 
-class TestCorrectedNEXT(TestParameter):
-    def setUp(self):
-        self._ports = {
-            0: ("Port 1", False),
-            1: ("Port 2", False),
-            2: ("Port 3", False),
-            3: ("Port 4", False),
-        }
+class TestCorrectedNEXT(TestPlugParameter):
+    def setUpData(self):
         self._matrices = np.array([
             [
                 [complex(x,2*(z%2-1/2)*x) for x in range(8*y+1,8*(y+1)+1)] for y in range(8*z, 8*(z+1))
             ] for z in range(4)
         ], np.complex)
         self._freq = [100, 200, 300, 500]
-        self._parameter = self.createParameter()
- 
+
     def createParameter(self):
-        rl = ReturnLoss(self._ports, self._freq, self._matrices)
-        opendfDelay = PropagationDelay(self._ports, self._freq, self._matrices, rl)
-        shortdfDelay = PropagationDelay(self._ports, self._freq, self._matrices, rl)
-        dfDelay = DFDelay(self._ports, self._freq, self._matrices, opendfDelay, shortdfDelay)
-        openDelay = PropagationDelay(self._ports, self._freq, self._matrices, rl)
-        shortDelay = PropagationDelay(self._ports, self._freq, self._matrices, rl)
-        plugDelay = PlugDelay(self._ports, self._freq, self._matrices, openDelay, shortDelay, dfDelay, 1, 2, 3)
-        nextDelay = NEXTDelay(self._ports, self._freq, self._matrices, plugDelay)
+        rl = ReturnLoss(self._config, self._freq, self._matrices)
+        opendfDelay = PropagationDelay(self._config, self._freq, self._matrices, rl)
+        shortdfDelay = PropagationDelay(self._config, self._freq, self._matrices, rl)
+        dfDelay = DFDelay(self._config, self._freq, self._matrices, opendfDelay, shortdfDelay)
+        openDelay = PropagationDelay(self._config, self._freq, self._matrices, rl)
+        shortDelay = PropagationDelay(self._config, self._freq, self._matrices, rl)
+        plugDelay = PlugDelay(self._config, self._freq, self._matrices, openDelay, shortDelay, dfDelay, 1, 2, 3)
+        nextDelay = NEXTDelay(self._config, self._freq, self._matrices, plugDelay)
 
-        return CorrectedNEXT(self._ports, self._freq, self._matrices, nextDelay)
+        self._dataseries = {
+            0: PortPairDataSerie(self._ports[0], self._ports[1]),
+            1: PortPairDataSerie(self._ports[0], self._ports[2]),
+            2: PortPairDataSerie(self._ports[0], self._ports[3]),
+            3: PortPairDataSerie(self._ports[1], self._ports[2]),
+            4: PortPairDataSerie(self._ports[1], self._ports[3]),
+            5: PortPairDataSerie(self._ports[2], self._ports[3]),
+        }
 
-    def testComputeParameter(self):
+        return CorrectedNEXT(self._config, self._freq, self._matrices, nextDelay)
+
+    def testComputeDataSeries(self):
+        self.assertEqual(self._series, set(self._dataseries.values()))
+
+    def testComputeComplexParameter(self):
         parameter = self._parameter.getComplexParameter()
         nextDelay = self._parameter.getNEXTDelay().getParameter()
-        pnext = NEXT(self._ports, self._freq, self._matrices).getParameter()
+        dbNEXT = NEXT(self._config, self._freq, self._matrices).getParameter()
 
         # there should be a parameter for each port combo        
         self.assertEqual(len(parameter), 6)
 
         # check the values of the port 1-2
-        self.assertAlmostEqual(parameter[(0,1)][0], correctNEXT(pnext[(0,1)][0], nextDelay[(0,1)], self._freq[0]))
-        self.assertAlmostEqual(parameter[(0,1)][1], correctNEXT(pnext[(0,1)][1], nextDelay[(0,1)], self._freq[1]))
-        self.assertAlmostEqual(parameter[(0,1)][2], correctNEXT(pnext[(0,1)][2], nextDelay[(0,1)], self._freq[2]))
-        self.assertAlmostEqual(parameter[(0,1)][3], correctNEXT(pnext[(0,1)][3], nextDelay[(0,1)], self._freq[3]))
-
-        # check the values of the port 3-4
-        self.assertAlmostEqual(parameter[(2,3)][0], correctNEXT(pnext[(2,3)][0], nextDelay[(2,3)], self._freq[0]))
-        self.assertAlmostEqual(parameter[(2,3)][1], correctNEXT(pnext[(2,3)][1], nextDelay[(2,3)], self._freq[1]))
-        self.assertAlmostEqual(parameter[(2,3)][2], correctNEXT(pnext[(2,3)][2], nextDelay[(2,3)], self._freq[2]))
-        self.assertAlmostEqual(parameter[(2,3)][3], correctNEXT(pnext[(2,3)][3], nextDelay[(2,3)], self._freq[3]))
-
+        for serie in self._dataseries.values():
+            for f in range(len(self._freq)):
+                (_, cpValue) = correctNEXT(dbNEXT[serie][f], nextDelay[serie], self._freq[f])
+                self.assertAlmostEqual(parameter[serie][f], cpValue)
 
 if __name__ == '__main__':
     unittest.main()
