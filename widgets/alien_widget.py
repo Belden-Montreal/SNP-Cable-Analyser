@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore
 from widgets.tab_widget import TabWidget
 from widgets import alien_widget_ui
 from matplotlib.figure import Figure
@@ -26,6 +26,7 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
         self.endGroup.buttonClicked.connect(lambda: self.updateWidget())
         self.alienVictimButton.clicked.connect(lambda: self.importVictim())
         self.alienImportSNP.clicked.connect(lambda: self.importDisturbers())
+        self.alienDisturbers.itemChanged.connect(lambda: self.disturbersChanged())
         self.drawFigure("End 1", "PSANEXT")
 
     def updateWidget(self):
@@ -34,9 +35,11 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
         self.alienDisturbers.clear()
         for disturber in self._alien.disturbers()[end][test]:
             item = QtWidgets.QListWidgetItem()
+            item.setFlags(item.flags() | QtCore.Qt.ItemIsUserCheckable)
+            item.setCheckState(QtCore.Qt.Checked)
             item.setText(disturber.getName())
             self.alienDisturbers.addItem(item)
-        self.drawFigure(end, test)
+        self.disturbersChanged()
 
     def drawFigure(self, end, test):
         self._figure.clear()
@@ -81,6 +84,17 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
         samples = self._alien.importSamples(files, end, test, disturber=True)
         self._node.addChildren(samples, end, test)
         self.updateWidget()
+
+    def disturbersChanged(self):
+        disturbers = list()
+        for i in range(self.alienDisturbers.count()):
+            item = self.alienDisturbers.item(i)
+            if item.checkState() == QtCore.Qt.Checked:
+                disturbers.append(item.text())
+        test = self.testTypeGroup.checkedButton().text()
+        end = self.endGroup.checkedButton().text()
+        self._alien.updateDisturbers(disturbers, end, test)
+        self.drawFigure(end, test)
     
     def showTab(self):
         self.graphicsView.draw()

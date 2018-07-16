@@ -52,6 +52,11 @@ class Alien(Project):
                 elif sample == self._victims[end][param]:
                     self._victims[end][param] = None
 
+    def updateDisturbers(self, names, end, param):
+        disturbers = [x for x in self._disturbers[end][param] if x.getName() in names]
+        if self._victims[end][param]:
+            self._victims[end][param].calculateAXEXTD(disturbers)
+
     def disturbers(self):
         return self._disturbers
 
