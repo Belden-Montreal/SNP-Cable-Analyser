@@ -34,4 +34,9 @@ class Victim(Sample):
 
     def calculateAXEXTD(self, disturbers):
         self._axextd = [disturber.getParameters()[self._param] for disturber in disturbers]
-        self.addParameters()
+        self._parameters["PS"+self._param].recalculate(self._axextd)
+        if self._param == "ANEXT":
+            name = "N"
+        else:
+            name = "F"
+        self._parameters["PSAACR"+name].recalculate(self._parameters["PS"+self._param])

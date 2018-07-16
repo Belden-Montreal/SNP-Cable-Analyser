@@ -187,5 +187,3 @@ class PairedParameter(Parameter):
 
     def getPairs(self):
         return self._ports
-
-

@@ -48,3 +48,8 @@ class PSAXEXT(Parameter):
 
     def getName(self):
         return "PSAXEXT"
+
+    def recalculate(self, axextd):
+        self._axextd = axextd
+        (self._parameter, self._complexParameter) = self.computeParameter()
+        

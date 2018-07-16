@@ -45,3 +45,7 @@ class PSAACRX(Parameter):
 
     def getName(self):
         return "PSAACRX"
+
+    def recalculate(self, psaxext):
+        self._psaxext = psaxext
+        (self._parameter, self._complexParameter) = self.computeParameter()
