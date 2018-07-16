@@ -1,43 +1,46 @@
-from parameters.parameter import PairedParameter
+from parameters.parameter import Parameter
+from parameters.dataserie import PortOrderedPairDataSerie, PortDataSerie
 
-class NEXTDelay(PairedParameter):
+import itertools
 
-    def __init__(self, ports, freq, matrices, plugDelay):
+class NEXTDelay(Parameter):
+    def __init__(self, ports, freq, matrices, plugDelay, mains=True, remotes=False):
+        self._mains   = mains
+        self._remotes = remotes
         self._plugDelay = plugDelay
         super(NEXTDelay, self).__init__(ports, freq, matrices)
         self._visible = False
 
-    def computePairs(self, ports):
-        # create each pair for the NEXT
-        pairs = dict()
-        for i in range(0, len(ports)//2):
-            for j in range(0, len(ports)//2):
-                if i >= j:
+    def computeDataSeries(self):
+        series = set()
+
+        # get the NEXT pairs between the main ports
+        if self._mains:
+            mains = self._ports.getMainPorts()
+            for (i,j) in itertools.product(mains, mains):
+                if i is j:
                     continue
+                series.add(PortOrderedPairDataSerie(i, j))
 
-                # create the pair for the first end of the line
-                port1,isRemote1 = ports[i]
-                port2,isRemote2 = ports[j]
-                pairs[(i, j)] = (port1+"-"+port2, isRemote1)
-                pairs[(j, i)] = (port2+"-"+port1, isRemote2)
+        # get the NEXT pairs between the remote ports
+        if self._remotes:
+            remotes = self._ports.getRemotePorts()
+            for (i,j) in itertools.product(remotes, remotes):
+                if i is j:
+                    continue
+                series.add(PortOrderedPairDataSerie(i, j))
 
-                # create the pair for the second end of the line
-                port1,isRemote1 = ports[i + len(ports)//2]
-                port2,isRemote2 = ports[j + len(ports)//2]
-                pairs[(i+ len(ports)//2, j+ len(ports)//2)] = (port1+"-"+port2, isRemote1)
-                pairs[(j+ len(ports)//2, i+ len(ports)//2)] = (port2+"-"+port1, isRemote2)
-
-        return pairs
+        return series
 
     def computeParameter(self):
         nextDelay = dict()
         plugDelay = self._plugDelay.getParameter()
 
-        for (i,j) in plugDelay:
-            for k in range(i+1, len(plugDelay)):
-                nextDelay[(i,k)] = plugDelay[(i,j)] + plugDelay[(k,k)]
+        for serie in self._series:
+            (serie1, serie2) = serie.getPortSeries()
+            nextDelay[serie] = plugDelay[serie1] + plugDelay[serie2]
 
-        return nextDelay,None
+        return (nextDelay,None)
     
     def recalculate(self, plugDelay):
         self._plugDelay = plugDelay
