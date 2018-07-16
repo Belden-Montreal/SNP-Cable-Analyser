@@ -136,14 +136,7 @@ class ProjectNode(Node):
         super(ProjectNode, self).removeRow(row)
 
     def setupInitialData(self):
-        self.addChildren(self._dataObject._samples)
-
-    def hasChild(self, text):
-        for i in range(self.rowCount()):
-            child = self.child(i)
-            if text == child.text():
-                return child
-        return 0
+        self.addChildren(self._dataObject.samples())
 
     # def getWidgets(self):
     #     return list()

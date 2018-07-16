@@ -17,5 +17,12 @@ class Node(QtGui.QStandardItem):
         if self.rowCount() == 0:
             self.parent().removeRow(self.row())
 
+    def hasChild(self, text):
+        for i in range(self.rowCount()):
+            child = self.child(i)
+            if text == child.text():
+                return child
+        return 0
+
     def getWidgets(self):
         return dict()
