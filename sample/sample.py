@@ -81,3 +81,6 @@ class SampleNode(Node):
                 continue
         widgets["main"] = MainWidget(self._dataObject, failParams)
         return widgets
+
+    def setStandard(self, standard):
+        self._dataObject.setStandard(standard)
