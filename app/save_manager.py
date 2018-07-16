@@ -1,9 +1,4 @@
-from zipfile import ZipFile
-import os
-import xmltodict
-import shutil
 import dill
-from project.project import Project
 
 class SaveManager(object):
 
