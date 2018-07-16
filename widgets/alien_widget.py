@@ -47,8 +47,7 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
             item.setCheckState(QtCore.Qt.Checked)
             item.setText(disturber.getName())
             self.alienDisturbers.addItem(item)
-        self.portsChanged()
-        self.disturbersChanged()
+        self.drawFigure(end, test)
 
     def drawFigure(self, end, test):
         self._figure.clear()
@@ -58,7 +57,7 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
         else:
             names = ["PSAFEXT", "PSAACRF"]
         if sample:
-            params = [sample.getParameters()["PSAXEXT"], sample.getParameters()["PSAACRX"]]
+            params = [sample.getParameters()[names[0]], sample.getParameters()[names[1]]]
             for i, param in enumerate(params):
                 colors = iter(plt.cm.rainbow(np.linspace(0, 1, len(param.getPorts())+1)))
 
@@ -76,6 +75,13 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
                         ax.semilogx(param.getFrequencies(),
                                     data,
                                     label=name, c=color)
+                limit = param.getLimit()
+                if limit:
+                    color = next(colors)
+                    ax.semilogx(
+                        *zip(*limit.evaluateArray({'f': param.getFrequencies()}, len(param.getFrequencies()), neg=True)),
+                        label="limit", c=color,
+                        linestyle="--")
                 ax.xaxis.set_major_formatter(ScalarFormatter())
                 ax.grid(which='both')
                 ax.legend(loc='best')
