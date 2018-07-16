@@ -12,7 +12,11 @@ class PSAACRX(Parameter):
     def __init__(self, ports, freq, matrices, psaxext, il):
         self._psaxext = psaxext
         self._il = il
-        super(PSAACRX, self).__init__(ports, freq, matrices)
+        self._ports = dict()
+        for port, (name, isRemote) in ports.items():
+            if not isRemote:
+                self._ports[port] = (name, isRemote)
+        super(PSAACRX, self).__init__(self._ports, freq, matrices)
     
     def computeParameter(self):
         
@@ -25,11 +29,9 @@ class PSAACRX(Parameter):
 
         for f,_ in enumerate(self._freq):
             for i in self._ports:
-                if i < len(self._ports)//2:
-                    ilPort = (i, i+len(self._ports)//2)
-                else:
-                    ilPort = (i, i-len(self._ports)//2)
+                ilPort = (i, i+len(self._ports))
                 psaacrx[i].append((psaxext[i][f][0]-il[ilPort][f][0], 0))
+
         return psaacrx,_
 
     def chooseMatrices(self, matrices):

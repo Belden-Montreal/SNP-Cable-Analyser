@@ -8,7 +8,11 @@ class PSAXEXT(Parameter):
     '''
     def __init__(self, ports, freq, matrices, axextd):
         self._axextd = axextd
-        super(PSAXEXT, self).__init__(ports, freq, matrices)
+        self._ports = dict()
+        for port, (name, isRemote) in ports.items():
+            if not isRemote:
+                self._ports[port] = (name, isRemote)
+        super(PSAXEXT, self).__init__(self._ports, freq, matrices)
 
     def computeParameter(self):
         
