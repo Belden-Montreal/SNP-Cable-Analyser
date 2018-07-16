@@ -3,6 +3,8 @@ from widgets.tab_widget import TabWidget
 from widgets import alien_widget_ui
 from matplotlib.figure import Figure
 from matplotlib.ticker import ScalarFormatter
+import matplotlib.pyplot as plt
+import numpy as np
 from canvas import Canvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 
@@ -27,8 +29,14 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
         self.alienVictimButton.clicked.connect(lambda: self.importVictim())
         self.alienImportSNP.clicked.connect(lambda: self.importDisturbers())
         self.alienDisturbers.itemChanged.connect(lambda: self.disturbersChanged())
-        self.drawFigure("End 1", "PSANEXT")
+        self._hiddenPorts = list()
+        self.alien12.toggled.connect(lambda: self.portsChanged())
+        self.alien36.toggled.connect(lambda: self.portsChanged())
+        self.alien45.toggled.connect(lambda: self.portsChanged())
+        self.alien78.toggled.connect(lambda: self.portsChanged())
 
+        self.portsChanged()
+        
     def updateWidget(self):
         test = self.testTypeGroup.checkedButton().text()
         end = self.endGroup.checkedButton().text()
@@ -39,6 +47,7 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
             item.setCheckState(QtCore.Qt.Checked)
             item.setText(disturber.getName())
             self.alienDisturbers.addItem(item)
+        self.portsChanged()
         self.disturbersChanged()
 
     def drawFigure(self, end, test):
@@ -51,19 +60,22 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
         if sample:
             params = [sample.getParameters()["PSAXEXT"], sample.getParameters()["PSAACRX"]]
             for i, param in enumerate(params):
+                colors = iter(plt.cm.rainbow(np.linspace(0, 1, len(param.getPorts())+1)))
+
                 ax = self._figure.add_subplot(1,2,i+1)
                 ax.set_title(end+" "+names[i])
                 ax.set_xlabel("Frequency")
                 ax.set_ylabel("dB")
                 for port, (name, isRemote) in param.getPorts().items():
-                    if not isRemote:
+                    color = next(colors)
+                    if not isRemote and name not in self._hiddenPorts:
                         try:
                             data = list(map(lambda val: val[0], param.getParameter()[port]))
                         except:
                             data = param[port]
                         ax.semilogx(param.getFrequencies(),
                                     data,
-                                    label=name)
+                                    label=name, c=color)
                 ax.xaxis.set_major_formatter(ScalarFormatter())
                 ax.grid(which='both')
                 ax.legend(loc='best')
@@ -94,6 +106,20 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
         test = self.testTypeGroup.checkedButton().text()
         end = self.endGroup.checkedButton().text()
         self._alien.updateDisturbers(disturbers, end, test)
+        self.drawFigure(end, test)
+
+    def portsChanged(self):
+        test = self.testTypeGroup.checkedButton().text()
+        end = self.endGroup.checkedButton().text()
+        self._hiddenPorts = list()
+        if not self.alien12.isChecked():
+            self._hiddenPorts.append(self.alien12.text())
+        if not self.alien45.isChecked():
+            self._hiddenPorts.append(self.alien45.text())
+        if not self.alien36.isChecked():
+            self._hiddenPorts.append(self.alien36.text())
+        if not self.alien78.isChecked():
+            self._hiddenPorts.append(self.alien78.text())
         self.drawFigure(end, test)
     
     def showTab(self):
