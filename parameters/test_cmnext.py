@@ -7,7 +7,7 @@ from parameters.dataserie import PortPairDataSerie
 
 class TestCMNEXT(TestParameter):
     def createParameter(self):
-        return CMNEXT(self._config, self._freq, self._matrices)       
+        return CMNEXT(self._config, self._freq, self._matrices, order=False)       
 
     def testComputeDataSeries(self):
         self.assertEqual(len(self._series), 4)

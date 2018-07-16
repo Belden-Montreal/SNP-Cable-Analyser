@@ -13,7 +13,7 @@ class TestDMCMNEXT(TestParameter):
             3: PortPairDataSerie(self._ports[3], self._ports[2]),
         }
 
-        return DMCMNEXT(self._config, self._freq, self._matrices)
+        return DMCMNEXT(self._config, self._freq, self._matrices, order=False)
 
     def testComputeDataSeries(self):
         self.assertEqual(self._series, set(self._dataseries.values()))

@@ -1,5 +1,5 @@
 from parameters.parameter import Parameter, complex2db, complex2phase, diffDiffMatrix
-from parameters.dataserie import PortPairDataSerie
+from parameters.dataserie import PortPairDataSerie, PortOrderedPairDataSerie
 
 import itertools
 
@@ -18,9 +18,10 @@ class NEXT(Parameter):
 
     We have the following pairs twice: (1,2), (1,3), (2,3), (4,5), (4,6), (5,6).
     """
-    def __init__(self, ports, freq, matrices, mains=True, remotes=True):
+    def __init__(self, ports, freq, matrices, mains=True, remotes=True, order=True):
         self._mains   = mains
         self._remotes = remotes
+        self._order   = order
         super(NEXT, self).__init__(ports, freq, matrices)
 
     def computeDataSeries(self):
@@ -33,7 +34,10 @@ class NEXT(Parameter):
             for (i,j) in itertools.product(mains, mains):
                 if i is j:
                     continue
-                series.add(PortPairDataSerie(i, j))
+                if self._order:
+                    series.add(PortOrderedPairDataSerie(i, j))
+                else:
+                    series.add(PortPairDataSerie(i, j))
  
         # get the NEXT pairs between the remote ports
         if self._remotes:
@@ -41,7 +45,10 @@ class NEXT(Parameter):
             for (i,j) in itertools.product(remotes, remotes):
                 if i is j:
                     continue
-                series.add(PortPairDataSerie(i, j))
+                if self._order:
+                    series.add(PortOrderedPairDataSerie(i, j))
+                else:
+                    series.add(PortPairDataSerie(i, j))
 
         return series
 

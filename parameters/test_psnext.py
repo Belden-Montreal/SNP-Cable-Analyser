@@ -30,7 +30,7 @@ class TestPSNEXT(TestParameter):
         }
 
     def createParameter(self):
-        nnext = NEXT(self._config, self._freq, self._matrices)
+        nnext = NEXT(self._config, self._freq, self._matrices, order=False)
         return PSNEXT(self._config, self._freq, self._matrices, nnext)
 
     def testComputeDataSeries(self):
@@ -137,7 +137,7 @@ class TestPlugPSNEXT(TestParameter):
         self._parameter = self.createParameter()
 
     def createParameter(self):
-        nnext = NEXT(self._config, self._freq, self._matrices)
+        nnext = NEXT(self._config, self._freq, self._matrices, order=False)
         return PSNEXT(self._config, self._freq, self._matrices, nnext)
 
     def testComputeDataSeries(self):
