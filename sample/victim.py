@@ -2,20 +2,27 @@ from sample.sample import Sample, PORTS_NAME
 
 class Victim(Sample):
 
-    def __init__(self, snpFile, disturbers=list()):
-        self._axextd = [disturber.getParameters()["AXEXT"] for disturber in disturbers]
+    def __init__(self, snpFile, param="ANEXT", disturbers=list()):
+        self._axextd = [disturber.getParameters()[param] for disturber in disturbers]
+        self._param = param
+        if self._param == "ANEXT":
+            self._psaxext = "PSANEXT"
+            self._psaacrx = "PSAACRN"
+        else:
+            self._psaxext = "PSAFEXT"
+            self._psaacrx = "PSAACRF"
         super(Victim, self).__init__(snpFile)
 
     def addParameters(self):
         parameters = [
             "IL",
-            "AXEXTD",
-            "PSAXEXT",
-            "PSAACRX",
+            self._param+"D",
+            self._psaxext,
+            self._psaacrx,
         ]
 
         for parameter in parameters:
-            if parameter == "AXEXTD":
+            if parameter == self._param+"D":
                 self._parameters[parameter] = self._axextd
             else:
                 self._parameters[parameter] = self._factory.getParameter(parameter)
@@ -26,5 +33,5 @@ class Victim(Sample):
             self._ports[i+self._portsNumber//2] = ("(d)"+PORTS_NAME[i], True)
 
     def calculateAXEXTD(self, disturbers):
-        self._axextd = [disturber.getParameters()["AXEXT"] for disturber in disturbers]
+        self._axextd = [disturber.getParameters()[self._param] for disturber in disturbers]
         self.addParameters()
