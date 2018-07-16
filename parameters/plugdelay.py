@@ -15,7 +15,7 @@ class PlugDelay(Parameter):
         self._visible = False
 
     def computeDataSeries(self):
-        series = {PortDataSerie(port) for port in self._ports.getPorts()}
+        series = {PortDataSerie(port) for port in self._ports.getMainPorts()}
 
         # make sure all dependent parameters have the same data series
         if series != self._openDelay.getDataSeries():

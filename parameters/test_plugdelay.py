@@ -7,6 +7,7 @@ from parameters.returnloss import ReturnLoss
 from parameters.dfdelay import DFDelay
 from parameters.plugdelay import PlugDelay
 from parameters.dataserie import PortDataSerie
+from sample.port import PlugConfiguration
 
 import numpy as np
 
@@ -19,6 +20,10 @@ class TestPlugDelay(TestParameter):
         ], np.complex)
         self._freq = [100, 200, 300, 500]
  
+    def setUpConfiguration(self):
+        super(TestPlugDelay, self).setUpConfiguration()
+        self._config = PlugConfiguration(set(self._ports.values()))
+
     def createParameter(self):
         rl = ReturnLoss(self._config, self._freq, self._matrices)
         opendfDelay = PropagationDelay(self._config, self._freq, self._matrices, rl)
