@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 
 from parameters.parameter import Parameter, complex2db, complex2phase
-from sample.port import WirePort, Wire, CableConfiguration
+from sample.port import WirePort, Wire, CableConfiguration, NetworkPort, PlugConfiguration
 
 class TestParameter(unittest.TestCase):
     def assertComplexAlmostEqual(self, dbParam, cpExpected):
@@ -96,14 +96,6 @@ class TestParameter(unittest.TestCase):
             if wire.getMainPort().getIndex() == 3 and wire.getRemotePort().getIndex() == 1:
                 self._wires[3] = wire
 
-    def testDrawPlot(self):
-        if type(self) == TestParameter:
-            return
-
-        # TODO: this should simply not crash
-        #
-        plot = self._parameter.getPlot()
-
     def createParameter(self):
         if type(self) == TestParameter:
             return
@@ -112,6 +104,30 @@ class TestParameter(unittest.TestCase):
 
     def testName(self):
         if type(self) == TestParameter:
+            return
+        self.assertEqual(isinstance(self._parameter.getName(), str), True)
+
+class TestPlugParameter(TestParameter):
+    def setUpConfiguration(self):
+       # create the ports
+        self._ports = {
+            0: NetworkPort(0 ,"Port 0"),
+            1: NetworkPort(1 ,"Port 1"),
+            2: NetworkPort(2 ,"Port 2"),
+            3: NetworkPort(3 ,"Port 3"),
+        }
+
+        # create the cable configuration
+        self._config = PlugConfiguration(set(self._ports.values()))
+
+    def createParameter(self):
+        if type(self) == TestPlugParameter:
+            return
+
+        raise NotImplementedError
+
+    def testName(self):
+        if type(self) == TestPlugParameter:
             return
         self.assertEqual(isinstance(self._parameter.getName(), str), True)
 
