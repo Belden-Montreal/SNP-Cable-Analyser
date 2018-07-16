@@ -3,7 +3,7 @@ from sample.disturber import Disturber
 from sample.victim import Victim
 from project.alien_import_dialog import AlienImportDialog
 from multiprocessing.dummy import Pool as ThreadPool
-
+from copy import deepcopy
 
 class Alien(Project):
     '''
@@ -74,11 +74,13 @@ class AlienNode(ProjectNode):
         dial = AlienImportDialog(parent)
         files = dial.getFiles()
         if files:
-            disturbersFile, victimFile, end, param = dial.getFiles()
+            disturbersFile, victimFile, end, param = files
             samples = list()
-            samples = self._dataObject.importSamples(disturbersFile, end, param, disturber=True)
+            samples = deepcopy(self._dataObject.importSamples(disturbersFile, end, param, disturber=True))
             samples.append(self._dataObject.importSamples([victimFile], end, param, disturber=False))
             self.addChildren(samples, end, param)
+            if self._alienTab:
+                self._alienTab.updateWidget()
 
     def addChildren(self, samples, end, param):
         node = self.hasChild(end)
@@ -100,5 +102,5 @@ class AlienNode(ProjectNode):
                     self.addChildren(samples, end, param)
 
     def getWidgets(self):
-        alienTab = AlienWidget(self)
-        return {"Alien": alienTab}
+        self._alienTab = AlienWidget(self)
+        return {"Alien": self._alienTab}
