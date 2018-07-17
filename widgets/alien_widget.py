@@ -34,7 +34,10 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
         self.alien36.toggled.connect(lambda: self.portsChanged())
         self.alien45.toggled.connect(lambda: self.portsChanged())
         self.alien78.toggled.connect(lambda: self.portsChanged())
-
+        self.alienLimitCheck.toggled.connect(lambda: self.showLimit())
+        self.alienAvgLimitCheck.toggled.connect(lambda: self.showLimit(True))
+        self._showLimit = True
+        self._showAvgLimit = True
         self.portsChanged()
         
     def updateWidget(self):
@@ -59,7 +62,7 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
         if sample:
             params = [sample.getParameters()[names[0]], sample.getParameters()[names[1]]]
             for i, param in enumerate(params):
-                colors = iter(plt.cm.rainbow(np.linspace(0, 1, len(param.getPorts())+1)))
+                colors = iter(plt.cm.rainbow(np.linspace(0, 1, len(param.getPorts())+2)))
 
                 ax = self._figure.add_subplot(1,2,i+1)
                 ax.set_title(end+" "+names[i])
@@ -76,12 +79,21 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
                                     data,
                                     label=name, c=color)
                 limit = param.getLimit()
-                if limit:
+                if self._showLimit and limit:
                     color = next(colors)
                     ax.semilogx(
                         *zip(*limit.evaluateArray({'f': param.getFrequencies()}, len(param.getFrequencies()), neg=True)),
                         label="limit", c=color,
                         linestyle="--")
+                if self._showAvgLimit and sample.getStandard():
+                    if "AVG"+names[i] in sample.getStandard().limits:
+                        limit = sample.getStandard().limits["AVG"+names[i]]
+                        if limit:
+                            color = next(colors)
+                            ax.semilogx(
+                                *zip(*limit.evaluateArray({'f': param.getFrequencies()}, len(param.getFrequencies()), neg=True)),
+                                label="average limit", c=color,
+                                linestyle="--")
                 ax.xaxis.set_major_formatter(ScalarFormatter())
                 ax.grid(which='both')
                 ax.legend(loc='best')
@@ -126,6 +138,15 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
             self._hiddenPorts.append(self.alien36.text())
         if not self.alien78.isChecked():
             self._hiddenPorts.append(self.alien78.text())
+        self.drawFigure(end, test)
+
+    def showLimit(self, average=False):
+        if average:
+            self._showAvgLimit = not self._showAvgLimit
+        else:
+            self._showLimit = not self._showLimit
+        test = self.testTypeGroup.checkedButton().text()
+        end = self.endGroup.checkedButton().text()
         self.drawFigure(end, test)
     
     def showTab(self):
