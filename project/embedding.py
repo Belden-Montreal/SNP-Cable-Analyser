@@ -46,17 +46,44 @@ class Embedding(Project):
     def __init__(self, name):
         super(Embedding, self).__init__(name)
         self._plug = None
-        self._sides = dict()
-        self._sides["Forward"] = list()
-        self._sides["Reverse"] = list()
+        self._load = dict()
+        self._load["Forward"] = None
+        self._load["Reverse"] = None
+        self._reverse = list()
 
-    def setPlug(self, plug):
-        self._plug = plug
-    
+    def importPlug(self, plugFile):
+        self._plug = SaveManager().loadProject(plugFile)
+        return self._plug
+
+    def importLoad(self, loadFile, side, cat="CAT5e"):
+        if cat == "CAT5e":
+            cases = Case.CAT5E
+        else:
+            cases = Case.CAT6
+        self._load[side] = Deembed(loadFile, self._plug.getPlugNext(), self._plug.getNextDelay(), cases)
+        return self._load[side]
+
+    def importReverse(self, openFile, shortFile):
+        openSample = SingleEnded(openFile)
+        shortSample = SingleEnded(shortFile)
+        self._reverse = [openSample, shortSample]
+        return self._reverse
+
     def removeSample(self, sample):
-        for side in self._sides.values():
+        for side in self._load.values():
             if sample in side:
                 side.remove(sample)
+        if sample in self._reverse:
+            self._reverse.remove(sample)
+
+    def load(self):
+        return self._load
+
+    def reverse(self):
+        return self._reverse
+
+    def plug(self):
+        return self._plug
 
     def generateExcel(self, outputName, sampleNames, z=False):
         raise NotImplementedError
@@ -78,19 +105,12 @@ class EmbeddingNode(ProjectNode):
         if files:
             loadFile, plugFile, k1, k2, k3, cat, reverse, openFile, shortFile = files
             samples = list()
-            if cat == "CAT5e":
-                cases = Case.CAT5E
-            else:
-                cases = Case.CAT6
             if reverse == ReverseState.REVERSE:
-                openSample = SingleEnded(openFile)
-                shortSample = SingleEnded(shortFile)
+                (openSample, shortSample) = self._dataObject.importReverse(openFile, shortFile)
                 samples.extend([openSample, shortSample])
-            plugProject = SaveManager().loadProject(plugFile)
-            loadSample = Deembed(loadFile, plugProject.getPlugNext(), plugProject.getNextDelay(), cases)
+            loadSample = self._dataObject.importLoad(loadFile, reverse, cat)
             samples.append(loadSample)
-            self._dataObject._sides[reverse] = samples
-            self._dataObject.setPlug(plugProject)
+            plugProject = self._dataObject.importPlug(plugFile)
             self.addChildren(samples, plugProject, reverse)
 
     def addChildren(self, samples, plug, side):
@@ -103,10 +123,17 @@ class EmbeddingNode(ProjectNode):
             node.appendRow(SampleNode(sample, self._dataObject))
 
     def setupInitialData(self):
-        for side, samples in self._dataObject._sides.items():
-            if len(samples):
-                self.addChildren(samples, self._dataObject._plug, side)
+        for side, sample in self._dataObject._load.items():
+            if sample:
+                self.addChildren([sample], self._dataObject._plug, side)
+        if len(self._dataObject._reverse):
+            self.addChildren(self._dataObject._reverse, self._dataObject._plug, "Reverse")
 
     def getWidgets(self):
-        embedTab = EmbedWidget()
-        return {"Embedding": embedTab}
+        embedTab = EmbedWidget(self)
+        pairTabs = embedTab.getTabs()
+        tabs = dict()
+        tabs["Embedding"] = embedTab
+        for name, pairTab in pairTabs.items():
+            tabs[name] = pairTab
+        return tabs

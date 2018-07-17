@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'embedWidget.ui'
+# Form implementation generated from reading ui file 'UIs\embedWidget.ui'
 #
-# Created by: PyQt5 UI code generator 5.10
+# Created by: PyQt5 UI code generator 5.11.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -20,13 +20,13 @@ class Ui_Form(object):
         self.plugGroupBox.setObjectName("plugGroupBox")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.plugGroupBox)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.plugList = QtWidgets.QComboBox(self.plugGroupBox)
-        self.plugList.setObjectName("plugList")
-        self.plugList.addItem("")
-        self.verticalLayout.addWidget(self.plugList)
-        self.addPlug = QtWidgets.QPushButton(self.plugGroupBox)
-        self.addPlug.setObjectName("addPlug")
-        self.verticalLayout.addWidget(self.addPlug)
+        self.importPlug = QtWidgets.QPushButton(self.plugGroupBox)
+        self.importPlug.setObjectName("importPlug")
+        self.verticalLayout.addWidget(self.importPlug)
+        self.plugLabel = QtWidgets.QLabel(self.plugGroupBox)
+        self.plugLabel.setText("")
+        self.plugLabel.setObjectName("plugLabel")
+        self.verticalLayout.addWidget(self.plugLabel)
         self.formLayout_2 = QtWidgets.QFormLayout()
         self.formLayout_2.setObjectName("formLayout_2")
         self.label = QtWidgets.QLabel(self.plugGroupBox)
@@ -85,12 +85,15 @@ class Ui_Form(object):
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_5.setObjectName("horizontalLayout_5")
         self.openLabel = QtWidgets.QLabel(self.matedMeasurementsGroupBox)
+        self.openLabel.setEnabled(False)
         self.openLabel.setObjectName("openLabel")
         self.horizontalLayout_5.addWidget(self.openLabel)
         self.importOpen = QtWidgets.QPushButton(self.matedMeasurementsGroupBox)
+        self.importOpen.setEnabled(False)
         self.importOpen.setObjectName("importOpen")
         self.horizontalLayout_5.addWidget(self.importOpen)
         self.acquireOpen = QtWidgets.QPushButton(self.matedMeasurementsGroupBox)
+        self.acquireOpen.setEnabled(False)
         self.acquireOpen.setObjectName("acquireOpen")
         self.horizontalLayout_5.addWidget(self.acquireOpen)
         self.verticalLayout_4.addLayout(self.horizontalLayout_5)
@@ -103,12 +106,15 @@ class Ui_Form(object):
         self.horizontalLayout_6 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_6.setObjectName("horizontalLayout_6")
         self.shortLabel = QtWidgets.QLabel(self.matedMeasurementsGroupBox)
+        self.shortLabel.setEnabled(False)
         self.shortLabel.setObjectName("shortLabel")
         self.horizontalLayout_6.addWidget(self.shortLabel)
         self.importShort = QtWidgets.QPushButton(self.matedMeasurementsGroupBox)
+        self.importShort.setEnabled(False)
         self.importShort.setObjectName("importShort")
         self.horizontalLayout_6.addWidget(self.importShort)
         self.acquireShort = QtWidgets.QPushButton(self.matedMeasurementsGroupBox)
+        self.acquireShort.setEnabled(False)
         self.acquireShort.setObjectName("acquireShort")
         self.horizontalLayout_6.addWidget(self.acquireShort)
         self.verticalLayout_4.addLayout(self.horizontalLayout_6)
@@ -152,6 +158,7 @@ class Ui_Form(object):
         self.embedCat5.setObjectName("embedCat5")
         self.gridLayout_3.addWidget(self.embedCat5, 2, 0, 1, 1)
         self.embedCat6 = QtWidgets.QRadioButton(self.categoryGroupBox)
+        self.embedCat6.setChecked(True)
         self.embedCat6.setObjectName("embedCat6")
         self.gridLayout_3.addWidget(self.embedCat6, 1, 0, 1, 1)
         self.categoryLayout.addWidget(self.categoryGroupBox)
@@ -196,8 +203,7 @@ class Ui_Form(object):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
         self.plugGroupBox.setTitle(_translate("Form", "Plug"))
-        self.plugList.setItemText(0, _translate("Form", "Select a Plug"))
-        self.addPlug.setText(_translate("Form", "Add Plug"))
+        self.importPlug.setText(_translate("Form", "Import Plug"))
         self.label.setText(_translate("Form", "DNEXT 12-36:"))
         self.dnext12_36.setText(_translate("Form", "\"\""))
         self.label_3.setText(_translate("Form", "DNEXT 45-12:"))
