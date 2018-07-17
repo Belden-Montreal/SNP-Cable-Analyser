@@ -13,27 +13,27 @@ class Alien(Project):
         super(Alien, self).__init__(name)
         self._disturbers = dict()
         self._victims = dict()
-        self._disturbers["End 1"] = dict()
-        self._disturbers["End 2"] = dict()
-        self._victims["End 1"] = dict()
-        self._victims["End 2"] = dict()
-        for end in self._disturbers:
-            self._disturbers[end]["PSANEXT"] = list()
-            self._disturbers[end]["PSAACRF"] = list()
-            self._victims[end]["PSANEXT"] = None
-            self._victims[end]["PSAACRF"] = None 
+        self._disturbers["PSANEXT"] = dict()
+        self._disturbers["PSAACRF"] = dict()
+        self._victims["PSANEXT"] = dict()
+        self._victims["PSAACRF"] = dict()
+        for param in self._disturbers:
+            self._disturbers[param]["End 1"] = list()
+            self._disturbers[param]["End 2"] = list()
+            self._victims[param]["End 1"] = None
+            self._victims[param]["End 2"] = None 
 
     def importSamples(self, fileNames, end, param, disturber=False):
         if disturber:
             pool = ThreadPool()
             samples = pool.starmap(self.__createDisturber, zip(fileNames, [param]*len(fileNames)))
-            if self._victims[end][param] is not None:
-                self._victims[end][param].setAXEXTD(self.__calculateAXEXTD(samples, param))
-            self._disturbers[end][param] = samples
+            if self._victims[param][end] is not None:
+                self._victims[param][end].setAXEXTD(self.__calculateAXEXTD(samples, param))
+            self._disturbers[param][end] = samples
             return samples
         elif len(fileNames) < 2:
-            sample = self.__createVictim(fileNames[0], param, self.__calculateAXEXTD(self._disturbers[end][param], param))
-            self._victims[end][param] = sample
+            sample = self.__createVictim(fileNames[0], param, self.__calculateAXEXTD(self._disturbers[param][end], param))
+            self._victims[param][end] = sample
             return sample
 
     def __createDisturber(self, name, param):
@@ -52,17 +52,17 @@ class Alien(Project):
             return "AFEXT"
 
     def removeSample(self, sample):
-        for end in self._disturbers:
-            for param in self._disturbers[end]:
-                if sample in self._disturbers[end][param]:
-                    self._disturbers[end][param].remove(sample)
-                elif sample == self._victims[end][param]:
-                    self._victims[end][param] = None
+        for param in self._disturbers:
+            for end in self._disturbers[end]:
+                if sample in self._disturbers[param][end]:
+                    self._disturbers[param][end].remove(sample)
+                elif sample == self._victims[param][end]:
+                    self._victims[param][end] = None
 
     def updateDisturbers(self, names, end, param):
-        disturbers = [x for x in self._disturbers[end][param] if x.getName() in names]
-        if self._victims[end][param]:
-            self._victims[end][param].setAXEXTD(self.__calculateAXEXTD(disturbers, param))
+        disturbers = [x for x in self._disturbers[param][end] if x.getName() in names]
+        if self._victims[param][end]:
+            self._victims[param][end].setAXEXTD(self.__calculateAXEXTD(disturbers, param))
 
     def disturbers(self):
         return self._disturbers
@@ -78,12 +78,12 @@ class Alien(Project):
 
     def setStandard(self, standard):
         self._standard = standard
-        for end in self._disturbers:
-            for param in self._disturbers[end]:
-                for disturber in self._disturbers[end][param]:
+        for param in self._disturbers:
+            for end in self._disturbers[param]:
+                for disturber in self._disturbers[param][end]:
                     disturber.setStandard(standard)
-                if self._victims[end][param]:
-                    self._victims[end][param].setStandard(standard)
+                if self._victims[param][end]:
+                    self._victims[param][end].setStandard(standard)
 
 from app.node import Node
 from sample.sample import SampleNode
@@ -104,21 +104,21 @@ class AlienNode(ProjectNode):
                 self._alienTab.updateWidget()
 
     def addChildren(self, samples, end, param):
-        node = self.hasChild(end)
+        node = self.hasChild(param)
         if not node:
-            node = Node(end)
+            node = Node(param)
             self.appendRow(node)
-        subNode = node.hasChild(param)
+        subNode = node.hasChild(end)
         if not subNode:
-            subNode = Node(param)
+            subNode = Node(end)
             node.appendRow(subNode)
         subNode.children = list()
         for sample in samples:
             subNode.appendRow(SampleNode(sample, self._dataObject))
 
     def setupInitialData(self):
-        for end, params in self._dataObject.disturbers().items():
-            for param, samples in params.items():
+        for param, ends in self._dataObject.disturbers().items():
+            for end, samples in ends.items():
                 if len(samples):
                     self.addChildren(samples, end, param)
 

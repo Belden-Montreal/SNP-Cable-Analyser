@@ -45,7 +45,7 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
     def updateWidget(self):
         end, test = self.getCheckButtons()
         self.alienDisturbers.clear()
-        for disturber in self._alien.disturbers()[end][test]:
+        for disturber in self._alien.disturbers()[test][end]:
             item = QtWidgets.QListWidgetItem()
             item.setFlags(item.flags() | QtCore.Qt.ItemIsUserCheckable)
             item.setCheckState(QtCore.Qt.Checked)
@@ -55,7 +55,7 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
 
     def drawFigure(self, end, test):
         self._figure.clear()
-        sample = self._alien.victims()[end][test]
+        sample = self._alien.victims()[test][end]
         if test == "PSANEXT":
             names = ["PSANEXT", "PSAACRN"]
         else:
