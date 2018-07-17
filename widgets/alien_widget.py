@@ -43,8 +43,7 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
         self.portsChanged()
         
     def updateWidget(self):
-        test = self.testTypeGroup.checkedButton().text()
-        end = self.endGroup.checkedButton().text()
+        end, test = self.getCheckButtons()
         self.alienDisturbers.clear()
         for disturber in self._alien.disturbers()[end][test]:
             item = QtWidgets.QListWidgetItem()
@@ -117,16 +116,14 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
 
     def importVictim(self):
         fileName,_ = QtWidgets.QFileDialog.getOpenFileName(self, "Select victim", "", "sNp Files (*.s*p)")
-        test = self.testTypeGroup.checkedButton().text()
-        end = self.endGroup.checkedButton().text()
+        end, test = self.getCheckButtons()
         sample = self._alien.importSamples([fileName], end, test, disturber=False)
         self._node.addChildren([sample], end, test)
         self.updateWidget()
 
     def importDisturbers(self):
         files,_ = QtWidgets.QFileDialog.getOpenFileNames(self, "Select disturbers", "", "sNp Files (*.s*p)")
-        test = self.testTypeGroup.checkedButton().text()
-        end = self.endGroup.checkedButton().text()
+        end, test = self.getCheckButtons()
         samples = self._alien.importSamples(files, end, test, disturber=True)
         self._node.addChildren(samples, end, test)
         self.updateWidget()
@@ -137,14 +134,12 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
             item = self.alienDisturbers.item(i)
             if item.checkState() == QtCore.Qt.Checked:
                 disturbers.append(item.text())
-        test = self.testTypeGroup.checkedButton().text()
-        end = self.endGroup.checkedButton().text()
+        end, test = self.getCheckButtons()
         self._alien.updateDisturbers(disturbers, end, test)
         self.drawFigure(end, test)
 
     def portsChanged(self):
-        test = self.testTypeGroup.checkedButton().text()
-        end = self.endGroup.checkedButton().text()
+        end, test = self.getCheckButtons()
         self._hiddenPorts = list()
         if not self.alien12.isChecked():
             self._hiddenPorts.append(self.alien12.text())
@@ -161,15 +156,18 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
             self._showAvgLimit = not self._showAvgLimit
         else:
             self._showLimit = not self._showLimit
-        test = self.testTypeGroup.checkedButton().text()
-        end = self.endGroup.checkedButton().text()
+        end, test = self.getCheckButtons()
         self.drawFigure(end, test)
     
     def showAverage(self):
         self._showAvg = not self._showAvg
+        end, test = self.getCheckButtons()
+        self.drawFigure(end, test)
+
+    def getCheckButtons(self):
         test = self.testTypeGroup.checkedButton().text()
         end = self.endGroup.checkedButton().text()
-        self.drawFigure(end, test)
+        return end, test
 
     def showTab(self):
         self.graphicsView.draw()
