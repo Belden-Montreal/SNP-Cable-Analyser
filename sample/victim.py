@@ -2,7 +2,7 @@ from sample.sample import Sample, PORTS_NAME
 
 class Victim(Sample):
 
-    def __init__(self, snpFile, param="ANEXT", axextd=list()):
+    def __init__(self, snpFile, param="ANEXT", axextd=list(), standard=None):
         self._axextd = axextd
         self._param = param
         if self._param == "ANEXT":
@@ -11,7 +11,7 @@ class Victim(Sample):
         else:
             self._psaxext = "PSAFEXT"
             self._psaacrx = "PSAACRF"
-        super(Victim, self).__init__(snpFile)
+        super(Victim, self).__init__(snpFile, standard)
 
     def addParameters(self):
         parameters = [

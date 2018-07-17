@@ -14,6 +14,7 @@ class Project(object):
         self._name = name
         self._date = ""
         self._samples = list()
+        self._standard = None
 
     def importSamples(self, fileNames):
         pool = ThreadPool()

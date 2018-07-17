@@ -37,10 +37,10 @@ class Alien(Project):
             return sample
 
     def __createDisturber(self, name, param):
-        return Disturber(name, self.__getParam(param))
+        return Disturber(name, self.__getParam(param), self._standard)
 
     def __createVictim(self, name, param, disturbers):
-        return Victim(name, self.__getParam(param), disturbers)
+        return Victim(name, self.__getParam(param), disturbers, self._standard)
 
     def __calculateAXEXTD(self, disturbers, param):
         return [x.getParameters()[self.__getParam(param)] for x in disturbers]
@@ -77,6 +77,7 @@ class Alien(Project):
         return AlienNode(self)
 
     def setStandard(self, standard):
+        self._standard = standard
         for end in self._disturbers:
             for param in self._disturbers[end]:
                 for disturber in self._disturbers[end][param]:

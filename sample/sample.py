@@ -6,7 +6,7 @@ class Sample(object):
     '''
     The sample class contains the measurements for one object
     '''
-    def __init__(self, snpFile):
+    def __init__(self, snpFile, standard=None):
         self._parameters = dict()
         if snpFile:
             self._snp = SNPAnalyzer(snpFile)
@@ -16,7 +16,10 @@ class Sample(object):
             self.setPorts()
             self._factory = ParameterFactory(self._ports, self._freq, self._mm, self._parameters)
             self.addParameters()
-            self._standard = None
+            if standard:
+                self.setStandard(standard)
+            else:
+                self._standard = None
 
     def addParameters(self):
         raise NotImplementedError
