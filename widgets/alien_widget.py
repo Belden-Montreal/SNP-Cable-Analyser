@@ -36,8 +36,10 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
         self.alien78.toggled.connect(lambda: self.portsChanged())
         self.alienLimitCheck.toggled.connect(lambda: self.showLimit())
         self.alienAvgLimitCheck.toggled.connect(lambda: self.showLimit(True))
+        self.alienAvg.toggled.connect(lambda: self.showAverage())
         self._showLimit = True
         self._showAvgLimit = True
+        self._showAvg = True
         self.portsChanged()
         
     def updateWidget(self):
@@ -62,23 +64,37 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
         if sample:
             params = [sample.getParameters()[names[0]], sample.getParameters()[names[1]]]
             for i, param in enumerate(params):
-                colors = iter(plt.cm.rainbow(np.linspace(0, 1, len(param.getPorts())+2)))
+                colors = iter(plt.cm.rainbow(np.linspace(0, 1, len(param.getPorts())+3)))
 
                 ax = self._figure.add_subplot(1,2,i+1)
                 ax.set_title(end+" "+names[i])
                 ax.set_xlabel("Frequency")
                 ax.set_ylabel("dB")
+                avg = np.array(list())
                 for port, (name, isRemote) in param.getPorts().items():
                     color = next(colors)
-                    if not isRemote and name not in self._hiddenPorts:
+                    if not isRemote:
                         try:
                             data = list(map(lambda val: val[0], param.getParameter()[port]))
                         except:
                             data = param[port]
-                        ax.semilogx(param.getFrequencies(),
-                                    data,
-                                    label=name, c=color)
+                        if len(avg) == 0:
+                            avg = np.array(data)
+                        else:
+                            avg = np.add(avg, data)
+                        if name not in self._hiddenPorts:
+                            ax.semilogx(param.getFrequencies(),
+                                        data,
+                                        label=name, c=color)
+
                 limit = param.getLimit()
+                avg = avg/(len(param.getPorts()))
+                if self._showAvg:
+                    color = next(colors)
+                    ax.semilogx(
+                        param.getFrequencies(),
+                        avg,
+                        label="average", c=color,)
                 if self._showLimit and limit:
                     color = next(colors)
                     ax.semilogx(
@@ -149,5 +165,11 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
         end = self.endGroup.checkedButton().text()
         self.drawFigure(end, test)
     
+    def showAverage(self):
+        self._showAvg = not self._showAvg
+        test = self.testTypeGroup.checkedButton().text()
+        end = self.endGroup.checkedButton().text()
+        self.drawFigure(end, test)
+
     def showTab(self):
         self.graphicsView.draw()
