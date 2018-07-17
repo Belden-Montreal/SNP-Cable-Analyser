@@ -43,10 +43,10 @@ class Main():
         self._mainWindow.actionNew_Project.triggered.connect(lambda:self.newProject())
         self._mainWindow.sampleTable.clicked.connect(lambda:self.setActiveSample())
         self._mainWindow.actionRun.triggered.connect(lambda:self._vnaManager.acquire())
-        self._mainWindow.actionImport_SnP.triggered.connect(lambda:self._vnaManager.acquire())
-        self._mainWindow.actionConnect.triggered.connect(lambda:self._vnaManager.connect())
+        # self._mainWindow.actionImport_SnP.triggered.connect(lambda:self._vnaManager.acquire())
+        self._mainWindow.actionConnect.triggered.connect(lambda:self.connect())
         self._mainWindow.actionWho_am_I.triggered.connect(lambda:self._vnaManager.whoAmI())
-        # self.actionMeasure.triggered.connect(MainWindow.aquire)
+        self._mainWindow.actionMeasure.triggered.connect(lambda:self._vnaManager.acquire())
         self._mainWindow.actionCalibrate_2.triggered.connect(lambda:self._vnaManager.calibrate())
         self._mainWindow.actionDisconnect.triggered.connect(lambda:self._vnaManager.disconnect())
         # self.actionAlien.triggered.connect(MainWindow.addAlien)
@@ -55,6 +55,16 @@ class Main():
         # QtCore.QMetaObject.connectSlotsByName(MainWindow)
         self._mainWindow.actionImport_Project.triggered.connect(lambda: self.loadProject())
         self._mainWindow.actionSave_Project.triggered.connect(lambda: self.saveProject())
+
+    def connect(self):
+        self._vnaManager.connect()
+        self._mainWindow.actionMeasure.setEnabled(True)
+        self._mainWindow.actionWho_am_I.setEnabled(True)
+        self._mainWindow.actionCalibrate.setEnabled(True)
+        self._mainWindow.actionCalibrate_2.setEnabled(True)
+        self._mainWindow.actionDisconnect.setEnabled(True)
+        self._mainWindow.actionRun.setEnabled(True)
+        self._mainWindow.actionConnect.setEnabled(False)
 
     def getRootProject(self):
          selected = self.getSelected()

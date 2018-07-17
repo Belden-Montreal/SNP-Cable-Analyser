@@ -15,6 +15,7 @@ class Communication(object):
         #rm = pyvisa.highlevel.ResourceManager()
         #print(rm.list_resources())
 
+        self.connected = False
 
         self.vna_settings_file = 'VNA_SETTINGS.ini'
 
