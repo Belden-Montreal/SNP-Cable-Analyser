@@ -1,74 +1,78 @@
-from parameters.returnloss import ReturnLoss
-from parameters.next import NEXT
+from parameters.returnloss       import ReturnLoss
+from parameters.next             import NEXT
 from parameters.propagationdelay import PropagationDelay
-from parameters.insertionloss import InsertionLoss
-from parameters.psnext import PSNEXT
-from parameters.lcl import LCL
-from parameters.tcl import TCL
-from parameters.cmrl import CMRL
-from parameters.cmnext import CMNEXT
-from parameters.cmdmnext import CMDMNEXT
-from parameters.cmdmrl import CMDMRL
-from parameters.dmcmnext import DMCMNEXT
-from parameters.dmcmrl import DMCMRL
-from parameters.tctl import TCTL
-from parameters.lctl import LCTL
-from parameters.psacrf import PSACRF
-from parameters.psfext import PSFEXT
-from parameters.acrf import ACRF
-from parameters.eltctl import ELTCTL
-from parameters.fext import FEXT
-from parameters.axext import AXEXT
-from parameters.psaxext import PSAXEXT
-from parameters.psaacrx import PSAACRX
-from parameters.dfdelay import DFDelay
-from parameters.plugdelay import PlugDelay
-from parameters.nextdelay import NEXTDelay
-from parameters.correctednext import CorrectedNEXT
-from parameters.dnext import DNEXT
-from parameters.case import Case
+from parameters.insertionloss    import InsertionLoss
+from parameters.psnext           import PSNEXT
+from parameters.lcl              import LCL
+from parameters.tcl              import TCL
+from parameters.cmrl             import CMRL
+from parameters.cmnext           import CMNEXT
+from parameters.cmdmnext         import CMDMNEXT
+from parameters.cmdmrl           import CMDMRL
+from parameters.dmcmnext         import DMCMNEXT
+from parameters.dmcmrl           import DMCMRL
+from parameters.tctl             import TCTL
+from parameters.lctl             import LCTL
+from parameters.psacrf           import PSACRF
+from parameters.psfext           import PSFEXT
+from parameters.acrf             import ACRF
+from parameters.eltctl           import ELTCTL
+from parameters.fext             import FEXT
+from parameters.axext            import AXEXT
+from parameters.psaxext          import PSAXEXT
+from parameters.psaacrx          import PSAACRX
+from parameters.dfdelay          import DFDelay
+from parameters.plugdelay        import PlugDelay
+from parameters.nextdelay        import NEXTDelay
+from parameters.correctednext    import CorrectedNEXT
+from parameters.dnext            import DNEXT
+from parameters.case             import Case
 
 class ParameterFactory(object):
+    def __init__(self, config, freq, matrices, parameters):
+        self._parameters = parameters
+        self._factory = self.setUpFactory(config, freq, matrices)
 
-    def __init__(self, ports, freq, matrix, params):
-        self._ports = ports
-        self._freq = freq
-        self._matrix = matrix
-        self._params = params
-        self.__parameters = {
-            "RL":lambda: ReturnLoss(self._ports, self._freq, self._matrix),
-            "IL":lambda: InsertionLoss(self._ports, self._freq, self._matrix),
-            "NEXT":lambda: NEXT(self._ports, self._freq, self._matrix),
-            "PSNEXT":lambda: PSNEXT(self._ports, self._freq, self._matrix, self._params["NEXT"]),
-            "Propagation Delay":lambda: PropagationDelay(self._ports, self._freq, self._matrix, self._params["RL"]),
-            "FEXT":lambda: FEXT(self._ports, self._freq, self._matrix),
-            "PSFEXT":lambda: PSFEXT(self._ports, self._freq, self._matrix, self._params["FEXT"]),
-            "ACRF":lambda: ACRF(self._ports, self._freq, self._matrix, self._params["FEXT"], self._params["IL"]),
-            "PSACRF":lambda: PSACRF(self._ports, self._freq, self._matrix, self._params["PSFEXT"], self._params["IL"]),
-            "LCL":lambda: LCL(self._ports, self._freq, self._matrix),
-            "LCTL":lambda: LCTL(self._ports, self._freq, self._matrix),
-            "TCL":lambda: TCL(self._ports, self._freq, self._matrix),
-            "TCTL":lambda: TCTL(self._ports, self._freq, self._matrix),
-            "ELTCTL":lambda: ELTCTL(self._ports, self._freq, self._matrix, self._params["IL"], self._params["TCTL"]),
-            "CMRL":lambda: CMRL(self._ports, self._freq, self._matrix),
-            "CMNEXT":lambda: CMNEXT(self._ports, self._freq, self._matrix),
-            "CMDMNEXT":lambda: CMDMNEXT(self._ports, self._freq, self._matrix),
-            "CMDMRL":lambda: CMDMRL(self._ports, self._freq, self._matrix),
-            "DMCMNEXT":lambda: DMCMNEXT(self._ports, self._freq, self._matrix),
-            "DMCMRL":lambda: DMCMRL(self._ports, self._freq, self._matrix),
-            "ANEXT":lambda: AXEXT(self._ports, self._freq, self._matrix, self._params["FEXT"], self._params["IL"]),
-            "AFEXT":lambda: AXEXT(self._ports, self._freq, self._matrix, self._params["FEXT"], self._params["IL"]),
-            "PSANEXT":lambda: PSAXEXT(self._ports, self._freq, self._matrix, self._params["ANEXTD"]),
-            "PSAACRN":lambda: PSAACRX(self._ports, self._freq, self._matrix, self._params["PSANEXT"], self._params["IL"]),
-            "PSAFEXT":lambda: PSAXEXT(self._ports, self._freq, self._matrix, self._params["AFEXTD"]),
-            "PSAACRF":lambda: PSAACRX(self._ports, self._freq, self._matrix, self._params["PSAFEXT"], self._params["IL"]),
-            "DFDelay":lambda: DFDelay(self._ports, self._freq, self._matrix, self._params["DFOpenDelay"], self._params["DFShortDelay"]),
-            "PlugDelay":lambda: PlugDelay(self._ports, self._freq, self._matrix, self._params["PlugOpenDelay"], self._params["PlugShortDelay"], self._params["DFDelay"], self._params["k1"], self._params["k2"], self._params["k3"]),
-            "NEXTDelay":lambda: NEXTDelay(self._ports, self._freq, self._matrix, self._params["PlugDelay"]),
-            "CNEXT":lambda: CorrectedNEXT(self._ports, self._freq, self._matrix, self._params["NEXTDelay"]),
-            "DNEXT":lambda: DNEXT(self._ports, self._freq, self._matrix, self._params["NEXTDelay"], self._params["PCNEXT"]),
-            "Case":lambda: Case(self._ports, self._freq, self._matrix, self._params["DNEXT"], self._params["PCNEXT"], self._params["Cases"]),
+    def setUpFactory(self, c, f, m):
+        p = lambda param: self.getParameter(param)
+        return {
+            "RL"               :lambda:       ReturnLoss(c, f, m),
+            "IL"               :lambda:    InsertionLoss(c, f, m),
+            "NEXT"             :lambda:             NEXT(c, f, m),
+            "PSNEXT"           :lambda:           PSNEXT(c, f, m, p("NEXT")),
+            "Propagation Delay":lambda: PropagationDelay(c, f, m, p("RL")),
+            "FEXT"             :lambda:             FEXT(c, f, m),
+            "PSFEXT"           :lambda:           PSFEXT(c, f, m, p("FEXT")),
+            "ACRF"             :lambda:             ACRF(c, f, m, p("FEXT"), p("IL")),
+            "PSACRF"           :lambda:           PSACRF(c, f, m, p("PSFEXT"), p("IL")),
+            "LCL"              :lambda:              LCL(c, f, m),
+            "LCTL"             :lambda:             LCTL(c, f, m),
+            "TCL"              :lambda:              TCL(c, f, m),
+            "TCTL"             :lambda:             TCTL(c, f, m),
+            "ELTCTL"           :lambda:           ELTCTL(c, f, m, p("IL"), p("TCTL")),
+            "CMRL"             :lambda:             CMRL(c, f, m),
+            "CMNEXT"           :lambda:           CMNEXT(c, f, m),
+            "CMDMNEXT"         :lambda:         CMDMNEXT(c, f, m),
+            "CMDMRL"           :lambda:           CMDMRL(c, f, m),
+            "DMCMNEXT"         :lambda:         DMCMNEXT(c, f, m),
+            "DMCMRL"           :lambda:           DMCMRL(c, f, m),
+            "ANEXT"            :lambda:            AXEXT(c, f, m, p("FEXT"), p("IL")),
+            "AFEXT"            :lambda:            AXEXT(c, f, m, p("FEXT"), p("IL")),
+            "PSANEXT"          :lambda:          PSAXEXT(c, f, m, p("ANEXTD")),
+            "PSAACRN"          :lambda:          PSAACRX(c, f, m, p("PSANEXT"), p("IL")),
+            "PSAFEXT"          :lambda:          PSAXEXT(c, f, m, p("AFEXTD")),
+            "PSAACRX"          :lambda:          PSAACRX(c, f, m, p("PSAXEXT"), p("IL")),
+            "DFDelay"          :lambda:          DFDelay(c, f, m, p("DFOpenDelay"), p("DFShortDelay")),
+            "NEXTDelay"        :lambda:        NEXTDelay(c, f, m, p("PlugDelay")),
+            "CNEXT"            :lambda:    CorrectedNEXT(c, f, m, p("NEXTDelay")),
+            "DNEXT"            :lambda:            DNEXT(c, f, m, p("NEXTDelay"), p("PCNEXT")),
+            "Case"             :lambda:             Case(c, f, m, p("DNEXT"), p[" PCNEXT"], p("Cases")),
+            "PlugDelay"        :lambda:        PlugDelay(c, f, m, p("PlugOpenDelay"), p("PlugShortDelay"),
+                                                                  p("DFDelay"), p("k1"),
+                                                                  p("k2"), p("k3")),
         }
 
     def getParameter(self, name):
-        return self.__parameters[name]()
+        if name not in self._parameters.keys():
+            self._parameters[name] = self._factory[name]()
+        return self._parameters[name]
