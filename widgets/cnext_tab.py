@@ -48,6 +48,3 @@ class CNEXTTab(TabWidget):
         axp.xaxis.set_major_formatter(ScalarFormatter())
         ax.grid(which="both")
         axp.grid(which="both")
-
-    def showTab(self):
-        self._graphicsView.draw()

@@ -60,10 +60,7 @@ class ParameterWidget(TabWidget, parameter_widget_ui.Ui_ParameterWidget):
             self.worstFreqLabel.setText(self.worstValue[0][pair.number][1].__str__())
             self.worstLimitLabel.setText(self.worstValue[0][pair.number][2].__str__())
             self.worstMarginLabel.setText(self.worstValue[0][pair.number][3].__str__())
-
-    def showTab(self):
-        self.graphicsView.draw()
-
+            
 class PairItem(QtWidgets.QListWidgetItem):
     def __init__(self, text, number, isRemote, parent = None, type = QtWidgets.QListWidgetItem.Type):
         super(PairItem, self).__init__(text, parent, type)

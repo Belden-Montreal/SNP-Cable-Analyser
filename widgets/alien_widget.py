@@ -168,6 +168,3 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
         test = self.testTypeGroup.checkedButton().text()
         end = self.endGroup.checkedButton().text()
         return end, test
-
-    def showTab(self):
-        self.graphicsView.draw()

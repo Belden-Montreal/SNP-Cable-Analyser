@@ -53,6 +53,4 @@ class CaseTab(TabWidget):
         ax.legend(loc="best")
         axp.grid(which="both")
         axp.legend(loc="best")
-
-    def showTab(self):
-        self._graphicsView.draw()
+        

@@ -30,4 +30,3 @@ class TestPlug(unittest.TestCase):
         project.removeSample(load)
         #should have removed the samples
         self.assertEqual(project._loadSample, None)
-
