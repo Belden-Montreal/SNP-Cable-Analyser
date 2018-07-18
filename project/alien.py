@@ -53,7 +53,7 @@ class Alien(Project):
 
     def removeSample(self, sample):
         for param in self._disturbers:
-            for end in self._disturbers[end]:
+            for end in self._disturbers[param]:
                 if sample in self._disturbers[param][end]:
                     self._disturbers[param][end].remove(sample)
                 elif sample == self._victims[param][end]:

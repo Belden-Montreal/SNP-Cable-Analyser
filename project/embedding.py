@@ -70,9 +70,9 @@ class Embedding(Project):
         return self._reverse
 
     def removeSample(self, sample):
-        for side in self._load.values():
-            if sample in side:
-                side.remove(sample)
+        for side in self._load:
+            if sample == self._load[side]:
+                self._load[side] = None
         if sample in self._reverse:
             self._reverse.remove(sample)
 
