@@ -28,6 +28,7 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
         self.createTabs("Reverse")
         self.tabWidget.setTabText(0, "main")
         self._loadFile = None
+        self._k1, self._k2, self._k3 = None, None, None
         self.updateWidget()
 
     def updateWidget(self):
@@ -43,10 +44,10 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
         if self._embedding.plug():
             plug = self._embedding.plug()
             self.plugLabel.setText(plug.getName())
-            k1, k2, k3 = plug.getConstants()
-            self.SJ_124578_LineEdit.setText(str(k1))
-            self.sJ36LineEdit.setText(str(k2))
-            self.thruCalibLineEdit.setText(str(k3))
+            self._k1, self._k2, self._k3 = plug.getConstants()
+            self.SJ_124578_LineEdit.setText(str(self._k1))
+            self.sJ36LineEdit.setText(str(self._k2))
+            self.thruCalibLineEdit.setText(str(self._k3))
         self.tabWidget.clear()
         self.tabWidget.addTab(self.mainTab, "main")
         for name, tab in self._pairTabs[side].items():
@@ -96,11 +97,20 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
             if self._isReverse:
                 pass #TODO: reverse Reembedding
             else:
+                self.checkConstants()
                 load = self._embedding.importLoad(self._loadFile, "Forward", self._cat)
                 self.loadFileName.setText(load.getName())
                 self._node.addChildren([load], self._embedding.plug(), "Forward")
             self.createTabs(self.getSide())
         self.updateWidget()
+
+    def checkConstants(self):
+        k1 = float(self.SJ_124578_LineEdit.text())
+        k2 = float(self.sJ36LineEdit.text())
+        k3 = float(self.thruCalibLineEdit.text())
+        if not (k1 == self._k1 and k2 == self._k2 and k3 == self._k3):
+            self._embedding.plug().setConstants(k1, k2, k3)
+            self._embedding.plug().recalculate()
 
     def getSide(self):
         if self._isReverse:

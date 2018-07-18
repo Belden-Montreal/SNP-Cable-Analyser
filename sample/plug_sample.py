@@ -28,3 +28,14 @@ class PlugSample(Sample):
         self._parameters["k3"] = self._k3
         for parameter in parameters:
             self._parameters[parameter] = self._factory.getParameter(parameter)
+
+    def recalculate(self, k1, k2, k3):
+        self._k1 = k1
+        self._k2 = k2
+        self._k3 = k3
+        self._parameters["k1"] = k1
+        self._parameters["k2"] = k2
+        self._parameters["k3"] = k3
+        self._parameters["PlugDelay"].recalculate(self._k1, self._k2, self._k3)
+        self._parameters["NEXTDelay"].recalculate(self._parameters["PlugDelay"])
+        self._parameters["CNEXT"].recalculate(self._parameters["NEXTDelay"])

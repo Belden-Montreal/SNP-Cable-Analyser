@@ -33,6 +33,10 @@ class CorrectedNEXT(NEXT):
                 correctedNext[(i,j)].append((complex2db(correctedNextVal), correctedPhase))
         return correctedNext, cpCorrectedNext
 
+    def recalculate(self, nextDelay):
+        self._nextDelay = nextDelay
+        (self._parameter, self._complexParameter) = self.computeParameter()
+
     def getNEXTDelay(self):
         return self._nextDelay
 

@@ -38,6 +38,10 @@ class NEXTDelay(PairedParameter):
                 nextDelay[(i,k)] = plugDelay[(i,j)] + plugDelay[(k,k)]
 
         return nextDelay,None
+    
+    def recalculate(self, plugDelay):
+        self._plugDelay = plugDelay
+        (self._parameter, self._complexParameter) = self.computeParameter()
 
     def getPlugDelay(self):
         return self._plugDelay

@@ -34,6 +34,12 @@ class PlugDelay(PairedParameter):
         
         return plugDelay,None
 
+    def recalculate(self, k1, k2, k3):
+        self._k1 = k1
+        self._k2 = k2
+        self._k3 = k3
+        (self._parameter, self._complexParameter) = self.computeParameter()
+
     def chooseMatrices(self, matrices):
         return None
 
