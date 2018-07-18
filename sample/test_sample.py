@@ -1,70 +1,54 @@
-import unittest
-import numpy as np
-from parameters.parameter_factory import ParameterFactory
+from unittest import TestCase
+from unittest.mock import MagicMock, patch
 
-class TestSample(unittest.TestCase):
+class TestSample(object):
     def setUp(self):
-        self._ports = {
-            0: ("Port 1", False),
-            1: ("Port 2", False),
-            2: ("Port 3", False),
-            3: ("Port 4", False),
-        }
+        self._params = set()
+        self._snp = "mock.snp"
 
-        self._e2ePorts = {
-            0: ("Port 1", False),
-            1: ("Port 2", False),
-            2: ("Port 3", True),
-            3: ("Port 4", True),
-        }
+    def createSample(self):
+        raise NotImplementedError
 
-        self._freq = [100, 200, 300, 400]
+    def getNumberOfPorts(self):
+        raise NotImplementedError
 
-        self._mm =  np.array([
-            [
-                [  1,  2,    3,   4,   5,   6,   7,   8],
-                [  9,  10,  11,  12,  13,  14,  15,  16],
-                [ 17,  18,  19,  20,  21,  22,  23,  24],
-                [ 25,  26,  27,  28,  29,  30,  31,  32],
-                [ 33,  34,  35,  36,  37,  38,  39,  40],
-                [ 41,  42,  43,  44,  45,  46,  47,  48],
-                [ 49,  50,  51,  52,  53,  54,  55,  56],
-                [ 57,  58,  59,  60,  61,  62,  63,  64],
-            ],[
-                [ 65,  66,  67,  68,  69,  70,  71,  72],
-                [ 73,  74,  75,  76,  77,  78,  79,  80],
-                [ 81,  82,  83,  84,  85,  86,  87,  88],
-                [ 89,  90,  91,  92,  93,  94,  95,  96],
-                [ 97,  98,  99, 100, 101, 102, 103, 104],
-                [105, 106, 107, 108, 109, 110, 111, 112],
-                [113, 114, 115, 116, 117, 118, 119, 120],
-                [121, 122, 123, 124, 125, 126, 127, 128],
-            ],[
-                [129, 130, 131, 132, 133, 134, 135, 136],
-                [137, 138, 139, 140, 141, 142, 143, 144],
-                [145, 146, 147, 148, 149, 150, 151, 152],
-                [153, 154, 155, 156, 157, 158, 159, 160],
-                [161, 162, 163, 164, 165, 166, 167, 168],
-                [169, 170, 171, 172, 173, 174, 175, 176],
-                [177, 178, 179, 180, 181, 182, 183, 184],
-                [185, 186, 187, 188, 189, 190, 191, 192],
-            ],[
-                [193, 194, 195, 196, 197, 198, 199, 200],
-                [201, 202, 203, 204, 205, 206, 207, 208],
-                [209, 210, 211, 212, 213, 214, 215, 216],
-                [217, 218, 219, 220, 221, 222, 223, 224],
-                [225, 226, 227, 228, 229, 230, 231, 232],
-                [233, 234, 235, 236, 237, 238, 239, 240],
-                [241, 242, 243, 244, 245, 246, 247, 248],
-                [249, 250, 251, 252, 253, 254, 255, 256],
-            ]
-        ], np.int32)
-        
-    def setMockSample(self, s):
-        s._mm = self._mm
-        s._ports = self._ports
-        s._freq = self._freq
-        s._portsNumber = 4
-        s.setPorts()
-        s._factory = ParameterFactory(self._ports, self._freq, self._mm, s._parameters)
-        s.addParameters()
+    def getExpectedComputedParameters(self):
+        raise NotImplementedError
+
+    def getShouldntRunParameters(self):
+        raise NotImplementedError
+
+    @patch('sample.sample.Sample.loadSNP')
+    @patch('sample.sample.Sample.getFactory')
+    def testParameterBuilding(self, mock_getfactory, mock_loadsnp):
+        if type(self) == TestSample:
+            return
+
+        # mock the network
+        (mock_network, mock_date) = (MagicMock(), MagicMock())
+        mock_loadsnp.return_value = (mock_network, mock_date)
+        mock_network.se2gmm = MagicMock()
+        mock_network.number_of_ports = self.getNumberOfPorts()
+
+        # mock the factory
+        def getParameter(value):
+            return value
+        mock_factory = MagicMock()
+        mock_factory.getParameter = MagicMock(side_effect=getParameter)
+        mock_getfactory.return_value = mock_factory
+
+        # create the sample
+        sample = self.createSample()
+
+        # make sure the expected parameters were computed
+        for expected in self.getExpectedComputedParameters():
+            mock_factory.getParameter.assert_any_call(expected)
+
+        # make sure some parameters we're not overriden
+        for expected in self.getShouldntRunParameters():
+            try:
+                mock_factory.getParameter.assert_any_call(expected)
+            except AssertionError:
+                continue
+            error = AssertionError("Parameter '{}' shouldn't be recomputed".format(expected))
+            raise error

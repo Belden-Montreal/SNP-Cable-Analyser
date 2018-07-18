@@ -1,8 +1,103 @@
-from sample.snp_analyzer import SNPAnalyzer
 from parameters.parameter_factory import ParameterFactory
 
-PORTS_NAME = ["45", "12", "36", "78"]
+from skrf import Network
+
 class Sample(object):
+    def __init__(self, snp, config=None):
+        # load the network
+        (self._network, self._date) = Sample.loadSNP(snp)
+
+        # get the network's configuration
+        if config:
+            self._config = config
+        else:
+            self._config = self.getDefaultConfiguration()
+
+        # convert the network into mixed mode
+        self._network.se2gmm(self.getNumPorts())
+
+        # various initialisation
+        self._parameters = self.getDefaultParameters()
+        self._standard = None
+
+        # config and network should have the same number of ports
+        if len(self._config.getPorts()) != self.getNumPorts():
+            raise ValueError
+
+        # create the parameter factory
+        self._factory = self.getFactory()
+
+        # create the parameter
+        for parameter in self.getAvailableParameters():
+            if parameter in self._parameters.keys():
+                continue
+            self._parameters[parameter] = self._factory.getParameter(parameter)
+
+    @staticmethod
+    def loadSNP(snp):
+        # load the touchstone file
+        network = Network()
+        snpfile = open(snp, 'r')
+        network.read_touchstone(snpfile)
+        snpfile.close(snpfile)
+
+        # get the date from the file
+        date = ctime(getctime(snpfile))
+
+        return (network, date)
+
+    def getDefaultConfiguration(self):
+        raise NotImplementedError
+
+    def getDefaultParameters(self):
+        raise NotImplementedError
+
+    def setStandard(self, standard):
+        self._standard = standard
+        for (name, parameter) in self._parameters.items():
+            if name in standard.limits:
+                parameter.setLimit(standard.limits[name])
+
+    def getFactory(self):
+        return ParameterFactory(
+            self.getConfig(),
+            self.getFrequencies(),
+            self.getMatrices(),
+            self.getParameters(),
+        )
+
+    def getAvailableParameters(self):
+        raise NotImplementedError
+
+    def getNetwork(self):
+        return self._network
+
+    def getMatrices(self):
+        return self._network.s
+
+    def getConfig(self):
+        return self._config
+
+    def getFrequencies(self):
+        return self._network.f
+
+    def getNumPorts(self):
+        # we divide by two since we're in mixed mode
+        return self._network.number_of_ports//2
+
+    def getParameter(self, name):
+        if name not in self._parameters.keys():
+            return None
+        return self._parameters[name]
+
+    def getParameters(self):
+        return self._parameters
+
+    def getDate(self):
+        return self._date
+
+PORTS_NAME = ["45", "12", "36", "78"]
+class Sample2(object):
     '''
     The sample class contains the measurements for one object
     '''
@@ -59,6 +154,7 @@ from app.node import Node
 from widgets.parameter_widget import ParameterWidget
 from widgets.main_widget import MainWidget
 from PyQt5 import QtWidgets
+
 class SampleNode(Node):
     def __init__(self, sample, project):
         super(SampleNode, self).__init__(sample.getName())
