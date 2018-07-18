@@ -171,6 +171,7 @@ class Main():
             selected = [self._model.itemFromIndex(x) for x in self.getSelected()]
             for node in selected:
                 node.setStandard(item)
+            self.displaySampleParams(self.getSelected()[0])
 
     # def tabChanged(self):
     #     # if self._mainWindow.param_tabs.currentIndex() == 0 or self._mainWindow.param_tabs.count() <= 1:
