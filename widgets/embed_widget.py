@@ -24,6 +24,8 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
         self._pairTabs = dict()
         self._pairTabs["Forward"] = dict()
         self._pairTabs["Reverse"] = dict()
+        self.createTabs("Forward")
+        self.createTabs("Reverse")
         self.tabWidget.setTabText(0, "main")
         self._loadFile = None
         self.updateWidget()
