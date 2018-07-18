@@ -15,8 +15,6 @@ class Main():
         self._mainWindow = MW.Ui_MainWindow()
 
         self._mainWindow.setupUi(self._qmw)
-        #self._mainWindow.sampleTable.setColumnCount(2)
-        #self._mainWindow.sampleTable.setHeaderLabels(["Name","Date"])
         self._model = TreeModel()
         self._mainWindow.sampleTable.setModel(self._model)
         self._mainWindow.sampleTable.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
@@ -29,8 +27,6 @@ class Main():
         self._mainWindow.actionImport_SnP.setDisabled(True)
         self._vnaManager = VNAManager()
 
-        # nav = NavigationToolbar(self._mainWindow.graphicsView, self._qmw)
-        # self._mainWindow.verticalLayout_3.addWidget(nav)
         #Here, we process any arguments that might be sent the program from outside of the interface.
         #In other words, when ever a user right click on an SNP files, rather than opening them in Notepad, it would be opened in this interface.
         arguments = sys.argv[1:] 
@@ -51,7 +47,7 @@ class Main():
         self._mainWindow.actionDisconnect.triggered.connect(lambda:self._vnaManager.disconnect())
         # self.actionAlien.triggered.connect(MainWindow.addAlien)
         # self.actionDeembed.triggered.connect(MainWindow.addEmbed)
-        self._mainWindow.param_tabs.currentChanged['int'].connect(lambda:self.tabChanged())
+        # self._mainWindow.param_tabs.currentChanged['int'].connect(lambda:self.tabChanged())
         # QtCore.QMetaObject.connectSlotsByName(MainWindow)
         self._mainWindow.actionImport_Project.triggered.connect(lambda: self.loadProject())
         self._mainWindow.actionSave_Project.triggered.connect(lambda: self.saveProject())
@@ -176,16 +172,16 @@ class Main():
             for node in selected:
                 node.setStandard(item)
 
-    def tabChanged(self):
-        # if self._mainWindow.param_tabs.currentIndex() == 0 or self._mainWindow.param_tabs.count() <= 1:
-        #     self._mainWindow.graphicsView.setVisible(False)
-        #     return
-        # self._mainWindow.graphicsView.setVisible(True)
-        # parameter = self._mainWindow.param_tabs.currentWidget().parameter
-        # plot = parameter.getPlot()
-        currentTab = self._mainWindow.param_tabs.currentWidget()
-        if currentTab:
-            currentTab.showTab()
+    # def tabChanged(self):
+    #     # if self._mainWindow.param_tabs.currentIndex() == 0 or self._mainWindow.param_tabs.count() <= 1:
+    #     #     self._mainWindow.graphicsView.setVisible(False)
+    #     #     return
+    #     # self._mainWindow.graphicsView.setVisible(True)
+    #     # parameter = self._mainWindow.param_tabs.currentWidget().parameter
+    #     # plot = parameter.getPlot()
+    #     currentTab = self._mainWindow.param_tabs.currentWidget()
+    #     # if currentTab:
+    #     #     currentTab.showTab()
 
     def loadProject(self):
         f, ok = QtWidgets.QFileDialog.getOpenFileName(self._qmw, caption="Load a project", directory="projects/", filter="Belden Network Analyzer Project file (*.bnap)")
