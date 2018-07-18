@@ -45,7 +45,7 @@ class Sample(object):
         network = Network()
         snpfile = open(snp, 'r')
         network.read_touchstone(snpfile)
-        snpfile.close(snpfile)
+        snpfile.close()
 
         # get the date from the file
         date = ctime(getctime(snpfile))
