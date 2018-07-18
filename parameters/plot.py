@@ -34,7 +34,8 @@ class ParameterPlot(object):
         return self._figure
 
     def drawFigure(self):
-        self._figure = Figure(figsize=(18.75,6.25), dpi=80) #might not work for all screen resolutions
+        return
+        self._figure = plt.figure(figsize=(18.75,6.25), dpi=80) #might not work for all screen resolutions
 
         #get main and remote ports
         ends = dict()

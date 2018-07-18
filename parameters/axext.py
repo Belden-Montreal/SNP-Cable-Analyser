@@ -1,4 +1,7 @@
-from parameters.parameter import Parameter, complex2db, order, diffDiffMatrix
+from parameters.parameter import Parameter, complex2db, complex2phase, diffDiffMatrix
+from parameters.dataserie import PortPairDataSerie
+
+import itertools
 
 class AXEXT(Parameter):
     """
@@ -36,29 +39,39 @@ class AXEXT(Parameter):
         - 12 of these data series are equivalent to a normal FEXT
         -  4 of these data series are equivalent to a normal insertion loss
     """
-    def __init__(self, ports, freq, matrices, fext, il):
-        self._fext = fext
-        self._il   = il
+    def __init__(self, ports, freq, matrices):
         super(AXEXT, self).__init__(ports, freq, matrices)
 
     def computeDataSeries(self):
-        return self._fext.getDataSeries().union(self._il.getDataSeries())
+        # create each pair for the AXEXT
+        series = set()
+
+        # get all pairs
+        mains = self._ports.getMainPorts()
+        remotes = self._ports.getRemotePorts()
+        for (i,j) in itertools.product(mains, remotes):
+            series.add(PortPairDataSerie(i, j))
+
+        return series
 
     def computeParameter(self):
         # initialize the dictionaries for each port
-        (dbAXEXT, cpAXEXT) = (dict(), dict())
+        dbAXEXT = {serie: list() for serie in self._series}
+        cpAXEXT = {serie: list() for serie in self._series}
 
-        # get the parameters
-        dbIL   = self._il.getParameter()
-        cpIL   = self._il.getComplexParameter()
-        dbFEXT = self._fext.getParameter()
-        cpFEXT = self._fext.getComplexParameter()
-        
-        # extract the ANEXT values from the fext and il
-        dbAXEXT.update(dbFEXT)
-        cpAXEXT.update(cpFEXT)
-        dbAXEXT.update(dbIL)
-        cpAXEXT.update(cpIL)        
+        # extract the AXEXT value from the matrices
+        for (f,_) in enumerate(self._freq):
+            for serie in self._series:
+                (i,j) = serie.getPortIndices()
+
+                # get the value from the matrix
+                cpValue = self._matrices[f, i, j]
+                dbValue = (complex2db(cpValue), complex2phase(cpValue))
+
+                # add the value into the AXEXT
+                cpAXEXT[serie].append(cpValue)
+                dbAXEXT[serie].append(dbValue)
+
         return (dbAXEXT, cpAXEXT)
 
     def chooseMatrices(self, matrices):

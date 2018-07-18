@@ -3,8 +3,6 @@ import numpy as np
 from parameters.test_parameter import TestParameter
 from parameters.psaxext import PSAXEXT
 from parameters.axext import AXEXT
-from parameters.fext import FEXT
-from parameters.insertionloss import InsertionLoss
 from parameters.parameter import complex2db
 from parameters.dataserie import PortDataSerie, PortPairDataSerie
 
@@ -13,16 +11,11 @@ class TestPSAXEXT(TestParameter):
         self.assertEqual(value in collection, True)
 
     def createParameter(self):
-        # we assume that the dependent parameters are tested
-        self._il = InsertionLoss(self._config, self._freq, self._matrices, reverse=False)
-
-        self._fext = FEXT(self._config, self._freq, self._matrices, reverse=False)
-
         self._axextd = {
-            0: AXEXT(self._config, self._freq, self._matrices, self._fext, self._il),
-            1: AXEXT(self._config, self._freq, self._matrices, self._fext, self._il),
-            2: AXEXT(self._config, self._freq, self._matrices, self._fext, self._il),
-            3: AXEXT(self._config, self._freq, self._matrices, self._fext, self._il),
+            0: AXEXT(self._config, self._freq, self._matrices),
+            1: AXEXT(self._config, self._freq, self._matrices),
+            2: AXEXT(self._config, self._freq, self._matrices),
+            3: AXEXT(self._config, self._freq, self._matrices),
         }
 
         self._dataseries = {

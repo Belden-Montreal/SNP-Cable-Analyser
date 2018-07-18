@@ -10,9 +10,7 @@ from parameters.dataserie import PortPairDataSerie
 class TestAXEXT(TestParameter):
     def createParameter(self):
         #we assume that fext and il are tested
-        fext = FEXT(self._config, self._freq, self._matrices, reverse=False)
-        il   = InsertionLoss(self._config, self._freq, self._matrices, reverse=False)
-        return AXEXT(self._config, self._freq, self._matrices, fext, il)
+        return AXEXT(self._config, self._freq, self._matrices)
 
     def testComputeDataSeries(self):
         # for a 4 ports (2 disturbed, 2 disturber), there are 4 ANEXT data series
