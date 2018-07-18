@@ -6,5 +6,8 @@ class TabWidget(QtWidgets.QWidget):
         super(TabWidget, self).__init__()
         ui.setupUi(self)
 
+    def __initWidgetOnly__(self, parent):
+        super(TabWidget, self).__init__()
+
     def showTab(self):
         pass
