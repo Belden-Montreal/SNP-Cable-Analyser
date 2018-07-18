@@ -90,6 +90,9 @@ from sample.sample import SampleNode
 from widgets.alien_widget import AlienWidget
 from PyQt5 import QtWidgets
 class AlienNode(ProjectNode):
+    def __init__(self, alien):
+        super(AlienNode, self).__init__(alien)
+        self._alienTab = None
 
     def openImportWindow(self, parent):
         dial = AlienImportDialog(parent)
@@ -123,7 +126,8 @@ class AlienNode(ProjectNode):
                     self.addChildren(samples, end, param)
 
     def getWidgets(self):
-        self._alienTab = AlienWidget(self)
+        if not self._alienTab:
+            self._alienTab = AlienWidget(self)
         return {"Alien": self._alienTab}
 
     def setStandard(self, standard):
