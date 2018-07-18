@@ -3,7 +3,7 @@ from parameters.parameter_factory import ParameterFactory
 from skrf import Network
 
 class Sample(object):
-    def __init__(self, snp, config=None):
+    def __init__(self, snp, config=None, standard=None):
         # load the network
         (self._network, self._date) = Sample.loadSNP(snp)
 
@@ -12,6 +12,12 @@ class Sample(object):
             self._config = config
         else:
             self._config = self.getDefaultConfiguration()
+
+        # set the standard
+        if standard:
+            self.setStandard(standard)
+        else:
+            self._standard = None
 
         # convert the network into mixed mode
         self._network.se2gmm(self.getNumPorts())

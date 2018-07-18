@@ -5,9 +5,9 @@ class AlienSample(Sample):
     '''
     Abstract class for alien sample.
     '''
-    def __init__(self, snp, remote=False, config=None):
+    def __init__(self, snp, remote=False, config=None, standard=None):
         self._remote = remote
-        super(AlienSample, self).__init__(snp, config=config)
+        super(AlienSample, self).__init__(snp, config=config, standard=standard)
     
     def isRemote(self):
         return self._remote
