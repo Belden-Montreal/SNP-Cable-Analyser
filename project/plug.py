@@ -62,6 +62,17 @@ class Plug(Project):
     def nodeFromProject(self):
         return PlugNode(self)
 
+    def removeSample(self, sample):
+        if self._dfOpenDelay == sample:
+            self._dfOpenDelay = None
+        if self._dfShortDelay == sample:
+            self._dfShortDelay = None
+        if self._openDelay == sample:
+            self._openDelay = None
+        if self._shortDelay == sample:
+            self._shortDelay = None
+        if self._loadSample == sample:
+            self._loadSample = None
 
 from sample.sample import SampleNode
 from widgets.plug_widget import PlugWidget
@@ -85,7 +96,6 @@ class PlugNode(ProjectNode):
 
             samples = [openSample, shortSample, dfOpenSample, dfShortSample, loadSample]
             self.addChildren(samples)
-            self._dataObject._samples = samples
             if self._plugWidget:
                 self._plugWidget.createTabs()
                 self._plugWidget.updateWidget()
