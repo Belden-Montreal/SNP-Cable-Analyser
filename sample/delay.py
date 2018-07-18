@@ -1,12 +1,8 @@
-from sample.sample import Sample
+from sample.cable import CableSample
 
-class Delay(Sample):
-
-    def addParameters(self):
-        parameters = [
+class CableDelaySample(CableSample):
+    def getAvailableParameters(self):
+        return {
             "RL",
             "Propagation Delay",
-        ]
-
-        for parameter in parameters:
-            self._parameters[parameter] = self._factory.getParameter(parameter)
+        }
