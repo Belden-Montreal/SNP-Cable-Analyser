@@ -1,30 +1,23 @@
-from sample.single_ended import SingleEnded
+from sample.plug import PlugSample
 
-class Deembed(SingleEnded):
-
-    def __init__(self, matedLoad, plugNext, plugNextDelay, cases):
-        self._plugNext = plugNext
-        self._plugNextDelay = plugNextDelay
+class DeembedSample(PlugSample):
+    def __init__(self, snp, plugNext, plugNEXTDelay, cases):
+        self._plugNEXT = plugNext
+        self._plugNEXTDelay = plugNEXTDelay
         self._cases = cases
-        super(Deembed, self).__init__(matedLoad)
+        super(DeembedSample, self).__init__(snp)
 
-    def addParameters(self):
-        parameters = [
+    def getDefaultParameters(self):
+        return {
+            "PCNEXT"   : self._plugNEXT,
+            "NEXTDelay": self._plugNEXTDelay,
+            "Cases"    : self._cases,
+        }
+
+    def getAvailableParameters(self):
+        return {
             "RL",
             "NEXT",
-            "PCNEXT",
-            "NEXTDelay",
             "DNEXT",
-            "Cases",
-            "Case",
-        ]
-
-        for parameter in parameters:
-            if parameter == "PCNEXT":
-                self._parameters[parameter] = self._plugNext
-            elif parameter == "NEXTDelay":
-                self._parameters[parameter] = self._plugNextDelay
-            elif parameter == "Cases":
-                self._parameters[parameter] = self._cases
-            else:
-                self._parameters[parameter] = self._factory.getParameter(parameter)
+            "Case",       
+        }.union(self.getDefaultParameters().keys())
