@@ -1,25 +1,16 @@
-from sample.sample import Sample, PORTS_NAME
-from parameters.parameter_factory import ParameterFactory
+from sample.alien import AlienSample
+from sample.port import NetworkPort, AlienConfiguration
 
-class Disturber(Sample):
+class DisturberSample(AlienSample):
     '''
-    The Disturber class contains the measurements for alien parameters of one disturber on the victim
+    The Disturber class contains the measurements for alien parameters of one
+    disturber on the victim.
     '''
-    def __init__(self, snpFile, param="ANEXT", standard=None):
-        self._param = param
-        super(Disturber, self).__init__(snpFile, standard)
-    
-    def addParameters(self):
-        parameters = [
-            "IL",
-            "FEXT",
-            self._param,
-        ]
+    def getDefaultParameters(self):
+        return dict()
 
-        for parameter in parameters:
-            self._parameters[parameter] = self._factory.getParameter(parameter)
-
-    def setPorts(self):
-        for i in range(self._portsNumber//2):
-            self._ports[i] = (PORTS_NAME[i], False)
-            self._ports[i+self._portsNumber//2] = ("(d)"+PORTS_NAME[i], True)
+    def getAvailableParameters(self):
+        if self.isRemote():
+            return {"AFEXT"}
+        else:
+            return {"ANEXT"}

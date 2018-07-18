@@ -1,18 +1,23 @@
-import unittest
-from sample.test_sample import TestSample
-from sample.disturber import Disturber
+from unittest import TestCase
+from sample.test_alien import TestAlienSample
+from sample.disturber import DisturberSample
 
-class TestDisturber(TestSample):
-    def setUp(self):
-        super(TestDisturber, self).setUp()
-        self._params = ["IL","FEXT", "ANEXT"]
+class TestDisturberRemoteSample(TestAlienSample, TestCase):
+    def createSample(self):
+        return DisturberSample(self._snp, remote=True)
 
-    def testParametersBuilding(self):
-        d = Disturber(None, "ANEXT")
-        self.setMockSample(d)
-        self.assertEqual(len(d._parameters), len(self._params))
-        self.assertListEqual(list(d._parameters.keys()), self._params)
+    def getExpectedComputedParameters(self):
+        return {"AFEXT"}
 
+    def getShouldntRunParameters(self):
+        return {"ANEXT"}
 
-if __name__ == '__main__':
-    unittest.main()
+class TestDisturberMainSample(TestAlienSample, TestCase):
+    def createSample(self):
+        return DisturberSample(self._snp)
+
+    def getExpectedComputedParameters(self):
+        return {"ANEXT"}
+
+    def getShouldntRunParameters(self):
+        return {"AFEXT"}

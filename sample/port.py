@@ -141,6 +141,31 @@ class PlugConfiguration(NetworkConfiguration):
     def getRemotePorts(self):
         return set()
 
+class AlienConfiguration(NetworkConfiguration):
+    """
+    This class represents a alien configuration of a network.
+    """
+    def __init__(self, victims=set(), disturbers=set()):
+        # save all ports in the configuration
+        self._ports      = victims.union(disturbers)
+        self._victims    = victims
+        self._disturbers = disturbers
+
+        # make sure all ports are unique
+        indices = {p.getIndex() for p in self._ports}
+        if len(indices) != len(self._ports):
+            error = ValueError("All ports must be unique in the configuration")
+            raise error
+
+    def getPorts(self):
+        return self._ports
+
+    def getMainPorts(self):
+        return self._victims
+
+    def getRemotePorts(self):
+        return self._disturbers
+
 class CableConfiguration(NetworkConfiguration):
     """
     This class represents a cable configuration of a network.

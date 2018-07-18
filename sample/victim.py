@@ -1,38 +1,44 @@
-from sample.sample import Sample, PORTS_NAME
+from sample.alien import AlienSample
 
-class Victim(Sample):
+class VictimSample(AlienSample):
+    def __init__(self, snp, samples, config=None):
+        self._samples = samples
 
-    def __init__(self, snpFile, param="ANEXT", axextd=list(), standard=None):
-        self._axextd = axextd
-        self._param = param
-        if self._param == "ANEXT":
-            self._psaxext = "PSANEXT"
-            self._psaacrx = "PSAACRN"
+        # make sure all samples are all remote or main
+        remotes = set(d.isRemote() for d in self._samples)
+        if len(remotes) != 1:
+            error = ValueError("Remote mismatch between disturber samples")
+            raise error
+        remote = next(iter(remotes))
+
+        super(VictimSample, self).__init__(snp, remote=remote, config=config)
+
+    def getDefaultConfiguration(self):
+        # make sure all configuration are the same
+        ports = [s.getConfig().getPorts() for s in self._samples]
+        if ports[1:] != ports[1:]:
+            error = ValueError("Configuration mismatch between disturber samples")
+            raise error
+        config = next(iter([s.getConfig() for s in self._samples]))
+
+        return config
+
+    def getDefaultParameters(self):
+        if self._remote:
+            parameters = [s.getParameter("AFEXT") for s in self._samples]
+            return {"AFEXTD": parameters}
         else:
-            self._psaxext = "PSAFEXT"
-            self._psaacrx = "PSAACRF"
-        super(Victim, self).__init__(snpFile, standard)
+            parameters = [s.getParameter("ANEXT") for s in self._samples]
+            return {"ANEXTD": parameters}
 
-    def addParameters(self):
-        parameters = [
-            "IL",
-            self._param+"D",
-            self._psaxext,
-            self._psaacrx,
-        ]
-
-        for parameter in parameters:
-            if parameter == self._param+"D":
-                self._parameters[parameter] = self._axextd
-            else:
-                self._parameters[parameter] = self._factory.getParameter(parameter)
-
-    def setPorts(self):
-        for i in range(self._portsNumber//2):
-            self._ports[i] = (PORTS_NAME[i], False)
-            self._ports[i+self._portsNumber//2] = ("(d)"+PORTS_NAME[i], True)
+    def getAvailableParameters(self):
+        if self._remote:
+            return {"AFEXTD", "PSAFEXT", "PSAACRF"}
+        else:
+            return {"ANEXTD", "PSANEXT", "PSAACRN"}
 
     def setAXEXTD(self, axextd):
+        # TODO: what is this?
         self._axextd = axextd
         self._parameters["PS"+self._param].recalculate(self._axextd)
         if self._param == "ANEXT":

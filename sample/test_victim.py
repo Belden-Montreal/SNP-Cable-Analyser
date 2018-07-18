@@ -1,24 +1,37 @@
-import unittest
-from sample.test_sample import TestSample
-from sample.victim import Victim
-from parameters.axext import AXEXT
-from parameters.insertionloss import InsertionLoss
-from parameters.fext import FEXT
+from unittest import TestCase
+from sample.test_alien import TestAlienSample
+from sample.disturber import DisturberSample
+from sample.victim import VictimSample
 
-class TestVictim(TestSample):
-    def setUp(self):
-        super(TestVictim, self).setUp()
-        self._params = ["IL", "ANEXTD", "PSANEXT", "PSAACRN"]
+class TestVictimSample(TestAlienSample):
+    def isRemote(self):
+        raise NotImplementedError
 
-    def testParametersBuilding(self):
-        il = InsertionLoss(self._e2ePorts, self._freq, self._mm)
-        fext = FEXT(self._e2ePorts, self._freq, self._mm)
-        axextd = [AXEXT(self._e2ePorts, self._freq, self._mm, fext, il) for i in range(4)]
-        v = Victim(None, "ANEXT", axextd)
-        self.setMockSample(v)
-        self.assertEqual(len(v._parameters), len(self._params))
-        self.assertListEqual(list(v._parameters.keys()), self._params)
+    def createSample(self):
+        self._samples = {
+            DisturberSample("disturber1.snp", remote=self.isRemote()),
+            DisturberSample("disturber2.snp", remote=self.isRemote()),
+            DisturberSample("disturber3.snp", remote=self.isRemote()),
+            DisturberSample("disturber4.snp", remote=self.isRemote()),
+        }
+        return VictimSample(self._snp, self._samples)
 
+class TestVictimRemoteSample(TestVictimSample, TestCase):
+    def isRemote(self):
+        return True
 
-if __name__ == '__main__':
-    unittest.main()
+    def getExpectedComputedParameters(self):
+        return {"PSAFEXT", "PSAACRF"}
+
+    def getShouldntRunParameters(self):
+        return {"AFEXTD"}
+
+class TestVictimMainSample(TestVictimSample, TestCase):
+    def isRemote(self):
+        return False
+
+    def getExpectedComputedParameters(self):
+        return {"PSANEXT", "PSAACRN"}
+
+    def getShouldntRunParameters(self):
+        return {"ANEXTD"}
