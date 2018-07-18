@@ -112,8 +112,15 @@ class EmbeddingNode(ProjectNode):
                 (openSample, shortSample) = self._dataObject.importReverse(openFile, shortFile)
                 samples.extend([openSample, shortSample])
             plugProject = self._dataObject.importPlug(plugFile)
+            pk1, pk2, pk3 = plugProject.getConstants()
+            if not (k1 == pk1 and k2 == pk2 and k3 == pk3):
+                plugProject.setConstants(k1, k2, k3)
+                plugProject.recalculate()
             loadSample = self._dataObject.importLoad(loadFile, reverse, cat)
             samples.append(loadSample)
+            if self._embedTab:
+                self._embedTab.createTabs(reverse)
+                self._embedTab.updateWidget()
             self.addChildren(samples, plugProject, reverse)
 
     def addChildren(self, samples, plug, side):
