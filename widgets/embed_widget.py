@@ -22,14 +22,14 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
         self._embedding = embedNode.getObject()
         self._cat = "Cat 6/6A"
         self._pairTabs = dict()
+        self._pairTabs["Forward"] = dict()
+        self._pairTabs["Reverse"] = dict()
+        self.tabWidget.setTabText(0, "main")
         self._loadFile = None
         self.updateWidget()
 
     def updateWidget(self):
-        if self._isReverse:
-            side = "Reverse"
-        else:
-            side = "Forward"
+        side = self.getSide()
         sample = self._embedding.load()[side]
         if sample:
             self.loadFileName.setText(sample.getName())
@@ -40,15 +40,18 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
             self.shortFileName.setText(self._embedding.reverse()[1])
         if self._embedding.plug():
             self.plugLabel.setText(self._embedding.plug().getName())
-        self.setupTabs(side)
+        self.tabWidget.clear()
+        self.tabWidget.addTab(self.mainTab, "main")
+        for name, tab in self._pairTabs[side].items():
+            self.tabWidget.addTab(tab, name)
 
-    def setupTabs(self, side):
+    def createTabs(self, side):
         sample = self._embedding.load()[side]
         if sample:
             cases = sample.getParameters()["Case"]
             for port, (name,_) in cases.getPorts().items():
                 tab = CaseTab(name, cases.getFrequencies(), cases.getParameter()[port], self)
-                self._pairTabs[name] = tab
+                self._pairTabs[side][name] = tab
 
     def reverse(self):
         self._isReverse = not self._isReverse
@@ -90,8 +93,11 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
             load = self._embedding.importLoad(self._loadFile, "Forward", self._cat)
             self.loadFileName.setText(load.getName())
             self._node.addChildren([load], self._embedding.plug(), "Forward")
+        self.createTabs(self.getSide())
         self.updateWidget()
 
-
-    def getTabs(self):
-        return self._pairTabs
+    def getSide(self):
+        if self._isReverse:
+            return "Reverse"
+        else:
+            return "Forward"
