@@ -28,6 +28,9 @@ class Plug(Project):
         self._k2 = k2
         self._k3 = k3
 
+    def getConstants(self):
+        return (self._k1, self._k2, self._k3)
+
     def nodeFromProject(self):
         return PlugNode(self)
 
