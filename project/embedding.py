@@ -98,6 +98,9 @@ from project.plug import PlugNode
 from widgets.embed_widget import EmbedWidget
 from PyQt5 import QtWidgets
 class EmbeddingNode(ProjectNode):
+    def __init__(self, embedding):
+        super(EmbeddingNode, self).__init__(embedding)
+        self._embedTab = None
 
     def openImportWindow(self, parent):
         dial = EmbedImportDialog(parent)
@@ -108,9 +111,9 @@ class EmbeddingNode(ProjectNode):
             if reverse == ReverseState.REVERSE:
                 (openSample, shortSample) = self._dataObject.importReverse(openFile, shortFile)
                 samples.extend([openSample, shortSample])
+            plugProject = self._dataObject.importPlug(plugFile)
             loadSample = self._dataObject.importLoad(loadFile, reverse, cat)
             samples.append(loadSample)
-            plugProject = self._dataObject.importPlug(plugFile)
             self.addChildren(samples, plugProject, reverse)
 
     def addChildren(self, samples, plug, side):
@@ -130,10 +133,9 @@ class EmbeddingNode(ProjectNode):
             self.addChildren(self._dataObject._reverse, self._dataObject._plug, "Reverse")
 
     def getWidgets(self):
-        embedTab = EmbedWidget(self)
-        pairTabs = embedTab.getTabs()
+        if not self._embedTab:
+            self._embedTab = EmbedWidget(self)
         tabs = dict()
-        tabs["Embedding"] = embedTab
-        for name, pairTab in pairTabs.items():
-            tabs[name] = pairTab
+        tabs["Embedding"] = self._embedTab
+
         return tabs
