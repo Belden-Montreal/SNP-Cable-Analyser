@@ -14,6 +14,7 @@ class PlugSample(Sample):
 
     def addParameters(self):
         parameters = [
+            "RL",
             "DFDelay",
             "PlugDelay",
             "NEXTDelay",

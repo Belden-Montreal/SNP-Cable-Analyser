@@ -3,6 +3,7 @@ from sample.delay import Delay
 from sample.plug_sample import PlugSample
 from project.plug_import_dialog import PlugImportDialog
 import numpy as np
+import xlsxwriter
 
 class Plug(Project):
 
@@ -74,6 +75,43 @@ class Plug(Project):
         if self._loadSample == sample:
             self._loadSample = None
 
+    def generateExcel(self, outputName, unused, unused2):
+        workbook = xlsxwriter.Workbook(outputName, options={'nan_inf_to_errors': True})
+        sample = self._loadSample
+        worksheet = workbook.add_worksheet(sample.getName())
+        worksheet.write('A1', 'Plug ID:')
+        worksheet.write('B1', sample.getName())
+    
+        cell_format = workbook.add_format({'align': 'center',
+                                            'valign': 'vcenter',
+                                            'border': 6,})
+        worksheet.merge_range('A3:A5', "Frequency", cell_format)
+
+        curPos = 1
+        parameters = {"RL": sample.getParameters()["RL"], "CNEXT": sample.getParameters()["CNEXT"]}
+        for i, (paramName, parameter) in enumerate(parameters.items()):
+            numSignals = len(parameter.getPorts())
+            worksheet.merge_range(2, curPos, 2, curPos+numSignals*2-1,  paramName, cell_format)
+            for i, (key, (portName,_)) in enumerate(parameter.getPorts().items()):
+                worksheet.merge_range(3, curPos+i*2, 3, curPos+i*2+1, str(portName), cell_format)
+                if paramName == "Propagation Delay":
+                    worksheet.merge_range(4, curPos+i*2, 4, curPos+i*2+1, "ns", cell_format)
+                    param = parameter.getParameter()
+                    for j, data in enumerate(param[key]):
+                        worksheet.merge_range(5+j, curPos+i*2, 5+j, curPos+i*2+1, "")
+                        self.box(workbook, worksheet, param, key, i*2, j, data, curPos)
+                else:
+                    worksheet.write(4,curPos+i*2, "mag", cell_format)
+                    worksheet.write(4,curPos+i*2+1, "phase", cell_format)
+                    param = parameter.getParameter()
+                    for j, (mag, phase) in enumerate(param[key]):
+                        worksheet.write(5+j, 0, sample.getFrequencies()[j])
+                        self.box(workbook, worksheet, param, key, i*2, j, mag, curPos)
+                        self.box(workbook, worksheet, param, key, i*2+1, j, phase, curPos)
+        
+            curPos += numSignals*2
+        workbook.close()
+
 from sample.sample import SampleNode
 from widgets.plug_widget import PlugWidget
 
@@ -105,7 +143,17 @@ class PlugNode(ProjectNode):
             self.appendRow(SampleNode(sample, self._dataObject))
 
     def setupInitialData(self):
-        samples = [self._dataObject._openDelay, self._dataObject._shortDelay, self._dataObject._dfOpenDelay, self._dataObject._dfShortDelay, self._dataObject._loadSample]
+        samples = list()
+        if self._dataObject._openDelay:
+            samples.append(self._dataObject._openDelay)
+        if self._dataObject._shortDelay:
+            samples.append(self._dataObject._shortDelay)
+        if self._dataObject._dfOpenDelay:
+            samples.append(self._dataObject._dfOpenDelay)
+        if self._dataObject._dfShortDelay:
+            samples.append(self._dataObject._dfShortDelay)
+        if self._dataObject._loadSample:
+            samples.append(self._dataObject._loadSample)
         self.addChildren(samples)
 
     def getWidgets(self):
