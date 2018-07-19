@@ -68,6 +68,10 @@ class ParameterFactory(object):
             "CNEXT":lambda: CorrectedNEXT(self._ports, self._freq, self._matrix, self._params["NEXTDelay"]),
             "DNEXT":lambda: DNEXT(self._ports, self._freq, self._matrix, self._params["NEXTDelay"], self._params["PCNEXT"]),
             "Case":lambda: Case(self._ports, self._freq, self._matrix, self._params["DNEXT"], self._params["PCNEXT"], self._params["Cases"]),
+            "JackDelay":lambda: PlugDelay(self._ports, self._freq, self._matrix, self._params["OpenDelay"], self._params["ShortDelay"], self._params["PlugDelay"], self._params["k1"], self._params["k2"], self._params["k3"]),
+            "JackNEXTDelay":lambda: NEXTDelay(self._ports, self._freq, self._matrix, self._params["JackDelay"]),
+            "RDNEXT":lambda: DNEXT(self._ports, self._freq, self._matrix, self._params["JackNEXTDelay"], self._params["PCNEXT"]),
+            "RCase":lambda: Case(self._ports, self._freq, self._matrix, self._params["RDNEXT"], self._params["PCNEXT"], self._params["Cases"]),
         }
 
     def getParameter(self, name):

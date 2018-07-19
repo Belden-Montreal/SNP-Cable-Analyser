@@ -1,8 +1,9 @@
 from project.project import Project, ProjectNode
 from project.embedding_import_dialog import EmbedImportDialog, ReverseState
 from app.save_manager import SaveManager
-from sample.single_ended import SingleEnded
+from sample.delay import Delay
 from sample.deembed import Deembed
+from sample.reverse_deembed import ReverseDeembed
 import numpy as np
 import xlsxwriter
 
@@ -50,7 +51,8 @@ class Embedding(Project):
         self._load = dict()
         self._load["Forward"] = None
         self._load["Reverse"] = None
-        self._reverse = list()
+        self._open = None
+        self._short = None
 
     def importPlug(self, plugFile):
         self._plug = SaveManager().loadProject(plugFile)
@@ -61,27 +63,39 @@ class Embedding(Project):
             cases = Case.CAT5E
         else:
             cases = Case.CAT6
-        self._load[side] = Deembed(loadFile, self._plug.getPlugNext(), self._plug.getNextDelay(), cases)
+        if side == "Forward":
+            self._load[side] = Deembed(loadFile, self._plug.getPlugNext(), self._plug.getNextDelay(), cases)
+        else:
+            k1, k2, k3 = self._plug.getConstants()
+            self._load[side] = ReverseDeembed(loadFile, self._plug.getPlugDelay(), self._plug.getPlugNext(),
+                                              self._open.getParameters()["Propagation Delay"], self._short.getParameters()["Propagation Delay"], k1, k2, k3, cases)
         return self._load[side]
 
-    def importReverse(self, openFile, shortFile):
-        openSample = SingleEnded(openFile)
-        shortSample = SingleEnded(shortFile)
-        self._reverse = [openSample, shortSample]
-        return self._reverse
+    def importOpen(self, openFile):
+        self._open = Delay(openFile)
+        return self._open
 
+    def importShort(self, shortFile):
+        self._short = Delay(shortFile)
+        return self._short
+    
     def removeSample(self, sample):
         for side in self._load:
             if sample == self._load[side]:
                 self._load[side] = None
-        if sample in self._reverse:
-            self._reverse.remove(sample)
+        if sample == self._open:
+            self._open = None
+        if sample == self._short:
+            self._short = None
 
     def load(self):
         return self._load
 
-    def reverse(self):
-        return self._reverse
+    def openSample(self):
+        return self._open
+    
+    def shortSample(self):
+        return self._short
 
     def plug(self):
         return self._plug
@@ -189,7 +203,8 @@ class EmbeddingNode(ProjectNode):
             loadFile, plugFile, k1, k2, k3, cat, reverse, openFile, shortFile = files
             samples = list()
             if reverse == ReverseState.REVERSE:
-                (openSample, shortSample) = self._dataObject.importReverse(openFile, shortFile)
+                openSample = self._dataObject.importOpen(openFile)
+                shortSample = self._dataObject.importShort(shortFile)
                 samples.extend([openSample, shortSample])
             plugProject = self._dataObject.importPlug(plugFile)
             pk1, pk2, pk3 = plugProject.getConstants()
@@ -208,16 +223,22 @@ class EmbeddingNode(ProjectNode):
         if not node:
             node = Node(side)
             self.appendRow(node)
-        node.appendRow(PlugNode(plug))
+        if plug:
+            node.appendRow(PlugNode(plug))
         for sample in samples:
             node.appendRow(SampleNode(sample, self._dataObject))
 
     def setupInitialData(self):
         for side, sample in self._dataObject._load.items():
             if sample:
-                self.addChildren([sample], self._dataObject._plug, side)
-        if len(self._dataObject._reverse):
-            self.addChildren(self._dataObject._reverse, self._dataObject._plug, "Reverse")
+                self.addChildren([sample], self._dataObject.plug(), side)
+        reverse = list()
+        if self._dataObject.openSample():
+            reverse.append(self._dataObject.openSample())
+        if self._dataObject.shortSample():
+            reverse.append(self._dataObject.shortSample())
+        if len(reverse) > 0:
+            self.addChildren(reverse, self._dataObject.plug(), "Reverse")
 
     def getWidgets(self):
         if not self._embedTab:

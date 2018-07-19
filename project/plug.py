@@ -49,6 +49,9 @@ class Plug(Project):
     def getNextDelay(self):
         return self._loadSample.getParameters()["NEXTDelay"]
 
+    def getPlugDelay(self):
+        return self._loadSample.getParameters()["PlugDelay"]
+
     def setConstants(self, k1, k2, k3):
         self._k1 = k1
         self._k2 = k2
