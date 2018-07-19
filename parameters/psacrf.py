@@ -1,5 +1,6 @@
 from parameters.parameter import Parameter, diffDiffMatrix
 from parameters.dataserie import PortDataSerie
+from parameters.type import ParameterType
 
 class PSACRF(Parameter):
     '''
@@ -13,6 +14,17 @@ class PSACRF(Parameter):
         self._psfext = psfext
         self._il = il
         super(PSACRF, self).__init__(ports, freq, matrices)
+
+    @staticmethod
+    def getType():
+        return ParameterType.PSACRF
+
+    @staticmethod
+    def register(parameters):
+        return lambda c, f, m: PSACRF(c, f, m,
+            parameters(ParameterType.PSFEXT),
+            parameters(ParameterType.IL)
+        )
 
     def computeDataSeries(self):
         # obtains the data series from the dependent parameters

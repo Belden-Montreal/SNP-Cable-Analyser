@@ -1,11 +1,23 @@
 from parameters.next import NEXT
 from parameters.parameter import complex2db, takeClosest
+from parameters.type import ParameterType
+
 import numpy as np
 
 class CorrectedNEXT(NEXT):
     def __init__(self, ports, freq, matrices, nextDelay):
         self._nextDelay = nextDelay
         super(CorrectedNEXT, self).__init__(ports, freq, matrices)
+
+    @staticmethod
+    def getType():
+        return ParameterType.CORRECTED_NEXT
+
+    @staticmethod
+    def register(parameters):
+        return lambda c, f, m: CorrectedNEXT(c, f, m,
+            parameters(ParameterType.NEXT_DELAY)
+        )
 
     def computeParameter(self):
         dbCorrectedNEXT = {serie: list() for serie in self._series}

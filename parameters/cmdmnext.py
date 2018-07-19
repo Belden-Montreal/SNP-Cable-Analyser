@@ -1,5 +1,6 @@
 from parameters.next import NEXT
 from parameters.parameter import comDiffMatrix
+from parameters.type import ParameterType
 
 class CMDMNEXT(NEXT):
     '''
@@ -18,6 +19,9 @@ class CMDMNEXT(NEXT):
 
     We have the following pairs twice: (1,2), (1,3), (2,3), (4,5), (4,6), (5,6).
     '''
+    @staticmethod
+    def getType():
+        return ParameterType.CMDMNEXT
 
     def chooseMatrices(self, matrices):
         return comDiffMatrix(matrices)

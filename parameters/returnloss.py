@@ -1,5 +1,6 @@
 from parameters.parameter import Parameter, complex2db, complex2phase, diffDiffMatrix
 from parameters.dataserie import PortDataSerie
+from parameters.type import ParameterType
 
 class ReturnLoss(Parameter):
     '''
@@ -12,6 +13,14 @@ class ReturnLoss(Parameter):
         4  [ _ _ _ 4 ] 
         
     '''
+    @staticmethod
+    def getType():
+        return ParameterType.RL
+
+    @staticmethod
+    def register(parameters):
+        return lambda c, f, m: ReturnLoss(c, f, m)
+        
     def computeDataSeries(self):
         return {PortDataSerie(port) for port in self._ports.getPorts()}
 

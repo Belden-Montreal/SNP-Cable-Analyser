@@ -1,5 +1,6 @@
 from parameters.parameter import Parameter, complex2db, complex2phase, diffDiffMatrix
 from parameters.dataserie import PortPairDataSerie
+from parameters.type import ParameterType
 
 import itertools
 
@@ -21,6 +22,14 @@ class FEXT(Parameter):
         self._forward = forward
         self._reverse = reverse
         super(FEXT, self).__init__(ports, freq, matrices)
+
+    @staticmethod
+    def getType():
+        return ParameterType.FEXT
+
+    @staticmethod
+    def register(parameters, forward=True, reverse=True):
+        return lambda c, f, m: FEXT(c, f, m, forward=forward, reverse=reverse)
 
     def computeDataSeries(self):
         # create each pair for the FEXT

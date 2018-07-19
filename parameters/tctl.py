@@ -1,5 +1,6 @@
 from parameters.insertionloss import InsertionLoss
 from parameters.parameter import comDiffMatrix
+from parameters.type import ParameterType
 
 class TCTL(InsertionLoss):
     '''
@@ -13,6 +14,10 @@ class TCTL(InsertionLoss):
     3  [ _ _ _ _ ] 
     4  [ _ _ _ _ ] 
     '''
+    @staticmethod
+    def getType():
+        return ParameterType.TCTL
+
     def chooseMatrices(self, matrices):
         return comDiffMatrix(matrices)
 

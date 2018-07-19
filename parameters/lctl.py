@@ -1,5 +1,6 @@
 from parameters.insertionloss import InsertionLoss
 from parameters.parameter import diffComMatrix
+from parameters.type import ParameterType
 
 class LCTL(InsertionLoss):
     '''
@@ -12,6 +13,9 @@ class LCTL(InsertionLoss):
     3  [ _ _ _ _ ] 
     4  [ _ _ _ _ ] 
     '''
+    @staticmethod
+    def getType():
+        return ParameterType.LCTL
 
     def chooseMatrices(self, matrices):
         return diffComMatrix(matrices)

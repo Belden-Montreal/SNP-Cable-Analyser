@@ -1,8 +1,10 @@
-import numpy as np
-import math
 from parameters.parameter import Parameter, complex2db, complex2phase, diffDiffMatrix
 from parameters.next import NEXT
 from parameters.dataserie import PortDataSerie
+from parameters.type import ParameterType
+
+import numpy as np
+import math
 
 def powerSum(values):
     return 10*np.log10(np.sum(list(map(lambda v: 10**(v[0]/10), values))))
@@ -17,6 +19,14 @@ class PSNEXT(Parameter):
     def __init__(self, ports, freq, matrices, pnext):
         self._next = pnext
         super(PSNEXT, self).__init__(ports, freq, matrices)
+
+    @staticmethod
+    def getType():
+        return ParameterType.PSNEXT
+
+    @staticmethod
+    def register(parameters):
+        return lambda c, f, m: PSNEXT(c, f, m, parameters(ParameterType.NEXT))
 
     def computeDataSeries(self):
         mains   = self._ports.getMainPorts()

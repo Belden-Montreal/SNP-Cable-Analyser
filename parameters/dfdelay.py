@@ -1,5 +1,7 @@
 from parameters.parameter import Parameter, takeClosest
 from parameters.dataserie import PortDataSerie
+from parameters.type import ParameterType
+
 import numpy as np
 
 class DFDelay(Parameter):
@@ -8,6 +10,17 @@ class DFDelay(Parameter):
         self._shortDelay = shortDelay
         self._visible    = False
         super(DFDelay, self).__init__(ports, freq, matrices)
+
+    @staticmethod
+    def getType():
+        return ParameterType.DF_DELAY
+
+    @staticmethod
+    def register(parameters):
+        return lambda c, f, m: DFDelay(c, f, m,
+            parameters(ParameterType.DF_OPEN_DELAY),
+            parameters(ParameterType.DF_SHORT_DELAY)
+        )
 
     def computeDataSeries(self):
         return {PortDataSerie(port) for port in self._ports.getPorts()}

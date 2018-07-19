@@ -1,5 +1,6 @@
 from parameters.parameter import Parameter, diffDiffMatrix
 from parameters.dataserie import PortDataSerie
+from parameters.type import ParameterType
 
 class PSAACRX(Parameter):
     '''
@@ -20,6 +21,16 @@ class PSAACRX(Parameter):
         self._psaxext = psaxext
         self._il      = il
         super(PSAACRX, self).__init__(ports, freq, matrices)
+
+    @staticmethod
+    def getType():
+        return ParameterType.PSAACRX
+
+    @staticmethod
+    def register(parameters):
+        return lambda c, f, m: PSAACRX(c, f, m,
+            parameters(ParameterType.IL)
+        )
 
     def computeDataSeries(self):
         # obtains the data series from the dependent parameters
@@ -79,3 +90,20 @@ class PSAACRX(Parameter):
     def recalculate(self, psaxext):
         self._psaxext = psaxext
         (self._parameter, self._complexParameter) = self.computeParameter()
+
+class PSAACRN(PSAACRX):
+    @staticmethod
+    def getType():
+        return ParameterType.PSAACRN
+
+    def getName(self):
+        return "PSAACRN"
+
+class PSAACRF(PSAACRX):
+    @staticmethod
+    def getType():
+        return ParameterType.PSAACRF
+
+    def getName(self):
+        return "PSAACRF"
+

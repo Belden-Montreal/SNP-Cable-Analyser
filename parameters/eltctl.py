@@ -1,4 +1,5 @@
 from parameters.parameter import Parameter
+from parameters.type import ParameterType
 
 class ELTCTL(Parameter):
     '''
@@ -11,6 +12,17 @@ class ELTCTL(Parameter):
         self._il = il
         self._tctl = tctl
         super(ELTCTL, self).__init__(ports, freq, matrices)
+
+    @staticmethod
+    def getType():
+        return ParameterType.ELTCTL
+
+    @staticmethod
+    def register(parameters):
+        return lambda c, f, m: DNEXT(c, f, m,
+            parameters(ParameterType.IL),
+            parameters(ParameterType.TCTL)
+        )
 
     def computeDataSeries(self):
         # make sure all dependent parameters have the same data series

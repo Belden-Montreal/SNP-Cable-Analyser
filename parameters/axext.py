@@ -1,5 +1,6 @@
 from parameters.parameter import Parameter, complex2db, complex2phase, diffDiffMatrix
 from parameters.dataserie import PortPairDataSerie
+from parameters.type import ParameterType
 
 import itertools
 
@@ -42,6 +43,10 @@ class AXEXT(Parameter):
     def __init__(self, ports, freq, matrices):
         super(AXEXT, self).__init__(ports, freq, matrices)
 
+    @staticmethod
+    def register(parameters):
+        return lambda c, f, m: AXEXT(c, f, m)
+
     def computeDataSeries(self):
         # create each pair for the AXEXT
         series = set()
@@ -79,3 +84,19 @@ class AXEXT(Parameter):
 
     def getName(self):
         return "AXEXT"
+
+class ANEXT(AXEXT):
+    @staticmethod
+    def getType():
+        return ParameterType.ANEXT
+
+    def getName(self):
+        return "ANEXT"
+
+class AFEXT(AXEXT):
+    @staticmethod
+    def getType():
+        return ParameterType.AFEXT
+
+    def getName(self):
+        return "AFEXT"

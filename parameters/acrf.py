@@ -1,5 +1,7 @@
 from parameters.parameter import Parameter, diffDiffMatrix
 from parameters.dataserie import PortPairDataSerie
+from parameters.type import ParameterType
+
 from math import sqrt, floor
 
 class ACRF(Parameter):
@@ -12,6 +14,17 @@ class ACRF(Parameter):
         self._fext = fext
         self._il   = il
         super(ACRF, self).__init__(ports, freq, matrices)
+
+    @staticmethod
+    def getType():
+        return ParameterType.ACRF
+
+    @staticmethod
+    def register(parameters):
+        return lambda c, f, m: ACRF(c, f, m,
+            parameters(ParameterType.FEXT),
+            parameters(ParameterType.IL)
+        )
 
     def computeDataSeries(self):
         # obtains data series from the dependent parameters

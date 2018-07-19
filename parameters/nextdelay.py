@@ -1,5 +1,6 @@
 from parameters.parameter import Parameter
 from parameters.dataserie import PortOrderedPairDataSerie, PortDataSerie
+from parameters.type import ParameterType
 
 import itertools
 
@@ -10,6 +11,17 @@ class NEXTDelay(Parameter):
         self._plugDelay = plugDelay
         super(NEXTDelay, self).__init__(ports, freq, matrices)
         self._visible = False
+
+    @staticmethod
+    def getType():
+        return ParameterType.NEXT_DELAY
+
+    @staticmethod
+    def register(parameters, mains=True, remotes=False):
+        return lambda c, f, m: NEXTDelay(c, f, m,
+            parameters(ParameterType.PLUG_DELAY),
+            mains=mains, remotes=remotes
+        )
 
     def computeDataSeries(self):
         series = set()

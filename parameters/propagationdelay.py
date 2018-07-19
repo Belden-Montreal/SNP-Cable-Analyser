@@ -1,5 +1,6 @@
 from parameters.parameter import Parameter, complex2phase
 from parameters.dataserie import PortDataSerie
+from parameters.type import ParameterType
 
 class PropagationDelay(Parameter):
     '''
@@ -11,10 +12,19 @@ class PropagationDelay(Parameter):
     where dp = phase[f2] - phase[f1], df = f2 - f1 and phase[f] is the phase
     of the return loss at a given frequency
     '''
-
     def __init__(self, ports, freq, matrices, rl):
         self._rl = rl
         super(PropagationDelay, self).__init__(ports, freq, matrices)
+
+    @staticmethod
+    def getType():
+        return ParameterType.PROPAGATION_DELAY
+
+    @staticmethod
+    def register(parameters):
+        return lambda c, f, m: PropagationDelay(c, f, m,
+            parameters(ParameterType.RL)
+        )
 
     def computeDataSeries(self):
         return {PortDataSerie(port) for port in self._ports.getPorts()}

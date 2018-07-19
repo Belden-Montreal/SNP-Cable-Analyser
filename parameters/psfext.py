@@ -1,5 +1,7 @@
 from parameters.parameter import Parameter, diffDiffMatrix, complex2db, complex2phase
 from parameters.dataserie import PortDataSerie
+from parameters.type import ParameterType
+
 import numpy as np
 
 def powerSum(values):
@@ -19,6 +21,14 @@ class PSFEXT(Parameter):
     def __init__(self, ports, freq, matrices, fext):
         self._fext = fext
         super(PSFEXT, self).__init__(ports, freq, matrices)
+
+    @staticmethod
+    def getType():
+        return ParameterType.PSFEXT
+
+    @staticmethod
+    def register(parameters):
+        return lambda c, f, m: PSFEXT(c, f, m, parameters(ParameterType.FEXT))
 
     def computeDataSeries(self):
         mains   = self._ports.getMainPorts()

@@ -1,5 +1,6 @@
 from parameters.parameter import complex2phase, complex2db
 from parameters.correctednext import CorrectedNEXT
+from parameters.type import ParameterType
 
 import numpy as np
 
@@ -11,6 +12,17 @@ class DNEXT(CorrectedNEXT):
         self._plugNext = plugNext
         super(DNEXT, self).__init__(ports, freq, matrices, plugNextDelay)
     
+    @staticmethod
+    def getType():
+        return ParameterType.DNEXT
+
+    @staticmethod
+    def register(parameters):
+        return lambda c, f, m: DNEXT(c, f, m,
+            parameters(ParameterType.NEXT_DELAY),
+            parameters(ParameterType.PC_NEXT)
+        )
+
     def computeParameter(self):
         # create the series
         cpDNEXT = {serie: list() for serie in self._series}

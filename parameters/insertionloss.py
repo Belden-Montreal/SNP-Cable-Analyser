@@ -1,5 +1,6 @@
 from parameters.parameter import Parameter, complex2db, complex2phase, diffDiffMatrix
 from parameters.dataserie import PortPairDataSerie
+from parameters.type import ParameterType
 
 class InsertionLoss(Parameter):
     '''
@@ -18,6 +19,14 @@ class InsertionLoss(Parameter):
         self._forward = forward
         self._reverse = reverse
         super(InsertionLoss, self).__init__(ports, freq, matrices)
+
+    @staticmethod
+    def getType():
+        return ParameterType.IL
+
+    @staticmethod
+    def register(parameters, foward=True, reverse=True):
+        return lambda c, f, m: InsertionLoss(c, f, m, foward=foward, reverse=reverse)
 
     def computeDataSeries(self):
         series = set()

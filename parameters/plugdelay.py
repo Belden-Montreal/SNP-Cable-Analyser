@@ -1,5 +1,6 @@
 from parameters.parameter import Parameter, takeClosest
 from parameters.dataserie import PortDataSerie
+from parameters.type import ParameterType
 
 import numpy as np
 
@@ -13,6 +14,21 @@ class PlugDelay(Parameter):
         self._k3 = k3
         super(PlugDelay, self).__init__(ports, freq, matrices)
         self._visible = False
+
+    @staticmethod
+    def getType():
+        return ParameterType.PLUG_DELAY
+
+    @staticmethod
+    def register(parameters):
+        return lambda c, f, m:PlugDelay(c, f, m,
+            parameters(ParameterType.PLUG_OPEN_DELAY),
+            parameters(ParameterType.PLUG_SHORT_DELAY),
+            parameters(ParameterType.DF_DELAY),
+            parameters(ParameterType.K1),
+            parameters(ParameterType.K2),
+            parameters(ParameterType.K3)
+        )
 
     def computeDataSeries(self):
         series = {PortDataSerie(port) for port in self._ports.getMainPorts()}

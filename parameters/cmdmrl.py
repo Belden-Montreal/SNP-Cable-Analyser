@@ -1,5 +1,6 @@
 from parameters.returnloss import ReturnLoss
 from parameters.parameter import comDiffMatrix
+from parameters.type import ParameterType
 
 class CMDMRL(ReturnLoss):
     '''
@@ -13,6 +14,9 @@ class CMDMRL(ReturnLoss):
         3  [ _ _ 3 _ ] 
         4  [ _ _ _ 4 ] 
     '''
+    @staticmethod
+    def getType():
+        return ParameterType.CMDMRL
 
     def chooseMatrices(self, matrices):
         return comDiffMatrix(matrices)

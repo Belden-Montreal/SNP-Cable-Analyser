@@ -1,5 +1,7 @@
 from parameters.parameter import Parameter, diffDiffMatrix
 from parameters.dataserie import PortDataSerie
+from parameters.type import ParameterType
+
 import numpy as np
 
 class PSAXEXT(Parameter):
@@ -99,12 +101,40 @@ class PSAXEXT(Parameter):
     def chooseMatrices(self, matrices):
         return diffDiffMatrix(matrices)
 
-    def getDisturbersAXEXT(self):
-        return self._axextd
-
     def getName(self):
         return "PSAXEXT"
+
+    def getDisturbersAXEXT(self):
+        return self._axextd
 
     def recalculate(self, axextd):
         self._axextd = axextd
         (self._parameter, self._complexParameter) = self.computeParameter()
+
+class PSANEXT(PSAXEXT):
+    @staticmethod
+    def getType():
+        return ParameterType.PSANEXT
+
+    @staticmethod
+    def register(parameters):
+        return lambda c, f, m: PSAXEXT(c, f, m,
+            parameters(ParameterType.ANEXTD)
+        )
+
+    def getName(self):
+        return "PSANEXT"
+
+class PSAFEXT(PSAXEXT):
+    @staticmethod
+    def getType():
+        return ParameterType.PSAFEXT
+
+    @staticmethod
+    def register(parameters):
+        return lambda c, f, m: PSAXEXT(c, f, m,
+            parameters(ParameterType.AFEXTD)
+        )
+
+    def getName(self):
+        return "PSAFEXT"

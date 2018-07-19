@@ -1,5 +1,6 @@
 from parameters.returnloss import ReturnLoss
 from parameters.parameter import diffComMatrix
+from parameters.type import ParameterType
 
 class LCL(ReturnLoss):
     '''
@@ -13,6 +14,9 @@ class LCL(ReturnLoss):
         3  [ _ _ 3 _ ] 
         4  [ _ _ _ 4 ] 
     '''
+    @staticmethod
+    def getType():
+        return ParameterType.LCL
 
     def chooseMatrices(self, matrices):
         return diffComMatrix(matrices)

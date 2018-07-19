@@ -1,6 +1,7 @@
 from parameters.parameter import Parameter, complex2db, complex2phase
 from parameters.case_plot import CasePlot
 from parameters.dataserie import PortOrderedPairDataSerie
+from parameters.type import ParameterType
 
 import numpy as np
 import itertools
@@ -12,6 +13,18 @@ class Case(Parameter):
         self._cnext = cnext
         super(Case, self).__init__(ports, freq, matrices)
         self._plot = CasePlot(self)
+
+    @staticmethod
+    def getType():
+        return ParameterType.CASE
+
+    @staticmethod
+    def register(parameters):
+        return lambda c, f, m: Case(c, f, m,
+            parameters(ParameterType.DNEXT),
+            parameters(ParameterType.PCNEXT),
+            parameters(ParameterType.CASES),
+        )
 
     def computeDataSeries(self):
         series = set()

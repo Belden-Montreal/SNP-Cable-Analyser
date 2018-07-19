@@ -60,6 +60,14 @@ class Parameter(object):
         self._worstValue = (dict(), None)
         self._plot = ParameterPlot(self)
 
+    @staticmethod
+    def getType():
+        raise NotImplementedError
+
+    @staticmethod
+    def register(parameters):
+        raise NotImplementedError
+
     def chooseMatrices(self, mixedModeMatrices):
         raise NotImplementedError
 

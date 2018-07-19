@@ -1,5 +1,6 @@
 from parameters.parameter import comDiffMatrix
 from parameters.returnloss import ReturnLoss
+from parameters.type import ParameterType
 
 class TCL(ReturnLoss):
     '''
@@ -14,6 +15,9 @@ class TCL(ReturnLoss):
         3  [ _ _ 3 _ ] 
         4  [ _ _ _ 4 ] 
     '''
+    @staticmethod
+    def getType():
+        return ParameterType.TCL
 
     def chooseMatrices(self, matrices):
         return comDiffMatrix(matrices)

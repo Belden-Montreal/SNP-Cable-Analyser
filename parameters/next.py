@@ -1,5 +1,6 @@
 from parameters.parameter import Parameter, complex2db, complex2phase, diffDiffMatrix
 from parameters.dataserie import PortPairDataSerie, PortOrderedPairDataSerie
+from parameters.type import ParameterType
 
 import itertools
 
@@ -23,6 +24,14 @@ class NEXT(Parameter):
         self._remotes = remotes
         self._order   = order
         super(NEXT, self).__init__(ports, freq, matrices)
+
+    @staticmethod
+    def getType():
+        return ParameterType.NEXT
+
+    @staticmethod
+    def register(parameters, mains=True, remotes=True, order=True):
+        return lambda c, f, m: NEXT(c, f, m, mains=mains, remotes=remotes, order=order)
 
     def computeDataSeries(self):
         # create each pair for the NEXT
