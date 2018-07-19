@@ -64,3 +64,33 @@ class TestParameterFactory(TestCase):
 
         # make sure the parameter wasn't created another time
         mock_next.assert_not_called()
+
+    @patch('parameters.parameter_factory.NEXT')
+    @patch('parameters.parameter_factory.PSNEXT')
+    def testOnlyRequestedInParameter(self, mock_psnext, mock_next):
+        # set up mocked objects
+        mock_next_obj = MagicMock()
+        mock_next.return_value = mock_next_obj
+        mock_psnext_obj = MagicMock()
+
+        # call the tested method
+        self._parameters["PSNEXT"] = self._factory.getParameter("PSNEXT")
+
+        # make sure the NEXT was computed
+        mock_next.assert_called_once_with(
+            self._config,
+            self._freq,
+            self._matrices
+        )
+
+        # make sure the PSNEXT was computed
+        mock_psnext.assert_called_once_with(
+            self._config,
+            self._freq,
+            self._matrices,
+            mock_next_obj
+        )
+
+        # NEXT shouldn't be in parameters
+        self.assertEqual(len(self._parameters), 1)
+        self.assertEqual("PSNEXT" in self._parameters.keys(), True)

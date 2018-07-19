@@ -30,7 +30,8 @@ from parameters.case             import Case
 
 class ParameterFactory(object):
     def __init__(self, config, freq, matrices, parameters):
-        self._parameters = parameters
+        self._computed = dict()
+        self._computed.update(parameters)
         self._factory = self.setUpFactory(config, freq, matrices)
 
     def setUpFactory(self, c, f, m):
@@ -73,6 +74,6 @@ class ParameterFactory(object):
         }
 
     def getParameter(self, name):
-        if name not in self._parameters.keys():
-            self._parameters[name] = self._factory[name]()
-        return self._parameters[name]
+        if name not in self._computed.keys():
+            self._computed[name] = self._factory[name]()
+        return self._computed[name]
