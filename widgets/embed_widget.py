@@ -17,6 +17,8 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
         self.reembedButton.clicked.connect(lambda: self.reembed())
         self.importLoad.clicked.connect(lambda: self.getLoadFile())
         self.importPlug.clicked.connect(lambda: self.getPlug())
+        self.importOpen.clicked.connect(lambda: self.getOpen())
+        self.importShort.clicked.connect(lambda: self.getShort())
         self._isReverse = False
         self._node = embedNode
         self._embedding = embedNode.getObject()
@@ -28,6 +30,8 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
         self.createTabs("Reverse")
         self.tabWidget.setTabText(0, "main")
         self._loadFile = None
+        self._openFile = None
+        self._shortFile = None
         self._k1, self._k2, self._k3 = None, None, None
         self.updateWidget()
 
@@ -38,9 +42,14 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
             self.loadFileName.setText(sample.getName())
         else:
             self.loadFileName.setText("\"\"")
-        if len(self._embedding.reverse()) == 2:
-            self.openFileName.setText(self._embedding.reverse()[0])
-            self.shortFileName.setText(self._embedding.reverse()[1])
+        if side == "Reverse":
+            if self._embedding.openSample():
+                self.openFileName.setText(self._embedding.openSample().getName())
+            if self._embedding.shortSample():
+                self.shortFileName.setText(self._embedding.shortSample().getName())
+        else:
+            self.openFileName.setText("\"\"")
+            self.shortFileName.setText("\"\"")
         if self._embedding.plug():
             plug = self._embedding.plug()
             self.plugLabel.setText(plug.getName())
@@ -56,7 +65,10 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
     def createTabs(self, side):
         sample = self._embedding.load()[side]
         if sample:
-            cases = sample.getParameters()["Case"]
+            if side == "Forward":
+                cases = sample.getParameters()["Case"]
+            else:
+                cases = sample.getParameters()["RCase"]
             for port, (name,_) in cases.getPorts().items():
                 tab = CaseTab(name, cases.getFrequencies(), cases.getParameter()[port], self)
                 self._pairTabs[side][name] = tab
@@ -92,15 +104,32 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
         self.plugLabel.setText(plug.getName())
         self.reembed()
 
+    def getOpen(self):
+        fileName,_ = QtWidgets.QFileDialog.getOpenFileName(self, "Select open file", "", "sNp Files (*.s*p)")
+        self._openFile = fileName
+        self.reembed()
+
+    def getShort(self):
+        fileName,_ = QtWidgets.QFileDialog.getOpenFileName(self, "Select short file", "", "sNp Files (*.s*p)")
+        self._shortFile = fileName
+        self.reembed()
+
     def reembed(self):
+        if self._isReverse:
+            side = "Reverse"
+            if self._openFile:
+                openFile = self._embedding.importOpen(self._openFile)
+                self.openFileName.setText(openFile.getName())
+            if self._shortFile:
+                shortFile = self._embedding.importShort(self._shortFile)
+                self.shortFileName.setText(shortFile.getName())
+        else:
+            side = "Forward"
         if self._loadFile:
-            if self._isReverse:
-                pass #TODO: reverse Reembedding
-            else:
-                self.checkConstants()
-                load = self._embedding.importLoad(self._loadFile, "Forward", self._cat)
-                self.loadFileName.setText(load.getName())
-                self._node.addChildren([load], self._embedding.plug(), "Forward")
+            self.checkConstants()
+            load = self._embedding.importLoad(self._loadFile, side, self._cat)
+            self.loadFileName.setText(load.getName())
+            self._node.addChildren([load], self._embedding.plug(), side)
             self.createTabs(self.getSide())
         self.updateWidget()
 
