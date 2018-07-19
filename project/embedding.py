@@ -4,6 +4,7 @@ from app.save_manager import SaveManager
 from sample.single_ended import SingleEnded
 from sample.deembed import Deembed
 import numpy as np
+import xlsxwriter
 
 class Case():
     CAT5E = {
@@ -86,7 +87,86 @@ class Embedding(Project):
         return self._plug
 
     def generateExcel(self, outputName, sampleNames, z=False):
-        raise NotImplementedError
+        workbook = xlsxwriter.Workbook(outputName, options={'nan_inf_to_errors': True})
+        if z:
+            dataTitle = ["Real", "Imag"]
+        else:
+            dataTitle = ["Mag", "Phase"]
+        for side, sample in self._load.items():
+            if sample:
+                worksheet = workbook.add_worksheet(side)
+                worksheet.write('A1', 'De-embedding ID:')
+                worksheet.write('B1', sample.getName())
+            
+                cell_format = workbook.add_format({'align': 'center',
+                                                    'valign': 'vcenter',
+                                                    'border': 6,})
+                worksheet.merge_range('A3:A5', "Frequency", cell_format)
+
+                curPos = 1
+                parameters = {"RL": sample.getParameters()["RL"], "NEXT": sample.getParameters()["NEXT"], "DNEXT": sample.getParameters()["DNEXT"], "Case": sample.getParameters()["Case"]}
+                for (paramName, parameter) in (parameters.items()):
+                    numSignals = len(parameter.getPorts())
+                    if paramName == "Case":
+                        nc = 0
+                        for p in parameter.getParameter().values():
+                            nc += len(p)
+                        worksheet.merge_range(2, curPos, 2, curPos+nc*2-1,  paramName, cell_format)
+                    else:
+                        worksheet.merge_range(2, curPos, 3, curPos+numSignals*2-1,  paramName, cell_format)
+                    for i, (key, (portName,_)) in enumerate(parameter.getPorts().items()):
+                        if paramName == "Case":
+                            param = self.__getParam(parameter, z)
+                            numCases = len(param[key])
+                            worksheet.merge_range(4, curPos, 4, curPos+numCases*2-1, str(portName), cell_format)
+                            for k, (n, case) in enumerate(param[key].items()):
+                                worksheet.merge_range(3, curPos+k*2, 3, curPos+k*2+1, str(n), cell_format)
+                                worksheet.write(5,curPos+k*2, dataTitle[0], cell_format)
+                                worksheet.write(5,curPos+k*2+1, dataTitle[1], cell_format)
+                                for j, (data) in enumerate(case):
+                                    d1,d2 = self.__getData(data, z)
+                                    worksheet.write(6+j, 0, sample.getFrequencies()[j])
+                                    self.box(workbook, worksheet, case, k*2, j, d1, curPos, numCases*2)
+                                    self.box(workbook, worksheet, case, k*2+1, j, d2, curPos, numCases*2)
+                            curPos+=numCases*2
+                            
+                        else:
+                            worksheet.merge_range(4, curPos+i*2, 4, curPos+i*2+1, str(portName), cell_format)
+                            worksheet.write(5,curPos+i*2, dataTitle[0], cell_format)
+                            worksheet.write(5,curPos+i*2+1, dataTitle[1], cell_format)
+                            param = self.__getParam(parameter, z)
+                            for j, (data) in enumerate(param[key]):
+                                d1,d2 = self.__getData(data, z)
+                                worksheet.write(6+j, 0, sample.getFrequencies()[j])
+                                self.box(workbook, worksheet, param[key], i*2, j, d1, curPos, len(param)*2)
+                                self.box(workbook, worksheet, param[key], i*2+1, j, d2, curPos, len(param)*2)
+                
+                    curPos += numSignals*2
+            workbook.close()
+
+    def box(self, workbook, worksheet, case, i, j, data, curPos, nCases):
+        box_form = workbook.add_format()
+        if j == 0:
+            box_form.set_top(6)
+        if i == 0:
+            box_form.set_left(6)
+        if j == len(case)-1:
+            box_form.set_bottom(6)
+        if i == nCases-1:
+            box_form.set_right(6)
+        worksheet.write(j+6, curPos+i, data, box_form)
+        
+    def __getParam(self, param, z=False):
+        if z:
+            return param.getComplexParameter()
+        else:
+            return param.getParameter()
+
+    def __getData(self, data, z=False):
+        if z:
+            return data.real, data.imag
+        else:
+            return data[0], data[1]
 
     def nodeFromProject(self):
         return EmbeddingNode(self)

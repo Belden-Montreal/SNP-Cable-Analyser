@@ -75,7 +75,7 @@ class Plug(Project):
         if self._loadSample == sample:
             self._loadSample = None
 
-    def generateExcel(self, outputName, unused, unused2):
+    def generateExcel(self, outputName, sampleNames, z=False):
         workbook = xlsxwriter.Workbook(outputName, options={'nan_inf_to_errors': True})
         sample = self._loadSample
         worksheet = workbook.add_worksheet(sample.getName())
