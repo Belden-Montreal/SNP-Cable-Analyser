@@ -1,7 +1,8 @@
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
 
-from parameters.parameter_factory import ParameterFactory
+from parameters.factory import ParameterFactory
+from parameters.type import ParameterType
 
 class TestParameterFactory(TestCase):
     def setUp(self):
@@ -16,8 +17,8 @@ class TestParameterFactory(TestCase):
             self._parameters
         )
 
-    @patch('parameters.parameter_factory.FEXT')
-    @patch('parameters.parameter_factory.PSFEXT')
+    @patch('parameters.fext.FEXT')
+    @patch('parameters.psfext.PSFEXT')
     def testDependentParameterBefore(self, mock_psfext, mock_fext):
         # set up mocked objects
         mock_fext_obj = MagicMock()
@@ -25,13 +26,15 @@ class TestParameterFactory(TestCase):
         mock_psfext_obj = MagicMock()
 
         # call the tested method
-        self._factory.getParameter("PSFEXT")
+        self._factory.getParameter(ParameterType.PSFEXT)
 
         # make sure the FEXT was computed
         mock_fext.assert_called_once_with(
             self._config,
             self._freq,
-            self._matrices
+            self._matrices,
+            forward=True,
+            reverse=True
         )
 
         # make sure the PSFEXT was computed
@@ -42,31 +45,34 @@ class TestParameterFactory(TestCase):
             mock_fext_obj
         )
 
-    @patch('parameters.parameter_factory.NEXT')
+    @patch('parameters.next.NEXT')
     def testNoRecompute(self, mock_next):
         # set up mocked objects
         mock_next_obj = MagicMock()
         mock_next.return_value = mock_next_obj
 
         # call the tested method
-        self._factory.getParameter("NEXT")
+        self._factory.getParameter(ParameterType.NEXT)
 
         # make sure the parameter was created
         mock_next.assert_called_once_with(
             self._config,
             self._freq,
-            self._matrices
+            self._matrices,
+            mains=True,
+            remotes=True,
+            order=True
         )
         mock_next.reset_mock()
 
         # call it again
-        self._factory.getParameter("NEXT")
+        self._factory.getParameter(ParameterType.NEXT)
 
         # make sure the parameter wasn't created another time
         mock_next.assert_not_called()
 
-    @patch('parameters.parameter_factory.NEXT')
-    @patch('parameters.parameter_factory.PSNEXT')
+    @patch('parameters.next.NEXT')
+    @patch('parameters.psnext.PSNEXT')
     def testOnlyRequestedInParameter(self, mock_psnext, mock_next):
         # set up mocked objects
         mock_next_obj = MagicMock()
@@ -74,13 +80,16 @@ class TestParameterFactory(TestCase):
         mock_psnext_obj = MagicMock()
 
         # call the tested method
-        self._parameters["PSNEXT"] = self._factory.getParameter("PSNEXT")
+        self._parameters[ParameterType.PSNEXT] = self._factory.getParameter(ParameterType.PSNEXT)
 
         # make sure the NEXT was computed
         mock_next.assert_called_once_with(
             self._config,
             self._freq,
-            self._matrices
+            self._matrices,
+            mains=True,
+            remotes=True,
+            order=True
         )
 
         # make sure the PSNEXT was computed
@@ -93,4 +102,4 @@ class TestParameterFactory(TestCase):
 
         # NEXT shouldn't be in parameters
         self.assertEqual(len(self._parameters), 1)
-        self.assertEqual("PSNEXT" in self._parameters.keys(), True)
+        self.assertEqual(ParameterType.PSNEXT in self._parameters.keys(), True)
