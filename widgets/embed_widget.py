@@ -95,8 +95,15 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
 
     def getLoadFile(self):
         fileName,_ = QtWidgets.QFileDialog.getOpenFileName(self, "Select load file", "", "sNp Files (*.s*p)")
+        oldName = self._loadFile
         self._loadFile = fileName
-        self.reembed()
+        try:
+            self.reembed()
+        except Exception as e:
+            self._loadFile = oldName
+            error = QtWidgets.QErrorMessage(self)
+            error.showMessage(("Please select valid s8p files. \n{}").format(str(e)), "Invalid_Files")
+            error.exec_()
 
     def getPlug(self):
         fileName,_ = QtWidgets.QFileDialog.getOpenFileName(self, "Select plug file", "", "Belden Network Analyzer Project files (*.bnap)")
@@ -106,13 +113,27 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
 
     def getOpen(self):
         fileName,_ = QtWidgets.QFileDialog.getOpenFileName(self, "Select open file", "", "sNp Files (*.s*p)")
+        oldName = self._openFile
         self._openFile = fileName
-        self.reembed()
+        try:
+            self.reembed()
+        except Exception as e:
+            self._openFile = oldName
+            error = QtWidgets.QErrorMessage(self)
+            error.showMessage(("Please select valid s8p files. \n{}").format(str(e)), "Invalid_Files")
+            error.exec_()
 
     def getShort(self):
         fileName,_ = QtWidgets.QFileDialog.getOpenFileName(self, "Select short file", "", "sNp Files (*.s*p)")
+        oldName = self._shortFile
         self._shortFile = fileName
-        self.reembed()
+        try:
+            self.reembed()
+        except Exception as e:
+            self._shortFile = oldName
+            error = QtWidgets.QErrorMessage(self)
+            error.showMessage(("Please select valid s8p files. \n{}").format(str(e)), "Invalid_Files")
+            error.exec_()
 
     def reembed(self):
         if self._isReverse:

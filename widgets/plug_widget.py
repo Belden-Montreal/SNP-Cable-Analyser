@@ -65,9 +65,13 @@ class PlugWidget(TabWidget, plug_widget_ui.Ui_Form):
                 self.updateWidget()
                 self._node.addChildren([self._plug.dfOpen(), self._plug.dfShort(), self._plug.openSample(), self._plug.shortSample(), self._plug.loadSample()])
             else:
-                print("error")
+                error = QtWidgets.QErrorMessage(self)
+                error.showMessage("Please select all the required files", "Missing_Files")
+                error.exec_()
         except Exception as e:
-            print(e)
+            error = QtWidgets.QErrorMessage(self)
+            error.showMessage(("Please select valid s8p files. \n{}").format(str(e)), "Invalid_Files")
+            error.exec_()
 
     def updateWidget(self):
         if self._plug._dfOpenDelay:
