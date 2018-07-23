@@ -78,6 +78,21 @@ class Plug(Project):
         if self._loadSample == sample:
             self._loadSample = None
 
+    def dfOpen(self):
+        return self._dfOpenDelay
+
+    def dfShort(self):
+        return self._dfShortDelay
+
+    def openSample(self):
+        return self._openDelay
+
+    def shortSample(self):
+        return self._shortDelay
+
+    def loadSample(self):
+        return self._loadSample
+
     def generateExcel(self, outputName, sampleNames, z=False):
         workbook = xlsxwriter.Workbook(outputName, options={'nan_inf_to_errors': True})
         sample = self._loadSample
