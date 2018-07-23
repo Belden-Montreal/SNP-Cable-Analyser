@@ -15,6 +15,7 @@ class TestPlugSample(TestSample):
             "k1",
             "k2",
             "k3",
+            "RL",
             "DFDelay",
             "PlugDelay",
             "NEXTDelay",
