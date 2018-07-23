@@ -112,7 +112,7 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
                 ax.xaxis.set_major_formatter(ScalarFormatter())
                 ax.grid(which='both')
                 ax.legend(loc='best')
-        self.showTab()
+        self.graphicsView.draw()
 
     def importVictim(self):
         fileName,_ = QtWidgets.QFileDialog.getOpenFileName(self, "Select victim", "", "sNp Files (*.s*p)")
