@@ -63,6 +63,7 @@ class PlugWidget(TabWidget, plug_widget_ui.Ui_Form):
                 self._plug.importLoad(self._loadName)
                 self.createTabs()
                 self.updateWidget()
+                self._node.addChildren([self._plug.dfOpen(), self._plug.dfShort(), self._plug.openSample(), self._plug.shortSample(), self._plug.loadSample()])
             else:
                 print("error")
         except Exception as e:
