@@ -39,16 +39,16 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
         side = self.getSide()
         sample = self._embedding.load()[side]
         if sample:
-            self.loadFileName.setText(sample.getName())
+            self.loadFileName.setText(sample.getFileName())
             self._loadFile = sample.getFileName()
         else:
             self.loadFileName.setText("\"\"")
             self._loadFile = None
         if side == "Reverse":
             if self._embedding.openSample():
-                self.openFileName.setText(self._embedding.openSample().getName())
+                self.openFileName.setText(self._embedding.openSample().getFileName())
             if self._embedding.shortSample():
-                self.shortFileName.setText(self._embedding.shortSample().getName())
+                self.shortFileName.setText(self._embedding.shortSample().getFileName())
         else:
             self.openFileName.setText("\"\"")
             self.shortFileName.setText("\"\"")
@@ -93,49 +93,31 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
             self._cat = "CAT5e"
         else:
             self._cat = "CAT6"
-        self.reembed()
 
     def getLoadFile(self):
         fileName,_ = QtWidgets.QFileDialog.getOpenFileName(self, "Select load file", "", "sNp Files (*.s*p)")
-        oldName = self._loadFile
         self._loadFile = fileName
-        try:
-            self.reembed()
-        except Exception as e:
-            self._loadFile = oldName
-            error = QtWidgets.QErrorMessage(self)
-            error.showMessage(("Please select valid s8p files. \n{}").format(str(e)), "Invalid_Files")
-            error.exec_()
+        self.loadFileName.setText(self._loadFile)
 
     def getPlug(self):
         fileName,_ = QtWidgets.QFileDialog.getOpenFileName(self, "Select plug file", "", "Belden Network Analyzer Project files (*.bnap)")
         plug = self._embedding.importPlug(fileName)
         self.plugLabel.setText(plug.getName())
-        self.reembed()
+        self._k1, self._k2, self._k3 = plug.getConstants()
+        self.SJ_124578_LineEdit.setText(str(self._k1))
+        self.sJ36LineEdit.setText(str(self._k2))
+        self.thruCalibLineEdit.setText(str(self._k3))
+        self._node.updateChildren()
 
     def getOpen(self):
         fileName,_ = QtWidgets.QFileDialog.getOpenFileName(self, "Select open file", "", "sNp Files (*.s*p)")
-        oldName = self._openFile
         self._openFile = fileName
-        try:
-            self.reembed()
-        except Exception as e:
-            self._openFile = oldName
-            error = QtWidgets.QErrorMessage(self)
-            error.showMessage(("Please select valid s8p files. \n{}").format(str(e)), "Invalid_Files")
-            error.exec_()
+        self.openFileName.setText(self._openFile)
 
     def getShort(self):
         fileName,_ = QtWidgets.QFileDialog.getOpenFileName(self, "Select short file", "", "sNp Files (*.s*p)")
-        oldName = self._shortFile
         self._shortFile = fileName
-        try:
-            self.reembed()
-        except Exception as e:
-            self._shortFile = oldName
-            error = QtWidgets.QErrorMessage(self)
-            error.showMessage(("Please select valid s8p files. \n{}").format(str(e)), "Invalid_Files")
-            error.exec_()
+        self.shortFileName.setText(self._shortFile)
 
     def reembed(self):
         if self._isReverse:
