@@ -63,7 +63,7 @@ class PlugWidget(TabWidget, plug_widget_ui.Ui_Form):
                 self._plug.importLoad(self._loadName)
                 self.createTabs()
                 self.updateWidget()
-                self._node.addChildren([self._plug.dfOpen(), self._plug.dfShort(), self._plug.openSample(), self._plug.shortSample(), self._plug.loadSample()])
+                self._node.updateChildren()
             else:
                 error = QtWidgets.QErrorMessage(self)
                 error.showMessage("Please select all the required files", "Missing_Files")
@@ -75,15 +75,15 @@ class PlugWidget(TabWidget, plug_widget_ui.Ui_Form):
 
     def updateWidget(self):
         if self._plug._dfOpenDelay:
-            self.dfOpenFileName.setText(self._plug._dfOpenDelay.getName())
+            self.dfOpenFileName.setText(self._plug._dfOpenDelay.getFileName())
         if self._plug._dfShortDelay:
-            self.dfShortFileName.setText(self._plug._dfShortDelay.getName())
+            self.dfShortFileName.setText(self._plug._dfShortDelay.getFileName())
         if self._plug._openDelay:
-            self.openFileName.setText(self._plug._openDelay.getName())
+            self.openFileName.setText(self._plug._openDelay.getFileName())
         if self._plug._shortDelay:
-            self.shortFileName.setText(self._plug._shortDelay.getName())
+            self.shortFileName.setText(self._plug._shortDelay.getFileName())
         if self._plug._loadSample:
-            self.loadFileName.setText(self._plug._loadSample.getName())
+            self.loadFileName.setText(self._plug._loadSample.getFileName())
         self.tabWidget.clear()
         self.tabWidget.addTab(self.mainTab, "main")
         for name, tab in self._pairTabs.items():

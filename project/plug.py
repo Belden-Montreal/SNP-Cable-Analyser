@@ -132,7 +132,7 @@ class Plug(Project):
 
 from sample.sample import SampleNode
 from widgets.plug_widget import PlugWidget
-
+from app.node import Node
 class PlugNode(ProjectNode):
     def __init__(self, plug):
         super(PlugNode, self).__init__(plug)
@@ -143,15 +143,14 @@ class PlugNode(ProjectNode):
         files = dial.getFiles()
         if files:
             dfOpen, dfShort, plugOpen, plugShort, plugLoad, k1, k2, k3 = files
-            openSample = self._dataObject.importOpen(plugOpen)
-            shortSample = self._dataObject.importShort(plugShort)
-            dfOpenSample = self._dataObject.importDfOpen(dfOpen)
-            dfShortSample = self._dataObject.importDfShort(dfShort)
+            self._dataObject.importOpen(plugOpen)
+            self._dataObject.importShort(plugShort)
+            self._dataObject.importDfOpen(dfOpen)
+            self._dataObject.importDfShort(dfShort)
             self._dataObject.setConstants(k1, k2, k3)
-            loadSample = self._dataObject.importLoad(plugLoad)
+            self._dataObject.importLoad(plugLoad)
 
-            samples = [openSample, shortSample, dfOpenSample, dfShortSample, loadSample]
-            self.addChildren(samples)
+            self.updateChildren()
             if self._plugWidget:
                 self._plugWidget.createTabs()
                 self._plugWidget.updateWidget()
@@ -159,20 +158,51 @@ class PlugNode(ProjectNode):
     def addChildren(self, samples):
         for sample in samples:
             self.appendRow(SampleNode(sample, self._dataObject))
+    
+    def updateChildren(self):
+        node = self.hasChild("DFOpen")
+        if not node:
+            node = Node("DFOpen")
+            self.appendRow(node)
+        node.setRowCount(0)
+        if self._dataObject.dfOpen():
+            node.appendRow(SampleNode(self._dataObject.dfOpen(), self._dataObject))
+
+        node = self.hasChild("DFShort")
+        if not node:
+            node = Node("DFShort")
+            self.appendRow(node)
+        node.setRowCount(0)
+        if self._dataObject.dfShort():
+            node.appendRow(SampleNode(self._dataObject.dfShort(), self._dataObject))
+
+        node = self.hasChild("Open")
+        if not node:
+            node = Node("Open")
+            self.appendRow(node)
+        node.setRowCount(0)
+        if self._dataObject.openSample():
+            node.appendRow(SampleNode(self._dataObject.openSample(), self._dataObject))
+
+        node = self.hasChild("Short")
+        if not node:
+            node = Node("Short")
+            self.appendRow(node)
+        node.setRowCount(0)
+        if self._dataObject.shortSample():
+            node.appendRow(SampleNode(self._dataObject.shortSample(), self._dataObject))
+
+        node = self.hasChild("Load")
+        if not node:
+            node = Node("Load")
+            self.appendRow(node)
+        node.setRowCount(0)
+        if self._dataObject.loadSample():
+            node.appendRow(SampleNode(self._dataObject.loadSample(), self._dataObject))  
+
 
     def setupInitialData(self):
-        samples = list()
-        if self._dataObject._openDelay:
-            samples.append(self._dataObject._openDelay)
-        if self._dataObject._shortDelay:
-            samples.append(self._dataObject._shortDelay)
-        if self._dataObject._dfOpenDelay:
-            samples.append(self._dataObject._dfOpenDelay)
-        if self._dataObject._dfShortDelay:
-            samples.append(self._dataObject._dfShortDelay)
-        if self._dataObject._loadSample:
-            samples.append(self._dataObject._loadSample)
-        self.addChildren(samples)
+        self.updateChildren()
 
     def getWidgets(self):
         if not self._plugWidget:
