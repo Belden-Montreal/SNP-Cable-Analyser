@@ -216,7 +216,7 @@ class EmbeddingNode(ProjectNode):
             if self._embedTab:
                 self._embedTab.createTabs(reverse)
                 self._embedTab.updateWidget()
-            self.addChildren(samples, plugProject, reverse)
+            self.updateChildren()
 
     def addChildren(self, samples, plug, side):
         node = self.hasChild(side)
@@ -228,17 +228,30 @@ class EmbeddingNode(ProjectNode):
         for sample in samples:
             node.appendRow(SampleNode(sample, self._dataObject))
 
+    def updateChildren(self):
+        self.removeRow(0)
+        if self._dataObject.plug():
+            self.insertRow(0, PlugNode(self._dataObject.plug()))
+        for side in self._dataObject.load():
+            node = self.hasChild(side)
+            if not node:
+                node = Node(side)
+                self.appendRow(node)
+            node.setRowCount(0)
+            if self._dataObject.load()[side]:
+                node.appendRow(SampleNode(self._dataObject.load()[side], self._dataObject))
+            if side == "Reverse":
+                if self._dataObject.shortSample():
+                    shortNode = Node("Short")
+                    node.appendRow(shortNode)
+                    shortNode.appendRow(SampleNode(self._dataObject.shortSample(), self._dataObject))
+                if self._dataObject.openSample():
+                    openNode = Node("Open")
+                    node.appendRow(openNode)
+                    openNode.appendRow(SampleNode(self._dataObject.openSample(), self._dataObject))
+
     def setupInitialData(self):
-        for side, sample in self._dataObject._load.items():
-            if sample:
-                self.addChildren([sample], self._dataObject.plug(), side)
-        reverse = list()
-        if self._dataObject.openSample():
-            reverse.append(self._dataObject.openSample())
-        if self._dataObject.shortSample():
-            reverse.append(self._dataObject.shortSample())
-        if len(reverse) > 0:
-            self.addChildren(reverse, self._dataObject.plug(), "Reverse")
+        self.updateChildren()
 
     def getWidgets(self):
         if not self._embedTab:
