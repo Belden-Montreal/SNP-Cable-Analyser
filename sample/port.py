@@ -1,11 +1,21 @@
+from enum import Enum
+
+class EthernetPair(Enum):
+    DUMMY  = 0
+    PAIR12 = 1
+    PAIR36 = 2
+    PAIR45 = 3
+    PAIR78 = 4
+
 class NetworkPort(object):
     """
     Basic class representing a port in a network. A port has an index in the
     network and a name.
     """
-    def __init__(self, index, name):
+    def __init__(self, index, name, ptype=None):
         self._index = index
         self._name  = name
+        self._type  = ptype
 
     def getIndex(self):
         return self._index
@@ -13,13 +23,16 @@ class NetworkPort(object):
     def getName(self):
         return self._name
 
+    def getType(self):
+        return self._type
+
 class WirePort(NetworkPort):
     """
     This class represents a wire port in a network. A wire has two ports, a
     main port and a remote one.
     """
-    def __init__(self, index, name, remote=False):
-        super(WirePort, self).__init__(index, name)
+    def __init__(self, index, name, remote=False, **kwargs):
+        super(WirePort, self).__init__(index, name, **kwargs)
         self._remote = remote
 
     def isRemote(self):
@@ -33,16 +46,18 @@ class Wire(object):
     This class represents a wire in a network. A wire has a name and  two ports,
     a main one and a remote one.
     """
-    def __init__(self, name, main, remote):
+    def __init__(self, name, main, remote, wtype=None):
         if main.isRemote():
             raise ValueError
 
         if not remote.isRemote():
             raise ValueError
 
-        self._name   = name
-        self._main   = main
-        self._remote = remote
+        self._name    = name
+        self._main    = main
+        self._remote  = remote
+        self._type    = wtype
+        self._reverse = None
 
     def getName(self):
         return self._name
@@ -52,6 +67,15 @@ class Wire(object):
 
     def getRemotePort(self):
         return self._remote
+
+    def getType(self):
+        return self._type
+
+    def getReverse(self):
+        return self._reverse
+
+    def setReverse(self, reverse):
+        self._reverse = reverse
 
     def __contains__(self, port):
         if self._main is port:
@@ -87,9 +111,12 @@ class ReversedWire(Wire):
     This class represents a wire traveled in the other direction.
     """
     def __init__(self, wire):
-        self._name   = wire.getName()
-        self._main   = wire.getRemotePort()
-        self._remote = wire.getMainPort()
+        self._name    = wire.getName()
+        self._main    = wire.getRemotePort()
+        self._remote  = wire.getMainPort()
+        self._type    = wire.getType()
+        self._reverse = wire
+        wire.setReverse(self)
 
 class NetworkConfiguration(object):
     """
@@ -104,6 +131,9 @@ class NetworkConfiguration(object):
     def getRemotePorts(self):
         raise NotImplementedError
 
+    def getByType(self):
+        raise NotImplementedError
+
     def __iter__(self):
         return self.getPorts().__iter__()
 
@@ -116,21 +146,45 @@ class PlugConfiguration(NetworkConfiguration):
     """
     def __init__(self, ports=set()):
         # save all ports in the configration
-        self._ports = ports
+        self._indices = set()
+        self._types   = dict()
+        self._ports = set()
+        {self.addPort(port) for port in ports}
 
-        # all the indices must be unique
-        self._indices = {port.getIndex() for port in self._ports}
-        if len(self._indices) != len(self._ports):
-            raise ValueError
+    def _registerType(self, port):
+        # make sure the port as a type
+        if port.getType() is None:
+            return
+
+        # types must be unique
+        if port.getType() in self._types:
+            raise ValueError("Duplicate types in the configuration")
+
+        # add the port
+        self._types[port.getType()] = port
+
+    def _registerIndex(self, port):
+        # indices must be unique
+        if port.getIndex() in self._indices:
+            raise ValueError("Duplicate port indices in the configuration")
+
+        # add the index
+        self._indices.add(port.getIndex())
 
     def addPort(self, port):
-        # make sure the port index isn't already in the configuration
-        if port.getIndex() in self._indices:
-            raise ValueError
+        # make sure there is no duplicate
+        try:
+            self._registerIndex(port)
+            self._registerType(port)
+        except ValueError:
+            if port.getIndex() in self._indices:
+                self._indices.discard(port.getIndex())
+            if port in self._types.values():
+                self._types.pop(port.getType())
+            raise
 
         # add the port to the configuration
         self._ports.add(port)
-        self._indices.add(port.getIndex())
 
     def getPorts(self):
         return self._ports
@@ -140,6 +194,11 @@ class PlugConfiguration(NetworkConfiguration):
 
     def getRemotePorts(self):
         return set()
+
+    def getByType(self, ptype):
+        if ptype not in self._types:
+            return None
+        return self._types[ptype]
 
 class AlienConfiguration(NetworkConfiguration):
     """
@@ -160,54 +219,68 @@ class AlienConfiguration(NetworkConfiguration):
     def getPorts(self):
         return self._ports
 
-    def getMainPorts(self):
+    def getVictimPorts(self):
         return self._victims
 
-    def getRemotePorts(self):
+    def getDisturberPorts(self):
         return self._disturbers
+
+    def getMainPorts(self):
+        return self.getVictimPorts()
+
+    def getRemotePorts(self):
+        return self.getDisturberPorts()
 
 class CableConfiguration(NetworkConfiguration):
     """
     This class represents a cable configuration of a network.
     """
     def __init__(self, foward=set()):
-        # save all foward wires in the configuration
-        self._foward = foward
+        # save all wire in the configration
+        self._indices  = set()
+        self._types    = dict()
+        self._ports    = set()
+        self._mains    = set()
+        self._remotes  = set()
+        self._foward   = set()
+        self._reversed = set()
+        self._wires    = set()
+        {self.addWire(wire) for wire in foward}
+    
+    def _registerType(self, wire):
+        # make sure the wire as a type
+        if wire.getType() is None:
+            return
 
-        # create the reversed wires
-        self._reversed = {ReversedWire(wire) for wire in foward}
+        # types must be unique
+        if wire.getType() in self._types:
+            raise ValueError("Duplicate types in the configuration")
 
-        # create the aggregate of all wires
-        self._wires = self._foward.union(self._reversed)
+        # add the port
+        self._types[wire.getType()] = wire
 
-        # all main ports must not be remote
-        self._mains = {wire.getMainPort() for wire in foward}
-        if not all([not port.isRemote() for port in self._mains]):
-            raise ValueError
+    def _registerIndex(self, port):
+        # indices must be unique
+        if port.getIndex() in self._indices:
+            raise ValueError("Duplicate port indices in the configuration")
 
-        # all remote ports must be remote
-        self._remotes = {wire.getRemotePort() for wire in foward}
-        if not all([port.isRemote() for port in self._remotes]):
-            raise ValueError
-
-        # save all ports in the configuration
-        self._ports = self._mains.union(self._remotes)
-
-        # all the indices must be unique
-        self._indices = {port.getIndex() for port in self._ports}
-        if len(self._indices) != len(self._ports):
-            raise ValueError
+        # add the index
+        self._indices.add(port.getIndex())
 
     def addWire(self, wire):
-        # the main port index must not be in the configuration
-        if wire.getMainPort().getIndex() in self._indices:
-            raise ValueError
-        self._indices.add(wire.getMainPort().getIndex())
-
-        # the remote port index must not be in the configuration
-        if wire.getRemotePort().getIndex() in self._indices:
-            raise ValueError
-        self._indices.add(wire.getRemotePort().getIndex())
+        # make sure there is no duplicate
+        try:
+            self._registerIndex(wire.getMainPort())
+            self._registerIndex(wire.getRemotePort())
+            self._registerType(wire)
+        except ValueError:
+            if wire.getMainPort().getIndex() in self._indices:
+                self._indices.discard(wire.getMainPort().getIndex())
+            if wire.getRemotePort().getIndex() in self._indices:
+                self._indices.discard(wire.getRemotePort().getIndex())
+            if wire.getType() in self._types:
+                self._types.pop(wire.getType())
+            raise
 
         # set proper remote in the ports
         wire.getMainPort().setRemote(False)
@@ -243,3 +316,8 @@ class CableConfiguration(NetworkConfiguration):
 
     def getRemotePorts(self):
         return self._remotes
+
+    def getByType(self, wtype):
+        if wtype not in self._types:
+            return None
+        return self._types[wtype]
