@@ -67,6 +67,10 @@ class Alien(Project):
         if self._victims[param][end]:
             self._victims[param][end].setAXEXTD(self.__calculateAXEXTD(disturbers, param))
 
+    def resetDisturbers(self, end, param):
+        if self._victims[param][end]:
+            self._victims[param][end].setAXEXTD(self.__calculateAXEXTD(self._disturbers[param][end], param))
+
     def disturbers(self):
         return self._disturbers
 

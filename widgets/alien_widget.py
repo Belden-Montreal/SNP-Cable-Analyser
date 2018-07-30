@@ -44,6 +44,7 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
         
     def updateWidget(self):
         end, test = self.getCheckButtons()
+        self._alien.resetDisturbers(end, test)
         self.alienDisturbers.clear()
         for disturber in self._alien.disturbers()[test][end]:
             item = QtWidgets.QListWidgetItem()
@@ -121,14 +122,14 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
     def importVictim(self):
         fileName,_ = QtWidgets.QFileDialog.getOpenFileName(self, "Select victim", "", "sNp Files (*.s*p)")
         end, test = self.getCheckButtons()
-        sample = self._alien.importSamples([fileName], end, test, disturber=False)
+        self._alien.importSamples([fileName], end, test, disturber=False)
         self._node.updateChildren()
         self.updateWidget()
 
     def importDisturbers(self):
         files,_ = QtWidgets.QFileDialog.getOpenFileNames(self, "Select disturbers", "", "sNp Files (*.s*p)")
         end, test = self.getCheckButtons()
-        samples = self._alien.importSamples(files, end, test, disturber=True)
+        self._alien.importSamples(files, end, test, disturber=True)
         self._node.updateChildren()
         self.updateWidget()
 
