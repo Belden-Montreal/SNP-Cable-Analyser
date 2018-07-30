@@ -179,7 +179,7 @@ class Ui_Form(object):
         self.sJ36LineEdit.setText(_translate("Form", "14e-12"))
         self.thruCalibLabel.setText(_translate("Form", "Thru Calib"))
         self.thruCalibLineEdit.setText(_translate("Form", "20e-12"))
-        self.recalcButton.setText(_translate("Form", "Recalculate"))
+        self.recalcButton.setText(_translate("Form", "Calculate"))
         self.matedMeasurementsGroupBox.setTitle(_translate("Form", "Direct Fixture + Plug measurements"))
         self.openLabel.setText(_translate("Form", "Open:"))
         self.importOpen.setText(_translate("Form", "Import SNP"))
