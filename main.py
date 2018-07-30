@@ -45,8 +45,8 @@ class Main():
         self._mainWindow.actionMeasure.triggered.connect(lambda:self._vnaManager.acquire())
         self._mainWindow.actionCalibrate_2.triggered.connect(lambda:self._vnaManager.calibrate())
         self._mainWindow.actionDisconnect.triggered.connect(lambda:self._vnaManager.disconnect())
-        # self.actionAlien.triggered.connect(MainWindow.addAlien)
-        # self.actionDeembed.triggered.connect(MainWindow.addEmbed)
+        self._mainWindow.actionAlien.triggered.connect(lambda:self.newProject(0))
+        self._mainWindow.actionDeembed.triggered.connect(lambda:self.newProject(2))
         # self._mainWindow.param_tabs.currentChanged['int'].connect(lambda:self.tabChanged())
         # QtCore.QMetaObject.connectSlotsByName(MainWindow)
         self._mainWindow.actionImport_Project.triggered.connect(lambda: self.loadProject())
@@ -68,12 +68,13 @@ class Main():
             return self._model.itemFromIndex(self._model.getRootFromIndex(selected[0]))
              
 
-    def newProject(self):
+    def newProject(self, first=3):
         dialog = QtWidgets.QDialog(self._qmw)
         newDial = new_project_dialog.Ui_NewProjectDialog()
         newDial.setupUi(dialog)
         projectTypes = ["Alien", "Plug", "Embedding", "Other"]
         newDial.typeBox.addItems(projectTypes)
+        newDial.typeBox.setCurrentIndex(first)
         res = dialog.exec_()
         if res:
             projType = newDial.typeBox.currentText()
