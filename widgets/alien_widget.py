@@ -51,6 +51,10 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
             item.setCheckState(QtCore.Qt.Checked)
             item.setText(disturber.getName())
             self.alienDisturbers.addItem(item)
+        if self._alien.victims()[test][end]:
+            self.victimLabel.setText(self._alien.victims()[test][end].getName())
+        else:
+            self.victimLabel.setText("")
         self.drawFigure(end, test)
 
     def drawFigure(self, end, test):
