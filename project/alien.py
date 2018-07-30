@@ -33,8 +33,10 @@ class Alien(Project):
             self._disturbers[param][end] = samples
             return samples
         elif len(fileNames) < 2:
-            sample = self.__createVictim(fileNames[0], param, self.__calculateAXEXTD(self._disturbers[param][end], param))
-            self._victims[param][end] = sample
+            for p in self._victims:
+                for e in self._victims[p]:
+                    sample = self.__createVictim(fileNames[0], p, self.__calculateAXEXTD(self._disturbers[p][e], p))
+                    self._victims[p][e] = sample
             return sample
 
     def __createDisturber(self, name, param):
