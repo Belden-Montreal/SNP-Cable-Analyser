@@ -148,31 +148,35 @@ class AlienNode(ProjectNode):
         files = dial.getFiles()
         if files:
             disturbersFile, victimFile, end, param = files
-            samples = list()
-            samples = deepcopy(self._dataObject.importSamples(disturbersFile, end, param, disturber=True))
-            samples.append(self._dataObject.importSamples([victimFile], end, param, disturber=False))
-            self.addChildren(samples, end, param)
+            self._dataObject.importSamples(disturbersFile, end, param, disturber=True)
+            self._dataObject.importSamples([victimFile], end, param, disturber=False)
+            self.updateChildren()
             if self._alienTab:
                 self._alienTab.updateWidget()
 
-    def addChildren(self, samples, end, param):
-        node = self.hasChild(param)
-        if not node:
-            node = Node(param)
-            self.appendRow(node)
-        subNode = node.hasChild(end)
-        if not subNode:
-            subNode = Node(end)
-            node.appendRow(subNode)
-        subNode.children = list()
-        for sample in samples:
-            subNode.appendRow(SampleNode(sample, self._dataObject))
+    def updateChildren(self):
+        for param in self._dataObject.disturbers():
+            node = self.hasChild(param)
+            if not node:
+                node = Node(param)
+                self.appendRow(node)
+            for end in self._dataObject.disturbers()[param]:
+                subNode = node.hasChild(end)
+                if not subNode:
+                    subNode = Node(end)
+                    node.appendRow(subNode)
+                subNode.setRowCount(0)
+                if self._dataObject.victims()[param][end]:
+                    subNode.appendRow(SampleNode(self._dataObject.victims()[param][end], self._dataObject))
+                if len(self._dataObject.disturbers()[param][end]) > 0:
+                    disturbersNode = Node("Disturbers")
+                    subNode.appendRow(disturbersNode)
+                    for disturber in self._dataObject.disturbers()[param][end]:
+                        disturbersNode.appendRow(SampleNode(disturber, self._dataObject))
+
 
     def setupInitialData(self):
-        for param, ends in self._dataObject.disturbers().items():
-            for end, samples in ends.items():
-                if len(samples):
-                    self.addChildren(samples, end, param)
+        self.updateChildren()
 
     def getWidgets(self):
         if not self._alienTab:
