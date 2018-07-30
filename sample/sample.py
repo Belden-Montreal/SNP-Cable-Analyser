@@ -52,6 +52,9 @@ class Sample(object):
     def getName(self):
          return self._name
 
+    def getFileName(self):
+        return self._snp.getFile()
+
     def getDate(self):
         return self._date
 

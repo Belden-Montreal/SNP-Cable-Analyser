@@ -40,8 +40,10 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
         sample = self._embedding.load()[side]
         if sample:
             self.loadFileName.setText(sample.getName())
+            self._loadFile = sample.getFileName()
         else:
             self.loadFileName.setText("\"\"")
+            self._loadFile = None
         if side == "Reverse":
             if self._embedding.openSample():
                 self.openFileName.setText(self._embedding.openSample().getName())
@@ -150,8 +152,8 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
             self.checkConstants()
             load = self._embedding.importLoad(self._loadFile, side, self._cat)
             self.loadFileName.setText(load.getName())
-            self._node.addChildren([load], self._embedding.plug(), side)
             self.createTabs(self.getSide())
+        self._node.updateChildren()
         self.updateWidget()
 
     def checkConstants(self):

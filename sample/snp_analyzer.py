@@ -47,6 +47,9 @@ class SNPAnalyzer(object):
     def getFreqUnit(self):
         return self._rs.frequency.unit
 
+    def getFile(self):
+        return self._snpFile
+
     def setFreqUnit(self, unit):
 
         unit_dict = {"hz" : 1,
