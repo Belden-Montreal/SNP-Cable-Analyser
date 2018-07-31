@@ -1,6 +1,8 @@
-from parameters.parameter_factory import ParameterFactory
+from parameters.factory import ParameterFactory
 
 from skrf import Network
+from time import ctime
+from os.path import getctime
 
 class Sample(object):
     def __init__(self, snp, config=None, standard=None):
@@ -48,7 +50,7 @@ class Sample(object):
         snpfile.close()
 
         # get the date from the file
-        date = ctime(getctime(snpfile))
+        date = ctime(getctime(snp))
 
         return (network, date)
 
