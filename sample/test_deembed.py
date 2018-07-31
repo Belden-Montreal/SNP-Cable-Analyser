@@ -2,6 +2,7 @@ from unittest.mock import MagicMock
 
 from sample.test_plug import TestPlugSample
 from sample.deembed import DeembedSample
+from parameters.type import ParameterType
 
 class TestDeembedSample(TestPlugSample):
     def createSample(self):
@@ -17,15 +18,15 @@ class TestDeembedSample(TestPlugSample):
 
     def getExpectedComputedParameters(self):
         return {
-            "RL",
-            "NEXT",
-            "DNEXT",
-            "Case",
+            ParameterType.RL,
+            ParameterType.NEXT,
+            ParameterType.DNEXT,
+            ParameterType.CASE,
         }
 
     def getShouldntRunParameters(self):
         return {
-            "PCNEXT",
-            "NEXTDelay",
-            "Cases",
+            ParameterType.PC_NEXT,
+            ParameterType.NEXT_DELAY,
+            ParameterType.CASES,
         }

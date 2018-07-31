@@ -2,6 +2,7 @@ from unittest import TestCase
 from sample.test_alien import TestAlienSample
 from sample.disturber import DisturberSample
 from sample.victim import VictimSample
+from parameters.type import ParameterType
 
 class TestVictimSample(TestAlienSample):
     def isRemote(self):
@@ -21,17 +22,17 @@ class TestVictimRemoteSample(TestVictimSample, TestCase):
         return True
 
     def getExpectedComputedParameters(self):
-        return {"PSAFEXT", "PSAACRF"}
+        return {ParameterType.PSAFEXT, ParameterType.PSAACRF}
 
     def getShouldntRunParameters(self):
-        return {"AFEXTD"}
+        return {ParameterType.AFEXTD}
 
 class TestVictimMainSample(TestVictimSample, TestCase):
     def isRemote(self):
         return False
 
     def getExpectedComputedParameters(self):
-        return {"PSANEXT", "PSAACRN"}
+        return {ParameterType.PSANEXT, ParameterType.PSAACRN}
 
     def getShouldntRunParameters(self):
-        return {"ANEXTD"}
+        return {ParameterType.ANEXTD} 

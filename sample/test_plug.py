@@ -2,6 +2,7 @@ from unittest import TestCase
 
 from sample.test_sample import TestSample
 from sample.plug import PlugSample
+from parameters.type import ParameterType
 
 class TestPlugSample(TestSample, TestCase):
     def createSample(self):
@@ -12,18 +13,18 @@ class TestPlugSample(TestSample, TestCase):
 
     def getExpectedComputedParameters(self):
         return {
-            "RL",
-            "NEXT",
-            "Propagation Delay",
-            "PSNEXT",
-            "LCL",
-            "TCL",
-            "CMRL",
-            "CMNEXT",
-            "CMDMNEXT",
-            "CMDMRL",
-            "DMCMNEXT",
-            "DMCMRL",
+            ParameterType.RL,
+            ParameterType.NEXT,
+            ParameterType.PROPAGATION_DELAY,
+            ParameterType.PSNEXT,
+            ParameterType.LCL,
+            ParameterType.TCL,
+            ParameterType.CMRL,
+            ParameterType.CMNEXT,
+            ParameterType.CMDMNEXT,
+            ParameterType.CMDMRL,
+            ParameterType.DMCMNEXT,
+            ParameterType.DMCMRL, 
         }
 
     def getShouldntRunParameters(self):

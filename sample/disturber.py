@@ -1,5 +1,6 @@
 from sample.alien import AlienSample
 from sample.port import NetworkPort, AlienConfiguration
+from parameters.type import ParameterType
 
 class DisturberSample(AlienSample):
     '''
@@ -11,6 +12,6 @@ class DisturberSample(AlienSample):
 
     def getAvailableParameters(self):
         if self.isRemote():
-            return {"AFEXT"}
+            return {ParameterType.AFEXT}
         else:
-            return {"ANEXT"}
+            return {ParameterType.ANEXT}

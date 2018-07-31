@@ -1,4 +1,5 @@
 from sample.alien import AlienSample
+from parameters.type import ParameterType
 
 class VictimSample(AlienSample):
     def __init__(self, snp, samples, config=None):
@@ -25,17 +26,17 @@ class VictimSample(AlienSample):
 
     def getDefaultParameters(self):
         if self._remote:
-            parameters = [s.getParameter("AFEXT") for s in self._samples]
-            return {"AFEXTD": parameters}
+            parameters = [s.getParameter(ParameterType.AFEXT) for s in self._samples]
+            return {ParameterType.AFEXTD: parameters}
         else:
-            parameters = [s.getParameter("ANEXT") for s in self._samples]
-            return {"ANEXTD": parameters}
+            parameters = [s.getParameter(ParameterType.ANEXT) for s in self._samples]
+            return {ParameterType.ANEXTD: parameters}
 
     def getAvailableParameters(self):
         if self._remote:
-            return {"AFEXTD", "PSAFEXT", "PSAACRF"}
+            return {ParameterType.AFEXTD, ParameterType.PSAFEXT, ParameterType.PSAACRF}
         else:
-            return {"ANEXTD", "PSANEXT", "PSAACRN"}
+            return {ParameterType.ANEXTD, ParameterType.PSANEXT, ParameterType.PSAACRN} 
 
     def setAXEXTD(self, axextd):
         # TODO: what is this?

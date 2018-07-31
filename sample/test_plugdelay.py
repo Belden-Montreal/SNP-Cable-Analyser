@@ -2,6 +2,7 @@ from unittest.mock import MagicMock
 
 from sample.test_plug import TestPlugSample
 from sample.plugdelay import PlugDelaySample
+from parameters.type import ParameterType
 
 class TestPlugDelaySample(TestPlugSample):
     def createSample(self):
@@ -25,16 +26,16 @@ class TestPlugDelaySample(TestPlugSample):
 
     def getExpectedComputedParameters(self):
         return {
-            "DFDelay",
-            "PlugDelay",
-            "NEXTDelay",
-            "CNEXT",
+            ParameterType.DF_DELAY,
+            ParameterType.PLUG_DELAY,
+            ParameterType.NEXT_DELAY,
+            ParameterType.CNEXT,
         }
 
     def getShouldntRunParameters(self):
         return {
-            "PlugOpenDelay",
-            "PlugShortDelay",
-            "DFOpenDelay",
-            "DFShortDelay",
-        }
+            ParameterType.PLUG_OPEN_DELAY,
+            ParameterType.PLUG_SHORT_DELAY,
+            ParameterType.DF_OPEN_DELAY,
+            ParameterType.DF_SHORT_DELAY,
+        } 

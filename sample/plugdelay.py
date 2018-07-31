@@ -1,4 +1,5 @@
 from sample.plug import PlugSample
+from parameters.type import ParameterType
 
 class PlugDelaySample(PlugSample):
     def __init__(self, snp, openDelay, shortDelay, dfOpenDelay, dfShortDelay, k1, k2, k3, config=None):
@@ -13,16 +14,16 @@ class PlugDelaySample(PlugSample):
 
     def getDefaultParameters(self):
         return {
-            "PlugOpenDelay" : self._openDelay,
-            "PlugShortDelay": self._shortDelay,
-            "DFOpenDelay"   : self._dfOpenDelay,
-            "DFShortDelay"  : self._dfShortDelay,
+            ParameterType.PLUG_OPEN_DELAY : self._openDelay,
+            ParameterType.PLUG_SHORT_DELAY: self._shortDelay,
+            ParameterType.DF_OPEN_DELAY   : self._dfOpenDelay,
+            ParameterType.DF_SHORT_DELAY  : self._dfShortDelay,
         }
 
     def getAvailableParameters(self):
         return {
-            "DFDelay",
-            "PlugDelay",
-            "NEXTDelay",
-            "CNEXT",
-        }
+            ParameterType.DF_DELAY,
+            ParameterType.PLUG_DELAY,
+            ParameterType.NEXT_DELAY,
+            ParameterType.CNEXT,
+        } 

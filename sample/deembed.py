@@ -1,4 +1,5 @@
 from sample.plug import PlugSample
+from parameters.type import ParameterType
 
 class DeembedSample(PlugSample):
     def __init__(self, snp, plugNext, plugNEXTDelay, cases):
@@ -9,15 +10,15 @@ class DeembedSample(PlugSample):
 
     def getDefaultParameters(self):
         return {
-            "PCNEXT"   : self._plugNEXT,
-            "NEXTDelay": self._plugNEXTDelay,
-            "Cases"    : self._cases,
+            ParameterType.PC_NEXT   : self._plugNEXT,
+            ParameterType.NEXT_DELAY: self._plugNEXTDelay,
+            ParameterType.CASES     : self._cases,
         }
 
     def getAvailableParameters(self):
         return {
-            "RL",
-            "NEXT",
-            "DNEXT",
-            "Case",       
+            ParameterType.RL,
+            ParameterType.NEXT,
+            ParameterType.DNEXT,
+            ParameterType.CASE,       
         }.union(self.getDefaultParameters().keys())

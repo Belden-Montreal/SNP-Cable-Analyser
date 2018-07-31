@@ -3,7 +3,8 @@ from os.path import getctime
 from time import ctime
 
 from sample.sample import Sample
-from sample.port import WirePort, Wire, CableConfiguration
+from sample.port import WirePort, Wire, CableConfiguration, EthernetPair
+from parameters.type import ParameterType
 
 class CableSample(Sample):
     def getDefaultConfiguration(self):
@@ -21,10 +22,10 @@ class CableSample(Sample):
 
         # create the wires for this network
         wires = {
-            Wire("12", ports[1], ports[5]),
-            Wire("36", ports[2], ports[6]),
-            Wire("45", ports[3], ports[7]),
-            Wire("78", ports[4], ports[8]),
+            Wire("12", ports[1], ports[5], wtype=EthernetPair.PAIR12),
+            Wire("36", ports[2], ports[6], wtype=EthernetPair.PAIR36),
+            Wire("45", ports[3], ports[7], wtype=EthernetPair.PAIR45),
+            Wire("78", ports[4], ports[8], wtype=EthernetPair.PAIR78),
         }
 
         # create the configuration for this network
@@ -35,24 +36,24 @@ class CableSample(Sample):
 
     def getAvailableParameters(self):
         return {
-            "RL",
-            "IL",
-            "NEXT",
-            "Propagation Delay",
-            "PSNEXT",
-            "FEXT",
-            "PSFEXT",
-            "ACRF",
-            "PSACRF",
-            "LCL",
-            "LCTL",
-            "TCL",
-            "TCTL",
-            "ELTCTL",
-            "CMRL",
-            "CMNEXT",
-            "CMDMNEXT",
-            "CMDMRL",
-            "DMCMNEXT",
-            "DMCMRL",
+            ParameterType.RL,
+            ParameterType.IL,
+            ParameterType.NEXT,
+            ParameterType.PROPAGATION_DELAY,
+            ParameterType.PSNEXT,
+            ParameterType.FEXT,
+            ParameterType.PSFEXT,
+            ParameterType.ACRF,
+            ParameterType.PSACRF,
+            ParameterType.LCL,
+            ParameterType.LCTL,
+            ParameterType.TCL,
+            ParameterType.TCTL,
+            ParameterType.ELTCTL,
+            ParameterType.CMRL,
+            ParameterType.CMNEXT,
+            ParameterType.CMDMNEXT,
+            ParameterType.CMDMRL,
+            ParameterType.DMCMNEXT,
+            ParameterType.DMCMRL, 
         }

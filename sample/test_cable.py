@@ -2,6 +2,7 @@ from unittest import TestCase
 
 from sample.test_sample import TestSample
 from sample.cable import CableSample
+from parameters.type import ParameterType
 
 class TestCableSample(TestSample, TestCase):
     def createSample(self):
@@ -12,26 +13,26 @@ class TestCableSample(TestSample, TestCase):
 
     def getExpectedComputedParameters(self):
         return {
-            "RL",
-            "IL",
-            "NEXT",
-            "Propagation Delay",
-            "PSNEXT",
-            "FEXT",
-            "PSFEXT",
-            "ACRF",
-            "PSACRF",
-            "LCL",
-            "LCTL",
-            "TCL",
-            "TCTL",
-            "ELTCTL",
-            "CMRL",
-            "CMNEXT",
-            "CMDMNEXT",
-            "CMDMRL",
-            "DMCMNEXT",
-            "DMCMRL",
+            ParameterType.RL,
+            ParameterType.IL,
+            ParameterType.NEXT,
+            ParameterType.PROPAGATION_DELAY,
+            ParameterType.PSNEXT,
+            ParameterType.FEXT,
+            ParameterType.PSFEXT,
+            ParameterType.ACRF,
+            ParameterType.PSACRF,
+            ParameterType.LCL,
+            ParameterType.LCTL,
+            ParameterType.TCL,
+            ParameterType.TCTL,
+            ParameterType.ELTCTL,
+            ParameterType.CMRL,
+            ParameterType.CMNEXT,
+            ParameterType.CMDMNEXT,
+            ParameterType.CMDMRL,
+            ParameterType.DMCMNEXT,
+            ParameterType.DMCMRL, 
         }
 
     def getShouldntRunParameters(self):
