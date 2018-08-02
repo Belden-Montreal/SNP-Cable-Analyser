@@ -44,7 +44,7 @@ class Main():
         self._mainWindow.actionWho_am_I.triggered.connect(lambda:self._vnaManager.whoAmI())
         self._mainWindow.actionMeasure.triggered.connect(lambda:self._vnaManager.acquire())
         self._mainWindow.actionCalibrate_2.triggered.connect(lambda:self._vnaManager.calibrate())
-        self._mainWindow.actionDisconnect.triggered.connect(lambda:self._vnaManager.disconnect())
+        self._mainWindow.actionDisconnect.triggered.connect(lambda:self.disconnect())
         self._mainWindow.actionAlien.triggered.connect(lambda:self.newProject(0))
         self._mainWindow.actionDeembed.triggered.connect(lambda:self.newProject(2))
         # self._mainWindow.param_tabs.currentChanged['int'].connect(lambda:self.tabChanged())
@@ -54,13 +54,24 @@ class Main():
 
     def connect(self):
         self._vnaManager.connect()
-        self._mainWindow.actionMeasure.setEnabled(True)
-        self._mainWindow.actionWho_am_I.setEnabled(True)
-        self._mainWindow.actionCalibrate.setEnabled(True)
-        self._mainWindow.actionCalibrate_2.setEnabled(True)
-        self._mainWindow.actionDisconnect.setEnabled(True)
-        self._mainWindow.actionRun.setEnabled(True)
-        self._mainWindow.actionConnect.setEnabled(False)
+        if self._vnaManager.connected():
+            self._mainWindow.actionMeasure.setEnabled(True)
+            self._mainWindow.actionWho_am_I.setEnabled(True)
+            self._mainWindow.actionCalibrate.setEnabled(True)
+            self._mainWindow.actionCalibrate_2.setEnabled(True)
+            self._mainWindow.actionDisconnect.setEnabled(True)
+            self._mainWindow.actionRun.setEnabled(True)
+            self._mainWindow.actionConnect.setEnabled(False)
+
+    def disconnect(self):
+        self._vnaManager.disconnect()
+        self._mainWindow.actionMeasure.setEnabled(False)
+        self._mainWindow.actionWho_am_I.setEnabled(False)
+        self._mainWindow.actionCalibrate.setEnabled(False)
+        self._mainWindow.actionCalibrate_2.setEnabled(False)
+        self._mainWindow.actionDisconnect.setEnabled(False)
+        self._mainWindow.actionRun.setEnabled(False)
+        self._mainWindow.actionConnect.setEnabled(True)
 
     def getRootProject(self):
          selected = self.getSelected()

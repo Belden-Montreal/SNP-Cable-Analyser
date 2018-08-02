@@ -15,7 +15,7 @@ class VNAManager(object):
         if addr:
             try:
                 self._comm.connectToVNA(addr)
-                self.connected = True
+                self._connected = True
             except Exception as e:
                 print(e)
 
@@ -23,7 +23,7 @@ class VNAManager(object):
         while self._connected:
             try:
                 self._comm.close()
-                self.connected = False
+                self._connected = False
             except Exception as e:
                 print(e)
 
@@ -61,6 +61,9 @@ class VNAManager(object):
 
     def calibrate(self):
         self._comm.calibrate()
+
+    def connected(self):
+        return self._connected
 
 class Test_Params_Dialog:
     def getParams(self, comm):
