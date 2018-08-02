@@ -127,10 +127,14 @@ class Main():
 
     def tableContextMenu(self, pos):
         selected = self.getSelected()
-        selectedProj = self.getRootProject().getObject()
+        if self.getRootProject():
+            selectedProj = self.getRootProject().getObject()
+        else:
+            selectedProj = None
         if selectedProj and len(selected) > 0:
     
             menu = QtWidgets.QMenu()
+            addSample = menu.addAction("Add Samples")
             setLimit = menu.addAction("Set Limit")
 
             if len(selected) == 1: 
@@ -152,13 +156,15 @@ class Main():
                     selectedProj.generateExcel(file , selected[0], z)
 
             elif action == delete:
-                # self._model.beginRemoveRows()
-                for s in selected:
-                    self._model.itemFromIndex(s).delete()
-                # self._model.endRemoveRows()
-                
+                sel = [self._model.itemFromIndex(s) for s in selected]
+                for s in sel:
+                    s.delete()
+
             elif action == setLimit:
                 self.setLimit()
+
+            elif action == addSample:
+                self.importSNP()
             #self.Project.activeMeasurements = selected
 
             # elif action == setPortNumber and len(self._selected) == 1:
@@ -166,13 +172,13 @@ class Main():
             return 1
 
         menu = QtWidgets.QMenu()
-        addSNP = menu.addAction("Add Sample")
+        addSNP = menu.addAction("Add Project")
         selectAll = menu.addAction("Select All")
         action = menu.exec_(QtGui.QCursor.pos())
         if action == selectAll:
             self._mainWindow.sampleTable.selectAll()
         elif action == addSNP:
-            self.importSNP()
+            self.newProject()
 
     def setLimit(self):
         
