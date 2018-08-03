@@ -1,6 +1,0 @@
-<RCC>
-  <qresource prefix="icons">
-    <file>minus-circle.svg</file>
-    <file>plus-circle.svg</file>
-  </qresource>
-</RCC>

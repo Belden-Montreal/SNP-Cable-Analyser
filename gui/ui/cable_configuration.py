@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'gui/ui/cable_configuration.ui'
+# Form implementation generated from reading ui file './ui/cable_configuration.ui'
 #
 # Created by: PyQt5 UI code generator 5.10.1
 #
@@ -276,7 +276,7 @@ class Ui_form(object):
         self.pair45Label.setText(_translate("form", "Pair 45"))
         self.hideNamesCheckBox.setText(_translate("form", "Hide Names"))
 
-from gui.icons import icons_rc
+from gui.ressources import icons_rc
 
 if __name__ == "__main__":
     import sys

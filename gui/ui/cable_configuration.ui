@@ -80,7 +80,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../icons/icons.qrc">
+        <iconset resource="../ressources/icons.qrc">
          <normaloff>:/icons/plus-circle.svg</normaloff>:/icons/plus-circle.svg</iconset>
        </property>
        <property name="flat">
@@ -118,7 +118,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../icons/icons.qrc">
+        <iconset resource="../ressources/icons.qrc">
          <normaloff>:/icons/minus-circle.svg</normaloff>:/icons/minus-circle.svg</iconset>
        </property>
        <property name="flat">
@@ -505,7 +505,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../icons/icons.qrc"/>
+  <include location="../ressources/icons.qrc"/>
  </resources>
  <connections/>
 </ui>
