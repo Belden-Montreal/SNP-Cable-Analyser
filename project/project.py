@@ -147,5 +147,5 @@ class ProjectNode(Node):
     def setStandard(self, standard):
         self._dataObject.setStandard(standard)
 
-    # def getWidgets(self):
+    # def getWidgets(self, vnaManager):
     #     return list()

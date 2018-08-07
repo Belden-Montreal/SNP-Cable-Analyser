@@ -4,8 +4,10 @@ from widgets.cnext_tab import CNEXTTab
 from PyQt5 import QtWidgets
 
 class PlugWidget(TabWidget, plug_widget_ui.Ui_Form):
-    def __init__(self, plugNode):
+    def __init__(self, plugNode, vnaManager):
         super(PlugWidget, self).__init__(self)
+        self._vna = vnaManager
+        self._vna.connection.connect(lambda: self.connect())
         self._node = plugNode
         self._plug = plugNode.getObject()
         self._loadName = None
@@ -14,14 +16,59 @@ class PlugWidget(TabWidget, plug_widget_ui.Ui_Form):
         self._dfOpenName = None
         self._dfShortName = None
         self.dfOpenImport.clicked.connect(lambda: self.getDfOpen())
+        self.dfOpenAcquire.clicked.connect(lambda: self.getVnaDfOpen())
         self.dfShortImport.clicked.connect(lambda: self.getDfShort())
+        self.dfShortAcquire.clicked.connect(lambda: self.getVnaDfShort())
         self.importOpen.clicked.connect(lambda: self.getOpen())
+        self.acquireOpen.clicked.connect(lambda: self.getVnaOpen())
         self.importShort.clicked.connect(lambda: self.getShort())
+        self.acquireShort.clicked.connect(lambda: self.getVnaShort())
         self.importLoad.clicked.connect(lambda: self.getLoad())
+        self.acquireLoad.clicked.connect(lambda: self.getVnaLoad())
         self.recalcButton.clicked.connect(lambda: self.calculate())
         self._pairTabs = dict()
         self.createTabs()
+        self.connect()
         self.updateWidget()
+
+    def connect(self):
+        if self._vna.connected():
+            self.dfOpenAcquire.setEnabled(True)
+            self.dfShortAcquire.setEnabled(True)
+            self.acquireOpen.setEnabled(True)
+            self.acquireShort.setEnabled(True)
+            self.acquireLoad.setEnabled(True)
+        else:
+            self.dfOpenAcquire.setEnabled(False)
+            self.dfShortAcquire.setEnabled(False)
+            self.acquireOpen.setEnabled(False)
+            self.acquireShort.setEnabled(False)
+            self.acquireLoad.setEnabled(False)
+
+    def getVnaDfOpen(self):
+        fileName = self._vna.acquire()
+        self._dfOpenName = fileName
+        self.dfOpenFileName.setText(fileName)
+
+    def getVnaDfShort(self):
+        fileName = self._vna.acquire()
+        self._dfShortName = fileName
+        self.dfShortFileName.setText(fileName)
+
+    def getVnaOpen(self):
+        fileName = self._vna.acquire()
+        self._openName = fileName
+        self.openFileName.setText(fileName)
+
+    def getVnaShort(self):
+        fileName = self._vna.acquire()
+        self._shortName = fileName
+        self.shortFileName.setText(fileName)
+
+    def getVnaLoad(self):
+        fileName = self._vna.acquire()
+        self._loadName = fileName
+        self.loadFileName.setText(fileName)
 
     def getDfOpen(self):
         fileName,_ = QtWidgets.QFileDialog.getOpenFileName(self, "Select Direct Fixture open file", "", "sNp Files (*.s*p)")

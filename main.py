@@ -121,7 +121,7 @@ class Main():
 
         self._mainWindow.param_tabs.clear()
         node = self._model.itemFromIndex(index)
-        tabs = node.getWidgets()
+        tabs = node.getWidgets(self._vnaManager)
         for name, tab in tabs.items():
             self._mainWindow.param_tabs.addTab(tab, name)
 

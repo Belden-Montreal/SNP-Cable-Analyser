@@ -7,8 +7,10 @@ from matplotlib.figure import Figure
 from matplotlib.ticker import ScalarFormatter
 
 class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
-    def __init__(self, embedNode):
+    def __init__(self, embedNode, vnaManager):
         super(EmbedWidget, self).__init__(self)
+        self._vna = vnaManager
+        self._vna.connection.connect(lambda: self.connect())
         self.reverseCheckBox.toggled.connect(lambda: self.reverse())
         self.categoryGroup = QtWidgets.QButtonGroup(self)
         self.categoryGroup.addButton(self.embedCat5)
@@ -19,6 +21,9 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
         self.importPlug.clicked.connect(lambda: self.getPlug())
         self.importOpen.clicked.connect(lambda: self.getOpen())
         self.importShort.clicked.connect(lambda: self.getShort())
+        self.acquireLoad.clicked.connect(lambda: self.getVnaLoad())
+        self.acquireOpen.clicked.connect(lambda: self.getVnaOpen())
+        self.acquireShort.clicked.connect(lambda: self.getVnaShort())
         self._isReverse = False
         self._node = embedNode
         self._embedding = embedNode.getObject()
@@ -33,7 +38,19 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
         self._openFile = None
         self._shortFile = None
         self._k1, self._k2, self._k3 = None, None, None
-        self.updateWidget()
+        self.connect()
+        self._isReverse = True
+        self.reverse()
+
+    def connect(self):
+        if self._vna.connected():
+            self.acquireLoad.setEnabled(True)
+            self.acquireOpen.setEnabled(True and self._isReverse)
+            self.acquireShort.setEnabled(True and self._isReverse)
+        else:
+            self.acquireLoad.setEnabled(False)
+            self.acquireOpen.setEnabled(False)
+            self.acquireShort.setEnabled(False)
 
     def updateWidget(self):
         side = self.getSide()
@@ -78,11 +95,11 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
     def reverse(self):
         self._isReverse = not self._isReverse
         self.openLabel.setEnabled(self._isReverse)
-        self.acquireOpen.setEnabled(self._isReverse)
+        self.acquireOpen.setEnabled(self._isReverse and self._vna.connected())
         self.importOpen.setEnabled(self._isReverse)
         self.openFileName.setEnabled(self._isReverse)
         self.shortLabel.setEnabled(self._isReverse)
-        self.acquireShort.setEnabled(self._isReverse)
+        self.acquireShort.setEnabled(self._isReverse and self._vna.connected())
         self.importShort.setEnabled(self._isReverse)
         self.shortFileName.setEnabled(self._isReverse)
         self.updateWidget()
@@ -116,6 +133,21 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
 
     def getShort(self):
         fileName,_ = QtWidgets.QFileDialog.getOpenFileName(self, "Select short file", "", "sNp Files (*.s*p)")
+        self._shortFile = fileName
+        self.shortFileName.setText(self._shortFile)
+
+    def getVnaLoad(self):
+        fileName = self._vna.acquire()
+        self._loadFile = fileName
+        self.loadFileName.setText(self._loadFile)
+
+    def getVnaOpen(self):
+        fileName = self._vna.acquire()
+        self._openFile = fileName
+        self.openFileName.setText(self._openFile)
+
+    def getVnaShort(self):
+        fileName = self._vna.acquire()
         self._shortFile = fileName
         self.shortFileName.setText(self._shortFile)
 

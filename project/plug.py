@@ -204,7 +204,7 @@ class PlugNode(ProjectNode):
     def setupInitialData(self):
         self.updateChildren()
 
-    def getWidgets(self):
+    def getWidgets(self, vnaManager):
         if not self._plugWidget:
-            self._plugWidget = PlugWidget(self)
+            self._plugWidget = PlugWidget(self, vnaManager)
         return {"Plug": self._plugWidget}

@@ -182,7 +182,7 @@ class AlienNode(ProjectNode):
     def setupInitialData(self):
         self.updateChildren()
 
-    def getWidgets(self):
+    def getWidgets(self, vnaManager):
         if not self._alienTab:
             self._alienTab = AlienWidget(self)
         return {"Alien": self._alienTab}

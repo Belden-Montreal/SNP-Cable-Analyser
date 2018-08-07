@@ -253,9 +253,9 @@ class EmbeddingNode(ProjectNode):
     def setupInitialData(self):
         self.updateChildren()
 
-    def getWidgets(self):
+    def getWidgets(self, vnaManager):
         if not self._embedTab:
-            self._embedTab = EmbedWidget(self)
+            self._embedTab = EmbedWidget(self, vnaManager)
         tabs = dict()
         tabs["Embedding"] = self._embedTab
 
