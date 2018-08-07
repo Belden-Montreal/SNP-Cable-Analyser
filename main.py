@@ -153,7 +153,12 @@ class Main():
                     else:
                         z = False
                     file, _ = QtWidgets.QFileDialog.getSaveFileName(self._qmw,"Export Excel Report", "","Excel File (*.xlsx)")
-                    selectedProj.generateExcel(file , selected[0], z)
+                    try:
+                        selectedProj.generateExcel(file , [self._model.itemFromIndex(s) for s in selected], z)
+                    except Exception as e:
+                        errorMessage = QtWidgets.QErrorMessage(self._qmw)
+                        errorMessage.showMessage(str(e))
+
 
             elif action == delete:
                 sel = [self._model.itemFromIndex(s) for s in selected]
