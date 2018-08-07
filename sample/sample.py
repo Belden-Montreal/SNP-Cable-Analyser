@@ -74,7 +74,7 @@ class SampleNode(Node):
         self.parent().removeRow(self.row())
         self._project.removeSample(self._dataObject)
 
-    def getWidgets(self):
+    def getWidgets(self, none):
         widgets = dict()
         
         widgets["main"] = None
