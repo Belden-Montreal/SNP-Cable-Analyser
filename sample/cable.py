@@ -7,17 +7,18 @@ from sample.port import WirePort, Wire, CableConfiguration, EthernetPair
 from parameters.type import ParameterType
 
 class CableSample(Sample):
-    def getDefaultConfiguration(self):
+    @staticmethod
+    def getDefaultConfiguration():
         # create the ports for this network
         ports = {
-            1: WirePort(0, "Port 1", remote=False),
-            2: WirePort(1, "Port 2", remote=False),
-            3: WirePort(2, "Port 3", remote=False),
-            4: WirePort(3, "Port 4", remote=False),
-            5: WirePort(4, "Port 5", remote=True),
-            6: WirePort(5, "Port 6", remote=True),
-            7: WirePort(6, "Port 7", remote=True),
-            8: WirePort(7, "Port 8", remote=True),
+            1: WirePort(0, "12", remote=False),
+            2: WirePort(1, "36", remote=False),
+            3: WirePort(2, "45", remote=False),
+            4: WirePort(3, "78", remote=False),
+            5: WirePort(4, "12 (r)", remote=True),
+            6: WirePort(5, "36 (r)", remote=True),
+            7: WirePort(6, "45 (r)", remote=True),
+            8: WirePort(7, "78 (r)", remote=True),
         }
 
         # create the wires for this network
@@ -31,7 +32,8 @@ class CableSample(Sample):
         # create the configuration for this network
         return CableConfiguration(foward=wires)
 
-    def getDefaultParameters(self):
+    @staticmethod
+    def getDefaultParameters():
         return dict()
 
     def getAvailableParameters(self):

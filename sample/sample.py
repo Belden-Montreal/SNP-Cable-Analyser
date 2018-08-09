@@ -2,12 +2,15 @@ from parameters.factory import ParameterFactory
 
 from skrf import Network
 from time import ctime
-from os.path import getctime
+from os.path import getctime, basename
 
 class Sample(object):
     def __init__(self, snp, config=None, standard=None):
         # load the network
         (self._network, self._date) = Sample.loadSNP(snp)
+
+        # get the name of the file
+        self._name = basename(snp)
 
         # get the network's configuration
         if config:
@@ -38,7 +41,7 @@ class Sample(object):
         # create the parameter
         for parameter in self.getAvailableParameters():
             if parameter in self._parameters.keys():
-                continue
+                faitcontinue
             self._parameters[parameter] = self._factory.getParameter(parameter)
 
     @staticmethod
@@ -54,10 +57,12 @@ class Sample(object):
 
         return (network, date)
 
-    def getDefaultConfiguration(self):
+    @staticmethod
+    def getDefaultConfiguration():
         raise NotImplementedError
 
-    def getDefaultParameters(self):
+    @staticmethod
+    def getDefaultParameters():
         raise NotImplementedError
 
     def setStandard(self, standard):
@@ -73,6 +78,9 @@ class Sample(object):
             self.getMatrices(),
             self.getParameters(),
         )
+
+    def getConfiguration(self):
+        return self._config
 
     def getAvailableParameters(self):
         raise NotImplementedError
@@ -103,6 +111,9 @@ class Sample(object):
 
     def getDate(self):
         return self._date
+
+    def getName(self):
+        return self._name
 
 PORTS_NAME = ["45", "12", "36", "78"]
 class Sample2(object):
