@@ -18,6 +18,10 @@ class TCTL(InsertionLoss):
     def getType():
         return ParameterType.TCTL
 
+    @staticmethod
+    def register(parameters, **kwargs):
+        return lambda c, f, m: TCTL(c, f, m, **kwargs)
+
     def chooseMatrices(self, matrices):
         return comDiffMatrix(matrices)
 

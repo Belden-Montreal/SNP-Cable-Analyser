@@ -18,6 +18,10 @@ class DMCMRL(ReturnLoss):
     def getType():
         return ParameterType.DMCMRL
 
+    @staticmethod
+    def register(parameters):
+        return lambda c, f, m: DMCMRL(c, f, m)
+
     def chooseMatrices(self, matrices):
         return diffComMatrix(matrices)
 

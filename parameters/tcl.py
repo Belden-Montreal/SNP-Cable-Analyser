@@ -19,6 +19,10 @@ class TCL(ReturnLoss):
     def getType():
         return ParameterType.TCL
 
+    @staticmethod
+    def register(parameters):
+        return lambda c, f, m: TCL(c, f, m)
+
     def chooseMatrices(self, matrices):
         return comDiffMatrix(matrices)
 

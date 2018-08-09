@@ -18,6 +18,10 @@ class CMDMRL(ReturnLoss):
     def getType():
         return ParameterType.CMDMRL
 
+    @staticmethod
+    def register(parameters):
+        return lambda c, f, m: CMDMRL(c, f, m)
+
     def chooseMatrices(self, matrices):
         return comDiffMatrix(matrices)
 

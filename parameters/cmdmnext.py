@@ -23,6 +23,10 @@ class CMDMNEXT(NEXT):
     def getType():
         return ParameterType.CMDMNEXT
 
+    @staticmethod
+    def register(parameters, **kwargs):
+        return lambda c, f, m: CMDMNEXT(c, f, m, **kwargs)
+
     def chooseMatrices(self, matrices):
         return comDiffMatrix(matrices)
 

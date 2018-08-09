@@ -19,7 +19,7 @@ class ELTCTL(Parameter):
 
     @staticmethod
     def register(parameters):
-        return lambda c, f, m: DNEXT(c, f, m,
+        return lambda c, f, m: ELTCTL(c, f, m,
             parameters(ParameterType.IL),
             parameters(ParameterType.TCTL)
         )

@@ -18,6 +18,10 @@ class LCL(ReturnLoss):
     def getType():
         return ParameterType.LCL
 
+    @staticmethod
+    def register(parameters):
+        return lambda c, f, m: LCL(c, f, m)
+
     def chooseMatrices(self, matrices):
         return diffComMatrix(matrices)
 

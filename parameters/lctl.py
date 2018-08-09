@@ -17,6 +17,10 @@ class LCTL(InsertionLoss):
     def getType():
         return ParameterType.LCTL
 
+    @staticmethod
+    def register(parameters, **kwargs):
+        return lambda c, f, m: LCTL(c, f, m, **kwargs)
+
     def chooseMatrices(self, matrices):
         return diffComMatrix(matrices)
 

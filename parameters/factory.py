@@ -44,7 +44,7 @@ class ParameterFactory(object):
             CorrectedNEXT, DFDelay, DMCMNEXT, DMCMRL, DNEXT, ELTCTL,
             FEXT, LCL, LCTL, NEXTDelay, NEXT, PlugDelay, PropagationDelay,
             PSAACRX, PSAACRN, PSAACRF, PSACRF, PSANEXT, PSAFEXT, PSFEXT,
-            PSNEXT, ReturnLoss,
+            PSNEXT, ReturnLoss, InsertionLoss, CMDMRL, TCTL, TCL
         }
         return {cls.getType() : cls.register(self.getParameter) for cls in parameters}
 

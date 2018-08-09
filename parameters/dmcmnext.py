@@ -7,6 +7,10 @@ class DMCMNEXT(NEXT):
     def getType():
         return ParameterType.DMCMNEXT
 
+    @staticmethod
+    def register(parameters, **kwargs):
+        return lambda c, f, m: DMCMNEXT(c, f, m, **kwargs)
+
     def chooseMatrices(self, matrices):
         return diffComMatrix(matrices)
 

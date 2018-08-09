@@ -25,8 +25,8 @@ class InsertionLoss(Parameter):
         return ParameterType.IL
 
     @staticmethod
-    def register(parameters, foward=True, reverse=True):
-        return lambda c, f, m: InsertionLoss(c, f, m, foward=foward, reverse=reverse)
+    def register(parameters, forward=True, reverse=True):
+        return lambda c, f, m: InsertionLoss(c, f, m, forward=forward, reverse=reverse)
 
     def computeDataSeries(self):
         series = set()
