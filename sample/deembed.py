@@ -28,3 +28,9 @@ class Deembed(SingleEnded):
                 self._parameters[parameter] = self._cases
             else:
                 self._parameters[parameter] = self._factory.getParameter(parameter)
+
+    def setStandard(self, standard):
+        super(Deembed, self).setStandard(standard)
+        for name, parameter in self._parameters.items():
+            if name == "Case":
+                parameter.setLimit(standard.limits["NEXT"])

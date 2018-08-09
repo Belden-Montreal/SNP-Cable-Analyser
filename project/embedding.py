@@ -185,6 +185,11 @@ class Embedding(Project):
     def nodeFromProject(self):
         return EmbeddingNode(self)
 
+    def setStandard(self, standard):
+        for side in self._load.values():
+            if side:
+                side.setStandard(standard)
+
 
 from app.node import Node
 from sample.sample import SampleNode
@@ -260,3 +265,9 @@ class EmbeddingNode(ProjectNode):
         tabs["Embedding"] = self._embedTab
 
         return tabs
+
+    def setStandard(self, standard):
+        super(EmbeddingNode, self).setStandard(standard)
+        if self._embedTab:
+            self._embedTab.createTabs(self._embedTab.getSide())
+            self._embedTab.updateWidget()

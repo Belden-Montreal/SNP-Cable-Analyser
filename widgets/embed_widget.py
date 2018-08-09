@@ -89,7 +89,11 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
             else:
                 cases = sample.getParameters()["RCase"]
             for port, (name,_) in cases.getPorts().items():
-                tab = CaseTab(name, cases.getFrequencies(), cases.getParameter()[port], self)
+                if sample.getStandard():
+                    limit = sample.getStandard().limits["NEXT"]
+                else:
+                    limit = None
+                tab = CaseTab(name, cases.getFrequencies(), cases.getParameter()[port], self, limit)
                 self._pairTabs[side][name] = tab
 
     def reverse(self):
