@@ -4,11 +4,11 @@ from limits.TreeModel import TreeModel
 from limits.EditLimitDialog import EditLimitDialog
 
 class LimitDialog(object):
-    def __init__(self):
+    def __init__(self, limitsFile = "limits/limits.xml"):
         self.dialog = QtWidgets.QDialog()
         self.limitDialog = Set_Limit_Dialog.Ui_LimitDialog()
         self.limitDialog.setupUi(self.dialog)
-        self.model = TreeModel()
+        self.model = TreeModel(limitsFile)
         self.limitDialog.treeView.setModel(self.model)
         self.resizeColumns(QtCore.QModelIndex())
         button = self.limitDialog.buttonBox.button(QtWidgets.QDialogButtonBox.Ok)

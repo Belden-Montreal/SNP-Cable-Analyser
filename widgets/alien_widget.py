@@ -44,6 +44,7 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
         
     def updateWidget(self):
         end, test = self.getCheckButtons()
+        self._alien.resetDisturbers(end, test)
         self.alienDisturbers.clear()
         for disturber in self._alien.disturbers()[test][end]:
             item = QtWidgets.QListWidgetItem()
@@ -51,6 +52,10 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
             item.setCheckState(QtCore.Qt.Checked)
             item.setText(disturber.getName())
             self.alienDisturbers.addItem(item)
+        if self._alien.victims()[test][end]:
+            self.victimLabel.setText(self._alien.victims()[test][end].getName())
+        else:
+            self.victimLabel.setText("")
         self.drawFigure(end, test)
 
     def drawFigure(self, end, test):
@@ -112,20 +117,20 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
                 ax.xaxis.set_major_formatter(ScalarFormatter())
                 ax.grid(which='both')
                 ax.legend(loc='best')
-        self.showTab()
+        self.graphicsView.draw()
 
     def importVictim(self):
         fileName,_ = QtWidgets.QFileDialog.getOpenFileName(self, "Select victim", "", "sNp Files (*.s*p)")
         end, test = self.getCheckButtons()
-        sample = self._alien.importSamples([fileName], end, test, disturber=False)
-        self._node.addChildren([sample], end, test)
+        self._alien.importSamples([fileName], end, test, disturber=False)
+        self._node.updateChildren()
         self.updateWidget()
 
     def importDisturbers(self):
         files,_ = QtWidgets.QFileDialog.getOpenFileNames(self, "Select disturbers", "", "sNp Files (*.s*p)")
         end, test = self.getCheckButtons()
-        samples = self._alien.importSamples(files, end, test, disturber=True)
-        self._node.addChildren(samples, end, test)
+        self._alien.importSamples(files, end, test, disturber=True)
+        self._node.updateChildren()
         self.updateWidget()
 
     def disturbersChanged(self):
@@ -168,6 +173,3 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
         test = self.testTypeGroup.checkedButton().text()
         end = self.endGroup.checkedButton().text()
         return end, test
-
-    def showTab(self):
-        self.graphicsView.draw()

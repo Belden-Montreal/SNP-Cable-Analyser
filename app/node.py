@@ -24,7 +24,7 @@ class Node(QtGui.QStandardItem):
                 return child
         return 0
 
-    def getWidgets(self):
+    def getWidgets(self, vnaManager):
         return dict()
 
     def setStandard(self, standard):

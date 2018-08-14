@@ -8,6 +8,9 @@ class MainWidget(TabWidget, main_widget_ui.Ui_MainWidget):
         self.testNameLabel.setText(sample.getName()+":")
         self.dateLabel.setText(sample.getDate())
         self.limitLabel.setText(str(sample.getStandard()))
+        self.updateParams(params)
+
+    def updateParams(self, params):
         if len(params) > 0:
             self.passLabel.setText("Fail")
         else:

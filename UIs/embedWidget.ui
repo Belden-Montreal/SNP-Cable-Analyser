@@ -16,7 +16,7 @@
   <layout class="QHBoxLayout" name="horizontalLayout_2">
    <item>
     <widget class="QTabWidget" name="tabWidget">
-     <widget class="QWidget" name="mainTab" native="true">
+     <widget class="QWidget" name="mainTab">
       <attribute name="title">
        <string/>
       </attribute>
@@ -389,7 +389,7 @@
             </size>
            </property>
            <property name="text">
-            <string>Reemebed</string>
+            <string>Reembed</string>
            </property>
           </widget>
          </item>

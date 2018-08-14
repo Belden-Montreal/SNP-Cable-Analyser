@@ -22,3 +22,9 @@ class DeembedSample(PlugSample):
             ParameterType.DNEXT,
             ParameterType.CASE,       
         }.union(self.getDefaultParameters().keys())
+
+    def setStandard(self, standard):
+        super(DeembedSample, self).setStandard(standard)
+        for name, parameter in self._parameters.items():
+            if name == "Case":
+                parameter.setLimit(standard.limits["NEXT"])

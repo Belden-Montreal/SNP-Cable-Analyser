@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>9</x>
@@ -36,14 +36,21 @@
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_4">
              <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_3"/>
-             </item>
-             <item>
               <layout class="QVBoxLayout" name="verticalLayout_2">
                <item>
                 <widget class="QPushButton" name="alienVictimButton">
                  <property name="text">
                   <string>Victim SNP</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="victimLabel">
+                 <property name="text">
+                  <string>&quot;&quot;</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
                  </property>
                 </widget>
                </item>

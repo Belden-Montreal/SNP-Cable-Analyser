@@ -3,7 +3,7 @@ from sample.single_ended import SingleEnded
 from multiprocessing.dummy import Pool as ThreadPool
 from os.path import splitext
 import xlsxwriter
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtGui
 
 class Project(object):
     '''
@@ -139,7 +139,7 @@ class ProjectNode(Node):
             self.model().removeRow(self.row())
 
     def removeRow(self, row):
-        super(ProjectNode, self).removeRow(row)
+        QtGui.QStandardItem.removeRow(self, row)
 
     def setupInitialData(self):
         self.addChildren(self._dataObject.samples())
@@ -147,5 +147,5 @@ class ProjectNode(Node):
     def setStandard(self, standard):
         self._dataObject.setStandard(standard)
 
-    # def getWidgets(self):
+    # def getWidgets(self, vnaManager):
     #     return list()

@@ -1,21 +1,25 @@
 import VNA_addr_dialog
 import TestParameters
 from Communication import Communication
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore
 from decimal import Decimal
 
-class VNAManager(object):
+class VNAManager(QtCore.QObject):
+    connection = QtCore.pyqtSignal()
 
     def __init__(self):
+        super(VNAManager, self).__init__()
         self._connected = False
         self._comm = Communication()
 
     def connect(self):
+        self.connection.emit()
         addr = Addr_Dialog().getAddr(self._comm)
         if addr:
             try:
                 self._comm.connectToVNA(addr)
-                self.connected = True
+                self._connected = True
+                self.connection.emit()
             except Exception as e:
                 print(e)
 
@@ -23,7 +27,8 @@ class VNAManager(object):
         while self._connected:
             try:
                 self._comm.close()
-                self.connected = False
+                self._connected = False
+                self.connection.emit()
             except Exception as e:
                 print(e)
 
@@ -61,6 +66,9 @@ class VNAManager(object):
 
     def calibrate(self):
         self._comm.calibrate()
+
+    def connected(self):
+        return self._connected
 
 class Test_Params_Dialog:
     def getParams(self, comm):

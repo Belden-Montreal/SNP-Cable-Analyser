@@ -245,5 +245,5 @@ class Ui_Form(object):
         self.shortingJack124578Label.setText(_translate("Form", "SJ 12,45,78"))
         self.sJ36Label.setText(_translate("Form", "SJ 36"))
         self.thruCalibLabel.setText(_translate("Form", "Thru Calib"))
-        self.reembedButton.setText(_translate("Form", "Reemebed"))
+        self.reembedButton.setText(_translate("Form", "Reembed"))
 

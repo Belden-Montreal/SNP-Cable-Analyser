@@ -166,6 +166,9 @@ class Sample2(object):
     def getName(self):
          return self._name
 
+    def getFileName(self):
+        return self._snp.getFile()
+
     def getDate(self):
         return self._date
 
@@ -179,26 +182,37 @@ class SampleNode(Node):
         super(SampleNode, self).__init__(sample.getName())
         self._dataObject = sample
         self._project = project
+        self._mainTab = None
+        self._paramTabs = dict()
 
     def delete(self):
         self.parent().removeRow(self.row())
         self._project.removeSample(self._dataObject)
 
-    def getWidgets(self):
+    def getWidgets(self, none):
         widgets = dict()
+        
         widgets["main"] = None
         failParams = list()
         for name, param in self._dataObject.getParameters().items():
             try:
                 if param.visible():
-                    tab = ParameterWidget(name, param)
-                    widgets[name] = tab
-                    if not tab.hasPassed:
-                        failParams.append(name)
+                    if name not in self._paramTabs:
+                        self._paramTabs[name] = ParameterWidget(name, param)
+                    widgets[name] = self._paramTabs[name]
+                    if not self._paramTabs[name].hasPassed:
+                            failParams.append(name)
             except:
                 continue
-        widgets["main"] = MainWidget(self._dataObject, failParams)
+        if not self._mainTab:
+            self._mainTab = MainWidget(self._dataObject, failParams)
+        else:
+            self._mainTab.updateParams(failParams)
+        widgets["main"] = self._mainTab
+
         return widgets
 
     def setStandard(self, standard):
         self._dataObject.setStandard(standard)
+        self._mainTab = None
+        self._paramTabs = dict()

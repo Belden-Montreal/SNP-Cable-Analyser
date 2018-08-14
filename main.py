@@ -44,9 +44,9 @@ class Main():
         self._mainWindow.actionWho_am_I.triggered.connect(lambda:self._vnaManager.whoAmI())
         self._mainWindow.actionMeasure.triggered.connect(lambda:self._vnaManager.acquire())
         self._mainWindow.actionCalibrate_2.triggered.connect(lambda:self._vnaManager.calibrate())
-        self._mainWindow.actionDisconnect.triggered.connect(lambda:self._vnaManager.disconnect())
-        # self.actionAlien.triggered.connect(MainWindow.addAlien)
-        # self.actionDeembed.triggered.connect(MainWindow.addEmbed)
+        self._mainWindow.actionDisconnect.triggered.connect(lambda:self.disconnect())
+        self._mainWindow.actionAlien.triggered.connect(lambda:self.newProject(0))
+        self._mainWindow.actionDeembed.triggered.connect(lambda:self.newProject(2))
         # self._mainWindow.param_tabs.currentChanged['int'].connect(lambda:self.tabChanged())
         # QtCore.QMetaObject.connectSlotsByName(MainWindow)
         self._mainWindow.actionImport_Project.triggered.connect(lambda: self.loadProject())
@@ -54,13 +54,24 @@ class Main():
 
     def connect(self):
         self._vnaManager.connect()
-        self._mainWindow.actionMeasure.setEnabled(True)
-        self._mainWindow.actionWho_am_I.setEnabled(True)
-        self._mainWindow.actionCalibrate.setEnabled(True)
-        self._mainWindow.actionCalibrate_2.setEnabled(True)
-        self._mainWindow.actionDisconnect.setEnabled(True)
-        self._mainWindow.actionRun.setEnabled(True)
-        self._mainWindow.actionConnect.setEnabled(False)
+        if self._vnaManager.connected():
+            self._mainWindow.actionMeasure.setEnabled(True)
+            self._mainWindow.actionWho_am_I.setEnabled(True)
+            self._mainWindow.actionCalibrate.setEnabled(True)
+            self._mainWindow.actionCalibrate_2.setEnabled(True)
+            self._mainWindow.actionDisconnect.setEnabled(True)
+            self._mainWindow.actionRun.setEnabled(True)
+            self._mainWindow.actionConnect.setEnabled(False)
+
+    def disconnect(self):
+        self._vnaManager.disconnect()
+        self._mainWindow.actionMeasure.setEnabled(False)
+        self._mainWindow.actionWho_am_I.setEnabled(False)
+        self._mainWindow.actionCalibrate.setEnabled(False)
+        self._mainWindow.actionCalibrate_2.setEnabled(False)
+        self._mainWindow.actionDisconnect.setEnabled(False)
+        self._mainWindow.actionRun.setEnabled(False)
+        self._mainWindow.actionConnect.setEnabled(True)
 
     def getRootProject(self):
          selected = self.getSelected()
@@ -68,12 +79,13 @@ class Main():
             return self._model.itemFromIndex(self._model.getRootFromIndex(selected[0]))
              
 
-    def newProject(self):
+    def newProject(self, first=3):
         dialog = QtWidgets.QDialog(self._qmw)
         newDial = new_project_dialog.Ui_NewProjectDialog()
         newDial.setupUi(dialog)
         projectTypes = ["Alien", "Plug", "Embedding", "Other"]
         newDial.typeBox.addItems(projectTypes)
+        newDial.typeBox.setCurrentIndex(first)
         res = dialog.exec_()
         if res:
             projType = newDial.typeBox.currentText()
@@ -109,16 +121,20 @@ class Main():
 
         self._mainWindow.param_tabs.clear()
         node = self._model.itemFromIndex(index)
-        tabs = node.getWidgets()
+        tabs = node.getWidgets(self._vnaManager)
         for name, tab in tabs.items():
             self._mainWindow.param_tabs.addTab(tab, name)
 
     def tableContextMenu(self, pos):
         selected = self.getSelected()
-        selectedProj = self.getRootProject().getObject()
+        if self.getRootProject():
+            selectedProj = self.getRootProject().getObject()
+        else:
+            selectedProj = None
         if selectedProj and len(selected) > 0:
     
             menu = QtWidgets.QMenu()
+            addSample = menu.addAction("Add Samples")
             setLimit = menu.addAction("Set Limit")
 
             if len(selected) == 1: 
@@ -137,16 +153,23 @@ class Main():
                     else:
                         z = False
                     file, _ = QtWidgets.QFileDialog.getSaveFileName(self._qmw,"Export Excel Report", "","Excel File (*.xlsx)")
-                    selectedProj.generateExcel(file , selected[0], z)
+                    try:
+                        selectedProj.generateExcel(file , [self._model.itemFromIndex(s) for s in selected], z)
+                    except Exception as e:
+                        errorMessage = QtWidgets.QErrorMessage(self._qmw)
+                        errorMessage.showMessage(str(e))
+
 
             elif action == delete:
-                # self._model.beginRemoveRows()
-                for s in selected:
-                    self._model.itemFromIndex(s).delete()
-                # self._model.endRemoveRows()
-                
+                sel = [self._model.itemFromIndex(s) for s in selected]
+                for s in sel:
+                    s.delete()
+
             elif action == setLimit:
                 self.setLimit()
+
+            elif action == addSample:
+                self.importSNP()
             #self.Project.activeMeasurements = selected
 
             # elif action == setPortNumber and len(self._selected) == 1:
@@ -154,13 +177,13 @@ class Main():
             return 1
 
         menu = QtWidgets.QMenu()
-        addSNP = menu.addAction("Add Sample")
+        addSNP = menu.addAction("Add Project")
         selectAll = menu.addAction("Select All")
         action = menu.exec_(QtGui.QCursor.pos())
         if action == selectAll:
             self._mainWindow.sampleTable.selectAll()
         elif action == addSNP:
-            self.importSNP()
+            self.newProject()
 
     def setLimit(self):
         
@@ -171,6 +194,7 @@ class Main():
             selected = [self._model.itemFromIndex(x) for x in self.getSelected()]
             for node in selected:
                 node.setStandard(item)
+            self.displaySampleParams(self.getSelected()[0])
 
     # def tabChanged(self):
     #     # if self._mainWindow.param_tabs.currentIndex() == 0 or self._mainWindow.param_tabs.count() <= 1:

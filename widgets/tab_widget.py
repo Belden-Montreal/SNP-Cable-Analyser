@@ -8,6 +8,4 @@ class TabWidget(QtWidgets.QWidget):
 
     def __initWidgetOnly__(self, parent):
         super(TabWidget, self).__init__()
-
-    def showTab(self):
-        pass
+        
