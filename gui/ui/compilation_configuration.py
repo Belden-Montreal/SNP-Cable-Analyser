@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file './ui/compilation_configuration.ui'
 #
-# Created by: PyQt5 UI code generator 5.10.1
+# Created by: PyQt5 UI code generator 5.11.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -93,6 +93,9 @@ class Ui_dialog(object):
         self.formatMagnitudeRadioButton = QtWidgets.QRadioButton(self.formatGroupBox)
         self.formatMagnitudeRadioButton.setObjectName("formatMagnitudeRadioButton")
         self.gridLayout.addWidget(self.formatMagnitudeRadioButton, 1, 0, 1, 1)
+        self.formatDelayRadioButton = QtWidgets.QRadioButton(self.formatGroupBox)
+        self.formatDelayRadioButton.setObjectName("formatDelayRadioButton")
+        self.gridLayout.addWidget(self.formatDelayRadioButton, 2, 0, 1, 1)
         self.mainGridLayout.addWidget(self.formatGroupBox, 13, 0, 1, 1)
         self.samplesLabel = QtWidgets.QLabel(dialog)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
@@ -175,6 +178,7 @@ class Ui_dialog(object):
         self.formatPhaseRadioButton.setText(_translate("dialog", "Phase"))
         self.formatImaginaryRadioButton.setText(_translate("dialog", "Imaginary"))
         self.formatMagnitudeRadioButton.setText(_translate("dialog", "Magnitude"))
+        self.formatDelayRadioButton.setText(_translate("dialog", "Delay"))
         self.samplesLabel.setText(_translate("dialog", "Samples"))
         self.parameterLabel.setText(_translate("dialog", "Parameter"))
         self.scaleGroupBox.setTitle(_translate("dialog", "Scale"))

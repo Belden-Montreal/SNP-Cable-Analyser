@@ -2,6 +2,7 @@ from parameters.parameter import Parameter, complex2db, complex2phase, diffDiffM
 from parameters.next import NEXT
 from parameters.dataserie import PortDataSerie
 from parameters.type import ParameterType
+from analysis.format import DataFormat
 
 import numpy as np
 import math
@@ -27,6 +28,15 @@ class PSNEXT(Parameter):
     @staticmethod
     def register(parameters):
         return lambda c, f, m: PSNEXT(c, f, m, parameters(ParameterType.NEXT))
+
+    @staticmethod
+    def getAvailableFormats():
+        return {
+            DataFormat.MAGNITUDE,
+            DataFormat.PHASE,
+            DataFormat.REAL,
+            DataFormat.IMAGINARY,
+        }
 
     def computeDataSeries(self):
         mains   = self._ports.getMainPorts()

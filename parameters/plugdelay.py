@@ -1,6 +1,7 @@
 from parameters.parameter import Parameter, takeClosest
 from parameters.dataserie import PortDataSerie
 from parameters.type import ParameterType
+from analysis.format import DataFormat
 
 import numpy as np
 
@@ -29,6 +30,12 @@ class PlugDelay(Parameter):
             parameters(ParameterType.K2),
             parameters(ParameterType.K3)
         )
+
+    @staticmethod
+    def getAvailableFormats():
+        return {
+            DataFormat.DELAY,
+        }
 
     def computeDataSeries(self):
         series = {PortDataSerie(port) for port in self._ports.getMainPorts()}

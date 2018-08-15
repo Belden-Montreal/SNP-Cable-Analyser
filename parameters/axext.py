@@ -1,6 +1,7 @@
 from parameters.parameter import Parameter, complex2db, complex2phase, diffDiffMatrix
 from parameters.dataserie import PortPairDataSerie
 from parameters.type import ParameterType
+from analysis.format import DataFormat
 
 import itertools
 
@@ -46,6 +47,15 @@ class AXEXT(Parameter):
     @staticmethod
     def register(parameters):
         return lambda c, f, m: AXEXT(c, f, m)
+
+    @staticmethod
+    def getAvailableFormats():
+        return {
+            DataFormat.MAGNITUDE,
+            DataFormat.PHASE,
+            DataFormat.REAL,
+            DataFormat.IMAGINARY,
+        }
 
     def computeDataSeries(self):
         # create each pair for the AXEXT

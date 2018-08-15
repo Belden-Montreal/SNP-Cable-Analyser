@@ -1,6 +1,7 @@
 from parameters.parameter import Parameter, diffDiffMatrix
 from parameters.dataserie import PortDataSerie
 from parameters.type import ParameterType
+from analysis.format import DataFormat
 
 class PSAACRX(Parameter):
     '''
@@ -32,6 +33,15 @@ class PSAACRX(Parameter):
 
     #         parameters(ParameterType.IL)
     #     )
+
+    @staticmethod
+    def getAvailableFormats():
+        return {
+            DataFormat.MAGNITUDE,
+            DataFormat.PHASE,
+            DataFormat.REAL,
+            DataFormat.IMAGINARY,
+        }
 
     def computeDataSeries(self):
         # obtains the data series from the dependent parameters

@@ -1,6 +1,7 @@
 from parameters.parameter import Parameter
 from parameters.dataserie import PortOrderedPairDataSerie, PortDataSerie
 from parameters.type import ParameterType
+from analysis.format import DataFormat
 
 import itertools
 
@@ -22,6 +23,12 @@ class NEXTDelay(Parameter):
             parameters(ParameterType.PLUG_DELAY),
             mains=mains, remotes=remotes
         )
+
+    @staticmethod
+    def getAvailableFormats():
+        return {
+            DataFormat.DELAY,
+        }
 
     def computeDataSeries(self):
         series = set()

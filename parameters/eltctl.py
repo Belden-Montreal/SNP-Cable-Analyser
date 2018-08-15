@@ -1,5 +1,6 @@
 from parameters.parameter import Parameter
 from parameters.type import ParameterType
+from analysis.format import DataFormat
 
 class ELTCTL(Parameter):
     '''
@@ -23,6 +24,15 @@ class ELTCTL(Parameter):
             parameters(ParameterType.IL),
             parameters(ParameterType.TCTL)
         )
+
+    @staticmethod
+    def getAvailableFormats():
+        return {
+            DataFormat.MAGNITUDE,
+            DataFormat.PHASE,
+            DataFormat.REAL,
+            DataFormat.IMAGINARY,
+        }
 
     def computeDataSeries(self):
         # make sure all dependent parameters have the same data series

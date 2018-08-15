@@ -1,6 +1,7 @@
 from parameters.parameter import Parameter, complex2phase
 from parameters.dataserie import PortDataSerie
 from parameters.type import ParameterType
+from analysis.format import DataFormat
 
 class PropagationDelay(Parameter):
     '''
@@ -25,6 +26,12 @@ class PropagationDelay(Parameter):
         return lambda c, f, m: PropagationDelay(c, f, m,
             parameters(ParameterType.RL)
         )
+
+    @staticmethod
+    def getAvailableFormats():
+        return {
+            DataFormat.DELAY,
+        }
 
     def computeDataSeries(self):
         return {PortDataSerie(port) for port in self._ports.getPorts()}
