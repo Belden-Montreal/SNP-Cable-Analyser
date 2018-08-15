@@ -1,6 +1,6 @@
 from project.project import Project, ProjectNode
-from sample.disturber import Disturber
-from sample.victim import Victim
+from sample.disturber import DisturberSample
+from sample.victim import VictimSample
 from project.alien_import_dialog import AlienImportDialog
 from multiprocessing.dummy import Pool as ThreadPool
 from copy import deepcopy
@@ -28,31 +28,24 @@ class Alien(Project):
         if disturber:
             pool = ThreadPool()
             samples = pool.starmap(self.__createDisturber, zip(fileNames, [param]*len(fileNames)))
-            if self._victims[param][end] is not None:
-                self._victims[param][end].setAXEXTD(self.__calculateAXEXTD(samples, param))
             self._disturbers[param][end] = samples
             return samples
         elif len(fileNames) < 2:
             for p in self._victims:
                 for e in self._victims[p]:
-                    sample = self.__createVictim(fileNames[0], p, self.__calculateAXEXTD(self._disturbers[p][e], p))
-                    self._victims[p][e] = sample
+                    if len(self._disturbers[p][e]):
+                        sample = self.__createVictim(fileNames[0], p, self._disturbers[p][e])
+                        self._victims[p][e] = sample
             return sample
 
     def __createDisturber(self, name, param):
-        return Disturber(name, self.__getParam(param), self._standard)
+        return DisturberSample(name, self.__isRemote(param), standard=self._standard)
 
     def __createVictim(self, name, param, disturbers):
-        return Victim(name, self.__getParam(param), disturbers, self._standard)
+        return VictimSample(name, disturbers, standard=self._standard)
 
-    def __calculateAXEXTD(self, disturbers, param):
-        return [x.getParameters()[self.__getParam(param)] for x in disturbers]
-
-    def __getParam(self, name):
-        if name == "PSANEXT":
-            return "ANEXT"
-        else:
-            return "AFEXT"
+    def __isRemote(self, name):
+        return name == "PSAACRF"
 
     def removeSample(self, sample):
         for param in self._disturbers:
@@ -64,12 +57,13 @@ class Alien(Project):
 
     def updateDisturbers(self, names, end, param):
         disturbers = [x for x in self._disturbers[param][end] if x.getName() in names]
-        if self._victims[param][end]:
-            self._victims[param][end].setAXEXTD(self.__calculateAXEXTD(disturbers, param))
+        # if self._victims[param][end]:
+        #     self._victims[param][end].setAXEXTD(self.__calculateAXEXTD(disturbers, param))
 
     def resetDisturbers(self, end, param):
-        if self._victims[param][end]:
-            self._victims[param][end].setAXEXTD(self.__calculateAXEXTD(self._disturbers[param][end], param))
+        pass
+        # if self._victims[param][end]:
+        #     self._victims[param][end].setAXEXTD(self.__calculateAXEXTD(self._disturbers[param][end], param))
 
     def disturbers(self):
         return self._disturbers

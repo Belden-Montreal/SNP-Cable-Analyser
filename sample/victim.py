@@ -2,7 +2,7 @@ from sample.alien import AlienSample
 from parameters.type import ParameterType
 
 class VictimSample(AlienSample):
-    def __init__(self, snp, samples, config=None):
+    def __init__(self, snp, samples, config=None, **kwargs):
         self._samples = samples
 
         # make sure all samples are all remote or main
@@ -12,7 +12,7 @@ class VictimSample(AlienSample):
             raise error
         remote = next(iter(remotes))
 
-        super(VictimSample, self).__init__(snp, remote=remote, config=config)
+        super(VictimSample, self).__init__(snp, remote=remote, config=config, **kwargs)
 
     def getDefaultConfiguration(self):
         # make sure all configuration are the same
@@ -38,12 +38,12 @@ class VictimSample(AlienSample):
         else:
             return {ParameterType.ANEXTD, ParameterType.PSANEXT, ParameterType.PSAACRN} 
 
-    def setAXEXTD(self, axextd):
-        # TODO: what is this?
-        self._axextd = axextd
-        self._parameters["PS"+self._param].recalculate(self._axextd)
-        if self._param == "ANEXT":
-            name = "N"
-        else:
-            name = "F"
-        self._parameters["PSAACR"+name].recalculate(self._parameters["PS"+self._param])
+    # def setAXEXTD(self, axextd):
+    #     # TODO: what is this?
+    #     self._axextd = axextd
+    #     self._parameters["PS"+self._param].recalculate(self._axextd)
+    #     if self._param == "ANEXT":
+    #         name = "N"
+    #     else:
+    #         name = "F"
+    #     self._parameters["PSAACR"+name].recalculate(self._parameters["PS"+self._param])

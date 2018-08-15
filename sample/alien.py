@@ -1,5 +1,5 @@
 from sample.sample import Sample
-from sample.port import EthernetPair, NetworkPort, AlienConfiguration
+from sample.port import EthernetPair, WirePort, AlienConfiguration
 
 class AlienSample(Sample):
     '''
@@ -15,18 +15,18 @@ class AlienSample(Sample):
     def getDefaultConfiguration(self):
         # create the victim ports
         victims = {
-            NetworkPort(0, "12 (v)", ptype=EthernetPair.PAIR12),
-            NetworkPort(1, "36 (v)", ptype=EthernetPair.PAIR36),
-            NetworkPort(2, "45 (v)", ptype=EthernetPair.PAIR45),
-            NetworkPort(3, "78 (v)", ptype=EthernetPair.PAIR78),
+            WirePort(0, ptype=EthernetPair.PAIR12, remote=True),
+            WirePort(1, ptype=EthernetPair.PAIR36, remote=True),
+            WirePort(2, ptype=EthernetPair.PAIR45, remote=True),
+            WirePort(3, ptype=EthernetPair.PAIR78, remote=True),
         }
 
         # create the disturber ports
         disturbers = {
-            NetworkPort(4, "12 (d)", ptype=EthernetPair.PAIR12),
-            NetworkPort(5, "36 (d)", ptype=EthernetPair.PAIR36),
-            NetworkPort(6, "45 (d)", ptype=EthernetPair.PAIR45),
-            NetworkPort(7, "78 (d)", ptype=EthernetPair.PAIR78),
+            WirePort(4, ptype=EthernetPair.PAIR12),
+            WirePort(5, ptype=EthernetPair.PAIR36),
+            WirePort(6, ptype=EthernetPair.PAIR45),
+            WirePort(7, ptype=EthernetPair.PAIR78),
         }
 
         # create the configuration for this network

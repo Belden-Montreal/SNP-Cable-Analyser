@@ -1,6 +1,7 @@
 from PyQt5 import QtWidgets, QtCore
 from widgets.tab_widget import TabWidget
 from widgets import alien_widget_ui
+from parameters.type import ParameterType
 from matplotlib.figure import Figure
 from matplotlib.ticker import ScalarFormatter
 import matplotlib.pyplot as plt
@@ -62,38 +63,37 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
         self._figure.clear()
         sample = self._alien.victims()[test][end]
         if test == "PSANEXT":
-            names = ["PSANEXT", "PSAACRN"]
+            names = [ParameterType.PSANEXT, ParameterType.PSAACRN]
         else:
-            names = ["PSAFEXT", "PSAACRF"]
+            names = [ParameterType.PSAFEXT, ParameterType.PSAACRF]
         if sample:
             params = [sample.getParameters()[names[0]], sample.getParameters()[names[1]]]
             for i, param in enumerate(params):
                 colors = iter(plt.cm.rainbow(np.linspace(0, 1, len(param.getPorts())+3)))
 
                 ax = self._figure.add_subplot(1,2,i+1)
-                ax.set_title(end+" "+names[i])
+                ax.set_title(end+" "+params[i].getName())
                 ax.set_xlabel("Frequency")
                 ax.set_ylabel("dB")
                 avg = np.array(list())
-                for port, (name, isRemote) in param.getPorts().items():
+                for serie in param.getDataSeries():
                     color = next(colors)
-                    if not isRemote:
-                        try:
-                            data = list(map(lambda val: val[0], param.getParameter()[port]))
-                        except:
-                            data = param[port]
-                        if len(avg) == 0:
-                            avg = np.array(data)
-                        else:
-                            avg = np.add(avg, data)
-                        if name not in self._hiddenPorts:
-                            ax.semilogx(param.getFrequencies(),
-                                        data,
-                                        label=name, c=color)
+                    try:
+                        data = list(map(lambda val: val[0], param.getParameter()[serie]))
+                    except:
+                        data = param[serie]
+                    if len(avg) == 0:
+                        avg = np.array(data)
+                    else:
+                        avg = np.add(avg, data)
+                    if serie.getName() not in self._hiddenPorts:
+                        ax.semilogx(param.getFrequencies(),
+                                    data,
+                                    label=serie.getName(), c=color)
 
                 limit = param.getLimit()
-                avg = avg/(len(param.getPorts()))
-                if self._showAvg:
+                avg = avg/(len(param.getDataSeries()))
+                if self._showAvg and len(avg):
                     color = next(colors)
                     ax.semilogx(
                         param.getFrequencies(),
@@ -106,8 +106,8 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
                         label="limit", c=color,
                         linestyle="--")
                 if self._showAvgLimit and sample.getStandard():
-                    if "AVG"+names[i] in sample.getStandard().limits:
-                        limit = sample.getStandard().limits["AVG"+names[i]]
+                    if "AVG"+params[i].getName() in sample.getStandard().limits:
+                        limit = sample.getStandard().limits["AVG"+params[i].getName()]
                         if limit:
                             color = next(colors)
                             ax.semilogx(
