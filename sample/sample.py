@@ -41,7 +41,7 @@ class Sample(object):
         # create the parameter
         for parameter in self.getAvailableParameters():
             if parameter in self._parameters.keys():
-                faitcontinue
+                continue
             self._parameters[parameter] = self._factory.getParameter(parameter)
 
     @staticmethod
@@ -70,6 +70,9 @@ class Sample(object):
         for (name, parameter) in self._parameters.items():
             if name in standard.limits:
                 parameter.setLimit(standard.limits[name])
+
+    def getStandard(self):
+        return self._standard
 
     def getFactory(self):
         return ParameterFactory(

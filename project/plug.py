@@ -1,6 +1,8 @@
 from project.project import Project, ProjectNode
-from sample.delay import Delay
-from sample.plug_sample import PlugSample
+from parameters.type import ParameterType
+from sample.delay import CableDelaySample
+from sample.plugdelay import PlugDelaySample
+from sample.plug import PlugSample
 from project.plug_import_dialog import PlugImportDialog
 import numpy as np
 import xlsxwriter
@@ -19,27 +21,27 @@ class Plug(Project):
         self._k3 = 0
 
     def importDfOpen(self, fileName):
-        self._dfOpenDelay = Delay(fileName)
+        self._dfOpenDelay = PlugSample(fileName)
         return self._dfOpenDelay
 
     def importDfShort(self, fileName):
-        self._dfShortDelay = Delay(fileName)
+        self._dfShortDelay = PlugSample(fileName)
         return self._dfShortDelay
 
     def importOpen(self, fileName):
-        self._openDelay = Delay(fileName)
+        self._openDelay = PlugSample(fileName)
         return self._openDelay
 
     def importShort(self, fileName):
-        self._shortDelay = Delay(fileName)
+        self._shortDelay = PlugSample(fileName)
         return self._shortDelay
 
     def importLoad(self, fileName):
-        self._loadSample = PlugSample(fileName, 
-            self._openDelay.getParameters()["Propagation Delay"],
-            self._shortDelay.getParameters()["Propagation Delay"],
-            self._dfOpenDelay.getParameters()["Propagation Delay"],
-            self._dfShortDelay.getParameters()["Propagation Delay"],
+        self._loadSample = PlugDelaySample(fileName, 
+            self._openDelay.getParameter(ParameterType.PROPAGATION_DELAY),
+            self._shortDelay.getParameter(ParameterType.PROPAGATION_DELAY),
+            self._dfOpenDelay.getParameter(ParameterType.PROPAGATION_DELAY),
+            self._dfShortDelay.getParameter(ParameterType.PROPAGATION_DELAY),
             self._k1, self._k2, self._k3)
         return self._loadSample
 

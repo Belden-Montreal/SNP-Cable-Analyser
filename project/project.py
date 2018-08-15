@@ -1,5 +1,5 @@
-from sample.end_to_end import EndToEnd
-from sample.single_ended import SingleEnded
+from sample.cable import CableSample
+from sample.plug import PlugSample
 from multiprocessing.dummy import Pool as ThreadPool
 from os.path import splitext
 import xlsxwriter
@@ -25,8 +25,8 @@ class Project(object):
     def __createSample(self, name):
         _, extension = splitext(name)
         if extension[2] == "8" or extension[2] == "4":
-            return SingleEnded(name)
-        return EndToEnd(name)
+            return PlugSample(name)
+        return CableSample(name)
 
     def removeSample(self, sample):
         if sample in self._samples:
