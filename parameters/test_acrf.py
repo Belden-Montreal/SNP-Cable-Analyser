@@ -4,7 +4,7 @@ from parameters.test_parameter import TestParameter
 from parameters.acrf import ACRF
 from parameters.fext import FEXT
 from parameters.insertionloss import InsertionLoss
-from parameters.dataserie import PortPairDataSerie
+from parameters.dataserie import PortPairDataSerie, WireDataSerie
 
 class TestACRF(TestParameter):
     def setUp(self):
@@ -18,10 +18,10 @@ class TestACRF(TestParameter):
         }
 
         self._ilSeries = {
-            0: PortPairDataSerie.fromWire(self._wires[0]),
-            1: PortPairDataSerie.fromWire(self._wires[1]),
-            2: PortPairDataSerie.fromWire(self._wires[2]),
-            3: PortPairDataSerie.fromWire(self._wires[3]),
+            0: WireDataSerie(self._wires[0]),
+            1: WireDataSerie(self._wires[1]),
+            2: WireDataSerie(self._wires[2]),
+            3: WireDataSerie(self._wires[3]),
         }
 
     def createParameter(self):

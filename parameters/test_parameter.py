@@ -3,6 +3,7 @@ import numpy as np
 
 from parameters.parameter import Parameter, complex2db, complex2phase
 from sample.port import WirePort, Wire, CableConfiguration, NetworkPort, PlugConfiguration
+from sample.port import EthernetPair
 
 class TestParameter(unittest.TestCase):
     def assertComplexAlmostEqual(self, dbParam, cpExpected):
@@ -74,16 +75,16 @@ class TestParameter(unittest.TestCase):
     def setUpConfiguration(self):
        # create the ports
         self._ports = {
-            0: WirePort(0 ,"Port 0", False),
-            1: WirePort(1 ,"Port 1", False),
-            2: WirePort(2 ,"Port 2", True),
-            3: WirePort(3 ,"Port 3", True),
+            0: WirePort(0, remote=False),
+            1: WirePort(1, remote=False),
+            2: WirePort(2, remote=True),
+            3: WirePort(3, remote=True),
         }
 
         # create the wires
         self._wires = {
-            0: Wire("Wire 0", self._ports[0], self._ports[2]),
-            1: Wire("Wire 1", self._ports[1], self._ports[3]),
+            0: Wire(self._ports[0], self._ports[2], wtype=EthernetPair.PAIR12),
+            1: Wire(self._ports[1], self._ports[3], wtype=EthernetPair.PAIR36),
         }
 
         # create the cable configuration
@@ -111,10 +112,10 @@ class TestPlugParameter(TestParameter):
     def setUpConfiguration(self):
        # create the ports
         self._ports = {
-            0: NetworkPort(0 ,"Port 0"),
-            1: NetworkPort(1 ,"Port 1"),
-            2: NetworkPort(2 ,"Port 2"),
-            3: NetworkPort(3 ,"Port 3"),
+            0: NetworkPort(0, ptype=EthernetPair.PAIR12),
+            1: NetworkPort(1, ptype=EthernetPair.PAIR36),
+            2: NetworkPort(2, ptype=EthernetPair.PAIR45),
+            3: NetworkPort(3, ptype=EthernetPair.PAIR78),
         }
 
         # create the cable configuration

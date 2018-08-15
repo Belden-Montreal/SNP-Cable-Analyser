@@ -44,7 +44,7 @@ class PSAACRX(Parameter):
             port = psaxextSerie.getPort()
 
             # find the corresponding wire
-            ilSerie = [s for s in ilSeries if s.getPorts()[0].getType() == port.getType()]
+            ilSerie = [s for s in ilSeries if s.getMainPort() == port]
             if len(ilSerie) != 1:
                 raise ValueError
 

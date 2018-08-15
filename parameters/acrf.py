@@ -37,12 +37,12 @@ class ACRF(Parameter):
             (p1,p2) = fextSerie.getPorts()
 
             # find the corresponding wire
-            ilSerie = [s for s in ilSeries if s.getPorts()[0] is p1]
+            ilSerie = [s for s in ilSeries if s.getMainPort() == p1]
             if len(ilSerie) != 1:
                 raise ValueError
 
             # create the data serie
-            series.add(PortPairDataSerie.fromSerie(fextSerie, ilSerie[0]))
+            series.add(PortPairDataSerie.fromSerie(fextSerie, data=ilSerie[0]))
 
         return series
 

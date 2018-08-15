@@ -3,16 +3,16 @@ from limits.Limit import Limit
 from parameters.parameter import complex2db
 from parameters.test_parameter import TestParameter
 from parameters.insertionloss import InsertionLoss
-from parameters.dataserie import PortPairDataSerie
+from parameters.dataserie import WireDataSerie
 
 class TestInsertionLoss(TestParameter):
     def setUp(self):
         super(TestInsertionLoss, self).setUp()
         self._series = {
-            0: PortPairDataSerie.fromWire(self._wires[0]),
-            1: PortPairDataSerie.fromWire(self._wires[1]),
-            2: PortPairDataSerie.fromWire(self._wires[2]),
-            3: PortPairDataSerie.fromWire(self._wires[3]),
+            0: WireDataSerie(self._wires[0]),
+            1: WireDataSerie(self._wires[1]),
+            2: WireDataSerie(self._wires[2]),
+            3: WireDataSerie(self._wires[3]),
         }
 
     def createParameter(self):

@@ -37,7 +37,7 @@ class PSACRF(Parameter):
             p = psfextSerie.getPort()
 
             # find the corresponding wire
-            ilSerie =  [s for s in ilSeries if s.getPorts()[0] is p]
+            ilSerie =  [s for s in ilSeries if s.getMainPort() == p]
             if len(ilSerie) != 1:
                 raise ValueError
 

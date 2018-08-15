@@ -4,7 +4,7 @@ from parameters.test_parameter import TestParameter
 from parameters.eltctl import ELTCTL
 from parameters.tctl import TCTL
 from parameters.insertionloss import InsertionLoss
-from parameters.dataserie import PortPairDataSerie
+from parameters.dataserie import WireDataSerie
 
 class TestELTCTL(TestParameter):
     def createParameter(self):
@@ -13,8 +13,8 @@ class TestELTCTL(TestParameter):
         il   = InsertionLoss(self._config, self._freq, self._matrices, reverse=False)
 
         self._dataseries = {
-            0: PortPairDataSerie.fromWire(self._wires[0]),
-            1: PortPairDataSerie.fromWire(self._wires[1]),
+            0: WireDataSerie(self._wires[0]),
+            1: WireDataSerie(self._wires[1]),
         }
 
         return ELTCTL(self._config, self._freq, self._matrices, il, tctl)

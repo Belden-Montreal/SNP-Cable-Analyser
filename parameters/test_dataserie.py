@@ -15,6 +15,11 @@ class TestPortDataSerie(TestCase):
         serie2 = PortDataSerie(NetworkPort(1, ptype=EthernetPair.PAIR36))
         self.assertNotEqual(serie1, serie2)
 
+    def testEqualDifferentRemotes(self):
+        serie1 = PortDataSerie(NetworkPort(0, ptype=EthernetPair.PAIR12, remote=False))
+        serie2 = PortDataSerie(NetworkPort(1, ptype=EthernetPair.PAIR36, remote=True))
+        self.assertNotEqual(serie1, serie2)
+
     def testHash(self):
         series = set()
 
@@ -46,14 +51,6 @@ class TestPortPairDataSerie(TestCase):
         serie2 = PortPairDataSerie(port3, port4)
         self.assertEqual(serie1, serie2)
 
-    def testEqualFlipped(self):
-        port1 = NetworkPort(1, ptype=EthernetPair.PAIR12)
-        port2 = NetworkPort(2, ptype=EthernetPair.PAIR36)
-
-        serie1 = PortPairDataSerie(port1, port2)
-        serie2 = PortPairDataSerie(port2, port1)
-        self.assertNotEqual(serie1, serie2)
-
     def testEqualDifferentTypes(self):
         port1 = NetworkPort(1, ptype=EthernetPair.PAIR12)
         port2 = NetworkPort(2, ptype=EthernetPair.PAIR36)
@@ -62,6 +59,24 @@ class TestPortPairDataSerie(TestCase):
 
         serie1 = PortPairDataSerie(port1, port2)
         serie2 = PortPairDataSerie(port3, port4)
+        self.assertNotEqual(serie1, serie2)
+
+    def testEqualDifferentRemotes(self):
+        port1 = NetworkPort(1, ptype=EthernetPair.PAIR12, remote=True)
+        port2 = NetworkPort(2, ptype=EthernetPair.PAIR36, remote=True)
+        port3 = NetworkPort(3, ptype=EthernetPair.PAIR45, remote=False)
+        port4 = NetworkPort(4, ptype=EthernetPair.PAIR36, remote=False)
+
+        serie1 = PortPairDataSerie(port1, port2)
+        serie2 = PortPairDataSerie(port3, port4)
+        self.assertNotEqual(serie1, serie2)
+
+    def testEqualFlipped(self):
+        port1 = NetworkPort(1, ptype=EthernetPair.PAIR12)
+        port2 = NetworkPort(2, ptype=EthernetPair.PAIR36)
+
+        serie1 = PortPairDataSerie(port1, port2)
+        serie2 = PortPairDataSerie(port2, port1)
         self.assertNotEqual(serie1, serie2)
 
     def testHash(self):
