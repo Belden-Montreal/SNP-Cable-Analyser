@@ -20,11 +20,14 @@ class PortDataSerie(DataSerie):
     def getData(self):
         return self._data
 
+    def getType(self):
+        return self._port.getType()
+
     def __eq__(self, other):
-        return (self._port is other.getPort())
+        return (self.getType() == other.getType())
 
     def __hash__(self):
-        return self._port.__hash__()
+        return self.getType().__hash__()
 
 class PortPairDataSerie(DataSerie):
     def __init__(self, port1, port2, data=None):
@@ -51,6 +54,10 @@ class PortPairDataSerie(DataSerie):
         (p1,p2) = self._ports
         return (p1.getIndex(), p2.getIndex())
 
+    def getTypes(self):
+        (p1,p2) = self._ports
+        return (p1.getType(), p2.getType())
+
     def getPortSeries(self):
         serie1 = PortDataSerie(self._ports[0])
         serie2 = PortDataSerie(self._ports[1])
@@ -60,16 +67,12 @@ class PortPairDataSerie(DataSerie):
         return self._data
 
     def __eq__(self, other):
-        (p1,p2) = self._ports
-        (o1,o2) = other.getPorts()
-        if p1 is not o1:
-            return False
-        if p2 is not o2:
-            return False
-        return True
+        (p1,p2) = self.getTypes()
+        (o1,o2) = other.getTypes()
+        return (p1 == o1) and (p2 == o2)
 
     def __hash__(self):
-        return self.getPortIndices().__hash__()
+        return self.getTypes().__hash__()
 
 class PortOrderedPairDataSerie(PortPairDataSerie):
     def __init__(self, port1, port2, data=None):
@@ -97,9 +100,19 @@ class WireDataSerie(PortPairDataSerie):
     def getRemotePort(self):
         return self._wire.getRemotePort()
 
+    def getType(self):
+        return self._wire.getType()
+
+    def isReverse(self):
+        return self._wire.isReverse()
+
     def __eq__(self, other):
-        return (self._wire is other.getWire())
+        if self.isReverse() != other.isReverse():
+            return False
+        if self.getType() != other.getType():
+            return False
+        return True
 
     def __hash__(self):
-        return self._wire.__hash__()
+        return (self.getType(), self.isReverse()).__hash__()
         

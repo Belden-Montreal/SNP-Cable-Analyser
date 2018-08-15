@@ -1,20 +1,27 @@
 from enum import Enum
 
 class EthernetPair(Enum):
-    DUMMY  = 0
-    PAIR12 = 1
-    PAIR36 = 2
-    PAIR45 = 3
-    PAIR78 = 4
+    UNDEF  = ("")
+    DUMMY  = ("")
+    PAIR12 = ("12")
+    PAIR36 = ("36")
+    PAIR45 = ("45")
+    PAIR78 = ("78")
+
+    def __init__(self, name):
+        self._name = name
+
+    def getName(self):
+        return self._name
 
 class NetworkPort(object):
     """
     Basic class representing a port in a network. A port has an index in the
-    network and a name.
+    network and have a type.
     """
-    def __init__(self, index, name, ptype=None):
+    def __init__(self, index, ptype=EthernetPair.UNDEF):
         self._index = index
-        self._name  = name
+        self._name  = ptype.getName()
         self._type  = ptype
 
     def getIndex(self):
@@ -26,34 +33,52 @@ class NetworkPort(object):
     def getType(self):
         return self._type
 
+    def setType(self, ptype):
+        self._name = ptype.getName()
+        self._type = ptype
+
 class WirePort(NetworkPort):
     """
-    This class represents a wire port in a network. A wire has two ports, a
-    main port and a remote one.
+    This subclass represents a port tied to a wire. This subclass allows a wire
+    to have a main and a remote port.
     """
-    def __init__(self, index, name, remote=False, **kwargs):
-        super(WirePort, self).__init__(index, name, **kwargs)
+    def __init__(self, index, ptype=EthernetPair.UNDEF, remote=False):
+        super(WirePort, self).__init__(index, ptype)
         self._remote = remote
+        self.__createName()
+
+    def __createName(self):
+        if self._remote:
+            self._name = "{} (r)".format(self._type.getName())
+        else:
+            self._name = self._type.getName()
 
     def isRemote(self):
         return self._remote
 
     def setRemote(self, remote=True):
         self._remote = remote
+        self.__createName()
 
 class Wire(object):
     """
-    This class represents a wire in a network. A wire has a name and  two ports,
+    This class represents a wire in a network. A wire consists of two ports:
     a main one and a remote one.
     """
-    def __init__(self, name, main, remote, wtype=None):
+    def __init__(self, main, remote, wtype=EthernetPair.UNDEF):
+        # main port shouldn't be remote
         if main.isRemote():
             raise ValueError
 
+        # remote should be remote
         if not remote.isRemote():
             raise ValueError
 
-        self._name    = name
+        # main and remote ports should have the same type
+        main.setType(wtype)
+        remote.setType(wtype)
+
+        self._name    = wtype.getName()
         self._main    = main
         self._remote  = remote
         self._type    = wtype
@@ -77,6 +102,9 @@ class Wire(object):
     def setReverse(self, reverse):
         self._reverse = reverse
 
+    def isReverse(self):
+        return False
+
     def __contains__(self, port):
         if self._main is port:
             return True
@@ -84,39 +112,20 @@ class Wire(object):
             return True
         return False
 
-class PortPair(object):
-    """
-    This class represents a pair of ports.
-    """
-    def __init__(self, port1, port2, name=None):
-        if port1.getIndex() < port2.getIndex():
-            self._ports = (port1, port2)
-        else:
-            self._ports = (port2, port1)
-        if name is None:
-            self._name = port1.getName() + "-" + port2.getName()
-
-    def getPorts(self):
-        return self._ports
-
-    def getPortIndices(self):
-        (p1,p2) = self._ports
-        return (p1.getIndex(), p2.getIndex())
-
-    def getName(self):
-        return self._name
-
 class ReversedWire(Wire):
     """
     This class represents a wire traveled in the other direction.
     """
     def __init__(self, wire):
-        self._name    = wire.getName()
+        self._name    = "{} (r)".format(wire.getName())
         self._main    = wire.getRemotePort()
         self._remote  = wire.getMainPort()
         self._type    = wire.getType()
         self._reverse = wire
         wire.setReverse(self)
+
+    def isReverse(self):
+        return True
 
 class NetworkConfiguration(object):
     """
