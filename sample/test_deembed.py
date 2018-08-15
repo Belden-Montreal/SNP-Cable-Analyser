@@ -10,7 +10,7 @@ class TestDeembedSample(TestPlugSample):
         self._nextDelay = MagicMock()
         self._cases = MagicMock()
         return DeembedSample(
-            None,
+            "",
             self._cnext,
             self._nextDelay,
             self._cases

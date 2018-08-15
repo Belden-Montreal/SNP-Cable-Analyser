@@ -22,7 +22,7 @@ class Case(Parameter):
     def register(parameters):
         return lambda c, f, m: Case(c, f, m,
             parameters(ParameterType.DNEXT),
-            parameters(ParameterType.PCNEXT),
+            parameters(ParameterType.PC_NEXT),
             parameters(ParameterType.CASES),
         )
 
@@ -42,7 +42,8 @@ class Case(Parameter):
         cpReembedded = {serie: dict() for serie in self._series}
 
         for serie in self._series:
-            cases = filter(lambda case: case[1][0] == serie and case[1][1] is not None, self._cases.items())
+            cases = filter(lambda case: case[1][0] == serie.getPortIndices() and case[1][1] is not None, self._cases.items())
+            
             for (index,_) in cases:
                 dbReembedded[serie][index] = list()
                 cpReembedded[serie][index] = list()
@@ -51,7 +52,7 @@ class Case(Parameter):
         cnext = self._cnext.getComplexParameter()
         for (f,freq) in enumerate(self._freq):
             for serie in self._series:
-                cases = [x for x in self._cases.items() if x[1][0] == serie and x[1][1] is not None]
+                cases = [x for x in self._cases.items() if x[1][0] == serie.getPortIndices() and x[1][1] is not None]
                 for (n, (_, case)) in cases:
                     plug = case(freq, cnext[serie][f])
                     dbPlug = plug[0]

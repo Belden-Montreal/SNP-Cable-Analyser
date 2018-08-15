@@ -2,6 +2,7 @@ from PyQt5 import QtWidgets
 from widgets.tab_widget import TabWidget
 from widgets.case_tab import CaseTab
 from widgets import embed_widget_ui
+from parameters.type import ParameterType
 from canvas import Canvas
 from matplotlib.figure import Figure
 from matplotlib.ticker import ScalarFormatter
@@ -56,16 +57,16 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
         side = self.getSide()
         sample = self._embedding.load()[side]
         if sample:
-            self.loadFileName.setText(sample.getFileName())
-            self._loadFile = sample.getFileName()
+            self.loadFileName.setText(sample.getName())
+            self._loadFile = sample.getName()
         else:
             self.loadFileName.setText("\"\"")
             self._loadFile = None
         if side == "Reverse":
             if self._embedding.openSample():
-                self.openFileName.setText(self._embedding.openSample().getFileName())
+                self.openFileName.setText(self._embedding.openSample().getName())
             if self._embedding.shortSample():
-                self.shortFileName.setText(self._embedding.shortSample().getFileName())
+                self.shortFileName.setText(self._embedding.shortSample().getName())
         else:
             self.openFileName.setText("\"\"")
             self.shortFileName.setText("\"\"")
@@ -85,16 +86,16 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
         sample = self._embedding.load()[side]
         if sample:
             if side == "Forward":
-                cases = sample.getParameters()["Case"]
+                cases = sample.getParameters()[ParameterType.CASE]
             else:
                 cases = sample.getParameters()["RCase"]
-            for port, (name,_) in cases.getPorts().items():
+            for serie in cases.getDataSeries():
                 if sample.getStandard():
                     limit = sample.getStandard().limits["NEXT"]
                 else:
                     limit = None
-                tab = CaseTab(name, cases.getFrequencies(), cases.getParameter()[port], self, limit)
-                self._pairTabs[side][name] = tab
+                tab = CaseTab(serie.getName(), cases.getFrequencies(), cases.getParameter()[serie], self, limit)
+                self._pairTabs[side][serie.getName()] = tab
 
     def reverse(self):
         self._isReverse = not self._isReverse

@@ -46,13 +46,13 @@ class Plug(Project):
         return self._loadSample
 
     def getPlugNext(self):
-        return self._loadSample.getParameters()["CNEXT"]
+        return self._loadSample.getParameters()[ParameterType.CORRECTED_NEXT]
 
     def getNextDelay(self):
-        return self._loadSample.getParameters()["NEXTDelay"]
+        return self._loadSample.getParameters()[ParameterType.NEXT_DELAY]
 
     def getPlugDelay(self):
-        return self._loadSample.getParameters()["PlugDelay"]
+        return self._loadSample.getParameters()[ParameterType.PLUG_DELAY]
 
     def setConstants(self, k1, k2, k3):
         self._k1 = k1

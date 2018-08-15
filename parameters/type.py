@@ -29,7 +29,6 @@ class ParameterType(Enum):
     PSAACRN           = auto()
     PSAACRF           = auto()
     PSAACRX           = auto()
-    CNEXT             = auto()
     DNEXT             = auto()
     CASE              = auto()
     CASES             = auto()

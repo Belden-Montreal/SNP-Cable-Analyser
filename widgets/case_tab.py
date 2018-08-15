@@ -24,7 +24,7 @@ class CaseTab(TabWidget):
         self._figure.clear()
         ax = self._figure.add_subplot(121)
         axp = self._figure.add_subplot(122)
-
+    
         for n, data in self._parameter.items():
             magData = list(map(lambda val: val[0], data))
 
