@@ -68,6 +68,10 @@ class Parameter(object):
     def register(parameters):
         raise NotImplementedError
 
+    @staticmethod
+    def getAvailableFormats():
+        raise NotImplementedError
+
     def chooseMatrices(self, mixedModeMatrices):
         raise NotImplementedError
 

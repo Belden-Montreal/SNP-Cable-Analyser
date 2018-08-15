@@ -1,6 +1,7 @@
 from parameters.parameter import Parameter, complex2db, complex2phase, diffDiffMatrix
 from parameters.dataserie import WireDataSerie
 from parameters.type import ParameterType
+from analysis.format import DataFormat
 
 class InsertionLoss(Parameter):
     '''
@@ -27,6 +28,15 @@ class InsertionLoss(Parameter):
     @staticmethod
     def register(parameters, forward=True, reverse=True):
         return lambda c, f, m: InsertionLoss(c, f, m, forward=forward, reverse=reverse)
+
+    @staticmethod
+    def getAvailableFormats():
+        return {
+            DataFormat.MAGNITUDE,
+            DataFormat.PHASE,
+            DataFormat.REAL,
+            DataFormat.IMAGINARY,
+        }
 
     def computeDataSeries(self):
         series = set()

@@ -1,6 +1,7 @@
 from parameters.parameter import Parameter, diffDiffMatrix
 from parameters.dataserie import PortDataSerie
 from parameters.type import ParameterType
+from analysis.format import DataFormat
 
 import numpy as np
 
@@ -52,6 +53,15 @@ class PSAXEXT(Parameter):
         self._axextd = axextd
         super(PSAXEXT, self).__init__(ports, freq, matrices)
 
+    @staticmethod
+    def getAvailableFormats():
+        return {
+            DataFormat.MAGNITUDE,
+            DataFormat.PHASE,
+            DataFormat.REAL,
+            DataFormat.IMAGINARY,
+        }
+
     def computeDataSeries(self):
         # all the data series should be identical in each disturber's AXEXT
         reference = next(iter(self._axextd))
@@ -72,7 +82,7 @@ class PSAXEXT(Parameter):
                 disturberSeries[disturber] = axextSeries
             series.add(PortDataSerie(port, data=disturberSeries))
         
-        return series
+        return seriesa
 
     def computeParameter(self):
         # initialize the dictionaries for each series

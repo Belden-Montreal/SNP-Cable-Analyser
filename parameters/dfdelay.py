@@ -1,6 +1,7 @@
 from parameters.parameter import Parameter, takeClosest
 from parameters.dataserie import PortDataSerie
 from parameters.type import ParameterType
+from analysis.format import DataFormat
 
 import numpy as np
 
@@ -21,6 +22,12 @@ class DFDelay(Parameter):
             parameters(ParameterType.DF_OPEN_DELAY),
             parameters(ParameterType.DF_SHORT_DELAY)
         )
+
+    @staticmethod
+    def getAvailableFormats():
+        return {
+            DataFormat.DELAY,
+        }
 
     def computeDataSeries(self):
         return {PortDataSerie(port) for port in self._ports.getPorts()}

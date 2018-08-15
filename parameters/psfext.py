@@ -1,6 +1,7 @@
 from parameters.parameter import Parameter, diffDiffMatrix, complex2db, complex2phase
 from parameters.dataserie import PortDataSerie
 from parameters.type import ParameterType
+from analysis.format import DataFormat
 
 import numpy as np
 
@@ -29,6 +30,15 @@ class PSFEXT(Parameter):
     @staticmethod
     def register(parameters):
         return lambda c, f, m: PSFEXT(c, f, m, parameters(ParameterType.FEXT))
+
+    @staticmethod
+    def getAvailableFormats():
+        return {
+            DataFormat.MAGNITUDE,
+            DataFormat.PHASE,
+            DataFormat.REAL,
+            DataFormat.IMAGINARY,
+        }
 
     def computeDataSeries(self):
         mains   = self._ports.getMainPorts()

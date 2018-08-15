@@ -1,6 +1,7 @@
 from parameters.parameter import Parameter, diffDiffMatrix
 from parameters.dataserie import PortPairDataSerie
 from parameters.type import ParameterType
+from analysis.format import DataFormat
 
 from math import sqrt, floor
 
@@ -25,6 +26,13 @@ class ACRF(Parameter):
             parameters(ParameterType.FEXT),
             parameters(ParameterType.IL)
         )
+
+    @staticmethod
+    def getAvailableFormats():
+        return {
+            DataFormat.REAL,
+            DataFormat.IMAGINARY,
+        }
 
     def computeDataSeries(self):
         # obtains data series from the dependent parameters

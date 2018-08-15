@@ -1,6 +1,7 @@
 from parameters.parameter import Parameter, complex2db, complex2phase, diffDiffMatrix
 from parameters.dataserie import PortPairDataSerie, PortOrderedPairDataSerie
 from parameters.type import ParameterType
+from analysis.format import DataFormat
 
 import itertools
 
@@ -32,6 +33,15 @@ class NEXT(Parameter):
     @staticmethod
     def register(parameters, mains=True, remotes=True, order=True):
         return lambda c, f, m: NEXT(c, f, m, mains=mains, remotes=remotes, order=order)
+
+    @staticmethod
+    def getAvailableFormats():
+        return {
+            DataFormat.MAGNITUDE,
+            DataFormat.PHASE,
+            DataFormat.REAL,
+            DataFormat.IMAGINARY,
+        }
 
     def computeDataSeries(self):
         # create each pair for the NEXT
