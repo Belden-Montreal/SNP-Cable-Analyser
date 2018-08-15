@@ -1,4 +1,5 @@
-from gui.ui.compilation_configuration import Ui_form
+from gui.ui.compilation_configuration import Ui_dialog
+from gui.widget.navigation import NavigationToolbar
 from analysis.compilation import CompilationAnalysis, PlotScale
 from analysis.format import DataFormat
 
@@ -8,24 +9,13 @@ from PyQt5.QtWidgets import QDialogButtonBox, QHBoxLayout, QSpacerItem
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT
-
-class NavigationToolbar(NavigationToolbar2QT):
-    """
-    This class is used for outputting navigation toolbar status to another label.
-    """
-    def __init__(self, canvas, parent, label, **kwargs):
-        super(NavigationToolbar, self).__init__(canvas, parent, **kwargs)
-        self.__label = label
-
-    def set_message(self, s):
-        self.__label.setText(s)
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 
 class CompilationConfigurationDialog(QDialog):
     def __init__(self, samples, compilation=None):
         super(CompilationConfigurationDialog, self).__init__()
         self.__samples = samples
-        self.__ui = Ui_form()
+        self.__ui = Ui_dialog()
         self.__ui.setupUi(self)
 
         # create the compilation if needed
@@ -91,7 +81,6 @@ class CompilationConfigurationDialog(QDialog):
         for ptype in parameters:
             pname = parameters[ptype]
             self.__ui.parameterComboBox.addItem(pname, userData = ptype)
-
         self.__ui.parameterComboBox.model().sort(0)
 
         # connect the index changed signal
@@ -109,6 +98,7 @@ class CompilationConfigurationDialog(QDialog):
             item.setData(QVariant(sample))
             model.appendRow(item)
         model.itemChanged.connect(self.__sampleStateChanged)
+        model.sort(0)
         self.__ui.samplesListView.setModel(model)
 
     def __setupFormat(self):
@@ -186,6 +176,7 @@ class CompilationConfigurationDialog(QDialog):
             item.setData(QVariant(serie))
             model.appendRow(item)
         model.itemChanged.connect(self.__serieStateChanged)
+        model.sort(0)
         self.__ui.dataseriesListView.setModel(model)
 
         # change the parameter in the compilation

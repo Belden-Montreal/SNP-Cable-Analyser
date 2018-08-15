@@ -5,24 +5,31 @@ from sample.port import PlugConfiguration, CableConfiguration
 class TestNetworkPort(unittest.TestCase):
     def setUp(self):
         self._index = 2
-        self._name  = "Port Name"
         self._type  = EthernetPair.PAIR12
-        self._port  = NetworkPort(self._index, self._name, ptype=self._type)
+        self._port  = NetworkPort(self._index, self._type)
 
     def testGetIndex(self):
         self.assertEqual(self._port.getIndex(), self._index)
 
     def testGetName(self):
-        self.assertEqual(self._port.getName(), self._name)
+        self.assertEqual(self._port.getName(), self._type.getName())
 
     def testGetType(self):
         self.assertEqual(self._port.getType(), self._type)
+
+    def testSetType(self):
+        self._port.setType(EthernetPair.PAIR36)
+        self.assertEqual(self._port.getType(), EthernetPair.PAIR36)
+        self.assertEqual(self._port.getName(), EthernetPair.PAIR36.getName())
 
 class TestWirePort(TestNetworkPort):
     def setUp(self):
         super(TestWirePort, self).setUp()
         self._remote = True
-        self._port   = WirePort(self._index, self._name, self._remote, ptype=self._type)
+        self._port   = WirePort(self._index, self._type, self._remote)
+
+    def testGetName(self):
+        self.assertEqual(self._port.getName(), "{} (r)".format(self._type.getName()))
 
     def testIsRemote(self):
         self.assertEqual(self._port.isRemote(), self._remote)
@@ -30,29 +37,34 @@ class TestWirePort(TestNetworkPort):
     def testSetRemote(self):
         self._port.setRemote(False)
         self.assertEqual(self._port.isRemote(), False)
+        self.assertEqual(self._port.getName(), "{}".format(self._type.getName()))
         self._port.setRemote(True)
         self.assertEqual(self._port.isRemote(), True)
+        self.assertEqual(self._port.getName(), "{} (r)".format(self._type.getName()))
 
 class TestWire(unittest.TestCase):
     def setUp(self):
-        self._name   = "Wire"
-        self._main   = WirePort(0, "Port 0", False)
-        self._remote = WirePort(1, "Port 1", True)
+        self._main   = WirePort(0, remote=False)
+        self._remote = WirePort(1, remote=True)
         self._type   = EthernetPair.PAIR36
-        self._wire   = Wire(self._name, self._main, self._remote, wtype=self._type)
+        self._wire   = Wire(self._main, self._remote, wtype=self._type)
+
+    def testConstructorSetType(self):
+        self.assertEqual(self._main.getType(),   self._type)
+        self.assertEqual(self._remote.getType(), self._type)
 
     def testConstructorMainIsRemote(self):
-        self._main = WirePort(0, "Port 0", True)
+        self._main = WirePort(0, remote=True)
         with self.assertRaises(ValueError):
-            Wire(self._name, self._main, self._remote)
+            Wire(self._main, self._remote)
 
     def testConstructorRemoteNotRemote(self):
-        self._remote = WirePort(1, "Port 1", False)
+        self._remote = WirePort(1, remote=False)
         with self.assertRaises(ValueError):
-            Wire(self._name, self._main, self._remote)
+            Wire(self._main, self._remote)
 
     def testGetName(self):
-        self.assertEqual(self._wire.getName(), self._name)
+        self.assertEqual(self._wire.getName(), self._type.getName())
 
     def testGetMainPort(self):
         self.assertEqual(self._wire.getMainPort(), self._main)
@@ -73,14 +85,20 @@ class TestWire(unittest.TestCase):
     def testContains(self):
         self.assertEqual(self._main   in self._wire, True)
         self.assertEqual(self._remote in self._wire, True)
-        self.assertEqual(WirePort(0, "Port 0", False) in self._wire, False)
-        self.assertEqual(WirePort(1, "Port 1", True)  in self._wire, False)
+        self.assertEqual(WirePort(0, remote=False) in self._wire, False)
+        self.assertEqual(WirePort(1, remote=True)  in self._wire, False)
+
+    def testIsReverse(self):
+        self.assertEqual(self._wire.isReverse(), False)
 
 class TestReversedWire(TestWire):
     def setUp(self):
         super(TestReversedWire, self).setUp()
         self._foward = self._wire
         self._wire = ReversedWire(self._wire)
+
+    def testGetName(self):
+        self.assertEqual(self._wire.getName(), "{} (r)".format(self._type.getName()))
 
     def testGetMainPort(self):
         self.assertEqual(self._wire.getMainPort(), self._remote)
@@ -91,13 +109,16 @@ class TestReversedWire(TestWire):
     def testGetReverse(self):
         self.assertEqual(self._wire.getReverse(), self._foward)
 
+    def testIsReverse(self):
+        self.assertEqual(self._wire.isReverse(), True)
+
 class TestPlugConfiguration(unittest.TestCase):
     def setUp(self):
         self._ports = {
-            0: NetworkPort(0, "Port 0", ptype=EthernetPair.PAIR12),
-            1: NetworkPort(1, "Port 1", ptype=EthernetPair.PAIR36),
-            2: NetworkPort(2, "Port 2", ptype=EthernetPair.PAIR45),
-            3: NetworkPort(3, "Port 3", ptype=EthernetPair.PAIR78),
+            0: NetworkPort(0, ptype=EthernetPair.PAIR12),
+            1: NetworkPort(1, ptype=EthernetPair.PAIR36),
+            2: NetworkPort(2, ptype=EthernetPair.PAIR45),
+            3: NetworkPort(3, ptype=EthernetPair.PAIR78),
         }
 
         self._config = PlugConfiguration(set(self._ports.values()))
@@ -106,34 +127,34 @@ class TestPlugConfiguration(unittest.TestCase):
         PlugConfiguration(set(self._ports.values()))
 
     def testConstructorDuplicateIndices(self):
-        self._ports[5] = NetworkPort(0, "Port 1")
+        self._ports[5] = NetworkPort(0)
         with self.assertRaises(ValueError):
             PlugConfiguration(set(self._ports.values()))
 
     def testConstructorDuplicateTypes(self):
-        self._ports[5] = NetworkPort(4, "Port 4", ptype=EthernetPair.PAIR12)
+        self._ports[5] = NetworkPort(4, ptype=EthernetPair.PAIR12)
         with self.assertRaises(ValueError):
             PlugConfiguration(set(self._ports.values()))
 
     def testAddPortNoDuplicateIndices(self):
-        port = NetworkPort(4, "Port 4")
+        port = NetworkPort(4)
         self._config.addPort(port)
         self.assertEqual(port in self._config.getPorts(), True)
 
     def testAddPortNewType(self):
-        port = NetworkPort(4, "Port 4", ptype=EthernetPair.DUMMY)
+        port = NetworkPort(4, ptype=EthernetPair.DUMMY)
         self._config.addPort(port)
         self.assertEqual(self._config.getByType(EthernetPair.DUMMY), port)
 
     def testAddPortDuplicateTypes(self):
-        port = NetworkPort(4, "Port 4", ptype=EthernetPair.PAIR12)
+        port = NetworkPort(4, ptype=EthernetPair.PAIR12)
         with self.assertRaises(ValueError):
             self._config.addPort(port)
         self.assertEqual(port.getIndex() not in self._config._indices, True)
         self.assertEqual(self._config.getByType(EthernetPair.PAIR12), self._ports[0])
 
     def testAddPortDuplicateIndices(self):
-        port = NetworkPort(0, "Port 0")
+        port = NetworkPort(0)
         with self.assertRaises(ValueError):
             self._config.addPort(port)
         self.assertEqual(port.getIndex() not in self._config._indices, True)
@@ -171,29 +192,29 @@ class TestPlugConfiguration(unittest.TestCase):
 class TestCableConfiguration(unittest.TestCase):
     def setUp(self):
         self._ports = {
-            0: WirePort(0, "Port 0", False), 4: WirePort(4, "Port 4", True),
-            1: WirePort(1, "Port 1", False), 5: WirePort(5, "Port 5", True),
-            2: WirePort(2, "Port 2", False), 6: WirePort(6, "Port 6", True),
-            3: WirePort(3, "Port 3", False), 7: WirePort(7, "Port 7", True),
+            0: WirePort(0, remote=False), 4: WirePort(4, remote=True),
+            1: WirePort(1, remote=False), 5: WirePort(5, remote=True),
+            2: WirePort(2, remote=False), 6: WirePort(6, remote=True),
+            3: WirePort(3, remote=False), 7: WirePort(7, remote=True),
         }
 
         self._wires = {
-            0: Wire("Wire 0", self._ports[0], self._ports[4], wtype=EthernetPair.PAIR12),
-            1: Wire("Wire 1", self._ports[1], self._ports[5], wtype=EthernetPair.PAIR36),
-            2: Wire("Wire 2", self._ports[2], self._ports[6], wtype=EthernetPair.PAIR45),
-            3: Wire("Wire 3", self._ports[3], self._ports[7], wtype=EthernetPair.PAIR78),
+            0: Wire(self._ports[0], self._ports[4], wtype=EthernetPair.PAIR12),
+            1: Wire(self._ports[1], self._ports[5], wtype=EthernetPair.PAIR36),
+            2: Wire(self._ports[2], self._ports[6], wtype=EthernetPair.PAIR45),
+            3: Wire(self._ports[3], self._ports[7], wtype=EthernetPair.PAIR78),
         }
 
         self._config = CableConfiguration(set(self._wires.values()))
 
     def addWire(self):
-        self._ports[8] = WirePort("Port 8", 8, False)
-        self._ports[9] = WirePort("Port 9", 9, True)
-        self._wires[5] = Wire("Wire 5", self._ports[8], self._ports[9])
+        self._ports[8] = WirePort(8, remote=False)
+        self._ports[9] = WirePort(9, remote=True)
+        self._wires[5] = Wire(self._ports[8], self._ports[9])
         self._config.addWire(self._wires[5])
 
     def testConstructorDuplicatePortIndices(self):
-        wire = Wire("Wire 4", WirePort(0, "Port 0", False), WirePort(9, "Port 9", True))
+        wire = Wire(WirePort(0, remote=False), WirePort(9, remote=True))
         self._wires[4] = wire
         with self.assertRaises(ValueError):
             self._config = CableConfiguration(set(self._wires.values()))
@@ -210,9 +231,9 @@ class TestCableConfiguration(unittest.TestCase):
             self.assertEqual(wire.getRemotePort() in self._config.getMainPorts(),   False)
 
     def testAddWireDuplicateType(self):
-        main   = WirePort(8, "Port 8", False)
-        remote = WirePort(9, "Port 9", True)
-        wire   = Wire("Wire 4", main, remote, wtype=EthernetPair.PAIR12)
+        main   = WirePort(8, remote=False)
+        remote = WirePort(9, remote=True)
+        wire   = Wire(main, remote, wtype=EthernetPair.PAIR12)
         with self.assertRaises(ValueError):
             self._config.addWire(wire)
         self.assertEqual(main.getIndex()   not in self._config._indices, True)
@@ -228,9 +249,9 @@ class TestCableConfiguration(unittest.TestCase):
         self.assertEqual(wire not in self._config._reversed, True)
 
     def testAddWireDuplicateIndexMain(self):
-        main   = WirePort(0, "Port 0", False)
-        remote = WirePort(8, "Port 8", True)
-        wire   = Wire("Wire 4", main, remote)
+        main   = WirePort(0, remote=False)
+        remote = WirePort(8, remote=True)
+        wire   = Wire(main, remote)
         with self.assertRaises(ValueError):
             self._config.addWire(wire)
         self.assertEqual(main.getIndex()   not in self._config._indices, True)
@@ -246,9 +267,9 @@ class TestCableConfiguration(unittest.TestCase):
         self.assertEqual(wire not in self._config._reversed, True)
 
     def testAddWireDuplicateIndexRemote(self):
-        main   = WirePort(8, "Port 8", False)
-        remote = WirePort(7, "Port 7", True)
-        wire   = Wire("Wire 4", main, remote)
+        main   = WirePort(8, remote=False)
+        remote = WirePort(7, remote=True)
+        wire   = Wire(main, remote)
         with self.assertRaises(ValueError):
             self._config.addWire(wire)
         self.assertEqual(main.getIndex()   not in self._config._indices, True)
@@ -299,10 +320,10 @@ class TestCableConfiguration(unittest.TestCase):
             i = main.getIndex()
             j = remote.getIndex()
 
-            self.assertEqual(foward[(j,i)].getName() is wire.getName(), True)
-            self.assertEqual(foward[(j,i)].getType() is wire.getType(), True)
-            self.assertEqual(foward[(j,i)].getMainPort() is remote, True)
-            self.assertEqual(foward[(j,i)].getRemotePort() is main, True)
+            self.assertEqual("{} (r)".format(foward[(j,i)].getName()), wire.getName())
+            self.assertEqual(foward[(j,i)].getType(), wire.getType())
+            self.assertEqual(foward[(j,i)].getMainPort()   is remote, True)
+            self.assertEqual(foward[(j,i)].getRemotePort() is main,   True)
             
     def testGetReversedWiresAfterAddWire(self):
         self.addWire()

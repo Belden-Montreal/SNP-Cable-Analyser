@@ -46,6 +46,8 @@ class CompilationAnalysis(object):
         self._axis = self._figure.add_subplot(111)
         self._axis.set_xlabel("Frequency (Hz)")
 
+        plt.tight_layout()
+
         self.setScale(PlotScale.LOGARITHMIC)
         self.setFormat(DataFormat.MAGNITUDE)
 
