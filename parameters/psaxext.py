@@ -82,7 +82,7 @@ class PSAXEXT(Parameter):
                 disturberSeries[disturber] = axextSeries
             series.add(PortDataSerie(port, data=disturberSeries))
         
-        return seriesa
+        return series
 
     def computeParameter(self):
         # initialize the dictionaries for each series

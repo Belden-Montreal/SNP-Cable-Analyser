@@ -34,13 +34,12 @@ class ParameterPlot(object):
         return self._figure
 
     def drawFigure(self):
-        return
         self._figure = plt.figure(figsize=(18.75,6.25), dpi=80) #might not work for all screen resolutions
 
         #get main and remote ports
         ends = dict()
-        ends["main"] = ({port: (name, isRemote) for port,(name, isRemote) in self._parameter.getPorts().items() if isRemote is False})
-        ends["remote"] = ({port: (name, isRemote) for port,(name, isRemote) in self._parameter.getPorts().items() if isRemote is True})
+        ends["main"] = ({serie for serie in self._parameter.getDataSeries() if serie.isRemote() is False})
+        ends["remote"] = ({serie for serie in self._parameter.getDataSeries() if serie.isRemote() is True})
 
         for i, (isRemote, end) in enumerate(ends.items()):
             if len(end) > 0:
@@ -52,10 +51,10 @@ class ParameterPlot(object):
                 ax.set_xlabel('Frequency (TODO)')
                 ax.set_ylabel('dB')
                 # draw each port's data
-                for port, (name, isRemote) in end.items():
+                for serie in end:
                     # get the next color
                     if len(self._selection) != 0:
-                        if port not in self._selection:
+                        if serie.getPort() not in self._selection:
                             color = 'grey'
                         else:
                             color = next(colors)
@@ -63,14 +62,14 @@ class ParameterPlot(object):
                         color = next(colors)
 
                     try:
-                        data = list(map(lambda val: val[0], self._parameter.getParameter()[port]))
+                        data = list(map(lambda val: val[0], self._parameter.getParameter()[serie]))
                     except:
-                        data = self._parameter.getParameter()[port]
+                        data = self._parameter.getParameter()[serie]
                     # draw the data
                     ax.semilogx(
                         self._parameter.getFrequencies(),
                         data,
-                        label=name, c=color
+                        label=serie.getName(), c=color
                     )
 
                 ax.xaxis.set_major_formatter(ScalarFormatter())
