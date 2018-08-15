@@ -4,7 +4,7 @@ from parameters.insertionloss import InsertionLoss
 from parameters.psaxext import PSAXEXT
 from parameters.psaacrx import PSAACRX
 from parameters.axext import AXEXT
-from parameters.dataserie import PortDataSerie, PortPairDataSerie
+from parameters.dataserie import PortDataSerie, PortPairDataSerie, WireDataSerie
 
 class TestPSAACRX(TestParameter):
     def createParameter(self):
@@ -23,8 +23,8 @@ class TestPSAACRX(TestParameter):
         }
 
         self._pairseries = {
-            0: PortPairDataSerie(self._ports[0], self._ports[2]),
-            1: PortPairDataSerie(self._ports[1], self._ports[3]),
+            0: WireDataSerie(self._wires[0]),
+            1: WireDataSerie(self._wires[1]),
         }
 
         self._expected = {
@@ -37,6 +37,7 @@ class TestPSAACRX(TestParameter):
         return PSAACRX(self._config, self._freq, self._matrices, self._psaxext, self._il)
 
     def testComputeDataSeries(self):
+        self.assertEqual(len(self._expected), len(self._series))
         for expected in self._expected:
             self.assertIn(expected, self._series)
 

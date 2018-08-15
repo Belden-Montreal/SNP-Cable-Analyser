@@ -1,5 +1,5 @@
 from parameters.parameter import Parameter, complex2db, complex2phase, diffDiffMatrix
-from parameters.dataserie import PortPairDataSerie
+from parameters.dataserie import WireDataSerie
 from parameters.type import ParameterType
 
 class InsertionLoss(Parameter):
@@ -32,10 +32,10 @@ class InsertionLoss(Parameter):
         series = set()
         if self._forward:
             wires = self._ports.getFowardWires()
-            [series.add(PortPairDataSerie.fromWire(wire)) for wire in wires]
+            [series.add(WireDataSerie(wire)) for wire in wires]
         if self._reverse:
             wires = self._ports.getReversedWires()
-            [series.add(PortPairDataSerie.fromWire(wire)) for wire in wires]
+            [series.add(WireDataSerie(wire)) for wire in wires]
         return series
 
     def computeParameter(self):

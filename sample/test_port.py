@@ -144,14 +144,14 @@ class TestPlugConfiguration(unittest.TestCase):
     def testAddPortNewType(self):
         port = NetworkPort(4, ptype=EthernetPair.DUMMY)
         self._config.addPort(port)
-        self.assertEqual(self._config.getByType(EthernetPair.DUMMY), port)
+        self.assertEqual(self._config.getByType(EthernetPair.DUMMY, False), port)
 
     def testAddPortDuplicateTypes(self):
         port = NetworkPort(4, ptype=EthernetPair.PAIR12)
         with self.assertRaises(ValueError):
             self._config.addPort(port)
         self.assertEqual(port.getIndex() not in self._config._indices, True)
-        self.assertEqual(self._config.getByType(EthernetPair.PAIR12), self._ports[0])
+        self.assertEqual(self._config.getByType(EthernetPair.PAIR12, False), self._ports[0])
 
     def testAddPortDuplicateIndices(self):
         port = NetworkPort(0)
@@ -176,11 +176,11 @@ class TestPlugConfiguration(unittest.TestCase):
          self.assertEqual(len(ports), 0)
 
     def testGetByType(self):
-        self.assertEqual(self._config.getByType(EthernetPair.DUMMY), None)
-        self.assertEqual(self._config.getByType(EthernetPair.PAIR12), self._ports[0])
-        self.assertEqual(self._config.getByType(EthernetPair.PAIR36), self._ports[1])
-        self.assertEqual(self._config.getByType(EthernetPair.PAIR45), self._ports[2])
-        self.assertEqual(self._config.getByType(EthernetPair.PAIR78), self._ports[3])
+        self.assertEqual(self._config.getByType(EthernetPair.DUMMY,  False), None)
+        self.assertEqual(self._config.getByType(EthernetPair.PAIR12, False), self._ports[0])
+        self.assertEqual(self._config.getByType(EthernetPair.PAIR36, False), self._ports[1])
+        self.assertEqual(self._config.getByType(EthernetPair.PAIR45, False), self._ports[2])
+        self.assertEqual(self._config.getByType(EthernetPair.PAIR78, False), self._ports[3])
 
     def testIterator(self):
         for port in self._config:

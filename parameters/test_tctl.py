@@ -2,13 +2,13 @@ import unittest
 
 from parameters.test_parameter import TestParameter
 from parameters.tctl import TCTL
-from parameters.dataserie import PortPairDataSerie
+from parameters.dataserie import WireDataSerie
 
 class TestTCTL(TestParameter):
     def createParameter(self):
         self._dataseries = {
-            0: PortPairDataSerie(self._ports[0], self._ports[2]),
-            1: PortPairDataSerie(self._ports[1], self._ports[3]),
+            0: WireDataSerie(self._wires[0]),
+            1: WireDataSerie(self._wires[1]),
         }
 
         return TCTL(self._config, self._freq, self._matrices, reverse=False)

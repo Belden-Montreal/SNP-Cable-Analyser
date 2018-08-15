@@ -11,22 +11,22 @@ class CableSample(Sample):
     def getDefaultConfiguration():
         # create the ports for this network
         ports = {
-            1: WirePort(0, "12", remote=False),
-            2: WirePort(1, "36", remote=False),
-            3: WirePort(2, "45", remote=False),
-            4: WirePort(3, "78", remote=False),
-            5: WirePort(4, "12 (r)", remote=True),
-            6: WirePort(5, "36 (r)", remote=True),
-            7: WirePort(6, "45 (r)", remote=True),
-            8: WirePort(7, "78 (r)", remote=True),
+            1: WirePort(0, remote=False),
+            2: WirePort(1, remote=False),
+            3: WirePort(2, remote=False),
+            4: WirePort(3, remote=False),
+            5: WirePort(4, remote=True),
+            6: WirePort(5, remote=True),
+            7: WirePort(6, remote=True),
+            8: WirePort(7, remote=True),
         }
 
         # create the wires for this network
         wires = {
-            Wire("12", ports[1], ports[5], wtype=EthernetPair.PAIR12),
-            Wire("36", ports[2], ports[6], wtype=EthernetPair.PAIR36),
-            Wire("45", ports[3], ports[7], wtype=EthernetPair.PAIR45),
-            Wire("78", ports[4], ports[8], wtype=EthernetPair.PAIR78),
+            Wire(ports[1], ports[5], wtype=EthernetPair.PAIR12),
+            Wire(ports[2], ports[6], wtype=EthernetPair.PAIR36),
+            Wire(ports[3], ports[7], wtype=EthernetPair.PAIR45),
+            Wire(ports[4], ports[8], wtype=EthernetPair.PAIR78),
         }
 
         # create the configuration for this network

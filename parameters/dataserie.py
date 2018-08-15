@@ -23,11 +23,18 @@ class PortDataSerie(DataSerie):
     def getType(self):
         return self._port.getType()
 
+    def isRemote(self):
+        return self._port.isRemote()
+
     def __eq__(self, other):
-        return (self.getType() == other.getType())
+        if self.getType() != other.getType():
+            return False
+        if self.isRemote() != other.isRemote():
+            return False
+        return True
 
     def __hash__(self):
-        return self.getType().__hash__()
+        return (self.getType(), self.isRemote()).__hash__()
 
 class PortPairDataSerie(DataSerie):
     def __init__(self, port1, port2, data=None):
@@ -58,6 +65,10 @@ class PortPairDataSerie(DataSerie):
         (p1,p2) = self._ports
         return (p1.getType(), p2.getType())
 
+    def getRemotes(self):
+        (p1,p2) = self._ports
+        return (p1.isRemote(), p2.isRemote())
+
     def getPortSeries(self):
         serie1 = PortDataSerie(self._ports[0])
         serie2 = PortDataSerie(self._ports[1])
@@ -67,12 +78,16 @@ class PortPairDataSerie(DataSerie):
         return self._data
 
     def __eq__(self, other):
-        (p1,p2) = self.getTypes()
-        (o1,o2) = other.getTypes()
-        return (p1 == o1) and (p2 == o2)
+        (p1,p2) = self.getPorts()
+        (o1,o2) = other.getPorts()
+        if p1.isRemote() != o1.isRemote():
+            return False
+        if p1.getType() != o1.getType():
+            return False
+        return True
 
     def __hash__(self):
-        return self.getTypes().__hash__()
+        return (self.getTypes(), self.getRemotes()).__hash__()
 
 class PortOrderedPairDataSerie(PortPairDataSerie):
     def __init__(self, port1, port2, data=None):

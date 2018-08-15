@@ -19,10 +19,17 @@ class NetworkPort(object):
     Basic class representing a port in a network. A port has an index in the
     network and have a type.
     """
-    def __init__(self, index, ptype=EthernetPair.UNDEF):
+    def __init__(self, index, ptype=EthernetPair.UNDEF, remote=False):
         self._index = index
-        self._name  = ptype.getName()
         self._type  = ptype
+        self._remote = remote
+        self.__createName()
+
+    def __createName(self):
+        if self._remote:
+            self._name = "{} (r)".format(self._type.getName())
+        else:
+            self._name = self._type.getName()
 
     def getIndex(self):
         return self._index
@@ -37,28 +44,15 @@ class NetworkPort(object):
         self._name = ptype.getName()
         self._type = ptype
 
-class WirePort(NetworkPort):
-    """
-    This subclass represents a port tied to a wire. This subclass allows a wire
-    to have a main and a remote port.
-    """
-    def __init__(self, index, ptype=EthernetPair.UNDEF, remote=False):
-        super(WirePort, self).__init__(index, ptype)
-        self._remote = remote
-        self.__createName()
-
-    def __createName(self):
-        if self._remote:
-            self._name = "{} (r)".format(self._type.getName())
-        else:
-            self._name = self._type.getName()
-
     def isRemote(self):
         return self._remote
 
     def setRemote(self, remote=True):
         self._remote = remote
         self.__createName()
+
+class WirePort(NetworkPort):
+    pass
 
 class Wire(object):
     """
@@ -166,11 +160,11 @@ class PlugConfiguration(NetworkConfiguration):
             return
 
         # types must be unique
-        if port.getType() in self._types:
+        if (port.getType(), port.isRemote()) in self._types:
             raise ValueError("Duplicate types in the configuration")
 
         # add the port
-        self._types[port.getType()] = port
+        self._types[(port.getType(), port.isRemote())] = port
 
     def _registerIndex(self, port):
         # indices must be unique
@@ -189,7 +183,7 @@ class PlugConfiguration(NetworkConfiguration):
             if port.getIndex() in self._indices:
                 self._indices.discard(port.getIndex())
             if port in self._types.values():
-                self._types.pop(port.getType())
+                self._types.pop((port.getType(), port.isRemote()))
             raise
 
         # add the port to the configuration
@@ -204,10 +198,10 @@ class PlugConfiguration(NetworkConfiguration):
     def getRemotePorts(self):
         return set()
 
-    def getByType(self, ptype):
-        if ptype not in self._types:
+    def getByType(self, ptype, remote):
+        if (ptype, remote) not in self._types:
             return None
-        return self._types[ptype]
+        return self._types[(ptype, remote)]
 
 class AlienConfiguration(NetworkConfiguration):
     """

@@ -1,7 +1,7 @@
 import unittest
 
 from parameters.parameter import complex2db
-from parameters.test_parameter import TestParameter
+from parameters.test_parameter import TestParameter, TestPlugParameter
 from parameters.next import NEXT
 from parameters.psnext import PSNEXT
 from parameters.dataserie import PortDataSerie, PortPairDataSerie
@@ -88,7 +88,7 @@ class TestPSNEXT(TestParameter):
         self.assertAlmostEqual(parameter[self._dataseries[3]][2][0], powerSum([nnext[self._nextseries[3]][2]]))
         self.assertAlmostEqual(parameter[self._dataseries[3]][3][0], powerSum([nnext[self._nextseries[3]][3]]))
 
-class TestPlugPSNEXT(TestParameter):
+class TestPlugPSNEXT(TestPlugParameter):
     def setUp(self):
         super(TestPlugPSNEXT, self).setUp()
 
@@ -120,21 +120,6 @@ class TestPlugPSNEXT(TestParameter):
             2: [self._nextseries[i] for i in [ 6, 7, 8]],
             3: [self._nextseries[i] for i in [ 9,10,11]],
         }
-
-    def setUpConfiguration(self):
-        # create the ports
-        self._ports = {
-            0: NetworkPort(0 ,"Port 0"),
-            1: NetworkPort(1 ,"Port 1"),
-            2: NetworkPort(2 ,"Port 2"),
-            3: NetworkPort(3 ,"Port 3"),
-        }
-
-        # create the plug configuration
-        self._config = PlugConfiguration(set(self._ports.values()))
-
-        # crate the parameter
-        self._parameter = self.createParameter()
 
     def createParameter(self):
         nnext = NEXT(self._config, self._freq, self._matrices, order=False)

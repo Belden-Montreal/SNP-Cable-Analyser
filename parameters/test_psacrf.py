@@ -4,7 +4,7 @@ from parameters.psfext import PSFEXT
 from parameters.insertionloss import InsertionLoss
 from parameters.fext import FEXT
 from parameters.psacrf import PSACRF
-from parameters.dataserie import PortDataSerie, PortPairDataSerie
+from parameters.dataserie import PortDataSerie, PortPairDataSerie, WireDataSerie
 
 class TestPSACRF(TestParameter):
     def setUp(self):
@@ -18,10 +18,10 @@ class TestPSACRF(TestParameter):
         }
 
         self._ilseries = {
-            0: PortPairDataSerie.fromWire(self._wires[0]),
-            1: PortPairDataSerie.fromWire(self._wires[1]),
-            2: PortPairDataSerie.fromWire(self._wires[2]),
-            3: PortPairDataSerie.fromWire(self._wires[3]),
+            0: WireDataSerie(self._wires[0]),
+            1: WireDataSerie(self._wires[1]),
+            2: WireDataSerie(self._wires[2]),
+            3: WireDataSerie(self._wires[3]),
         }
 
     def createParameter(self):
