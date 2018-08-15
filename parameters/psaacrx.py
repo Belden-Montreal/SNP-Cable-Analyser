@@ -26,11 +26,12 @@ class PSAACRX(Parameter):
     def getType():
         return ParameterType.PSAACRX
 
-    @staticmethod
-    def register(parameters):
-        return lambda c, f, m: PSAACRX(c, f, m,
-            parameters(ParameterType.IL)
-        )
+    # @staticmethod
+    # def register(parameters):
+    #     return lambda c, f, m: PSAACRX(c, f, m,
+
+    #         parameters(ParameterType.IL)
+    #     )
 
     def computeDataSeries(self):
         # obtains the data series from the dependent parameters
@@ -43,7 +44,7 @@ class PSAACRX(Parameter):
             port = psaxextSerie.getPort()
 
             # find the corresponding wire
-            ilSerie = [s for s in ilSeries if s.getPorts()[0] is port]
+            ilSerie = [s for s in ilSeries if s.getPorts()[0].getType() == port.getType()]
             if len(ilSerie) != 1:
                 raise ValueError
 
@@ -96,6 +97,13 @@ class PSAACRN(PSAACRX):
     def getType():
         return ParameterType.PSAACRN
 
+    @staticmethod
+    def register(parameters):
+        return lambda c, f, m: PSAACRX(c, f, m,
+            parameters(ParameterType.PSANEXT),
+            parameters(ParameterType.IL)
+        )
+
     def getName(self):
         return "PSAACRN"
 
@@ -103,6 +111,13 @@ class PSAACRF(PSAACRX):
     @staticmethod
     def getType():
         return ParameterType.PSAACRF
+
+    @staticmethod
+    def register(parameters):
+        return lambda c, f, m: PSAACRX(c, f, m,
+            parameters(ParameterType.PSAFEXT),
+            parameters(ParameterType.IL)
+        )
 
     def getName(self):
         return "PSAACRF"
