@@ -65,6 +65,8 @@ class CompilationAnalysis(object):
             data = [value.real for value in parameter.getComplexParameter()[serie]]
         elif self._format == DataFormat.IMAGINARY:
             data = [value.imag for value in parameter.getComplexParameter()[serie]]
+        elif self._format == DataFormat.DELAY:
+            data = [value.real for value in parameter.getComplexParameter()[serie]]
 
         return (frequencies, data)
 
@@ -197,14 +199,7 @@ class CompilationAnalysis(object):
                 self.__addLine(sample, serie)
 
         # set y axis label
-        if self._format == DataFormat.MAGNITUDE:
-            self._axis.set_ylabel("Magnitude (dB)")
-        elif self._format == DataFormat.PHASE:
-            self._axis.set_ylabel("Phase")
-        elif self._format == DataFormat.REAL:
-            self._axis.set_ylabel("Real")
-        elif self._format == DataFormat.IMAGINARY:
-            self._axis.set_ylabel("Imaginary")
+        self._axis.set_ylabel(self._format.getTitle())
 
     def getFormat(self):
         return self._format

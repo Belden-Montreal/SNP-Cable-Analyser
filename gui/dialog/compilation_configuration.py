@@ -31,7 +31,7 @@ class CompilationConfigurationDialog(QDialog):
         self.__setupTitleLineEdit()
         self.__setupParameters()
         self.__setupSamples()
-        self.__setupFormat()
+        self.__setupFormats()
         self.__setupScale()
         self.__setupButtons()
 
@@ -72,14 +72,16 @@ class CompilationConfigurationDialog(QDialog):
         parameters = dict()
         for sample in self.__samples:
             for (ptype, parameter) in sample.getParameters().items():
-                parameters[ptype] = parameter.getName()
+                name = parameter.getName()
+                formats = parameter.getAvailableFormats()
+                parameters[ptype] = (name, formats)
 
         # clear the combo box
         self.__ui.parameterComboBox.clear()
 
         # setup the combo box
         for ptype in parameters:
-            pname = parameters[ptype]
+            (pname, formats) = parameters[ptype]
             self.__ui.parameterComboBox.addItem(pname, userData = ptype)
         self.__ui.parameterComboBox.model().sort(0)
 
@@ -101,36 +103,34 @@ class CompilationConfigurationDialog(QDialog):
         model.sort(0)
         self.__ui.samplesListView.setModel(model)
 
-    def __setupFormat(self):
-        pformat = self._compilation.getFormat()
-        if pformat == DataFormat.IMAGINARY:
-            self.__ui.formatImaginaryRadioButton.setChecked(True)
-        if pformat == DataFormat.REAL:
-            self.__ui.formatRealRadioButton.setChecked(True)
-        if pformat == DataFormat.MAGNITUDE:
-            self.__ui.formatMagnitudeRadioButton.setChecked(True)
-        if pformat == DataFormat.PHASE:
-            self.__ui.formatPhaseRadioButton.setChecked(True)
+    def __setupFormats(self):
+        self.__radios = dict()
+        self.__radios[DataFormat.DELAY]     = self.__ui.formatDelayRadioButton
+        self.__radios[DataFormat.IMAGINARY] = self.__ui.formatImaginaryRadioButton
+        self.__radios[DataFormat.REAL]      = self.__ui.formatRealRadioButton
+        self.__radios[DataFormat.MAGNITUDE] = self.__ui.formatMagnitudeRadioButton
+        self.__radios[DataFormat.PHASE]     = self.__ui.formatPhaseRadioButton
 
-        # imaginary format radio button
-        self.__ui.formatImaginaryRadioButton.clicked.connect(
-            lambda checked:self.__setFormat(DataFormat.IMAGINARY)
-        )
+        # select compilation's current format
+        for (dformat, radio) in self.__radios.items():
+            radio.clicked.connect(lambda checked,dformat=dformat:self.__setFormat(dformat))
+            radio.setChecked(False)
+        self.__radios[self._compilation.getFormat()].setChecked(True)
 
-        # real format radio button
-        self.__ui.formatRealRadioButton.clicked.connect(
-            lambda checked:self.__setFormat(DataFormat.REAL)
-        )
+    def __setFormats(self, formats):
+        self.__formats = formats
 
-        # magnitude format radio button
-        self.__ui.formatMagnitudeRadioButton.clicked.connect(
-            lambda checked:self.__setFormat(DataFormat.MAGNITUDE)
-        )
+        # enable possible formats
+        for radio in self.__radios.values():
+            radio.setEnabled(False)
+        for dformat in formats:
+            self.__radios[dformat].setEnabled(True)
 
-        # phase format radio button
-        self.__ui.formatPhaseRadioButton.clicked.connect(
-            lambda checked:self.__setFormat(DataFormat.PHASE)
-        )
+        # change format if current one isn't available
+        if self._compilation.getFormat() not in formats:
+            dformat = next(iter(formats))
+            self.__radios[dformat].setChecked(True)
+            self.__setFormat(dformat)
 
     def __setupScale(self):
         # use compilation's scale
@@ -155,12 +155,16 @@ class CompilationConfigurationDialog(QDialog):
         self.__ui.buttonBox.button(QDialogButtonBox.Ok).clicked.connect(self.accept)
         self.__ui.buttonBox.button(QDialogButtonBox.Cancel).clicked.connect(self.reject)
 
-    def __setParameter(self, index, names):
+    def __setParameter(self, index, data):
         # get the selected parameter
         self.__parameter = self.__ui.parameterComboBox.itemData(index)
+        (names, formats) = data[self.__parameter]
+
+        # change available formats
+        self.__setFormats(formats)
 
         # update the title
-        self.__ui.titleLineEdit.setText(names[self.__parameter])
+        self.__ui.titleLineEdit.setText(names)
 
         # get all the data series
         series = set()
