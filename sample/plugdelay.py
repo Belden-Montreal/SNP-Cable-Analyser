@@ -18,6 +18,9 @@ class PlugDelaySample(PlugSample):
             ParameterType.PLUG_SHORT_DELAY: self._shortDelay,
             ParameterType.DF_OPEN_DELAY   : self._dfOpenDelay,
             ParameterType.DF_SHORT_DELAY  : self._dfShortDelay,
+            ParameterType.K1 : self._k1,
+            ParameterType.K2 : self._k2,
+            ParameterType.K3 : self._k3,
         }
 
     def getAvailableParameters(self):
@@ -25,5 +28,5 @@ class PlugDelaySample(PlugSample):
             ParameterType.DF_DELAY,
             ParameterType.PLUG_DELAY,
             ParameterType.NEXT_DELAY,
-            ParameterType.CNEXT,
+            ParameterType.CORRECTED_NEXT,
         } 
