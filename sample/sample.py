@@ -73,8 +73,8 @@ class Sample(object):
     def setStandard(self, standard):
         self._standard = standard
         for (name, parameter) in self._parameters.items():
-            if name in standard.limits:
-                parameter.setLimit(standard.limits[name])
+            if name.name in standard.limits:
+                parameter.setLimit(standard.limits[name.name])
 
     def getStandard(self):
         return self._standard
