@@ -50,16 +50,19 @@ class ParameterWidget(TabWidget, parameter_widget_ui.Ui_ParameterWidget):
         self.setLabels(listIndex, pair)
 
     def setLabels(self, listIndex, pair):
-        if self.worstMargin[0] and listIndex == valueType.MARGIN: #Worst margin
-            self.marginValueLabel.setText(self.worstMargin[0][pair.number][0].__str__())
-            self.marginFreqLabel.setText(self.worstMargin[0][pair.number][1].__str__())
-            self.marginLimitLabel.setText(self.worstMargin[0][pair.number][2].__str__())
-            self.marginLabel.setText(self.worstMargin[0][pair.number][3].__str__())
-        elif self.worstValue and listIndex == valueType.VALUE: #worst value
-            self.worstValueLabel.setText(self.worstValue[0][pair.number][0].__str__())
-            self.worstFreqLabel.setText(self.worstValue[0][pair.number][1].__str__())
-            self.worstLimitLabel.setText(self.worstValue[0][pair.number][2].__str__())
-            self.worstMarginLabel.setText(self.worstValue[0][pair.number][3].__str__())
+        try:
+            if self.worstMargin[0] and listIndex == valueType.MARGIN: #Worst margin
+                self.marginValueLabel.setText("{0:.2f}".format(self.worstMargin[0][pair.number][0]))
+                self.marginFreqLabel.setText("{0:.2f}".format(self.worstMargin[0][pair.number][1]))
+                self.marginLimitLabel.setText("{0:.2f}".format(self.worstMargin[0][pair.number][2]))
+                self.marginLabel.setText("{0:.2f}".format(self.worstMargin[0][pair.number][3]))
+            elif self.worstValue and listIndex == valueType.VALUE: #worst value
+                self.worstValueLabel.setText("{0:.2f}".format(self.worstValue[0][pair.number][0]))
+                self.worstFreqLabel.setText("{0:.2f}".format(self.worstValue[0][pair.number][1]))
+                self.worstLimitLabel.setText("{0:.2f}".format(self.worstValue[0][pair.number][2]))
+                self.worstMarginLabel.setText("{0:.2f}".format(self.worstValue[0][pair.number][3]))
+        except:
+            return
             
 class PairItem(QtWidgets.QListWidgetItem):
     def __init__(self, text, number, parent = None, type = QtWidgets.QListWidgetItem.Type):
