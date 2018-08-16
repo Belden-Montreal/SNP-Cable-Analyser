@@ -31,6 +31,10 @@ class Sample(object):
         self._parameters = self.getDefaultParameters()
         self._standard = None
 
+        # change frequency unit
+        self._network.f = self._network.f * (1000 ** -2)
+        self._network.frequency.unit = 'mhz'
+
         # config and network should have the same number of ports
         if len(self._config.getPorts()) != self.getNumPorts():
             raise ValueError
