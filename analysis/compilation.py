@@ -1,6 +1,6 @@
 from matplotlib import pyplot as plt
 from analysis.format import DataFormat
-from enum import Enum
+from analysis.scale import PlotScale
 
 def autoscale_y(axis, margin=0.1):
     """
@@ -27,10 +27,6 @@ def autoscale_y(axis, margin=0.1):
         if new_top > top: top = new_top
 
     axis.set_ylim(bot,top)
-
-class PlotScale(Enum):
-    LOGARITHMIC = 0
-    LINEAR      = 1
 
 class CompilationAnalysis(object):
     def __init__(self):
