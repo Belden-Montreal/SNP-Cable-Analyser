@@ -30,3 +30,14 @@ class PlugDelaySample(PlugSample):
             ParameterType.NEXT_DELAY,
             ParameterType.CORRECTED_NEXT,
         } 
+
+    def recalculate(self, k1, k2, k3):
+        self._k1 = k1
+        self._k2 = k2
+        self._k3 = k3
+        #re-create the parameters
+        self._parameters = self.getDefaultParameters()
+        for parameter in self.getAvailableParameters():
+            if parameter in self._parameters.keys():
+                continue
+            self._parameters[parameter] = self._factory.getParameter(parameter)
