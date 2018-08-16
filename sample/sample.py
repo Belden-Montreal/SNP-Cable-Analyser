@@ -11,6 +11,7 @@ class Sample(object):
 
         # get the name of the file
         self._name = basename(snp)
+        self._fileName = snp
 
         # get the network's configuration
         if config:
@@ -121,6 +122,9 @@ class Sample(object):
 
     def getName(self):
         return self._name
+
+    def getFileName(self):
+        return self._fileName
 
 PORTS_NAME = ["45", "12", "36", "78"]
 class Sample2(object):

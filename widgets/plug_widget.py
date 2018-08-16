@@ -122,15 +122,20 @@ class PlugWidget(TabWidget, plug_widget_ui.Ui_Form):
         #     error.exec_()
 
     def updateWidget(self):
-        if self._plug._dfOpenDelay:
+        if self._plug.dfOpen():
+            self._dfOpenName = self._plug.dfOpen().getFileName()
             self.dfOpenFileName.setText(self._plug._dfOpenDelay.getName())
-        if self._plug._dfShortDelay:
+        if self._plug.dfShort():
+            self._dfShortName = self._plug.dfShort().getFileName()
             self.dfShortFileName.setText(self._plug._dfShortDelay.getName())
-        if self._plug._openDelay:
+        if self._plug.openSample():
+            self._openName = self._plug.openSample().getFileName()
             self.openFileName.setText(self._plug._openDelay.getName())
-        if self._plug._shortDelay:
+        if self._plug.shortSample():
+            self._shortName = self._plug.shortSample().getFileName()
             self.shortFileName.setText(self._plug._shortDelay.getName())
-        if self._plug._loadSample:
+        if self._plug.loadSample():
+            self._loadName = self._plug.loadSample().getFileName()
             self.loadFileName.setText(self._plug._loadSample.getName())
         self.tabWidget.clear()
         self.tabWidget.addTab(self.mainTab, "main")

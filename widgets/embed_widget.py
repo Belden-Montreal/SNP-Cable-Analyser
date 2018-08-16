@@ -58,14 +58,16 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
         sample = self._embedding.load()[side]
         if sample:
             self.loadFileName.setText(sample.getName())
-            self._loadFile = sample.getName()
+            self._loadFile = sample.getFileName()
         else:
             self.loadFileName.setText("\"\"")
             self._loadFile = None
         if side == "Reverse":
             if self._embedding.openSample():
+                self._openFile = self._embedding.openSample().getFileName()
                 self.openFileName.setText(self._embedding.openSample().getName())
             if self._embedding.shortSample():
+                self._shortFile = self._embedding.shortSample().getFileName()
                 self.shortFileName.setText(self._embedding.shortSample().getName())
         else:
             self.openFileName.setText("\"\"")
