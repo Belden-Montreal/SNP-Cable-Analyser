@@ -39,8 +39,7 @@ class CorrectedNEXT(NEXT):
                 cpCorrectedNEXTVal = complex(re,im)
 
                 # crate the magnitude/phase value
-                dbCorrectedNEXTVal = (amp, correctedPhase)
-
+                dbCorrectedNEXTVal = (complex2db(amp), correctedPhase)
                 # add the values into the result lists
                 cpCorrectedNEXT[serie].append(cpCorrectedNEXTVal)
                 dbCorrectedNEXT[serie].append(dbCorrectedNEXTVal)
