@@ -2,6 +2,7 @@ from matplotlib import pyplot as plt
 from analysis.figure import FigureAnalysis
 from analysis.format import DataFormat, formatParameterData
 from analysis.scale import PlotScale
+from document.parameter import ParameterDocumentObject
 from overrides import overrides
 
 class ParameterAnalysis(FigureAnalysis):
@@ -69,3 +70,11 @@ class ParameterAnalysis(FigureAnalysis):
         # remove the serie
         self._removeLine(serie)
         self._series.discard(serie)
+
+    def getParameter(self):
+        return self._parameter
+
+    @overrides
+    def generateDocumentObject(self, prefix):
+        return ParameterDocumentObject(prefix, self)
+        
