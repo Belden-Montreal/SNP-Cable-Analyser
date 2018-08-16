@@ -1,5 +1,5 @@
 class Analysis(object):
-    def generateDocumentObject(self):
+    def generateDocumentObject(self, prefix):
         NotImplementedError
 
 
