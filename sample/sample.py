@@ -41,7 +41,7 @@ class Sample(object):
         # create the parameter
         for parameter in self.getAvailableParameters():
             if parameter in self._parameters.keys():
-                faitcontinue
+                continue
             self._parameters[parameter] = self._factory.getParameter(parameter)
 
     @staticmethod
