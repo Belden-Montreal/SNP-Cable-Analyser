@@ -6,3 +6,6 @@
 *.tex
 *.log
 *.pdf
+
+# allow TeX files in template directory
+!template/*.tex
