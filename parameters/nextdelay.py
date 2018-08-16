@@ -73,3 +73,21 @@ class NEXTDelay(Parameter):
 
     def chooseMatrices(self, matrices):
         return None
+
+class JackNEXTDelay(NEXTDelay):
+    def __init__(self, ports, freq, matrices, jackDelay, mains=True, remotes=False):
+        super(JackNEXTDelay, self).__init__(ports, freq, matrices, jackDelay, mains, remotes)
+
+    @staticmethod
+    def getType():
+        return ParameterType.JACK_NEXT_DELAY
+
+    @staticmethod
+    def register(parameters, mains=True, remotes=False):
+        return lambda c, f, m: NEXTDelay(c, f, m,
+            parameters(ParameterType.JACK_DELAY),
+            mains=mains, remotes=remotes
+        )
+
+    def getName(self):
+        return"JackNEXTDelay"

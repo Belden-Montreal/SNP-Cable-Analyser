@@ -90,7 +90,7 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
             if side == "Forward":
                 cases = sample.getParameters()[ParameterType.CASE]
             else:
-                cases = sample.getParameters()["RCase"]
+                cases = sample.getParameters()[ParameterType.RCASE]
             for serie in cases.getDataSeries():
                 if sample.getStandard():
                     limit = sample.getStandard().limits["NEXT"]

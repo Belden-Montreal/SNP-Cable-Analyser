@@ -2,8 +2,9 @@ from project.project import Project, ProjectNode
 from project.embedding_import_dialog import EmbedImportDialog, ReverseState
 from app.save_manager import SaveManager
 from sample.delay import CableDelaySample
-from sample.deembed import DeembedSample
-# from sample.reverse_deembed import ReverseDeembed
+from sample.plug import PlugSample 
+from sample.deembed import DeembedSample, ReverseDeembedSample
+from parameters.type import ParameterType
 import numpy as np
 import xlsxwriter
 
@@ -67,17 +68,16 @@ class Embedding(Project):
             self._load[side] = DeembedSample(loadFile, self._plug.getPlugNext(), self._plug.getNextDelay(), cases)
         else:
             k1, k2, k3 = self._plug.getConstants()
-            # TODO: re-add reverse deembed
-            # self._load[side] = ReverseDeembed(loadFile, self._plug.getPlugDelay(), self._plug.getPlugNext(),
-                                            #   self._open.getParameter("Propagation Delay"), self._short.getParameter("Propagation Delay"), k1, k2, k3, cases)
+            self._load[side] = ReverseDeembedSample(loadFile, self._plug.getPlugNext(), self._plug.getPlugDelay(),
+                                              self._open.getParameter(ParameterType.PROPAGATION_DELAY), self._short.getParameter(ParameterType.PROPAGATION_DELAY), k1, k2, k3, cases)
         return self._load[side]
 
     def importOpen(self, openFile):
-        self._open = CableDelaySample(openFile)
+        self._open = PlugSample(openFile)
         return self._open
 
     def importShort(self, shortFile):
-        self._short = CableDelaySample(shortFile)
+        self._short = PlugSample(shortFile)
         return self._short
     
     def removeSample(self, sample):

@@ -96,3 +96,19 @@ class Case(Parameter):
 
     def getCNEXT(self):
         return self._cnext
+
+class ReverseCase(Case):
+    def __init__(self, ports, freq, matrices, reverseJackVector, cnext, cases):
+        super(ReverseCase, self).__init__(ports, freq, matrices, reverseJackVector, cnext, cases)
+
+    @staticmethod
+    def getType():
+        return ParameterType.RCASE
+
+    @staticmethod
+    def register(parameters):
+        return lambda c, f, m: Case(c, f, m,
+            parameters(ParameterType.RDNEXT),
+            parameters(ParameterType.PC_NEXT),
+            parameters(ParameterType.CASES),
+        )
