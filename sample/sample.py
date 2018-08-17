@@ -19,18 +19,11 @@ class Sample(object):
         else:
             self._config = self.getDefaultConfiguration()
 
-        # set the standard
-        if standard:
-            self.setStandard(standard)
-        else:
-            self._standard = None
-
         # convert the network into mixed mode
         self._network.se2gmm(self.getNumPorts())
 
         # various initialisation
         self._parameters = self.getDefaultParameters()
-        self._standard = None
 
         # change frequency unit
         self._network.f = self._network.f * (1000 ** -2)
@@ -48,6 +41,12 @@ class Sample(object):
             if parameter in self._parameters.keys():
                 continue
             self._parameters[parameter] = self._factory.getParameter(parameter)
+
+        #  set the standard
+        if standard:
+            self.setStandard(standard)
+        else:
+            self._standard = None
 
     @staticmethod
     def loadSNP(snp):

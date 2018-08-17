@@ -86,4 +86,4 @@ class ParameterPlot(object):
     def setLimit(self, limit):
         self._limit = limit
         self._figure = None
-        self.drawFigure()
+        # self.drawFigure()
