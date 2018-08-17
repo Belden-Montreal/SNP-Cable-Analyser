@@ -1,4 +1,4 @@
-from parameters.parameter import Parameter, complex2db, complex2phase, diffDiffMatrix
+from parameters.parameter import Parameter, complex2db, complex2phase, diffDiffMatrix, DataAnalysis, PairValues
 from parameters.dataserie import WireDataSerie
 from parameters.type import ParameterType
 from analysis.format import DataFormat
@@ -81,13 +81,12 @@ class InsertionLoss(Parameter):
         return margins, freqs, vals
 
     def getWorstMargin(self):
-        if len(self._worstMargin[0]):
+        if len(self._worstMargin.pairs):
             return self._worstMargin
         if self._limit is None:
             return (dict(), None)
         limit = self._limit.evaluateDict({'f': self._freq}, len(self._freq), neg=True)
-        passed = True
-        worst = dict()
+        self._worstMargin = DataAnalysis()
         if limit:
             for pair,values in self._parameter.items():
                 margins, freqs, vals = self.getMargins(values, limit)
@@ -97,22 +96,20 @@ class InsertionLoss(Parameter):
                     v, f = vals[index], freqs[index]
                     l = limit[f]
                     if v < l:
-                        passed = False
-                    worst[pair] = v, f, l, abs(worstMargin)
-            self._worstMargin = worst, passed
+                        self._worstMargin.passed = False
+                    self._worstMargin.setPair(pair, PairValues(v, f, l, abs(worstMargin)))
             return self._worstMargin
-        return (dict(), None)
+        return DataAnalysis()
 
     def getWorstValue(self):
-        if len(self._worstValue[0]):
+        if len(self._worstValue.pairs):
             return self._worstValue
         
         if self._limit is not None:
             limit = self._limit.evaluateDict({'f': self._freq}, len(self._freq), neg=True)
         else:
             limit = {freq: None for freq in self._freq}
-        passed = True
-        worst = dict()
+        self._worstValue = DataAnalysis()
         if limit:
             for pair,values in self._parameter.items():
                 margins, freqs, vals = self.getMargins(values, limit)
@@ -122,13 +119,12 @@ class InsertionLoss(Parameter):
                     m, f = margins[index], freqs[index]
                     l = limit[f]
                     if l and worstVal < l:
-                        passed = False
+                        self._worstValue.passed = False
                     if m:
                         m = abs(m)
-                    worst[pair] = worstVal, f, l, m
-            self._worstValue = worst, passed
+                    self._worstValue.setPair(pair, PairValues(worstVal, f, l, m))
             return self._worstValue
-        return (dict(), None)
+        return DataAnalysis
     
     def chooseMatrices(self, matrices):
         return diffDiffMatrix(matrices)

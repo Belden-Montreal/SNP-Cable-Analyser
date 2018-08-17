@@ -56,8 +56,8 @@ class Parameter(object):
         self._series = self.computeDataSeries()
         (self._parameter, self._complexParameter) = self.computeParameter()
         self._limit = None
-        self._worstMargin = (dict(), None)
-        self._worstValue = (dict(), None)
+        self._worstMargin = DataAnalysis()
+        self._worstValue = DataAnalysis()
         self._plot = ParameterPlot(self)
 
     @staticmethod
@@ -96,8 +96,8 @@ class Parameter(object):
     def setLimit(self, limit):
         self._limit = deepcopy(limit)
         self._plot.setLimit(self._limit)
-        self._worstMargin = (dict(), None)
-        self._worstValue = (dict(), None)
+        self._worstMargin = DataAnalysis()
+        self._worstValue = DataAnalysis()
 
     def getPorts(self):
         return self._ports
@@ -106,13 +106,12 @@ class Parameter(object):
         return self._plot
 
     def getWorstMargin(self):
-        if len(self._worstMargin[0]):
+        if len(self._worstMargin.pairs):
             return self._worstMargin
         if self._limit is None:
-            return (dict(), None)
+            return DataAnalysis()
         limit = self._limit.evaluateDict({'f': self._freq}, len(self._freq), neg=True)
-        passed = True
-        worst = dict()
+        self._worstMargin = DataAnalysis()
         if limit:
             for pair,values in self._parameter.items():
                 margins, freqs, vals = self.getMargins(values, limit)
@@ -122,11 +121,10 @@ class Parameter(object):
                     v, f = vals[index], freqs[index]
                     l = limit[f]
                     if v > l:
-                        passed = False
-                    worst[pair] = v, f, l, abs(worstMargin)
-            self._worstMargin = worst, passed
+                        self._worstMargin.passed = False
+                    self._worstMargin.setPair(pair, PairValues(v, f, l, abs(worstMargin)))
             return self._worstMargin
-        return (dict(), None)
+        return DataAnalysis()
 
     def getMargins(self, values, limit):
         margins = list()
@@ -143,15 +141,14 @@ class Parameter(object):
         return margins, freqs, vals
 
     def getWorstValue(self):
-        if len(self._worstValue[0]):
+        if len(self._worstValue.pairs):
             return self._worstValue
 
         if self._limit is not None:
             limit = self._limit.evaluateDict({'f': self._freq}, len(self._freq), neg=True)
         else:
             limit = {freq: None for freq in self._freq}
-        passed = True
-        worst = dict()
+        self._worstValue = DataAnalysis()
         if limit:
             for pair,values in self._parameter.items():
                 margins, freqs, vals = self.getMargins(values, limit)
@@ -161,13 +158,12 @@ class Parameter(object):
                     m, f = margins[index], freqs[index]
                     l = limit[f]
                     if l and worstVal > l:
-                        passed = False
+                        self._worstValue.passed = False
                     if m:
                         m = abs(m)
-                    worst[pair] = worstVal, f, l, m
-            self._worstValue = worst, passed
+                    self._worstValue.setPair(pair, PairValues(worstVal, f, l, m))
             return self._worstValue
-        return (dict(), None)
+        return DataAnalysis()
 
     def getNumPorts(self):
         return len(self._ports)
@@ -193,8 +189,8 @@ class PairedParameter(Parameter):
         self._pairs = self.computePairs(ports)
         (self._parameter, self._complexParameter) = self.computeParameter()
         self._limit = None
-        self._worstMargin = (dict(), None)
-        self._worstValue = (dict(), None)
+        self._worstMargin = DataAnalysis()
+        self._worstValue = DataAnalysis()
         self._plot = ParameterPlot(self)
         
     def computePairs(self, ports):
@@ -207,3 +203,49 @@ class PairedParameter(Parameter):
 
     def getPairs(self):
         return self._ports
+
+class PairValues(object):
+    def __init__(self, value, freq, limit, margin):
+        self._value = value
+        self._freq = freq
+        self._limit = limit
+        self._margin = margin
+
+    @property
+    def value(self):
+        return self._value
+
+    @property
+    def freq(self):
+        return self._freq
+
+    @property
+    def limit(self):
+        return self._limit
+
+    @property
+    def margin(self):
+        return self._margin
+
+class DataAnalysis(object):
+    def __init__(self):
+        self._passed = True
+        self._pairs = dict()
+    
+    def hasData(self):
+        return len(self._pairs) > 0
+
+    def setPair(self, pair, values):
+        self._pairs[pair] = values
+
+    @property
+    def passed(self):
+        return self._passed
+
+    @passed.setter
+    def passed(self, ppassed):
+        self._passed = ppassed
+
+    @property
+    def pairs(self):
+        return self._pairs
