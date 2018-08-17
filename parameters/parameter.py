@@ -143,27 +143,25 @@ class Parameter(object):
     def getWorstValue(self):
         if len(self._worstValue.pairs):
             return self._worstValue
-
+        limit = dict()
         if self._limit is not None:
             limit = self._limit.evaluateDict({'f': self._freq}, len(self._freq), neg=True)
-        else:
+        if len(limit) == 0:
             limit = {freq: None for freq in self._freq}
         self._worstValue = DataAnalysis()
-        if limit:
-            for pair,values in self._parameter.items():
-                margins, freqs, vals = self.getMargins(values, limit)
-                if len(vals):
-                    worstVal = max(vals)
-                    index = vals.index(worstVal)
-                    m, f = margins[index], freqs[index]
-                    l = limit[f]
-                    if l and worstVal > l:
-                        self._worstValue.passed = False
-                    if m:
-                        m = abs(m)
-                    self._worstValue.setPair(pair, PairValues(worstVal, f, l, m))
-            return self._worstValue
-        return DataAnalysis()
+        for pair,values in self._parameter.items():
+            margins, freqs, vals = self.getMargins(values, limit)
+            if len(vals):
+                worstVal = max(vals)
+                index = vals.index(worstVal)
+                m, f = margins[index], freqs[index]
+                l = limit[f]
+                if l and worstVal > l:
+                    self._worstValue.passed = False
+                if m:
+                    m = abs(m)
+                self._worstValue.setPair(pair, PairValues(worstVal, f, l, m))
+        return self._worstValue
 
     def getNumPorts(self):
         return len(self._ports)
