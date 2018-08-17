@@ -97,7 +97,7 @@ class InsertionLoss(Parameter):
                     l = limit[f]
                     if v < l:
                         self._worstMargin.passed = False
-                    self._worstMargin.setPair(pair, PairValues(v, f, l, abs(worstMargin)))
+                    self._worstMargin.setPair(pair, PairValues(v, f, l, worstMargin))
             return self._worstMargin
         return DataAnalysis()
 

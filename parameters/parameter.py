@@ -122,7 +122,7 @@ class Parameter(object):
                     l = limit[f]
                     if v > l:
                         self._worstMargin.passed = False
-                    self._worstMargin.setPair(pair, PairValues(v, f, l, abs(worstMargin)))
+                    self._worstMargin.setPair(pair, PairValues(v, f, l, worstMargin))
             return self._worstMargin
         return DataAnalysis()
 
@@ -247,3 +247,21 @@ class DataAnalysis(object):
     @property
     def pairs(self):
         return self._pairs
+
+    def getWorstPairValue(self):
+        maximum = -float('inf')
+        worstPair = None
+        for pair, values in self.pairs.items():
+            if maximum < values.value:
+                maximum = values.value
+                worstPair = pair
+        return worstPair
+
+    def getWorstPairMargin(self):
+        minimum = float('inf')
+        worstPair = None
+        for pair, values in self.pairs.items():
+            if minimum > values.margin:
+                minimum = values.margin
+                worstPair = pair
+        return worstPair

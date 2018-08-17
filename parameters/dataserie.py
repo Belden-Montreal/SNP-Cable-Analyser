@@ -87,6 +87,8 @@ class PortPairDataSerie(DataSerie):
             return False
         if p1.getType() != o1.getType():
             return False
+        if p2.getType() != o2.getType():
+            return False
         return True
 
     def __hash__(self):

@@ -29,6 +29,14 @@ class ParameterWidget(TabWidget, parameter_widget_ui.Ui_ParameterWidget):
             if (self.worstValue.passed and self.worstMargin.passed) or not self.worstMargin.hasData():
                 self.passLabel.setText("Pass")
                 self.hasPassed = True
+            if self.worstValue.hasData():
+                worst = self.worstValue.getWorstPairValue()
+                item = PairItem.getItemFromPair(worst, [self.worstListWidget.item(i) for i in range(self.worstListWidget.count())])
+                self.worstListWidget.setCurrentItem(item)
+            if self.worstMargin.hasData():
+                worst = self.worstMargin.getWorstPairMargin()
+                item = PairItem.getItemFromPair(worst, [self.marginListWidget.item(i) for i in range(self.marginListWidget.count())])
+                self.marginListWidget.setCurrentItem(item)
             else:
                 self.passLabel.setText("Fail")
                 self.hasPassed = False
@@ -50,12 +58,12 @@ class ParameterWidget(TabWidget, parameter_widget_ui.Ui_ParameterWidget):
                 self.marginValueLabel.setText("{0:.2f}".format(self.worstMargin.pairs[pair.number].value))
                 self.marginFreqLabel.setText("{0:.2f}".format(self.worstMargin.pairs[pair.number].freq))
                 self.marginLimitLabel.setText("{0:.2f}".format(self.worstMargin.pairs[pair.number].limit))
-                self.marginLabel.setText("{0:.2f}".format(self.worstMargin.pairs[pair.number].margin))
+                self.marginLabel.setText("{0:.2f}".format(abs(self.worstMargin.pairs[pair.number].margin)))
             elif self.worstValue.hasData() and listIndex == valueType.VALUE: #worst value
                 self.worstValueLabel.setText("{0:.2f}".format(self.worstValue.pairs[pair.number].value))
                 self.worstFreqLabel.setText("{0:.2f}".format(self.worstValue.pairs[pair.number].freq))
                 self.worstLimitLabel.setText("{0:.2f}".format(self.worstValue.pairs[pair.number].limit))
-                self.worstMarginLabel.setText("{0:.2f}".format(self.worstValue.pairs[pair.number].margin))
+                self.worstMarginLabel.setText("{0:.2f}".format(abs(self.worstValue.pairs[pair.number].margin)))
         except:
             return
             
@@ -64,3 +72,9 @@ class PairItem(QtWidgets.QListWidgetItem):
         super(PairItem, self).__init__(text, parent, type)
         self.number = number
 
+    @staticmethod
+    def getItemFromPair(pair, items):
+        for item in items:
+            if pair is not None:
+                if pair == item.number:
+                    return item
