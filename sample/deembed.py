@@ -2,11 +2,11 @@ from sample.plug import PlugSample
 from parameters.type import ParameterType
 
 class DeembedSample(PlugSample):
-    def __init__(self, snp, plugNext, plugNEXTDelay, cases):
+    def __init__(self, snp, plugNext, plugNEXTDelay, cases, **kwargs):
         self._plugNEXT = plugNext
         self._plugNEXTDelay = plugNEXTDelay
         self._cases = cases
-        super(DeembedSample, self).__init__(snp)
+        super(DeembedSample, self).__init__(snp, **kwargs)
 
     def getDefaultParameters(self):
         return {
@@ -30,7 +30,7 @@ class DeembedSample(PlugSample):
                 parameter.setLimit(standard.limits["NEXT"])
 
 class ReverseDeembedSample(DeembedSample):
-    def __init__(self, snp, plugNext, plugDelay, jackOpenDelay, jackShortDelay, k1, k2, k3, cases):
+    def __init__(self, snp, plugNext, plugDelay, jackOpenDelay, jackShortDelay, k1, k2, k3, cases, **kwargs):
         self._plugNEXT = plugNext
         self._jackOpenDelay = jackOpenDelay
         self._jackShortDelay = jackShortDelay
@@ -39,7 +39,7 @@ class ReverseDeembedSample(DeembedSample):
         self._k1 = k1
         self._k2 = k2
         self._k3 = k3
-        PlugSample.__init__(self, snp)
+        PlugSample.__init__(self, snp, **kwargs)
 
     def getDefaultParameters(self):
         return {

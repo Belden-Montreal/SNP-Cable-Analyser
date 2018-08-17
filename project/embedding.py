@@ -65,11 +65,11 @@ class Embedding(Project):
         else:
             cases = Case.CAT6
         if side == "Forward":
-            self._load[side] = DeembedSample(loadFile, self._plug.getPlugNext(), self._plug.getNextDelay(), cases)
+            self._load[side] = DeembedSample(loadFile, self._plug.getPlugNext(), self._plug.getNextDelay(), cases, standard=self._standard)
         else:
             k1, k2, k3 = self._plug.getConstants()
             self._load[side] = ReverseDeembedSample(loadFile, self._plug.getPlugNext(), self._plug.getPlugDelay(),
-                                              self._open.getParameter(ParameterType.PROPAGATION_DELAY), self._short.getParameter(ParameterType.PROPAGATION_DELAY), k1, k2, k3, cases)
+                                              self._open.getParameter(ParameterType.PROPAGATION_DELAY), self._short.getParameter(ParameterType.PROPAGATION_DELAY), k1, k2, k3, cases, standard=self._standard)
         return self._load[side]
 
     def importOpen(self, openFile):
@@ -187,6 +187,7 @@ class Embedding(Project):
         return EmbeddingNode(self)
 
     def setStandard(self, standard):
+        self._standard = standard
         for side in self._load.values():
             if side:
                 side.setStandard(standard)
