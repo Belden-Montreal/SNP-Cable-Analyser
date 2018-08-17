@@ -128,7 +128,7 @@ class PSANEXT(PSAXEXT):
 
     @staticmethod
     def register(parameters):
-        return lambda c, f, m: PSAXEXT(c, f, m,
+        return lambda c, f, m: PSANEXT(c, f, m,
             parameters(ParameterType.ANEXTD)
         )
 
@@ -142,7 +142,7 @@ class PSAFEXT(PSAXEXT):
 
     @staticmethod
     def register(parameters):
-        return lambda c, f, m: PSAXEXT(c, f, m,
+        return lambda c, f, m: PSAFEXT(c, f, m,
             parameters(ParameterType.AFEXTD)
         )
 

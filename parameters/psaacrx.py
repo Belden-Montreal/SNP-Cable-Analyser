@@ -109,7 +109,7 @@ class PSAACRN(PSAACRX):
 
     @staticmethod
     def register(parameters):
-        return lambda c, f, m: PSAACRX(c, f, m,
+        return lambda c, f, m: PSAACRN(c, f, m,
             parameters(ParameterType.PSANEXT),
             parameters(ParameterType.IL)
         )
@@ -124,7 +124,7 @@ class PSAACRF(PSAACRX):
 
     @staticmethod
     def register(parameters):
-        return lambda c, f, m: PSAACRX(c, f, m,
+        return lambda c, f, m: PSAACRF(c, f, m,
             parameters(ParameterType.PSAFEXT),
             parameters(ParameterType.IL)
         )

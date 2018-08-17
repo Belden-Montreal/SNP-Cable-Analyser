@@ -205,15 +205,15 @@ class SampleNode(Node):
         widgets["main"] = None
         failParams = list()
         for param in self._dataObject.getParameters().values():
-            # try:
-            if param.visible():
-                if param.getName() not in self._paramTabs:
-                    self._paramTabs[param.getName()] = ParameterWidget(param.getName(), param)
-                widgets[param.getName()] = self._paramTabs[param.getName()]
-                if not self._paramTabs[param.getName()].hasPassed:
-                        failParams.append(param.getName())
-            # except Exception as e:
-            #     print(e)
+            try:
+                if param.visible():
+                    if param.getName() not in self._paramTabs:
+                        self._paramTabs[param.getName()] = ParameterWidget(param.getName(), param)
+                    widgets[param.getName()] = self._paramTabs[param.getName()]
+                    if not self._paramTabs[param.getName()].hasPassed:
+                            failParams.append(param.getName())
+            except:
+                continue
         if not self._mainTab:
             self._mainTab = MainWidget(self._dataObject, failParams)
         else:
