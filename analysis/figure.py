@@ -46,9 +46,8 @@ class FigureAnalysis(Analysis):
         ))
         
         # create the plot
-        self._figure = plt.figure()
-        self._axis = self._figure.add_subplot(111)
-        plt.tight_layout()
+        (self._figure, self._axis) = plt.subplots()
+        self._legend = None
 
         # default scale and format
         self.setTitle(self.getDefaultTitle())
@@ -64,6 +63,11 @@ class FigureAnalysis(Analysis):
 
     def _setYLabel(self):
         self._axis.set_ylabel(self._format.getTitle())
+
+    def _updateLegend(self):
+        if self._legend is not None:
+            self._legend.remove()
+        self._legend = self._axis.legend(loc='lower center', ncol=3)
 
     def _addLine(self, identifier):
         # make sure the identifier isn't already in the lines
@@ -87,12 +91,15 @@ class FigureAnalysis(Analysis):
         self._lines[identifier] = self._axis.plot(
             x, y,
             label=label,
-            linewidth=0.8,
+            linewidth=0.6,
             c=color
         )
         
         # scale Y axis to fit data
         autoscaleY(self._axis)
+
+        # update the legend
+        self._updateLegend()
 
     def _removeLine(self, identifier):
         # make sure the serie in preset
@@ -101,6 +108,9 @@ class FigureAnalysis(Analysis):
 
         # remove the line
         {line.remove() for line in self._lines.pop(identifier)}
+
+        # update the legend
+        self._updateLegend()
 
     def _getXData(self, identifier):
         raise NotImplementedError
