@@ -31,11 +31,11 @@ class Alien(Project):
             self._disturbers[param][end] = samples
             return samples
         elif len(fileNames) < 2:
-            for p in self._victims:
-                for e in self._victims[p]:
-                    if len(self._disturbers[p][e]):
-                        sample = self.__createVictim(fileNames[0], p, self._disturbers[p][e])
-                        self._victims[p][e] = sample
+            # for p in self._victims:
+            #     for e in self._victims[p]:
+            #         if len(self._disturbers[p][e]):
+            sample = self.__createVictim(fileNames[0], param, self._disturbers[param][end])
+            self._victims[param][end] = sample
             return sample
 
     def __createDisturber(self, name, param):
@@ -57,13 +57,12 @@ class Alien(Project):
 
     def updateDisturbers(self, names, end, param):
         disturbers = [x for x in self._disturbers[param][end] if x.getName() in names]
-        # if self._victims[param][end]:
-        #     self._victims[param][end].setAXEXTD(self.__calculateAXEXTD(disturbers, param))
+        if self._victims[param][end]:
+            self._victims[param][end].recalculate(disturbers)
 
     def resetDisturbers(self, end, param):
-        pass
-        # if self._victims[param][end]:
-        #     self._victims[param][end].setAXEXTD(self.__calculateAXEXTD(self._disturbers[param][end], param))
+        if self._victims[param][end]:
+            self._victims[param][end].resetDisturbers()
 
     def disturbers(self):
         return self._disturbers

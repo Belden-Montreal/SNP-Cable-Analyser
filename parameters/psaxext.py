@@ -64,24 +64,26 @@ class PSAXEXT(Parameter):
 
     def computeDataSeries(self):
         # all the data series should be identical in each disturber's AXEXT
-        reference = next(iter(self._axextd))
-        for disturber in self._axextd:
-            if reference.getDataSeries() != disturber.getDataSeries():
-                raise ValueError
-
-        # create the series for this parameter
-        series = set()
-        for port in self._ports.getMainPorts():
-            disturberSeries = dict()
+        try:
+            reference = next(iter(self._axextd))
             for disturber in self._axextd:
-                axextSeries = set()
-                for serie in disturber.getDataSeries():
-                    if port != serie.getPorts()[0]:
-                        continue
-                    axextSeries.add(serie)
-                disturberSeries[disturber] = axextSeries
-            series.add(PortDataSerie(port, data=disturberSeries))
-        
+                if reference.getDataSeries() != disturber.getDataSeries():
+                    raise ValueError
+
+            # create the series for this parameter
+            series = set()
+            for port in self._ports.getMainPorts():
+                disturberSeries = dict()
+                for disturber in self._axextd:
+                    axextSeries = set()
+                    for serie in disturber.getDataSeries():
+                        if port != serie.getPorts()[0]:
+                            continue
+                        axextSeries.add(serie)
+                    disturberSeries[disturber] = axextSeries
+                series.add(PortDataSerie(port, data=disturberSeries))
+        except StopIteration:
+            series = set()
         return series
 
     def computeParameter(self):

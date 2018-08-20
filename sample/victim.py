@@ -34,16 +34,29 @@ class VictimSample(AlienSample):
 
     def getAvailableParameters(self):
         if self._remote:
-            return {ParameterType.AFEXTD, ParameterType.PSAFEXT, ParameterType.PSAACRF}
+            return [ParameterType.IL, ParameterType.PSAFEXT, ParameterType.PSAACRF]
         else:
-            return {ParameterType.ANEXTD, ParameterType.PSANEXT, ParameterType.PSAACRN} 
+            return [ParameterType.IL, ParameterType.PSANEXT, ParameterType.PSAACRN] 
 
-    # def setAXEXTD(self, axextd):
-    #     # TODO: what is this?
-    #     self._axextd = axextd
-    #     self._parameters["PS"+self._param].recalculate(self._axextd)
-    #     if self._param == "ANEXT":
-    #         name = "N"
-    #     else:
-    #         name = "F"
-    #     self._parameters["PSAACR"+name].recalculate(self._parameters["PS"+self._param])
+    def recalculate(self, disturbers):
+        #We keep the insertion loss to not recalculate it
+        il = self._parameters[ParameterType.IL]
+
+        if self._remote:
+            param = ParameterType.AFEXTD
+            parameters = [s.getParameter(ParameterType.AFEXT) for s in disturbers]
+        else:
+            param = ParameterType.ANEXTD
+            parameters = [s.getParameter(ParameterType.ANEXT) for s in disturbers]
+
+        #re-create the parameters
+        self._parameters = {ParameterType.IL: il, param: parameters}
+        #re-create the factory
+        self._factory = self.getFactory()
+        for parameter in self.getAvailableParameters():
+            if parameter in self._parameters.keys():
+                continue
+            self._parameters[parameter] = self._factory.getParameter(parameter)
+
+    def resetDisturbers(self):
+        self.recalculate(self._samples)

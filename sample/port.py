@@ -51,6 +51,14 @@ class NetworkPort(object):
         self._remote = remote
         self.__createName()
 
+    def __eq__(self, other):
+        if self.getType() == other.getType() and self.isRemote() == other.isRemote():
+            return True
+        return False
+
+    def __hash__(self):
+        return (self.getType(), self.isRemote()).__hash__()
+
 class WirePort(NetworkPort):
     pass
 

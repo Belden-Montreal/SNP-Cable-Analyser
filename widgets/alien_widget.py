@@ -124,7 +124,8 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
         end, test = self.getCheckButtons()
         self._alien.importSamples([fileName], end, test, disturber=False)
         self._node.updateChildren()
-        self.updateWidget()
+        self.victimLabel.setText(self._alien.victims()[test][end].getName())
+        self.drawFigure(end, test)
 
     def importDisturbers(self):
         files,_ = QtWidgets.QFileDialog.getOpenFileNames(self, "Select disturbers", "", "sNp Files (*.s*p)")
