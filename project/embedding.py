@@ -1,8 +1,7 @@
 from project.project import Project, ProjectNode
 from project.embedding_import_dialog import EmbedImportDialog, ReverseState
 from app.save_manager import SaveManager
-from sample.delay import CableDelaySample
-from sample.plug import PlugSample 
+from sample.delay import DelaySample
 from sample.deembed import DeembedSample, ReverseDeembedSample
 from parameters.type import ParameterType
 import numpy as np
@@ -73,11 +72,11 @@ class Embedding(Project):
         return self._load[side]
 
     def importOpen(self, openFile):
-        self._open = PlugSample(openFile)
+        self._open = DelaySample(openFile)
         return self._open
 
     def importShort(self, shortFile):
-        self._short = PlugSample(shortFile)
+        self._short = DelaySample(shortFile)
         return self._short
     
     def removeSample(self, sample):

@@ -1,8 +1,7 @@
 from project.project import Project, ProjectNode
 from parameters.type import ParameterType
-from sample.delay import CableDelaySample
+from sample.delay import DelaySample
 from sample.plugdelay import PlugDelaySample
-from sample.plug import PlugSample
 from project.plug_import_dialog import PlugImportDialog
 import numpy as np
 import xlsxwriter
@@ -21,19 +20,19 @@ class Plug(Project):
         self._k3 = 0
 
     def importDfOpen(self, fileName):
-        self._dfOpenDelay = PlugSample(fileName)
+        self._dfOpenDelay = DelaySample(fileName)
         return self._dfOpenDelay
 
     def importDfShort(self, fileName):
-        self._dfShortDelay = PlugSample(fileName)
+        self._dfShortDelay = DelaySample(fileName)
         return self._dfShortDelay
 
     def importOpen(self, fileName):
-        self._openDelay = PlugSample(fileName)
+        self._openDelay = DelaySample(fileName)
         return self._openDelay
 
     def importShort(self, fileName):
-        self._shortDelay = PlugSample(fileName)
+        self._shortDelay = DelaySample(fileName)
         return self._shortDelay
 
     def importLoad(self, fileName):
