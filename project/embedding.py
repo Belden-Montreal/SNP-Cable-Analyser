@@ -207,18 +207,19 @@ class EmbeddingNode(ProjectNode):
         files = dial.getFiles()
         if files:
             loadFile, plugFile, k1, k2, k3, cat, reverse, openFile, shortFile = files
-            samples = list()
             if reverse == ReverseState.REVERSE:
-                openSample = self._dataObject.importOpen(openFile)
-                shortSample = self._dataObject.importShort(shortFile)
-                samples.extend([openSample, shortSample])
-            plugProject = self._dataObject.importPlug(plugFile)
-            pk1, pk2, pk3 = plugProject.getConstants()
-            if not (k1 == pk1 and k2 == pk2 and k3 == pk3):
-                plugProject.setConstants(k1, k2, k3)
-                plugProject.recalculate()
-            loadSample = self._dataObject.importLoad(loadFile, reverse, cat)
-            samples.append(loadSample)
+                if openFile:
+                    self._dataObject.importOpen(openFile)
+                if shortFile:
+                    self._dataObject.importShort(shortFile)
+            if plugFile:
+                plugProject = self._dataObject.importPlug(plugFile)
+                pk1, pk2, pk3 = plugProject.getConstants()
+                if not (k1 == pk1 and k2 == pk2 and k3 == pk3):
+                    plugProject.setConstants(k1, k2, k3)
+                    plugProject.recalculate()
+            if loadFile:
+                self._dataObject.importLoad(loadFile, reverse, cat)
             if self._embedTab:
                 self._embedTab.createTabs(reverse)
                 self._embedTab.updateWidget()

@@ -146,8 +146,10 @@ class AlienNode(ProjectNode):
         files = dial.getFiles()
         if files:
             disturbersFile, victimFile, end, param = files
-            self._dataObject.importSamples(disturbersFile, end, param, disturber=True)
-            self._dataObject.importSamples([victimFile], end, param, disturber=False)
+            if disturbersFile:
+                self._dataObject.importSamples(disturbersFile, end, param, disturber=True)
+            if victimFile:
+                self._dataObject.importSamples([victimFile], end, param, disturber=False)
             self.updateChildren()
             if self._alienTab:
                 self._alienTab.updateWidget()
