@@ -29,14 +29,15 @@ class Alien(Project):
             pool = ThreadPool()
             samples = pool.starmap(self.__createDisturber, zip(fileNames, [param]*len(fileNames)))
             self._disturbers[param][end] = samples
+            if self._victims[param][end]:
+                self._victims[param][end].setDisturbers(samples)
             return samples
         elif len(fileNames) < 2:
-            # for p in self._victims:
-            #     for e in self._victims[p]:
-            #         if len(self._disturbers[p][e]):
-            sample = self.__createVictim(fileNames[0], param, self._disturbers[param][end])
-            self._victims[param][end] = sample
-            return sample
+            for p in self._victims:
+                for e in self._victims[p]:
+                    sample = self.__createVictim(fileNames[0], p, self._disturbers[p][e])
+                    self._victims[p][e] = sample
+            return self._victims[param][end]
 
     def __createDisturber(self, name, param):
         return DisturberSample(name, self.__isRemote(param), standard=self._standard)

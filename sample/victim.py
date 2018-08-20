@@ -6,21 +6,26 @@ class VictimSample(AlienSample):
         self._samples = samples
 
         # make sure all samples are all remote or main
-        remotes = set(d.isRemote() for d in self._samples)
-        if len(remotes) != 1:
-            error = ValueError("Remote mismatch between disturber samples")
-            raise error
-        remote = next(iter(remotes))
-
+        if len(self._samples):
+            remotes = set(d.isRemote() for d in self._samples)
+            if len(remotes) != 1:
+                error = ValueError("Remote mismatch between disturber samples")
+                raise error
+            remote = next(iter(remotes))
+        else:
+            remote=False
         super(VictimSample, self).__init__(snp, remote=remote, config=config, **kwargs)
 
     def getDefaultConfiguration(self):
         # make sure all configuration are the same
-        ports = [s.getConfig().getPorts() for s in self._samples]
-        if ports[1:] != ports[1:]:
-            error = ValueError("Configuration mismatch between disturber samples")
-            raise error
-        config = next(iter([s.getConfig() for s in self._samples]))
+        try:
+            ports = [s.getConfig().getPorts() for s in self._samples]
+            if ports[1:] != ports[1:]:
+                error = ValueError("Configuration mismatch between disturber samples")
+                raise error
+            config = next(iter([s.getConfig() for s in self._samples]))
+        except StopIteration:
+            config = super(VictimSample, self).getDefaultConfiguration()
 
         return config
 
@@ -60,3 +65,12 @@ class VictimSample(AlienSample):
 
     def resetDisturbers(self):
         self.recalculate(self._samples)
+
+    def setDisturbers(self, samples):
+        self._samples = samples
+        remotes = set(d.isRemote() for d in self._samples)
+        if len(remotes) != 1:
+            error = ValueError("Remote mismatch between disturber samples")
+            raise error
+        remote = next(iter(remotes))
+        self._remote = remote

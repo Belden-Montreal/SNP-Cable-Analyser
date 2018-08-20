@@ -67,8 +67,10 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
         else:
             names = [ParameterType.PSAFEXT, ParameterType.PSAACRF]
         if sample:
-            params = [sample.getParameters()[names[0]], sample.getParameters()[names[1]]]
+            params = [sample.getParameter(names[0]), sample.getParameter(names[1])]
             for i, param in enumerate(params):
+                if param is None:
+                    continue
                 colors = iter(plt.cm.rainbow(np.linspace(0, 1, len(param.getPorts())+3)))
 
                 ax = self._figure.add_subplot(1,2,i+1)
