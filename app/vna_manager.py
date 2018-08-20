@@ -43,7 +43,6 @@ class VNAManager(QtCore.QObject):
 
     def acquire(self):
         if self._comm.connected :
-            try:
                 testName, numPorts, IF, start_freq, stop_freq, num_points, average, timeout = Test_Params_Dialog().getParams(self._comm)
                 if testName:
                     try:
@@ -59,10 +58,7 @@ class VNAManager(QtCore.QObject):
 
                     except Exception as e:
                         print(e)
-            except Exception as e:
-                print(e)
-
-        raise "You Must be connected to VNA"
+        return None
 
     def calibrate(self):
         self._comm.calibrate()
@@ -92,7 +88,7 @@ class Test_Params_Dialog:
         result = dialog.exec_()
         
         if not result:
-            return 0
+            return None, None, None, None, None, None, None, None
         if result:
             try:
                 testName = params_dialog.testNameLineEdit_2.text()
