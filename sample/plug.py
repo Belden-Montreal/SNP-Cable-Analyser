@@ -19,7 +19,7 @@ class PlugSample(Sample):
         return dict()
 
     def getAvailableParameters(self):
-        return {
+        return [
             ParameterType.RL,
             ParameterType.NEXT,
             ParameterType.PROPAGATION_DELAY,
@@ -32,5 +32,5 @@ class PlugSample(Sample):
             ParameterType.CMDMRL,
             ParameterType.DMCMNEXT,
             ParameterType.DMCMRL, 
-        }
+        ]
         

@@ -54,11 +54,11 @@ class ReverseDeembedSample(DeembedSample):
         }
 
     def getAvailableParameters(self):
-        return {
+        return [
             ParameterType.RL,
             ParameterType.NEXT,
             ParameterType.JACK_DELAY,
             ParameterType.JACK_NEXT_DELAY,
             ParameterType.RDNEXT,
             ParameterType.RCASE,       
-        }.union(self.getDefaultParameters().keys())
+        ]

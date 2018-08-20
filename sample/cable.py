@@ -37,7 +37,7 @@ class CableSample(Sample):
         return dict()
 
     def getAvailableParameters(self):
-        return {
+        return [
             ParameterType.RL,
             ParameterType.IL,
             ParameterType.NEXT,
@@ -58,4 +58,4 @@ class CableSample(Sample):
             ParameterType.CMDMRL,
             ParameterType.DMCMNEXT,
             ParameterType.DMCMRL, 
-        }
+        ]
