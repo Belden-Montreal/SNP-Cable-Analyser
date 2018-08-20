@@ -136,33 +136,38 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
 
     def importVictim(self):
         fileName,_ = QtWidgets.QFileDialog.getOpenFileName(self, "Select victim", "", "sNp Files (*.s*p)")
-        end, test = self.getCheckButtons()
-        self._alien.importSamples([fileName], end, test, disturber=False)
-        self._node.updateChildren()
-        self.victimLabel.setText(self._alien.victims()[test][end].getName())
-        self.drawFigure(end, test)
+        if fileName:
+            end, test = self.getCheckButtons()
+            self._alien.importSamples([fileName], end, test, disturber=False)
+            self._node.updateChildren()
+            self.victimLabel.setText(self._alien.victims()[test][end].getName())
+            self.drawFigure(end, test)
 
     def acquireVictim(self):
         fileName = self._vna.acquire()
-        end, test = self.getCheckButtons()
-        self._alien.importSamples([fileName], end, test, disturber=False)
-        self._node.updateChildren()
-        self.victimLabel.setText(self._alien.victims()[test][end].getName())
-        self.drawFigure(end, test)
+        if fileName:
+            end, test = self.getCheckButtons()
+            self._alien.importSamples([fileName], end, test, disturber=False)
+            self._node.updateChildren()
+            self.victimLabel.setText(self._alien.victims()[test][end].getName())
+            self.drawFigure(end, test)
 
     def importDisturbers(self):
         files,_ = QtWidgets.QFileDialog.getOpenFileNames(self, "Select disturbers", "", "sNp Files (*.s*p)")
-        end, test = self.getCheckButtons()
-        self._alien.importSamples(files, end, test, disturber=True)
-        self._node.updateChildren()
-        self.updateWidget()
+        if files:
+            end, test = self.getCheckButtons()
+            self._alien.importSamples(files, end, test, disturber=True)
+            self._node.updateChildren()
+            self.updateWidget()
 
     def acquireDisturbers(self):
         n, ok = QtWidgets.QInputDialog.getInt(self, "Number of disturbers", "Please enter the number of disturbers to acquire", 1, 1, 32)
         files = list()
         if ok:
             for _ in range(n):
-                files.append(self._vna.acquire())
+                fileName = self._vna.acquire()
+                if fileName:
+                    files.append(fileName)
             end, test = self.getCheckButtons()
             self._alien.importSamples(files, end, test, disturber=True)
             self._node.updateChildren()

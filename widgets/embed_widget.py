@@ -120,43 +120,50 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
 
     def getLoadFile(self):
         fileName,_ = QtWidgets.QFileDialog.getOpenFileName(self, "Select load file", "", "sNp Files (*.s*p)")
-        self._loadFile = fileName
-        self.loadFileName.setText(self._loadFile)
+        if fileName:
+            self._loadFile = fileName
+            self.loadFileName.setText(self._loadFile)
 
     def getPlug(self):
         fileName,_ = QtWidgets.QFileDialog.getOpenFileName(self, "Select plug file", "", "Belden Network Analyzer Project files (*.bnap)")
-        plug = self._embedding.importPlug(fileName)
-        self.plugLabel.setText(plug.getName())
-        self._k1, self._k2, self._k3 = plug.getConstants()
-        self.SJ_124578_LineEdit.setText(str(self._k1))
-        self.sJ36LineEdit.setText(str(self._k2))
-        self.thruCalibLineEdit.setText(str(self._k3))
-        self._node.updateChildren()
+        if fileName:
+            plug = self._embedding.importPlug(fileName)
+            self.plugLabel.setText(plug.getName())
+            self._k1, self._k2, self._k3 = plug.getConstants()
+            self.SJ_124578_LineEdit.setText(str(self._k1))
+            self.sJ36LineEdit.setText(str(self._k2))
+            self.thruCalibLineEdit.setText(str(self._k3))
+            self._node.updateChildren()
 
     def getOpen(self):
         fileName,_ = QtWidgets.QFileDialog.getOpenFileName(self, "Select open file", "", "sNp Files (*.s*p)")
-        self._openFile = fileName
-        self.openFileName.setText(self._openFile)
+        if fileName:
+            self._openFile = fileName
+            self.openFileName.setText(self._openFile)
 
     def getShort(self):
         fileName,_ = QtWidgets.QFileDialog.getOpenFileName(self, "Select short file", "", "sNp Files (*.s*p)")
-        self._shortFile = fileName
-        self.shortFileName.setText(self._shortFile)
+        if fileName:
+            self._shortFile = fileName
+            self.shortFileName.setText(self._shortFile)
 
     def getVnaLoad(self):
         fileName = self._vna.acquire()
-        self._loadFile = fileName
-        self.loadFileName.setText(self._loadFile)
+        if fileName:
+            self._loadFile = fileName
+            self.loadFileName.setText(self._loadFile)
 
     def getVnaOpen(self):
         fileName = self._vna.acquire()
-        self._openFile = fileName
-        self.openFileName.setText(self._openFile)
-
+        if fileName:
+            self._openFile = fileName
+            self.openFileName.setText(self._openFile)
+    
     def getVnaShort(self):
         fileName = self._vna.acquire()
-        self._shortFile = fileName
-        self.shortFileName.setText(self._shortFile)
+        if fileName:
+            self._shortFile = fileName
+            self.shortFileName.setText(self._shortFile)
 
     def reembed(self):
         if self._isReverse:
