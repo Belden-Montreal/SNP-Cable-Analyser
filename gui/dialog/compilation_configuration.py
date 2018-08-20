@@ -1,6 +1,7 @@
 from gui.ui.compilation_configuration import Ui_dialog
 from gui.widget.navigation import NavigationToolbar
-from analysis.compilation import CompilationAnalysis, PlotScale
+from analysis.compilation import CompilationAnalysis
+from analysis.scale import PlotScale
 from analysis.format import DataFormat
 
 from PyQt5.QtCore import Qt, QVariant

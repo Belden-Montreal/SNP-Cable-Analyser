@@ -1,4 +1,6 @@
 from parameters.factory import ParameterFactory
+from analysis.parameter import ParameterAnalysis
+from document.sample import SampleDocumentObject
 
 from skrf import Network
 from time import ctime
@@ -47,6 +49,11 @@ class Sample(object):
             self.setStandard(standard)
         else:
             self._standard = None
+
+        # create the analyses
+        self._analyses = dict()
+        for (ptype, parameter) in self._parameters.items():
+            self._analyses[ptype] = ParameterAnalysis(parameter)
 
     @staticmethod
     def loadSNP(snp):
@@ -116,6 +123,14 @@ class Sample(object):
     def getParameters(self):
         return self._parameters
 
+    def getAnalysis(self, name):
+        if name not in self._analyses.keys():
+            return None
+        return self._analyses[name]
+
+    def getAnalyses(self):
+        return self._analyses
+
     def getDate(self):
         return self._date
 
@@ -124,6 +139,9 @@ class Sample(object):
 
     def getFileName(self):
         return self._fileName
+
+    def generateDocumentObject(self, prefix):
+        return SampleDocumentObject(prefix, self)
 
 PORTS_NAME = ["45", "12", "36", "78"]
 class Sample2(object):

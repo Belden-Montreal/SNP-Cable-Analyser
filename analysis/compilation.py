@@ -1,6 +1,6 @@
 from matplotlib import pyplot as plt
 from analysis.format import DataFormat
-from enum import Enum
+from analysis.scale import PlotScale
 
 def autoscale_y(axis, margin=0.1):
     """
@@ -28,10 +28,6 @@ def autoscale_y(axis, margin=0.1):
 
     axis.set_ylim(bot,top)
 
-class PlotScale(Enum):
-    LOGARITHMIC = 0
-    LINEAR      = 1
-
 class CompilationAnalysis(object):
     def __init__(self):
         self._format = None
@@ -42,9 +38,10 @@ class CompilationAnalysis(object):
         self._lines = dict()
         self._parameter = None
 
-        self._figure = plt.figure()
-        self._axis = self._figure.add_subplot(111)
+        (self._figure, self._axis) = plt.subplots()
         self._axis.set_xlabel("Frequency (Hz)")
+
+        self._legend = None
 
         plt.tight_layout()
 
@@ -69,6 +66,11 @@ class CompilationAnalysis(object):
             data = [value.real for value in parameter.getComplexParameter()[serie]]
 
         return (frequencies, data)
+
+    def __updateLegend(self):
+        if self._legend is not None:
+            self._legend.remove()
+        self._legend = self._axis.legend(loc='lower center', ncol=3)
 
     def __addLine(self, sample, serie):
         # make sure a parameter is specified
@@ -96,6 +98,9 @@ class CompilationAnalysis(object):
         # scale y axis to fit data
         autoscale_y(self._axis)
 
+        # update legend
+        self.__updateLegend()
+
     def __removeLine(self, sample, serie, keepsample=False):
         # make sure the sample have series
         if sample not in self._lines:
@@ -115,6 +120,9 @@ class CompilationAnalysis(object):
         if not keepsample:
             if len(self._lines[sample]) == 0:
                 self._lines.pop(sample)
+
+        # update legend
+        self.__updateLegend()
 
     def addSample(self, sample):
         # don't add the sample if it is already there

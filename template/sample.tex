@@ -1,0 +1,29 @@
+\documentclass{article}
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{standalone}
+
+\usepackage{pgf}
+\usepackage{multicol}
+\usepackage{geometry}
+\usepackage{float}
+
+\geometry{
+	total={210mm,297mm},
+    left=10mm,
+    right=10mm,
+    top=10mm,
+    bottom=10mm,
+}
+
+
+\begin{document}
+    \section*{\texttt{\templatevar{name}}}
+    \begin{multicols}{3}
+        \templateblock{for parameter in parameters}
+            \noindent\input{\templatevar{parameter}}
+        \templateblock{endfor}
+    \end{multicols}
+\end{document}
+
