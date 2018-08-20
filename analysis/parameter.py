@@ -6,10 +6,10 @@ from document.parameter import ParameterDocumentObject
 from overrides import overrides
 
 class ParameterAnalysis(FigureAnalysis):
-    def __init__(self, parameter):
+    def __init__(self, parameter, **kwargs):
         self._parameter = parameter
         self._series = set()
-        super(ParameterAnalysis, self).__init__()
+        super(ParameterAnalysis, self).__init__(**kwargs)
 
         # by default, we show all series
         for serie in self._parameter.getDataSeries():

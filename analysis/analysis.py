@@ -1,4 +1,13 @@
 class Analysis(object):
+    def __init__(self, export=True):
+        self._export = export
+
+    def doExport(self):
+        return self._export
+
+    def setExport(self, export=True):
+        self._export = export
+
     def generateDocumentObject(self, prefix):
         NotImplementedError
 

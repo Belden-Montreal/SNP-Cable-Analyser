@@ -23,14 +23,20 @@ def autoscaleY(axis, margin=0.1):
     bot,top = np.inf, -np.inf
 
     for line in lines:
-        new_bot, new_top = get_bottom_top(line)
+        try:
+            new_bot, new_top = get_bottom_top(line)
+        except ValueError as error:
+            print(error)
+            return
         if new_bot < bot: bot = new_bot
         if new_top > top: top = new_top
 
     axis.set_ylim(bot,top)
 
 class FigureAnalysis(Analysis):
-    def __init__(self):
+    def __init__(self, **kwargs):
+        super(FigureAnalysis, self).__init__(**kwargs)
+
         self._format = None
         self._scale  = None
         self._lines  = dict()
