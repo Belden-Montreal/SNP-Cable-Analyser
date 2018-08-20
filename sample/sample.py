@@ -1,5 +1,6 @@
 from parameters.factory import ParameterFactory
 from analysis.parameter import ParameterAnalysis
+from document.sample import SampleDocumentObject
 
 from skrf import Network
 from time import ctime
@@ -128,6 +129,9 @@ class Sample(object):
 
     def getName(self):
         return self._name
+
+    def generateDocumentObject(self, prefix):
+        return SampleDocumentObject(prefix, self)
 
 PORTS_NAME = ["45", "12", "36", "78"]
 class Sample2(object):

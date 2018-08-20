@@ -22,7 +22,7 @@ class ParameterDocumentObject(DocumentObject):
         return {
             'figure': {
                 'path': figure,
-                'scale': 0.4,
+                'scale': 0.3,
             },
         }
         

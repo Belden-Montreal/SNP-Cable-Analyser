@@ -4,6 +4,9 @@ from os.path import abspath
 def normalize(name):
     return name.lower().replace(' ', '-')
 
+def latex(name):
+    return name.replace('_', '\\_')
+
 class DocumentObject(object):
     def __init__(self, prefix):
         # create prefix directory if it doesn't exist
