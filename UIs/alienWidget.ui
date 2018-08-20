@@ -45,6 +45,13 @@
                 </widget>
                </item>
                <item>
+                <widget class="QPushButton" name="victimRun">
+                 <property name="text">
+                  <string>Acquire Victim</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
                 <widget class="QLabel" name="victimLabel">
                  <property name="text">
                   <string>&quot;&quot;</string>
@@ -252,7 +259,7 @@
             <item>
              <widget class="QPushButton" name="alienRun">
               <property name="text">
-               <string>Run Alien </string>
+               <string>Acquire Alien </string>
               </property>
              </widget>
             </item>

@@ -10,7 +10,7 @@ from canvas import Canvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 
 class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
-    def __init__(self, alienNode):
+    def __init__(self, alienNode, vnaManager):
         super(AlienWidget, self).__init__(self)
         self._figure = Figure()
         self._alien = alienNode.getObject()
@@ -41,7 +41,20 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
         self._showLimit = True
         self._showAvgLimit = True
         self._showAvg = True
+        self._vna = vnaManager
+        self._vna.connection.connect(lambda: self.connect())
+        self.alienRun.clicked.connect(lambda: self.acquireDisturbers())
+        self.victimRun.clicked.connect(lambda: self.acquireVictim())
+        self.connect()
         self.portsChanged()
+
+    def connect(self):
+        if self._vna.connected():
+            self.alienRun.setEnabled(True)
+            self.victimRun.setEnabled(True)
+        else:
+            self.alienRun.setEnabled(False)
+            self.victimRun.setEnabled(False)
         
     def updateWidget(self):
         end, test = self.getCheckButtons()
@@ -129,12 +142,31 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
         self.victimLabel.setText(self._alien.victims()[test][end].getName())
         self.drawFigure(end, test)
 
+    def acquireVictim(self):
+        fileName = self._vna.acquire()
+        end, test = self.getCheckButtons()
+        self._alien.importSamples([fileName], end, test, disturber=False)
+        self._node.updateChildren()
+        self.victimLabel.setText(self._alien.victims()[test][end].getName())
+        self.drawFigure(end, test)
+
     def importDisturbers(self):
         files,_ = QtWidgets.QFileDialog.getOpenFileNames(self, "Select disturbers", "", "sNp Files (*.s*p)")
         end, test = self.getCheckButtons()
         self._alien.importSamples(files, end, test, disturber=True)
         self._node.updateChildren()
         self.updateWidget()
+
+    def acquireDisturbers(self):
+        n, ok = QtWidgets.QInputDialog.getInt(self, "Number of disturbers", "Please enter the number of disturbers to acquire", 1, 1, 32)
+        files = list()
+        if ok:
+            for _ in range(n):
+                files.append(self._vna.acquire())
+            end, test = self.getCheckButtons()
+            self._alien.importSamples(files, end, test, disturber=True)
+            self._node.updateChildren()
+            self.updateWidget()
 
     def disturbersChanged(self):
         disturbers = list()
