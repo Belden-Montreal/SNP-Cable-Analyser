@@ -2,18 +2,20 @@ from matplotlib import pyplot as plt
 from analysis.figure import FigureAnalysis
 from analysis.format import DataFormat, formatParameterData
 from analysis.scale import PlotScale
-from document.parameter import ParameterDocumentObject
 from overrides import overrides
 
 class ParameterAnalysis(FigureAnalysis):
-    def __init__(self, parameter, **kwargs):
+    def __init__(self, parameter, series=None, **kwargs):
         self._parameter = parameter
         self._series = set()
         super(ParameterAnalysis, self).__init__(**kwargs)
 
         # by default, we show all series
-        for serie in self._parameter.getDataSeries():
-            self.addSerie(serie)
+        if series is None:
+            series = self._parameter.getDataSeries()
+
+        # show the selected series
+        {self.addSerie(serie) for serie in series}
 
     @overrides
     def _getXData(self, serie):
@@ -73,8 +75,3 @@ class ParameterAnalysis(FigureAnalysis):
 
     def getParameter(self):
         return self._parameter
-
-    @overrides
-    def generateDocumentObject(self, prefix):
-        return ParameterDocumentObject(prefix, self)
-        
