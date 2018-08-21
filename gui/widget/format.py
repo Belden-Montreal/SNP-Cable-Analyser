@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QWidget
 
 class FormatSelectionWidget(QWidget):
     # the signal emitted when the format changes
-    formatChanged = pyqtSignal(DataFormat)
+    changed = pyqtSignal(DataFormat)
 
     def __init__(self, parent=None):
         super(FormatSelectionWidget, self).__init__(parent)
@@ -25,7 +25,7 @@ class FormatSelectionWidget(QWidget):
 
         # setup the radio button signals
         for (f, r) in self.__radios.items():
-            r.toggled.connect(lambda c,f=f:self.formatChanged.emit(f) if c else None)
+            r.toggled.connect(lambda c,f=f:self.changed.emit(f) if c else None)
 
         # default selection
         self.setFormat(DataFormat.MAGNITUDE)

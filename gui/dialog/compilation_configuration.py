@@ -105,10 +105,10 @@ class CompilationConfigurationDialog(QDialog):
         self.__ui.samplesListView.setModel(model)
 
     def __setupFormats(self):
-        self.__ui.formatSelection.formatChanged.connect(self.__setFormat)
+        self.__ui.formatSelection.changed.connect(self.__setFormat)
 
     def __setupScale(self):
-        self.__ui.scaleSelection.scaleChanged.connect(self.__setScale)
+        self.__ui.scaleSelection.changed.connect(self.__setScale)
         self.__ui.scaleSelection.setScale(self._compilation.getScale())
 
     def __setupButtons(self):

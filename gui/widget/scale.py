@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QWidget
 
 class ScaleSelectionWidget(QWidget):
     # the signal emitted when the scale changes
-    scaleChanged = pyqtSignal(PlotScale)
+    changed = pyqtSignal(PlotScale)
 
     def __init__(self, parent=None):
         super(ScaleSelectionWidget, self).__init__(parent)
@@ -22,7 +22,7 @@ class ScaleSelectionWidget(QWidget):
 
         # setup the radio button signals
         for (s, r) in self.__radios.items():
-            r.toggled.connect(lambda c,s=s:self.scaleChanged.emit(s) if c else None)
+            r.toggled.connect(lambda c,s=s:self.changed.emit(s) if c else None)
 
         # default selection
         self.setScale(PlotScale.LOGARITHMIC)
