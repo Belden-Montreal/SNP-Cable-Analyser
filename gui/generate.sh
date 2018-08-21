@@ -9,9 +9,10 @@ DIR_RES="$DIR_GUI/ressources"
 PACKAGE_RES="gui.ressources"
 
 find "$DIR_UI" -type f -iname "*.ui" | while read UI_FILE; do
-    FILENAME=$(basename "$UI_FILE" ".ui")
-    echo "Generating '$DIR_UI/$FILENAME.py'"
-    pyuic5 -x "$DIR_UI/$FILENAME.ui" -o "$DIR_UI/$FILENAME.py" --import-from="$PACKAGE_RES"
+    BASENAME=$(basename "$UI_FILE" ".ui")
+    DIRNAME=$(dirname "$UI_FILE")
+    echo "Generating '$DIRNAME/$BASENAME.py'"
+    pyuic5 -x "$DIRNAME/$BASENAME.ui" -o "$DIRNAME/$BASENAME.py" --import-from="$PACKAGE_RES"
 done
 
 find "$DIR_RES" -type f -iname "*.qrc" | while read QRC_FILE; do
