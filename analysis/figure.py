@@ -34,7 +34,7 @@ def autoscaleY(axis, margin=0.1):
     axis.set_ylim(bot,top)
 
 class FigureAnalysis(Analysis):
-    def __init__(self, **kwargs):
+    def __init__(self, figure=None, axis=None, **kwargs):
         super(FigureAnalysis, self).__init__(**kwargs)
 
         self._format = None
@@ -45,8 +45,12 @@ class FigureAnalysis(Analysis):
             np.linspace(0, 1, self.getMaximumNumberOfLines()+1)
         ))
         
-        # create the plot
-        (self._figure, self._axis) = plt.subplots()
+        # create the figure if needed
+        if figure is None and axis is None:
+            (self._figure, self._axis) = plt.subplots()
+        else:
+            self._figure = figure
+            self._axis = axis
         self._legend = None
 
         # default scale and format
