@@ -143,9 +143,9 @@ class PlugWidget(TabWidget, plug_widget_ui.Ui_Form):
             self.tabWidget.addTab(tab, name)
 
     def createTabs(self):
-        sample = self._plug._loadSample
-        if sample:
-            cnext = sample.getParameter(ParameterType.CORRECTED_NEXT)
-            for serie in cnext.getDataSeries():
-                tab = CNEXTTab(serie.getName(), cnext.getFrequencies(), cnext.getParameter()[serie])
+        cnext = self._plug.getPlugNext()
+        if cnext:
+            series = cnext.getDataSeries()
+            for serie in series:
+                tab = CNEXTTab(serie, cnext)
                 self._pairTabs[serie.getName()] = tab

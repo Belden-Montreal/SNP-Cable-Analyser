@@ -45,7 +45,9 @@ class Plug(Project):
         return self._loadSample
 
     def getPlugNext(self):
-        return self._loadSample.getParameters()[ParameterType.CORRECTED_NEXT]
+        if self._loadSample:
+            return self._loadSample.getParameter(ParameterType.CORRECTED_NEXT)
+        return None
 
     def getNextDelay(self):
         return self._loadSample.getParameters()[ParameterType.NEXT_DELAY]
