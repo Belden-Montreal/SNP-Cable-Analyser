@@ -28,7 +28,6 @@ class ParameterType(Enum):
     PSAFEXT           = auto()
     PSAACRN           = auto()
     PSAACRF           = auto()
-    PSAACRX           = auto()
     DNEXT             = auto()
     CASE              = auto()
     CASES             = auto()
