@@ -57,8 +57,8 @@ class Sample(object):
         for (ptype, parameter) in self._parameters.items():
             try:
                 self._analyses[ptype] = ParameterAnalysis(parameter)
-            except Exception as e:
-                print("{} : {}".format(ptype.name, e))
+            except:
+                continue
 
     @staticmethod
     def loadSNP(snp):
