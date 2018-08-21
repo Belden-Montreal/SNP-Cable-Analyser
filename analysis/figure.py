@@ -67,7 +67,7 @@ class FigureAnalysis(Analysis):
     def _updateLegend(self):
         if self._legend is not None:
             self._legend.remove()
-        self._legend = self._axis.legend(loc='lower center', ncol=3)
+        self._legend = self._axis.legend(loc='best', ncol=3)
 
     def _addLine(self, identifier):
         # make sure the identifier isn't already in the lines

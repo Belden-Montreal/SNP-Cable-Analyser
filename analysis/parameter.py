@@ -1,4 +1,5 @@
 from matplotlib import pyplot as plt
+from matplotlib.ticker import ScalarFormatter
 from analysis.figure import FigureAnalysis
 from analysis.format import DataFormat, formatParameterData
 from analysis.scale import PlotScale
@@ -10,6 +11,10 @@ class ParameterAnalysis(FigureAnalysis):
         self._parameter = parameter
         self._series = set()
         super(ParameterAnalysis, self).__init__(**kwargs)
+
+        # set grid
+        self._axis.grid(which="both")
+        self._axis.xaxis.set_major_formatter(ScalarFormatter())
 
         # by default, we show all series
         for serie in self._parameter.getDataSeries():

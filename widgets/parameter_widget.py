@@ -9,7 +9,7 @@ class valueType():
     VALUE = 1
 
 class ParameterWidget(TabWidget, parameter_widget_ui.Ui_ParameterWidget):
-    def __init__(self, paramName, parameter):
+    def __init__(self, paramName, parameter, analysis):
         super(ParameterWidget, self).__init__(self)
         self.paramLabel.setText(paramName)
         self.paramName = paramName
@@ -19,7 +19,8 @@ class ParameterWidget(TabWidget, parameter_widget_ui.Ui_ParameterWidget):
         self.marginListWidget.currentItemChanged.connect(lambda current: self.pairSelected(current, valueType.MARGIN))
         self.worstListWidget.currentItemChanged.connect(lambda current: self.pairSelected(current, valueType.VALUE))
         self.setPairsList()
-        self.graphicsView = Canvas(parameter.getPlot().getFigure())
+        self.analysis = analysis
+        self.graphicsView = Canvas(analysis.getFigure())
         self.verticalLayout.insertWidget(0, self.graphicsView)
         self.navBar = NavigationToolbar(self.graphicsView, self)
         self.verticalLayout.insertWidget(1, self.navBar)

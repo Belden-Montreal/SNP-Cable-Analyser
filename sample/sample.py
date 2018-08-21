@@ -49,11 +49,16 @@ class Sample(object):
             self.setStandard(standard)
         else:
             self._standard = None
+        
+        self.createAnalyses()
 
-        # create the analyses
+    def createAnalyses(self):
         self._analyses = dict()
         for (ptype, parameter) in self._parameters.items():
-            self._analyses[ptype] = ParameterAnalysis(parameter)
+            try:
+                self._analyses[ptype] = ParameterAnalysis(parameter)
+            except Exception as e:
+                print("{} : {}".format(ptype.name, e))
 
     @staticmethod
     def loadSNP(snp):
@@ -222,14 +227,14 @@ class SampleNode(Node):
         
         widgets["main"] = None
         failParams = list()
-        for param in self._dataObject.getParameters().values():
+        for ptype, param in self._dataObject.getParameters().items():
             try:
                 if param.visible():
-                    if param.getName() not in self._paramTabs:
-                        self._paramTabs[param.getName()] = ParameterWidget(param.getName(), param)
-                    widgets[param.getName()] = self._paramTabs[param.getName()]
-                    if not self._paramTabs[param.getName()].hasPassed:
-                            failParams.append(param.getName())
+                    if ptype.name not in self._paramTabs:
+                        self._paramTabs[ptype.name] = ParameterWidget(param.getName(), param, self._dataObject.getAnalysis(ptype))
+                    widgets[param.getName()] = self._paramTabs[ptype.name]
+                    if not self._paramTabs[ptype.name].hasPassed:
+                            failParams.append(ptype.name)
             except:
                 continue
         if not self._mainTab:
