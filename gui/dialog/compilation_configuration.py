@@ -105,33 +105,7 @@ class CompilationConfigurationDialog(QDialog):
         self.__ui.samplesListView.setModel(model)
 
     def __setupFormats(self):
-        self.__radios = dict()
-        self.__radios[DataFormat.DELAY]     = self.__ui.formatDelayRadioButton
-        self.__radios[DataFormat.IMAGINARY] = self.__ui.formatImaginaryRadioButton
-        self.__radios[DataFormat.REAL]      = self.__ui.formatRealRadioButton
-        self.__radios[DataFormat.MAGNITUDE] = self.__ui.formatMagnitudeRadioButton
-        self.__radios[DataFormat.PHASE]     = self.__ui.formatPhaseRadioButton
-
-        # select compilation's current format
-        for (dformat, radio) in self.__radios.items():
-            radio.clicked.connect(lambda checked,dformat=dformat:self.__setFormat(dformat))
-            radio.setChecked(False)
-        self.__radios[self._compilation.getFormat()].setChecked(True)
-
-    def __setFormats(self, formats):
-        self.__formats = formats
-
-        # enable possible formats
-        for radio in self.__radios.values():
-            radio.setEnabled(False)
-        for dformat in formats:
-            self.__radios[dformat].setEnabled(True)
-
-        # change format if current one isn't available
-        if self._compilation.getFormat() not in formats:
-            dformat = next(iter(formats))
-            self.__radios[dformat].setChecked(True)
-            self.__setFormat(dformat)
+        self.__ui.formatSelection.formatChanged.connect(self.__setFormat)
 
     def __setupScale(self):
         # use compilation's scale
@@ -162,7 +136,7 @@ class CompilationConfigurationDialog(QDialog):
         (names, formats) = data[self.__parameter]
 
         # change available formats
-        self.__setFormats(formats)
+        self.__ui.formatSelection.setAvailableFormats(formats)
 
         # update the title
         self.__ui.titleLineEdit.setText(names)
