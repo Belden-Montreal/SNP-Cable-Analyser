@@ -108,22 +108,8 @@ class CompilationConfigurationDialog(QDialog):
         self.__ui.formatSelection.formatChanged.connect(self.__setFormat)
 
     def __setupScale(self):
-        # use compilation's scale
-        scale = self._compilation.getScale()
-        if scale == PlotScale.LOGARITHMIC:
-            self.__ui.scaleLogarithmicRadioButton.setChecked(True)
-        if scale == PlotScale.LINEAR:
-            self.__ui.scaleLinearRadioButton.setChecked(True)
-
-        # logarithmic scale format radio button
-        self.__ui.scaleLogarithmicRadioButton.clicked.connect(
-            lambda checked:self.__setScale(PlotScale.LOGARITHMIC)
-        )
-
-        # linear scale radio button
-        self.__ui.scaleLinearRadioButton.clicked.connect(
-            lambda checked:self.__setScale(PlotScale.LINEAR)
-        )       
+        self.__ui.scaleSelection.scaleChanged.connect(self.__setScale)
+        self.__ui.scaleSelection.setScale(self._compilation.getScale())
 
     def __setupButtons(self):
         # setup the ok and cancel buttons
