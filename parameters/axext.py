@@ -100,6 +100,10 @@ class ANEXT(AXEXT):
     def getType():
         return ParameterType.ANEXT
 
+    @staticmethod
+    def register(parameters):
+        return lambda c, f, m: ANEXT(c, f, m)
+
     def getName(self):
         return "ANEXT"
 
@@ -107,6 +111,10 @@ class AFEXT(AXEXT):
     @staticmethod
     def getType():
         return ParameterType.AFEXT
+
+    @staticmethod
+    def register(parameters):
+        return lambda c, f, m: AFEXT(c, f, m)
 
     def getName(self):
         return "AFEXT"

@@ -2,6 +2,7 @@ from project.project import Project, ProjectNode
 from sample.disturber import DisturberSample
 from sample.victim import VictimSample
 from project.alien_import_dialog import AlienImportDialog
+from parameters.type import ParameterType
 from multiprocessing.dummy import Pool as ThreadPool
 from copy import deepcopy
 import xlsxwriter
@@ -131,6 +132,18 @@ class Alien(Project):
                     disturber.setStandard(standard)
                 if self._victims[param][end]:
                     self._victims[param][end].setStandard(standard)
+
+    def getCurrentAnalyses(self, param, end):
+        v = self._victims[param][end]
+        if v:
+            if v.isRemote():
+                ptype = ParameterType.PSAFEXT
+                ptype2 = ParameterType.PSAACRF
+            else:
+                ptype = ParameterType.PSANEXT
+                ptype2 = ParameterType.PSAACRN
+            return v.getAnalysis(ptype), v.getAnalysis(ptype2)
+        return None, None
 
 from app.node import Node
 from sample.sample import SampleNode

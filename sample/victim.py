@@ -62,6 +62,7 @@ class VictimSample(AlienSample):
             if parameter in self._parameters.keys():
                 continue
             self._parameters[parameter] = self._factory.getParameter(parameter)
+        self.createAnalyses()
 
     def resetDisturbers(self):
         self.recalculate(self._samples)
@@ -74,3 +75,4 @@ class VictimSample(AlienSample):
             raise error
         remote = next(iter(remotes))
         self._remote = remote
+        self.recalculate(self._samples)
