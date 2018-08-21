@@ -96,7 +96,7 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
                     limit = sample.getStandard().limits["NEXT"]
                 else:
                     limit = None
-                tab = CaseTab(serie.getName(), cases.getFrequencies(), cases.getParameter()[serie], self, limit)
+                tab = CaseTab(serie, cases, self, limit)
                 self._pairTabs[side][serie.getName()] = tab
 
     def reverse(self):

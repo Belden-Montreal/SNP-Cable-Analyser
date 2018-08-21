@@ -34,3 +34,17 @@ def formatParameterData(parameter, serie, pformat):
     if pformat == DataFormat.DELAY:
         data = [value.real for value in parameter.getComplexParameter()[serie]]
     return data
+
+def formatCaseData(parameter, serie, case, pformat):
+    data = None
+    if pformat == DataFormat.MAGNITUDE:
+        data = [mag for (mag,_) in parameter.getParameter()[serie][case]]
+    if pformat == DataFormat.PHASE:
+        data = [phase for (_,phase) in parameter.getParameter()[serie][case]]
+    if pformat == DataFormat.REAL:
+        data = [value.real for value in parameter.getComplexParameter()[serie][case]]
+    if pformat == DataFormat.IMAGINARY:
+        data = [value.imag for value in parameter.getComplexParameter()[serie][case]]
+    if pformat == DataFormat.DELAY:
+        data = [value.real for value in parameter.getComplexParameter()[serie][case]]
+    return data

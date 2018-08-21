@@ -4,21 +4,29 @@ from matplotlib.figure import Figure
 from matplotlib.ticker import ScalarFormatter
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from canvas import Canvas
+from analysis.case import CaseAnalysis
 
 class CaseTab(TabWidget):
-    def __init__(self, name, freq, parameter,  parent=None, limit=None):
+    def __init__(self, serie, parameter,  parent=None, limit=None):
         super(CaseTab, self).__initWidgetOnly__(parent)
-        self._name = name
-        self._freq = freq
+        self._name = serie.getName()
+        self._serie = serie
         self._parameter = parameter
+        self._analysis = CaseAnalysis(parameter)
         self._layout = QtWidgets.QVBoxLayout(self)
-        self._figure = Figure()
+        self._figure = self._analysis.getFigure()
         self._graphicsView = Canvas(self._figure, self)
         self._navBar = NavigationToolbar(self._graphicsView, self)
         self._layout.addWidget(self._graphicsView)
         self._layout.addWidget(self._navBar)
         self._limit = limit
-        self.drawFigure()
+        self.setupPlot()
+        self._graphicsView.draw()
+
+    def setupPlot(self):
+        for serie in self._parameter.getDataSeries():
+            self._analysis.removeSerie(serie)
+        self._analysis.addSerie(self._serie)
 
     def drawFigure(self):
         self._figure.clear()

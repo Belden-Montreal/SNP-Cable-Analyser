@@ -2,7 +2,7 @@ from parameters.parameter import Parameter, complex2db, complex2phase
 from parameters.case_plot import CasePlot
 from parameters.dataserie import PortOrderedPairDataSerie
 from parameters.type import ParameterType
-
+from analysis.format import DataFormat
 import numpy as np
 import itertools
 
@@ -25,6 +25,15 @@ class Case(Parameter):
             parameters(ParameterType.PC_NEXT),
             parameters(ParameterType.CASES),
         )
+
+    @staticmethod
+    def getAvailableFormats():
+        return {
+            DataFormat.MAGNITUDE,
+            DataFormat.PHASE,
+            DataFormat.REAL,
+            DataFormat.IMAGINARY,
+        }
 
     def computeDataSeries(self):
         series = set()
