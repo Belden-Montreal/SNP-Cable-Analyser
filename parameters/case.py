@@ -1,5 +1,4 @@
 from parameters.parameter import Parameter, complex2db, complex2phase
-from parameters.case_plot import CasePlot
 from parameters.dataserie import PortOrderedPairDataSerie
 from parameters.type import ParameterType
 from analysis.format import DataFormat
@@ -12,7 +11,6 @@ class Case(Parameter):
         self._cases = cases
         self._cnext = cnext
         super(Case, self).__init__(ports, freq, matrices)
-        self._plot = CasePlot(self)
 
     @staticmethod
     def getType():

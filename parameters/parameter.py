@@ -2,7 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from bisect import bisect_left
 from limits.Limit import Limit
-from parameters.plot import ParameterPlot
 from copy import deepcopy
 
 def diffDiffMatrix(matrices):
@@ -58,7 +57,6 @@ class Parameter(object):
         self._limit = None
         self._worstMargin = DataAnalysis()
         self._worstValue = DataAnalysis()
-        self._plot = ParameterPlot(self)
 
     @staticmethod
     def getType():
@@ -95,15 +93,11 @@ class Parameter(object):
 
     def setLimit(self, limit):
         self._limit = deepcopy(limit)
-        self._plot.setLimit(self._limit)
         self._worstMargin = DataAnalysis()
         self._worstValue = DataAnalysis()
 
     def getPorts(self):
         return self._ports
-
-    def getPlot(self):
-        return self._plot
 
     def getWorstMargin(self):
         if len(self._worstMargin.pairs):
@@ -189,7 +183,6 @@ class PairedParameter(Parameter):
         self._limit = None
         self._worstMargin = DataAnalysis()
         self._worstValue = DataAnalysis()
-        self._plot = ParameterPlot(self)
         
     def computePairs(self, ports):
         """
