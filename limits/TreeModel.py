@@ -6,7 +6,7 @@ from collections import OrderedDict
 import xmltodict
 
 class TreeModel(QtCore.QAbstractItemModel):
-    def __init__(self, fileUrl = "limits/limits.xml", parent = None):
+    def __init__(self, fileUrl, parent = None):
         QtCore.QAbstractItemModel.__init__(self)
         self.parser = LimitParser(fileUrl)
         self.setupModelFromFile()

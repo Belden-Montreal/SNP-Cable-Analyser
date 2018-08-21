@@ -1,8 +1,7 @@
 from parameters.parameter import Parameter, complex2db, complex2phase
-from parameters.case_plot import CasePlot
 from parameters.dataserie import PortOrderedPairDataSerie
 from parameters.type import ParameterType
-
+from analysis.format import DataFormat
 import numpy as np
 import itertools
 
@@ -12,7 +11,6 @@ class Case(Parameter):
         self._cases = cases
         self._cnext = cnext
         super(Case, self).__init__(ports, freq, matrices)
-        self._plot = CasePlot(self)
 
     @staticmethod
     def getType():
@@ -22,9 +20,18 @@ class Case(Parameter):
     def register(parameters):
         return lambda c, f, m: Case(c, f, m,
             parameters(ParameterType.DNEXT),
-            parameters(ParameterType.PCNEXT),
+            parameters(ParameterType.PC_NEXT),
             parameters(ParameterType.CASES),
         )
+
+    @staticmethod
+    def getAvailableFormats():
+        return {
+            DataFormat.MAGNITUDE,
+            DataFormat.PHASE,
+            DataFormat.REAL,
+            DataFormat.IMAGINARY,
+        }
 
     def computeDataSeries(self):
         series = set()
@@ -42,7 +49,8 @@ class Case(Parameter):
         cpReembedded = {serie: dict() for serie in self._series}
 
         for serie in self._series:
-            cases = filter(lambda case: case[1][0] == serie and case[1][1] is not None, self._cases.items())
+            cases = filter(lambda case: case[1][0] == serie.getPortIndices() and case[1][1] is not None, self._cases.items())
+            
             for (index,_) in cases:
                 dbReembedded[serie][index] = list()
                 cpReembedded[serie][index] = list()
@@ -51,7 +59,7 @@ class Case(Parameter):
         cnext = self._cnext.getComplexParameter()
         for (f,freq) in enumerate(self._freq):
             for serie in self._series:
-                cases = [x for x in self._cases.items() if x[1][0] == serie and x[1][1] is not None]
+                cases = [x for x in self._cases.items() if x[1][0] == serie.getPortIndices() and x[1][1] is not None]
                 for (n, (_, case)) in cases:
                     plug = case(freq, cnext[serie][f])
                     dbPlug = plug[0]
@@ -95,3 +103,19 @@ class Case(Parameter):
 
     def getCNEXT(self):
         return self._cnext
+
+class ReverseCase(Case):
+    def __init__(self, ports, freq, matrices, reverseJackVector, cnext, cases):
+        super(ReverseCase, self).__init__(ports, freq, matrices, reverseJackVector, cnext, cases)
+
+    @staticmethod
+    def getType():
+        return ParameterType.RCASE
+
+    @staticmethod
+    def register(parameters):
+        return lambda c, f, m: Case(c, f, m,
+            parameters(ParameterType.RDNEXT),
+            parameters(ParameterType.PC_NEXT),
+            parameters(ParameterType.CASES),
+        )

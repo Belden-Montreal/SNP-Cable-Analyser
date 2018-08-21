@@ -77,12 +77,17 @@ class PortPairDataSerie(DataSerie):
     def getData(self):
         return self._data
 
+    def isRemote(self):
+        return self._ports[0].isRemote()
+
     def __eq__(self, other):
         (p1,p2) = self.getPorts()
         (o1,o2) = other.getPorts()
         if p1.isRemote() != o1.isRemote():
             return False
         if p1.getType() != o1.getType():
+            return False
+        if p2.getType() != o2.getType():
             return False
         return True
 

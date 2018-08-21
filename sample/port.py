@@ -51,6 +51,14 @@ class NetworkPort(object):
         self._remote = remote
         self.__createName()
 
+    def __eq__(self, other):
+        if self.getType() == other.getType() and self.isRemote() == other.isRemote():
+            return True
+        return False
+
+    def __hash__(self):
+        return (self.getType(), self.isRemote()).__hash__()
+
 class WirePort(NetworkPort):
     pass
 
@@ -218,6 +226,18 @@ class AlienConfiguration(NetworkConfiguration):
         if len(indices) != len(self._ports):
             error = ValueError("All ports must be unique in the configuration")
             raise error
+        self._victimWires = set()
+        for victim in self._victims:
+            for disturber in self._disturbers:
+                if disturber.getType() == victim.getType():
+                    self._victimWires.add(Wire(disturber, victim, victim.getType()))
+        # self._victimWires = {Wire(disturber, disturber, disturber.getType()) for (disturber) in (self._victims, self._disturbers) if disturber is disturber}
+
+    def getFowardWires(self):
+        return self._victimWires
+
+    def getReversedWires(self):
+        return {ReversedWire(wire) for wire in self._victimWires}
 
     def getPorts(self):
         return self._ports

@@ -7,6 +7,10 @@ class CMNEXT(NEXT):
     def getType():
         return ParameterType.CMNEXT
 
+    @staticmethod
+    def register(parameters, **kwargs):
+        return lambda c, f, m: CMNEXT(c, f, m, **kwargs)
+
     def chooseMatrices(self, matrices):
         return comComMatrix(matrices)
 

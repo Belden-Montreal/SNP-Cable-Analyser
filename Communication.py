@@ -44,16 +44,13 @@ class Communication(object):
                 self.config.write(configfile)
 
     def connectToVNA(self, VNA_ADDRESS):
-        try:
-            self.VNAAddress = VNA_ADDRESS
-            self.rm = visa.ResourceManager()
-            self.session = self.rm.open_resource(self.VNAAddress)
-            with open(self.vna_settings_file, 'w') as configfile:
-                print("Write to INI")
-                self.config.write(configfile)
-            self.connected = True
-        except Exception as e:
-            print(e)
+        self.VNAAddress = VNA_ADDRESS
+        self.rm = visa.ResourceManager()
+        self.session = self.rm.open_resource(self.VNAAddress)
+        with open(self.vna_settings_file, 'w') as configfile:
+            print("Write to INI")
+            self.config.write(configfile)
+        self.connected = True
 
 	 
     @property

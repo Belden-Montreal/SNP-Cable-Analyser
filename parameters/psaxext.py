@@ -64,25 +64,27 @@ class PSAXEXT(Parameter):
 
     def computeDataSeries(self):
         # all the data series should be identical in each disturber's AXEXT
-        reference = next(iter(self._axextd))
-        for disturber in self._axextd:
-            if reference.getDataSeries() != disturber.getDataSeries():
-                raise ValueError
-
-        # create the series for this parameter
-        series = set()
-        for port in self._ports.getMainPorts():
-            disturberSeries = dict()
+        try:
+            reference = next(iter(self._axextd))
             for disturber in self._axextd:
-                axextSeries = set()
-                for serie in disturber.getDataSeries():
-                    if port != serie.getPorts()[0]:
-                        continue
-                    axextSeries.add(serie)
-                disturberSeries[disturber] = axextSeries
-            series.add(PortDataSerie(port, data=disturberSeries))
-        
-        return seriesa
+                if reference.getDataSeries() != disturber.getDataSeries():
+                    raise ValueError
+
+            # create the series for this parameter
+            series = set()
+            for port in self._ports.getMainPorts():
+                disturberSeries = dict()
+                for disturber in self._axextd:
+                    axextSeries = set()
+                    for serie in disturber.getDataSeries():
+                        if port != serie.getPorts()[0]:
+                            continue
+                        axextSeries.add(serie)
+                    disturberSeries[disturber] = axextSeries
+                series.add(PortDataSerie(port, data=disturberSeries))
+        except StopIteration:
+            series = set()
+        return series
 
     def computeParameter(self):
         # initialize the dictionaries for each series
@@ -128,7 +130,7 @@ class PSANEXT(PSAXEXT):
 
     @staticmethod
     def register(parameters):
-        return lambda c, f, m: PSAXEXT(c, f, m,
+        return lambda c, f, m: PSANEXT(c, f, m,
             parameters(ParameterType.ANEXTD)
         )
 
@@ -142,7 +144,7 @@ class PSAFEXT(PSAXEXT):
 
     @staticmethod
     def register(parameters):
-        return lambda c, f, m: PSAXEXT(c, f, m,
+        return lambda c, f, m: PSAFEXT(c, f, m,
             parameters(ParameterType.AFEXTD)
         )
 

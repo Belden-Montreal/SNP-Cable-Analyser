@@ -27,11 +27,12 @@ class PSAACRX(Parameter):
     def getType():
         return ParameterType.PSAACRX
 
-    @staticmethod
-    def register(parameters):
-        return lambda c, f, m: PSAACRX(c, f, m,
-            parameters(ParameterType.IL)
-        )
+    # @staticmethod
+    # def register(parameters):
+    #     return lambda c, f, m: PSAACRX(c, f, m,
+
+    #         parameters(ParameterType.IL)
+    #     )
 
     @staticmethod
     def getAvailableFormats():
@@ -106,6 +107,13 @@ class PSAACRN(PSAACRX):
     def getType():
         return ParameterType.PSAACRN
 
+    @staticmethod
+    def register(parameters):
+        return lambda c, f, m: PSAACRN(c, f, m,
+            parameters(ParameterType.PSANEXT),
+            parameters(ParameterType.IL)
+        )
+
     def getName(self):
         return "PSAACRN"
 
@@ -113,6 +121,13 @@ class PSAACRF(PSAACRX):
     @staticmethod
     def getType():
         return ParameterType.PSAACRF
+
+    @staticmethod
+    def register(parameters):
+        return lambda c, f, m: PSAACRF(c, f, m,
+            parameters(ParameterType.PSAFEXT),
+            parameters(ParameterType.IL)
+        )
 
     def getName(self):
         return "PSAACRF"

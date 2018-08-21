@@ -50,7 +50,9 @@ class PSNEXT(Parameter):
             for nextSerie in self._next.getDataSeries():
                 (p1,p2) = nextSerie.getPorts()
 
-                if not p == p1:
+                if self._next.order() and not (p == p1 or p == p2):
+                    continue
+                elif not self._next.order() and not p == p1:
                     continue
 
                 nextSeries.add(nextSerie)
@@ -73,7 +75,7 @@ class PSNEXT(Parameter):
                 # get the NEXT values of these pairs
                 cpValues = [self._next.getComplexParameter()[s][f] for s in nextSeries]
                 dbValues = [self._next.getParameter()[s][f]        for s in nextSeries]
-                
+
                 # compute PSNEXT
                 cpValue = np.sum(list(cpValues))
                 dbValue = (powerSum(dbValues), complex2phase(cpValue))

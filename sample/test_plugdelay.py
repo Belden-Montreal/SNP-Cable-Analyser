@@ -29,7 +29,7 @@ class TestPlugDelaySample(TestPlugSample):
             ParameterType.DF_DELAY,
             ParameterType.PLUG_DELAY,
             ParameterType.NEXT_DELAY,
-            ParameterType.CNEXT,
+            ParameterType.CORRECTED_NEXT,
         }
 
     def getShouldntRunParameters(self):

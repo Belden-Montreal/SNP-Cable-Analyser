@@ -61,3 +61,18 @@ class DNEXT(CorrectedNEXT):
 
     def getComplexParameter(self):
         return self._complexParameter
+
+class ReverseDNEXT(DNEXT):
+    def __init__(self, ports, freq, matrices, jackNextDelay, plugNext):
+        super(ReverseDNEXT, self).__init__(ports, freq, matrices, jackNextDelay, plugNext)
+    
+    @staticmethod
+    def getType():
+        return ParameterType.RDNEXT
+
+    @staticmethod
+    def register(parameters):
+        return lambda c, f, m: DNEXT(c, f, m,
+            parameters(ParameterType.JACK_NEXT_DELAY),
+            parameters(ParameterType.PC_NEXT)
+        )

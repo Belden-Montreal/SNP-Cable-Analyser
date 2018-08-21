@@ -9,25 +9,24 @@ class TestPlug(unittest.TestCase):
     def testFileImport(self):
         project = Plug("test")
 
-        # project.importSamples(self._fileName, Filetype.DFOPEN)
-        # project.importSamples(self._fileName, Filetype.DFSHORT)
-        # project.importSamples(self._fileName, Filetype.OPEN)
-        # project.importSamples(self._fileName, Filetype.SHORT)
+        project.importDfOpen(self._fileName)
+        project.importDfShort(self._fileName)
+        project.importOpen(self._fileName)
+        project.importShort(self._fileName)
         project.setConstants(1,2,3)
-        # project.importSamples(self._fileName, Filetype.LOAD)
+        load = project.importLoad(self._fileName)
 
         #should have added 5 samples
-        self.assertEqual(len(project._samples),5)
+        self.assertNotEqual((project._loadSample),None)
 
         #samples should have the correct names
         #self.assertEqual(project._samples[0]._name, "fci")
-        self.assertEqual(project._samples[0]._name, "testout_mm")
+        self.assertEqual(project._loadSample.getName(), "testout_mm")
 
         #should have access to plug NEXT and NEXT delay
         self.assertTrue(project.getPlugNext())
         self.assertTrue(project.getNextDelay())
 
-        # project.removeSamples("testout_mm")
+        project.removeSample(load)
         #should have removed the samples
-        self.assertEqual(len(project._samples), 0)
-
+        self.assertEqual(project._loadSample, None)

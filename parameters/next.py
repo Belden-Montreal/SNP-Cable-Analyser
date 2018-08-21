@@ -96,3 +96,6 @@ class NEXT(Parameter):
 
     def getName(self):
         return "NEXT"
+
+    def order(self):
+        return self._order

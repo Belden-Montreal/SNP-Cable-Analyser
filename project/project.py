@@ -1,9 +1,9 @@
-from sample.end_to_end import EndToEnd
-from sample.single_ended import SingleEnded
+from sample.cable import CableSample
+from sample.plug import PlugSample
 from multiprocessing.dummy import Pool as ThreadPool
 from os.path import splitext
 import xlsxwriter
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtGui
 
 class Project(object):
     '''
@@ -25,8 +25,8 @@ class Project(object):
     def __createSample(self, name):
         _, extension = splitext(name)
         if extension[2] == "8" or extension[2] == "4":
-            return SingleEnded(name)
-        return EndToEnd(name)
+            return PlugSample(name)
+        return CableSample(name)
 
     def removeSample(self, sample):
         if sample in self._samples:
@@ -139,7 +139,7 @@ class ProjectNode(Node):
             self.model().removeRow(self.row())
 
     def removeRow(self, row):
-        super(ProjectNode, self).removeRow(row)
+        QtGui.QStandardItem.removeRow(self, row)
 
     def setupInitialData(self):
         self.addChildren(self._dataObject.samples())
@@ -147,5 +147,5 @@ class ProjectNode(Node):
     def setStandard(self, standard):
         self._dataObject.setStandard(standard)
 
-    # def getWidgets(self):
+    # def getWidgets(self, vnaManager):
     #     return list()

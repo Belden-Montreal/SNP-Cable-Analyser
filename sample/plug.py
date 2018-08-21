@@ -6,10 +6,10 @@ class PlugSample(Sample):
     def getDefaultConfiguration(self):
         # create the ports for this network
         ports = {
-            NetworkPort(0, "12", ptype=EthernetPair.PAIR12),
-            NetworkPort(1, "36", ptype=EthernetPair.PAIR36),
-            NetworkPort(2, "45", ptype=EthernetPair.PAIR45),
-            NetworkPort(3, "78", ptype=EthernetPair.PAIR78),
+            NetworkPort(0, ptype=EthernetPair.PAIR45),
+            NetworkPort(1, ptype=EthernetPair.PAIR12),
+            NetworkPort(2, ptype=EthernetPair.PAIR36),
+            NetworkPort(3, ptype=EthernetPair.PAIR78),
         }
 
         # create the configuration for this network
@@ -19,7 +19,7 @@ class PlugSample(Sample):
         return dict()
 
     def getAvailableParameters(self):
-        return {
+        return [
             ParameterType.RL,
             ParameterType.NEXT,
             ParameterType.PROPAGATION_DELAY,
@@ -32,5 +32,5 @@ class PlugSample(Sample):
             ParameterType.CMDMRL,
             ParameterType.DMCMNEXT,
             ParameterType.DMCMRL, 
-        }
+        ]
         

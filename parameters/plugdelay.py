@@ -88,3 +88,26 @@ class PlugDelay(Parameter):
 
     def __getFrequenciesIndex(self, f1, f2, f):
         return takeClosest(f1, f), takeClosest(f2, f)+1
+
+class JackDelay(PlugDelay):
+    def __init__(self, ports, freq, matrices, openDelay, shortDelay, plugDelay, k1, k2, k3):
+        super(JackDelay, self).__init__(ports, freq, matrices, openDelay, shortDelay, plugDelay, k1, k2, k3)
+
+    @staticmethod
+    def getType():
+        return ParameterType.JACK_DELAY
+
+    @staticmethod
+    def register(parameters):
+        return lambda c, f, m:PlugDelay(c, f, m,
+            parameters(ParameterType.JACK_OPEN_DELAY),
+            parameters(ParameterType.JACK_SHORT_DELAY),
+            parameters(ParameterType.PLUG_DELAY),
+            parameters(ParameterType.K1),
+            parameters(ParameterType.K2),
+            parameters(ParameterType.K3)
+        )
+
+    def getName(self):
+        return "JackDelay"
+        

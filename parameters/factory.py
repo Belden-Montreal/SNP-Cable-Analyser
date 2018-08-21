@@ -22,11 +22,11 @@ from parameters.axext            import ANEXT, AFEXT
 from parameters.psaxext          import PSANEXT, PSAFEXT
 from parameters.psaacrx          import PSAACRX, PSAACRN, PSAACRF
 from parameters.dfdelay          import DFDelay
-from parameters.plugdelay        import PlugDelay
-from parameters.nextdelay        import NEXTDelay
+from parameters.plugdelay        import PlugDelay, JackDelay
+from parameters.nextdelay        import NEXTDelay, JackNEXTDelay
 from parameters.correctednext    import CorrectedNEXT
-from parameters.dnext            import DNEXT
-from parameters.case             import Case
+from parameters.dnext            import DNEXT, ReverseDNEXT
+from parameters.case             import Case, ReverseCase
 
 class ParameterFactory(object):
     def __init__(self, config, freq, matrices, parameters):
@@ -43,8 +43,9 @@ class ParameterFactory(object):
             ACRF, ANEXT, AFEXT, Case, CMDMNEXT, DMCMRL, CMNEXT, CMRL,
             CorrectedNEXT, DFDelay, DMCMNEXT, DMCMRL, DNEXT, ELTCTL,
             FEXT, LCL, LCTL, NEXTDelay, NEXT, PlugDelay, PropagationDelay,
-            PSAACRX, PSAACRN, PSAACRF, PSACRF, PSANEXT, PSAFEXT, PSFEXT,
-            PSNEXT, ReturnLoss, InsertionLoss, CMDMRL, TCTL, TCL
+            PSAACRN, PSAACRF, PSACRF, PSANEXT, PSAFEXT, PSFEXT,
+            PSNEXT, ReturnLoss, InsertionLoss, CMDMRL, TCTL, TCL, JackDelay,
+            JackNEXTDelay, ReverseDNEXT, ReverseCase
         }
         return {cls.getType() : cls.register(self.getParameter) for cls in parameters}
 

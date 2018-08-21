@@ -13,6 +13,7 @@ class Sample(object):
 
         # get the name of the file
         self._name = basename(snp)
+        self._fileName = snp
 
         # get the network's configuration
         if config:
@@ -20,18 +21,15 @@ class Sample(object):
         else:
             self._config = self.getDefaultConfiguration()
 
-        # set the standard
-        if standard:
-            self.setStandard(standard)
-        else:
-            self._standard = None
-
         # convert the network into mixed mode
         self._network.se2gmm(self.getNumPorts())
 
         # various initialisation
         self._parameters = self.getDefaultParameters()
-        self._standard = None
+
+        # change frequency unit
+        self._network.f = self._network.f * (1000 ** -2)
+        self._network.frequency.unit = 'mhz'
 
         # config and network should have the same number of ports
         if len(self._config.getPorts()) != self.getNumPorts():
@@ -46,10 +44,21 @@ class Sample(object):
                 continue
             self._parameters[parameter] = self._factory.getParameter(parameter)
 
-        # create the analyses
+        #  set the standard
+        if standard:
+            self.setStandard(standard)
+        else:
+            self._standard = None
+        
+        self.createAnalyses()
+
+    def createAnalyses(self):
         self._analyses = dict()
         for (ptype, parameter) in self._parameters.items():
-            self._analyses[ptype] = ParameterAnalysis(parameter)
+            try:
+                self._analyses[ptype] = ParameterAnalysis(parameter)
+            except:
+                continue
 
     @staticmethod
     def loadSNP(snp):
@@ -75,8 +84,11 @@ class Sample(object):
     def setStandard(self, standard):
         self._standard = standard
         for (name, parameter) in self._parameters.items():
-            if name in standard.limits:
-                parameter.setLimit(standard.limits[name])
+            if name.name in standard.limits:
+                parameter.setLimit(standard.limits[name.name])
+
+    def getStandard(self):
+        return self._standard
 
     def getFactory(self):
         return ParameterFactory(
@@ -129,6 +141,9 @@ class Sample(object):
 
     def getName(self):
         return self._name
+
+    def getFileName(self):
+        return self._fileName
 
     def generateDocumentObject(self, prefix):
         return SampleDocumentObject(prefix, self)
@@ -184,6 +199,9 @@ class Sample2(object):
     def getName(self):
          return self._name
 
+    def getFileName(self):
+        return self._snp.getFile()
+
     def getDate(self):
         return self._date
 
@@ -197,26 +215,37 @@ class SampleNode(Node):
         super(SampleNode, self).__init__(sample.getName())
         self._dataObject = sample
         self._project = project
+        self._mainTab = None
+        self._paramTabs = dict()
 
     def delete(self):
         self.parent().removeRow(self.row())
         self._project.removeSample(self._dataObject)
 
-    def getWidgets(self):
+    def getWidgets(self, none):
         widgets = dict()
+        
         widgets["main"] = None
         failParams = list()
-        for name, param in self._dataObject.getParameters().items():
+        for ptype, param in self._dataObject.getParameters().items():
             try:
                 if param.visible():
-                    tab = ParameterWidget(name, param)
-                    widgets[name] = tab
-                    if not tab.hasPassed:
-                        failParams.append(name)
+                    if ptype.name not in self._paramTabs:
+                        self._paramTabs[ptype.name] = ParameterWidget(param.getName(), param, self._dataObject.getAnalysis(ptype))
+                    widgets[param.getName()] = self._paramTabs[ptype.name]
+                    if not self._paramTabs[ptype.name].hasPassed:
+                            failParams.append(ptype.name)
             except:
                 continue
-        widgets["main"] = MainWidget(self._dataObject, failParams)
+        if not self._mainTab:
+            self._mainTab = MainWidget(self._dataObject, failParams)
+        else:
+            self._mainTab.updateParams(failParams)
+        widgets["main"] = self._mainTab
+
         return widgets
 
     def setStandard(self, standard):
         self._dataObject.setStandard(standard)
+        self._mainTab = None
+        self._paramTabs = dict()

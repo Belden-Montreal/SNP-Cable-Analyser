@@ -1,9 +1,11 @@
 from project.project import Project, ProjectNode
 from project.embedding_import_dialog import EmbedImportDialog, ReverseState
 from app.save_manager import SaveManager
-from sample.single_ended import SingleEnded
-from sample.deembed import Deembed
+from sample.delay import DelaySample
+from sample.deembed import DeembedSample, ReverseDeembedSample
+from parameters.type import ParameterType
 import numpy as np
+import xlsxwriter
 
 class Case():
     CAT5E = {
@@ -49,7 +51,8 @@ class Embedding(Project):
         self._load = dict()
         self._load["Forward"] = None
         self._load["Reverse"] = None
-        self._reverse = list()
+        self._open = None
+        self._short = None
 
     def importPlug(self, plugFile):
         self._plug = SaveManager().loadProject(plugFile)
@@ -60,36 +63,133 @@ class Embedding(Project):
             cases = Case.CAT5E
         else:
             cases = Case.CAT6
-        self._load[side] = Deembed(loadFile, self._plug.getPlugNext(), self._plug.getNextDelay(), cases)
+        if side == "Forward":
+            self._load[side] = DeembedSample(loadFile, self._plug.getPlugNext(), self._plug.getNextDelay(), cases, standard=self._standard)
+        else:
+            k1, k2, k3 = self._plug.getConstants()
+            self._load[side] = ReverseDeembedSample(loadFile, self._plug.getPlugNext(), self._plug.getPlugDelay(),
+                                              self._open.getParameter(ParameterType.PROPAGATION_DELAY), self._short.getParameter(ParameterType.PROPAGATION_DELAY), k1, k2, k3, cases, standard=self._standard)
         return self._load[side]
 
-    def importReverse(self, openFile, shortFile):
-        openSample = SingleEnded(openFile)
-        shortSample = SingleEnded(shortFile)
-        self._reverse = [openSample, shortSample]
-        return self._reverse
+    def importOpen(self, openFile):
+        self._open = DelaySample(openFile)
+        return self._open
 
+    def importShort(self, shortFile):
+        self._short = DelaySample(shortFile)
+        return self._short
+    
     def removeSample(self, sample):
         for side in self._load:
             if sample == self._load[side]:
                 self._load[side] = None
-        if sample in self._reverse:
-            self._reverse.remove(sample)
+        if sample == self._open:
+            self._open = None
+        if sample == self._short:
+            self._short = None
 
     def load(self):
         return self._load
 
-    def reverse(self):
-        return self._reverse
+    def openSample(self):
+        return self._open
+    
+    def shortSample(self):
+        return self._short
 
     def plug(self):
         return self._plug
 
     def generateExcel(self, outputName, sampleNames, z=False):
-        raise NotImplementedError
+        workbook = xlsxwriter.Workbook(outputName, options={'nan_inf_to_errors': True})
+        if z:
+            dataTitle = ["Real", "Imag"]
+        else:
+            dataTitle = ["Mag", "Phase"]
+        for side, sample in self._load.items():
+            if sample:
+                worksheet = workbook.add_worksheet(side)
+                worksheet.write('A1', 'De-embedding ID:')
+                worksheet.write('B1', sample.getName())
+            
+                cell_format = workbook.add_format({'align': 'center',
+                                                    'valign': 'vcenter',
+                                                    'border': 6,})
+                worksheet.merge_range('A3:A5', "Frequency", cell_format)
+
+                curPos = 1
+                parameters = {"RL": sample.getParameters()["RL"], "NEXT": sample.getParameters()["NEXT"], "DNEXT": sample.getParameters()["DNEXT"], "Case": sample.getParameters()["Case"]}
+                for (paramName, parameter) in (parameters.items()):
+                    numSignals = len(parameter.getPorts())
+                    if paramName == "Case":
+                        nc = 0
+                        for p in parameter.getParameter().values():
+                            nc += len(p)
+                        worksheet.merge_range(2, curPos, 2, curPos+nc*2-1,  paramName, cell_format)
+                    else:
+                        worksheet.merge_range(2, curPos, 3, curPos+numSignals*2-1,  paramName, cell_format)
+                    for i, (key, (portName,_)) in enumerate(parameter.getPorts().items()):
+                        if paramName == "Case":
+                            param = self.__getParam(parameter, z)
+                            numCases = len(param[key])
+                            worksheet.merge_range(4, curPos, 4, curPos+numCases*2-1, str(portName), cell_format)
+                            for k, (n, case) in enumerate(param[key].items()):
+                                worksheet.merge_range(3, curPos+k*2, 3, curPos+k*2+1, str(n), cell_format)
+                                worksheet.write(5,curPos+k*2, dataTitle[0], cell_format)
+                                worksheet.write(5,curPos+k*2+1, dataTitle[1], cell_format)
+                                for j, (data) in enumerate(case):
+                                    d1,d2 = self.__getData(data, z)
+                                    worksheet.write(6+j, 0, sample.getFrequencies()[j])
+                                    self.box(workbook, worksheet, case, k*2, j, d1, curPos, numCases*2)
+                                    self.box(workbook, worksheet, case, k*2+1, j, d2, curPos, numCases*2)
+                            curPos+=numCases*2
+                            
+                        else:
+                            worksheet.merge_range(4, curPos+i*2, 4, curPos+i*2+1, str(portName), cell_format)
+                            worksheet.write(5,curPos+i*2, dataTitle[0], cell_format)
+                            worksheet.write(5,curPos+i*2+1, dataTitle[1], cell_format)
+                            param = self.__getParam(parameter, z)
+                            for j, (data) in enumerate(param[key]):
+                                d1,d2 = self.__getData(data, z)
+                                worksheet.write(6+j, 0, sample.getFrequencies()[j])
+                                self.box(workbook, worksheet, param[key], i*2, j, d1, curPos, len(param)*2)
+                                self.box(workbook, worksheet, param[key], i*2+1, j, d2, curPos, len(param)*2)
+                
+                    curPos += numSignals*2
+            workbook.close()
+
+    def box(self, workbook, worksheet, case, i, j, data, curPos, nCases):
+        box_form = workbook.add_format()
+        if j == 0:
+            box_form.set_top(6)
+        if i == 0:
+            box_form.set_left(6)
+        if j == len(case)-1:
+            box_form.set_bottom(6)
+        if i == nCases-1:
+            box_form.set_right(6)
+        worksheet.write(j+6, curPos+i, data, box_form)
+        
+    def __getParam(self, param, z=False):
+        if z:
+            return param.getComplexParameter()
+        else:
+            return param.getParameter()
+
+    def __getData(self, data, z=False):
+        if z:
+            return data.real, data.imag
+        else:
+            return data[0], data[1]
 
     def nodeFromProject(self):
         return EmbeddingNode(self)
+
+    def setStandard(self, standard):
+        self._standard = standard
+        for side in self._load.values():
+            if side:
+                side.setStandard(standard)
 
 
 from app.node import Node
@@ -107,42 +207,69 @@ class EmbeddingNode(ProjectNode):
         files = dial.getFiles()
         if files:
             loadFile, plugFile, k1, k2, k3, cat, reverse, openFile, shortFile = files
-            samples = list()
             if reverse == ReverseState.REVERSE:
-                (openSample, shortSample) = self._dataObject.importReverse(openFile, shortFile)
-                samples.extend([openSample, shortSample])
-            plugProject = self._dataObject.importPlug(plugFile)
-            pk1, pk2, pk3 = plugProject.getConstants()
-            if not (k1 == pk1 and k2 == pk2 and k3 == pk3):
-                plugProject.setConstants(k1, k2, k3)
-                plugProject.recalculate()
-            loadSample = self._dataObject.importLoad(loadFile, reverse, cat)
-            samples.append(loadSample)
+                if openFile:
+                    self._dataObject.importOpen(openFile)
+                if shortFile:
+                    self._dataObject.importShort(shortFile)
+            if plugFile:
+                plugProject = self._dataObject.importPlug(plugFile)
+                pk1, pk2, pk3 = plugProject.getConstants()
+                if not (k1 == pk1 and k2 == pk2 and k3 == pk3):
+                    plugProject.setConstants(k1, k2, k3)
+                    plugProject.recalculate()
+            if loadFile:
+                self._dataObject.importLoad(loadFile, reverse, cat)
             if self._embedTab:
                 self._embedTab.createTabs(reverse)
                 self._embedTab.updateWidget()
-            self.addChildren(samples, plugProject, reverse)
+            self.updateChildren()
 
     def addChildren(self, samples, plug, side):
         node = self.hasChild(side)
         if not node:
             node = Node(side)
             self.appendRow(node)
-        node.appendRow(PlugNode(plug))
+        if plug:
+            node.appendRow(PlugNode(plug))
         for sample in samples:
             node.appendRow(SampleNode(sample, self._dataObject))
 
-    def setupInitialData(self):
-        for side, sample in self._dataObject._load.items():
-            if sample:
-                self.addChildren([sample], self._dataObject._plug, side)
-        if len(self._dataObject._reverse):
-            self.addChildren(self._dataObject._reverse, self._dataObject._plug, "Reverse")
+    def updateChildren(self):
+        self.removeRow(0)
+        if self._dataObject.plug():
+            self.insertRow(0, PlugNode(self._dataObject.plug()))
+        for side in self._dataObject.load():
+            node = self.hasChild(side)
+            if not node:
+                node = Node(side)
+                self.appendRow(node)
+            node.setRowCount(0)
+            if self._dataObject.load()[side]:
+                node.appendRow(SampleNode(self._dataObject.load()[side], self._dataObject))
+            if side == "Reverse":
+                if self._dataObject.shortSample():
+                    shortNode = Node("Short")
+                    node.appendRow(shortNode)
+                    shortNode.appendRow(SampleNode(self._dataObject.shortSample(), self._dataObject))
+                if self._dataObject.openSample():
+                    openNode = Node("Open")
+                    node.appendRow(openNode)
+                    openNode.appendRow(SampleNode(self._dataObject.openSample(), self._dataObject))
 
-    def getWidgets(self):
+    def setupInitialData(self):
+        self.updateChildren()
+
+    def getWidgets(self, vnaManager):
         if not self._embedTab:
-            self._embedTab = EmbedWidget(self)
+            self._embedTab = EmbedWidget(self, vnaManager)
         tabs = dict()
         tabs["Embedding"] = self._embedTab
 
         return tabs
+
+    def setStandard(self, standard):
+        super(EmbeddingNode, self).setStandard(standard)
+        if self._embedTab:
+            self._embedTab.createTabs(self._embedTab.getSide())
+            self._embedTab.updateWidget()

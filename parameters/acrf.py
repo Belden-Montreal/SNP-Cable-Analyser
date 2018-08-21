@@ -30,8 +30,7 @@ class ACRF(Parameter):
     @staticmethod
     def getAvailableFormats():
         return {
-            DataFormat.REAL,
-            DataFormat.IMAGINARY,
+            DataFormat.MAGNITUDE,
         }
 
     def computeDataSeries(self):

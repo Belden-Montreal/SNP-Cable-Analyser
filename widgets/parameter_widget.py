@@ -9,39 +9,43 @@ class valueType():
     VALUE = 1
 
 class ParameterWidget(TabWidget, parameter_widget_ui.Ui_ParameterWidget):
-    def __init__(self, paramName, parameter):
+    def __init__(self, paramName, parameter, analysis):
         super(ParameterWidget, self).__init__(self)
         self.paramLabel.setText(paramName)
         self.paramName = paramName
         self.parameter = parameter
-        self.hasPassed = False
-        values = (parameter.getWorstValue(), parameter.getWorstMargin())
+        self.hasPassed = True
+        worstVal, worstMarg = parameter.getWorstValue(), parameter.getWorstMargin()
         self.marginListWidget.currentItemChanged.connect(lambda current: self.pairSelected(current, valueType.MARGIN))
         self.worstListWidget.currentItemChanged.connect(lambda current: self.pairSelected(current, valueType.VALUE))
         self.setPairsList()
-        self.graphicsView = Canvas(parameter.getPlot().getFigure())
+        self.analysis = analysis
+        self.graphicsView = Canvas(analysis.getFigure())
         self.verticalLayout.insertWidget(0, self.graphicsView)
         self.navBar = NavigationToolbar(self.graphicsView, self)
         self.verticalLayout.insertWidget(1, self.navBar)
-        if values[0][0] and values[1]:
-            self.worstValue = values[0]
-            self.worstMargin = values[1]
-            if self.worstValue[1] and self.worstMargin[1]:
+        if worstVal.hasData():
+            self.worstValue = worstVal
+            self.worstMargin = worstMarg
+            if (self.worstValue.passed and self.worstMargin.passed) or not self.worstMargin.hasData():
                 self.passLabel.setText("Pass")
                 self.hasPassed = True
+            if self.worstValue.hasData():
+                worst = self.worstValue.getWorstPairValue()
+                item = PairItem.getItemFromPair(worst, [self.worstListWidget.item(i) for i in range(self.worstListWidget.count())])
+                self.worstListWidget.setCurrentItem(item)
+            if self.worstMargin.hasData():
+                worst = self.worstMargin.getWorstPairMargin()
+                item = PairItem.getItemFromPair(worst, [self.marginListWidget.item(i) for i in range(self.marginListWidget.count())])
+                self.marginListWidget.setCurrentItem(item)
             else:
                 self.passLabel.setText("Fail")
                 self.hasPassed = False
-        else:
-            self.worstMargin = (dict(),None)
-            self.worstValue = (dict(),None)
-            self.passLabel.setText("Fail")
-            self.hasPassed = False
 
     def setPairsList(self):
-        for num, (port, isRemote) in self.parameter.getPorts().items():
-            self.marginListWidget.addItem(PairItem(port, num, isRemote))
-            self.worstListWidget.addItem(PairItem(port, num, isRemote))
+        for serie in self.parameter.getDataSeries():
+            self.marginListWidget.addItem(PairItem(serie.getName(), serie))
+            self.worstListWidget.addItem(PairItem(serie.getName(), serie))
         self.marginListWidget.sortItems()            
         self.worstListWidget.sortItems()
 
@@ -50,23 +54,28 @@ class ParameterWidget(TabWidget, parameter_widget_ui.Ui_ParameterWidget):
         self.setLabels(listIndex, pair)
 
     def setLabels(self, listIndex, pair):
-        if self.worstMargin[0] and listIndex == valueType.MARGIN: #Worst margin
-            self.marginValueLabel.setText(self.worstMargin[0][pair.number][0].__str__())
-            self.marginFreqLabel.setText(self.worstMargin[0][pair.number][1].__str__())
-            self.marginLimitLabel.setText(self.worstMargin[0][pair.number][2].__str__())
-            self.marginLabel.setText(self.worstMargin[0][pair.number][3].__str__())
-        elif self.worstValue and listIndex == valueType.VALUE: #worst value
-            self.worstValueLabel.setText(self.worstValue[0][pair.number][0].__str__())
-            self.worstFreqLabel.setText(self.worstValue[0][pair.number][1].__str__())
-            self.worstLimitLabel.setText(self.worstValue[0][pair.number][2].__str__())
-            self.worstMarginLabel.setText(self.worstValue[0][pair.number][3].__str__())
-
-    def showTab(self):
-        self.graphicsView.draw()
-
+        try:
+            if self.worstMargin.hasData() and listIndex == valueType.MARGIN: #Worst margin
+                self.marginValueLabel.setText("{0:.2f}".format(self.worstMargin.pairs[pair.number].value))
+                self.marginFreqLabel.setText("{0:.2f}".format(self.worstMargin.pairs[pair.number].freq))
+                self.marginLimitLabel.setText("{0:.2f}".format(self.worstMargin.pairs[pair.number].limit))
+                self.marginLabel.setText("{0:.2f}".format(abs(self.worstMargin.pairs[pair.number].margin)))
+            elif self.worstValue.hasData() and listIndex == valueType.VALUE: #worst value
+                self.worstValueLabel.setText("{0:.2f}".format(self.worstValue.pairs[pair.number].value))
+                self.worstFreqLabel.setText("{0:.2f}".format(self.worstValue.pairs[pair.number].freq))
+                self.worstLimitLabel.setText("{0:.2f}".format(self.worstValue.pairs[pair.number].limit))
+                self.worstMarginLabel.setText("{0:.2f}".format(abs(self.worstValue.pairs[pair.number].margin)))
+        except:
+            return
+            
 class PairItem(QtWidgets.QListWidgetItem):
-    def __init__(self, text, number, isRemote, parent = None, type = QtWidgets.QListWidgetItem.Type):
+    def __init__(self, text, number, parent = None, type = QtWidgets.QListWidgetItem.Type):
         super(PairItem, self).__init__(text, parent, type)
         self.number = number
-        self.isRemote = isRemote
 
+    @staticmethod
+    def getItemFromPair(pair, items):
+        for item in items:
+            if pair is not None:
+                if pair == item.number:
+                    return item

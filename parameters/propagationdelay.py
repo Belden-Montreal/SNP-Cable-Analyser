@@ -78,6 +78,7 @@ class PropagationDelay(Parameter):
         for i,value in enumerate(values):
             if self._freq[i] in limit:
                 if limit[self._freq[i]]:
+                    limit[self._freq[i]] = abs(limit[self._freq[i]])
                     margins.append(limit[self._freq[i]]-value)
                 else:
                     margins.append(None)

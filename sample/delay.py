@@ -1,8 +1,9 @@
-from sample.cable import CableSample
+from sample.plug import PlugSample
+from parameters.type import ParameterType
 
-class CableDelaySample(CableSample):
+class DelaySample(PlugSample):
     def getAvailableParameters(self):
-        return {
-            "RL",
-            "Propagation Delay",
-        }
+        return [
+            ParameterType.RL,
+            ParameterType.PROPAGATION_DELAY,
+        ]
