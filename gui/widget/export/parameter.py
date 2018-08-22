@@ -39,6 +39,11 @@ class ExportParameterWidget(QWidget):
         # change configuration
         self.__config = config
 
+        # disconnect old signals
+        model = self.__ui.dataSeriesListView.model()
+        if model is not None:
+            model.itemChanged.disconnect()
+
         # create the new model
         model = QStandardItemModel()
         for (serie, state) in config.getDataSeries().items():
