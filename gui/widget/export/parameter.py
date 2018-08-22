@@ -59,6 +59,10 @@ class ExportParameterWidget(QWidget):
         # update the model of the list view
         self.__ui.dataSeriesListView.setModel(model)
 
+        # update available formats
+        formats = config.getParameter().getAvailableFormats()
+        self.__ui.formatSelection.setAvailableFormats(formats)
+
         # use configuration's data format
         self.__ui.formatSelection.setFormat(config.getFormat())
 
