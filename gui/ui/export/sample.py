@@ -25,6 +25,8 @@ class Ui_form(object):
         self.parameterExportWidget = ExportParameterWidget(form)
         self.parameterExportWidget.setObjectName("parameterExportWidget")
         self.gridLayout.addWidget(self.parameterExportWidget, 0, 1, 2, 1)
+        self.gridLayout.setColumnStretch(0, 1)
+        self.gridLayout.setColumnStretch(1, 1)
 
         self.retranslateUi(form)
         QtCore.QMetaObject.connectSlotsByName(form)

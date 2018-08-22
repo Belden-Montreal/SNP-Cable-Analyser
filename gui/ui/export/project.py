@@ -13,6 +13,7 @@ class Ui_form(object):
         form.setObjectName("form")
         form.resize(699, 355)
         self.gridLayout = QtWidgets.QGridLayout(form)
+        self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.gridLayout.setObjectName("gridLayout")
         self.samplesLabel = QtWidgets.QLabel(form)
         self.samplesLabel.setObjectName("samplesLabel")
@@ -23,6 +24,8 @@ class Ui_form(object):
         self.samplesListView = QtWidgets.QListView(form)
         self.samplesListView.setObjectName("samplesListView")
         self.gridLayout.addWidget(self.samplesListView, 1, 0, 1, 1)
+        self.gridLayout.setColumnStretch(0, 1)
+        self.gridLayout.setColumnStretch(1, 2)
 
         self.retranslateUi(form)
         QtCore.QMetaObject.connectSlotsByName(form)
