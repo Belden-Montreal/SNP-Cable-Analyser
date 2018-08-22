@@ -194,10 +194,10 @@ class AlienNode(ProjectNode):
     def getWidgets(self, vnaManager):
         if not self._alienTab:
             self._alienTab = AlienWidget(self, vnaManager)
-        else:
-            self._alienTab.updateWidget()
+
         return {"Alien": self._alienTab}
 
     def setStandard(self, standard):
         self._dataObject.setStandard(standard)
         self._alienTab.updateWidget()
+        

@@ -62,6 +62,8 @@ class VictimSample(AlienSample):
             if parameter in self._parameters.keys():
                 continue
             self._parameters[parameter] = self._factory.getParameter(parameter)
+        if self._standard:
+            self.setStandard(self._standard)
         self.createAnalyses()
 
     def resetDisturbers(self):

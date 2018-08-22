@@ -92,7 +92,7 @@ class Parameter(object):
         return self._limit
 
     def setLimit(self, limit):
-        self._limit = deepcopy(limit)
+        self._limit = limit
         self._worstMargin = DataAnalysis()
         self._worstValue = DataAnalysis()
 

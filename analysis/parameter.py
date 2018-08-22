@@ -25,7 +25,7 @@ class ParameterAnalysis(FigureAnalysis):
 
         # add the limit if it exists
         if self._parameter.getLimit():
-            self.addSerie(LimitDataSerie("limit"))
+            self.addLimit()
 
     @overrides
     def _getXData(self, serie):
@@ -92,9 +92,9 @@ class ParameterAnalysis(FigureAnalysis):
 
     def addLimit(self):
         serie = LimitDataSerie("limit")
-        
+
         if serie in self._series:
             return
-
+        self._colors[serie] = (1, 0, 0) # red
         self._addLine(serie)
         self._series.add(serie)

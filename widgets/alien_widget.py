@@ -42,15 +42,13 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
         self.verticalLayout.insertWidget(0, self.graphicsView)
         self.navBar = NavigationToolbar(self.graphicsView, self)
         self.verticalLayout.insertWidget(1, self.navBar)
+        end, test = self.getCheckButtons()
+        self.changeFigure(end, test)
         self.connect()
 
     def connect(self):
-        if self._vna.connected():
-            self.alienRun.setEnabled(True)
-            self.victimRun.setEnabled(True)
-        else:
-            self.alienRun.setEnabled(False)
-            self.victimRun.setEnabled(False)
+        self.alienRun.setEnabled(self._vna.connected())
+        self.victimRun.setEnabled(self._vna.connected())
         
     def updateWidget(self):
         end, test = self.getCheckButtons()
