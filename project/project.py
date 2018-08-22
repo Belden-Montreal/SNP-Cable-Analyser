@@ -102,6 +102,9 @@ class Project(object):
     def samples(self):
         return self._samples
 
+    def getSamples(self):
+        return self._samples
+
     def getName(self):
         return self._name
 
