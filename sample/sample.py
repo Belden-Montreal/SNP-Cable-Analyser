@@ -1,4 +1,5 @@
 from parameters.factory import ParameterFactory
+from parameters.type import ParameterType
 from analysis.parameter import ParameterAnalysis
 from document.sample import SampleDocumentObject
 
@@ -44,13 +45,13 @@ class Sample(object):
                 continue
             self._parameters[parameter] = self._factory.getParameter(parameter)
 
+        self.createAnalyses()
+
         #  set the standard
         if standard:
             self.setStandard(standard)
         else:
             self._standard = None
-        
-        self.createAnalyses()
 
     def createAnalyses(self):
         self._analyses = dict()
@@ -85,7 +86,9 @@ class Sample(object):
         self._standard = standard
         for (name, parameter) in self._parameters.items():
             if name.name in standard.limits:
-                parameter.setLimit(standard.limits[name.name])
+                if len(standard.limits[name.name].functions) > 0:
+                    parameter.setLimit(standard.limits[name.name])
+                    self._analyses[name].addLimit()
 
     def getStandard(self):
         return self._standard

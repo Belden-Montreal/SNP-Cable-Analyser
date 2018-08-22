@@ -30,8 +30,8 @@ def autoscaleY(axis, margin=0.1):
             return
         if new_bot < bot: bot = new_bot
         if new_top > top: top = new_top
-
-    axis.set_ylim(bot,top)
+    limits = np.array([bot, top], dtype=np.float64)
+    axis.set_ylim(limits)
 
 class FigureAnalysis(Analysis):
     def __init__(self, figure=None, axis=None, **kwargs):

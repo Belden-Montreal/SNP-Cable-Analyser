@@ -2,6 +2,36 @@ class DataSerie(object):
     def getName(self):
         raise NotImplementedError
 
+class LimitDataSerie(DataSerie):
+    def __init__(self, name, data=None):
+        self._name = name
+        self._data = data
+
+    def getName(self):
+        return self._name
+
+    def getData(self):
+        return self._data
+
+    def getType(self):
+        return self._name
+
+    def isRemote(self):
+        return self._name
+
+    def getPorts(self):
+        return self._name, self._name
+
+    def __eq__(self, other):
+        if self.getType() != other.getType():
+            return False
+        if self.isRemote() != other.isRemote():
+            return False
+        return True
+
+    def __hash__(self):
+        return (self.getType(), self.isRemote()).__hash__()
+
 class PortDataSerie(DataSerie):
     def __init__(self, port, data=None):
         self._port = port

@@ -1,8 +1,9 @@
 from matplotlib import pyplot as plt
 from matplotlib.ticker import ScalarFormatter
-from analysis.figure import FigureAnalysis
+from analysis.figure import FigureAnalysis, autoscaleY
 from analysis.format import DataFormat, formatParameterData
 from analysis.scale import PlotScale
+from parameters.dataserie import LimitDataSerie
 from overrides import overrides
 
 class ParameterAnalysis(FigureAnalysis):
@@ -22,12 +23,20 @@ class ParameterAnalysis(FigureAnalysis):
         # show the selected series
         {self.addSerie(serie) for serie in series}
 
+        # add the limit if it exists
+        if self._parameter.getLimit():
+            self.addSerie(LimitDataSerie("limit"))
+
     @overrides
     def _getXData(self, serie):
+        if serie.getName() == "limit":
+            return self._parameter.getLimit().evaluateDict({'f': self._parameter.getFrequencies()}, len(self._parameter.getFrequencies()), neg=True).keys()
         return self._parameter.getFrequencies()
 
     @overrides
     def _getYData(self, serie):
+        if serie.getName() == "limit":
+            return self._parameter.getLimit().evaluateDict({'f': self._parameter.getFrequencies()}, len(self._parameter.getFrequencies()), neg=True).values()
         return formatParameterData(self._parameter, serie, self.getFormat())
 
     @overrides
@@ -80,3 +89,12 @@ class ParameterAnalysis(FigureAnalysis):
 
     def getParameter(self):
         return self._parameter
+
+    def addLimit(self):
+        serie = LimitDataSerie("limit")
+        
+        if serie in self._series:
+            return
+
+        self._addLine(serie)
+        self._series.add(serie)
