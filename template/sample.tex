@@ -7,7 +7,6 @@
 \usepackage{pgf}
 \usepackage{multicol}
 \usepackage{geometry}
-\usepackage{float}
 
 \geometry{
 	total={210mm,297mm},
@@ -17,12 +16,11 @@
     bottom=10mm,
 }
 
-
 \begin{document}
     \section*{\texttt{\templatevar{name}}}
     \begin{multicols}{3}
         \templateblock{for parameter in parameters}
-            \noindent\input{\templatevar{parameter}}
+            \noindent\input{\templatevar{parameter.path}}
         \templateblock{endfor}
     \end{multicols}
 \end{document}
