@@ -30,7 +30,7 @@ class ParameterDocumentObject(DocumentObject):
         # create the arguments
         arguments["figure"] = dict()
         arguments["figure"]["path"]  = relative
-        arguments["figure"]["scale"] = 0.45
+        arguments["figure"]["scale"] = 0.4
 
         return arguments
         
