@@ -11,8 +11,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_presetsWidget(object):
     def setupUi(self, presetsWidget):
         presetsWidget.setObjectName("presetsWidget")
-        presetsWidget.resize(335, 66)
+        presetsWidget.resize(198, 24)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(presetsWidget)
+        self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.presetsLabel = QtWidgets.QLabel(presetsWidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
