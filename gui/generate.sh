@@ -11,8 +11,17 @@ PACKAGE_RES="gui.ressources"
 find "$DIR_UI" -type f -iname "*.ui" | while read UI_FILE; do
     BASENAME=$(basename "$UI_FILE" ".ui")
     DIRNAME=$(dirname "$UI_FILE")
-    echo "Generating '$DIRNAME/$BASENAME.py'"
-    pyuic5 -x "$DIRNAME/$BASENAME.ui" -o "$DIRNAME/$BASENAME.py" --import-from="$PACKAGE_RES"
+
+    UI_FILE="$DIRNAME/$BASENAME.ui"
+    PY_FILE="$DIRNAME/$BASENAME.py"
+
+    if [[ "$PY_FILE" -nt "$UI_FILE" ]]; then
+        echo "No changed made to '$PY_FILE'"
+        continue
+    fi
+
+    echo "Generating '$PY_FILE'"
+    pyuic5 -x "$UI_FILE" -o "$PY_FILE" --import-from="$PACKAGE_RES"
 done
 
 find "$DIR_RES" -type f -iname "*.qrc" | while read QRC_FILE; do
