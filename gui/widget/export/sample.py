@@ -19,13 +19,18 @@ class ExportSampleWidget(QWidget):
 
     def __parameterStateChanged(self, item):
         # get the paramete serie from the checked item
-        parameter = item.data()
+        ptype = item.data()
 
         # add/remove the parameter from the configuration
         if item.checkState() == Qt.Checked:
-            self.__config.addParameter(parameter)
+            self.__config.addParameter(ptype)
         else:
-            self.__config.removeParameter(parameter)
+            self.__config.removeParameter(ptype)
+
+        # disable the widget if the we do not export this parameter
+        widgetConfig = self.__ui.parameterExportWidget.getConfiguration()
+        if widgetConfig is not None:
+            self.__ui.parameterExportWidget.setEnabled(widgetConfig.doExport())
 
     def __parameterSelectionChanged(self, current, previous):
         # make sure a model is setup
@@ -43,6 +48,9 @@ class ExportSampleWidget(QWidget):
 
         # change the configuration in the widget
         self.__ui.parameterExportWidget.setExportConfiguration(config)
+
+        # disable the widget if the we do not export this parameter
+        self.__ui.parameterExportWidget.setEnabled(config.doExport())
 
     def setExportConfiguration(self, config):
         # change configuration
