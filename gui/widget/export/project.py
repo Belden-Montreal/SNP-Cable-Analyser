@@ -85,6 +85,9 @@ class ExportProjectWidget(QWidget):
             self.__samplesSelectionChanged
         )
 
+        # select first sample by default
+        self.__ui.samplesListView.setCurrentIndex(model.index(0, 0))
+
     def getConfiguration(self):
         return self.__config
 

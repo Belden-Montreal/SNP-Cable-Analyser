@@ -81,6 +81,9 @@ class ExportSampleWidget(QWidget):
             self.__parameterSelectionChanged
         )
 
+        # select first parameter by default
+        self.__ui.parametersListView.setCurrentIndex(model.index(0, 0))
+
     def getConfiguration(self):
         return self.__config
 
