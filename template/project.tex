@@ -1,0 +1,25 @@
+\documentclass{article}
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{standalone}
+
+\usepackage{pgf}
+\usepackage{multicol}
+\usepackage{geometry}
+
+\geometry{
+	total={210mm,297mm},
+    left=10mm,
+    right=10mm,
+    top=10mm,
+    bottom=10mm,
+}
+
+\begin{document}
+    \templateblock{for sample in samples}
+        \input{\templatevar{sample.path}}
+        \pagebreak
+    \templateblock{endfor}
+\end{document}
+
