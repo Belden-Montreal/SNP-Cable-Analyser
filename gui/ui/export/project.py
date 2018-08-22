@@ -22,6 +22,7 @@ class Ui_form(object):
         self.sampleExportWidget.setObjectName("sampleExportWidget")
         self.gridLayout.addWidget(self.sampleExportWidget, 0, 1, 2, 1)
         self.samplesListView = QtWidgets.QListView(form)
+        self.samplesListView.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.samplesListView.setObjectName("samplesListView")
         self.gridLayout.addWidget(self.samplesListView, 1, 0, 1, 1)
         self.gridLayout.setColumnStretch(0, 1)

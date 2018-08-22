@@ -37,7 +37,11 @@
     <widget class="ExportSampleWidget" name="sampleExportWidget" native="true"/>
    </item>
    <item row="1" column="0">
-    <widget class="QListView" name="samplesListView"/>
+    <widget class="QListView" name="samplesListView">
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

@@ -19,6 +19,7 @@ class Ui_form(object):
         self.dataSeriesLabel.setObjectName("dataSeriesLabel")
         self.verticalLayout.addWidget(self.dataSeriesLabel)
         self.dataSeriesListView = QtWidgets.QListView(form)
+        self.dataSeriesListView.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.dataSeriesListView.setObjectName("dataSeriesListView")
         self.verticalLayout.addWidget(self.dataSeriesListView)
         self.scaleSelection = ScaleSelectionWidget(form)
