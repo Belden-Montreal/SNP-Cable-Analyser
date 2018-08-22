@@ -8,5 +8,5 @@ class ExportConfiguration(object):
     def setExport(self, export=True):
         self._export = export
 
-    def generateDocumentObject(self, prefix):
+    def generateDocumentObject(self, root, prefix):
         raise NotImplementedError
