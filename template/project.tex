@@ -7,14 +7,21 @@
 \usepackage{pgf}
 \usepackage{multicol}
 \usepackage{geometry}
+\usepackage{fancyhdr}
 
 \geometry{
 	total={210mm,297mm},
     left=10mm,
     right=10mm,
-    top=10mm,
-    bottom=10mm,
+    top=30mm,
+    bottom=30mm,
 }
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\today}
+\lhead{Report}
+\rfoot{Page \thepage}
 
 \begin{document}
     \templateblock{for sample in samples}
