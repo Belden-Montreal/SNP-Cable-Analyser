@@ -1,5 +1,6 @@
 from export.configuration import ExportConfiguration
 from export.sample import SampleExportConfiguration
+from document.project import ProjectDocumentObject
 from overrides import overrides
 
 class ProjectExportConfiguration(ExportConfiguration):
@@ -24,6 +25,9 @@ class ProjectExportConfiguration(ExportConfiguration):
     def getSamples(self):
         return self._samples
 
+    def getProject(self):
+        return self._project
+
     @overrides
-    def generateDocumentObject(self, prefix):
-        pass
+    def generateDocumentObject(self, root, prefix):
+        return ProjectDocumentObject(root, prefix, self)

@@ -1,5 +1,6 @@
 from export.configuration import ExportConfiguration
 from export.parameter import ParameterExportConfiguration
+from document.sample import SampleDocumentObject
 from overrides import overrides
 
 class SampleExportConfiguration(ExportConfiguration):
@@ -24,8 +25,11 @@ class SampleExportConfiguration(ExportConfiguration):
     def getParameters(self):
         return self._parameters
 
+    def getSample(self):
+        return self._sample
+
     @overrides
-    def generateDocumentObject(self, prefix):
-        return SampleDocumentObject(self)
+    def generateDocumentObject(self, root, prefix):
+        return SampleDocumentObject(root, prefix, self)
         
     

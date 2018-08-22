@@ -34,7 +34,11 @@
     </widget>
    </item>
    <item>
-    <widget class="QListView" name="dataSeriesListView"/>
+    <widget class="QListView" name="dataSeriesListView">
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+    </widget>
    </item>
    <item>
     <widget class="ScaleSelectionWidget" name="scaleSelection" native="true"/>

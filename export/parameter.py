@@ -1,5 +1,5 @@
-from document.parameter import ParameterDocumentObject
 from export.configuration import ExportConfiguration
+from document.parameter import ParameterDocumentObject
 from analysis.scale import PlotScale
 from analysis.format import DataFormat
 from overrides import overrides
@@ -64,5 +64,5 @@ class ParameterExportConfiguration(ExportConfiguration):
         return self._parameter
 
     @overrides
-    def generateDocumentObject(self, prefix):
-        return ParameterDocumentObject(prefix, self)
+    def generateDocumentObject(self, root, prefix):
+        return ParameterDocumentObject(root, prefix, self)
