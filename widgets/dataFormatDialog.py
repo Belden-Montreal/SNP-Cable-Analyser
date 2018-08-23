@@ -33,5 +33,5 @@ class Ui_DataFormatDialog(object):
 
     def retranslateUi(self, DataFormatDialog):
         _translate = QtCore.QCoreApplication.translate
-        DataFormatDialog.setWindowTitle(_translate("DataFormatDialog", "Dialog"))
+        DataFormatDialog.setWindowTitle(_translate("DataFormatDialog", "Change Data Format"))
 

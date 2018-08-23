@@ -5,7 +5,7 @@ from parameters.type import ParameterType
 import numpy as np
 from canvas import Canvas
 from matplotlib.figure import Figure
-from widgets.navbar import NavigationToolbar
+from widgets.alien_navbar import AlienNavigationToolbar
 
 class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
     def __init__(self, alienNode, vnaManager):
@@ -34,10 +34,10 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
         self._vna.connection.connect(lambda: self.connect())
         self.alienRun.clicked.connect(lambda: self.acquireDisturbers())
         self.victimRun.clicked.connect(lambda: self.acquireVictim())
-        self._analysis, self._analysis2 = None, None
+        self._analyses = (None, None)
         self.graphicsView = Canvas(Figure())
         self.verticalLayout.insertWidget(0, self.graphicsView)
-        self.navBar = NavigationToolbar(self.graphicsView, None, parent=self)
+        self.navBar = AlienNavigationToolbar(self.graphicsView, *self._analyses, parent=self)
         self.verticalLayout.insertWidget(1, self.navBar)
         end, test = self.getCheckButtons()
         self.changeFigure(end, test)
@@ -71,14 +71,14 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
             if widget is not None:
                 widget.setParent(None)
         #Re-add the figure
-        self._analysis, self._analysis2 = self._alien.getCurrentAnalyses(test, end)
-        if self._analysis:
-            figure = self._analysis.getFigure()
+        self._analyses = self._alien.getCurrentAnalyses(test, end)
+        if self._analyses[0]:
+            figure = self._analyses[0].getFigure()
         else:
             figure = Figure()
         self.graphicsView = Canvas(figure)
         self.verticalLayout.insertWidget(0, self.graphicsView)
-        self.navBar = NavigationToolbar(self.graphicsView, None, self)
+        self.navBar = AlienNavigationToolbar(self.graphicsView, *self._analyses, self)
         self.verticalLayout.insertWidget(1, self.navBar)
         self.graphicsView.draw()
 
@@ -150,32 +150,36 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
             hiddenPorts.append(self.alien36.text())
         if not self.alien78.isChecked():
             hiddenPorts.append(self.alien78.text())
-        if self._analysis:
-            for serie in self._analysis.getParameter().getDataSeries():
-                if serie.getName() in hiddenPorts:
-                    self._analysis.removeSerie(serie)
-                else:
-                    self._analysis.addSerie(serie)
+        for a in self._analyses:
+            if a:
+                for serie in a.getParameter().getDataSeries():
+                    if serie.getName() in hiddenPorts:
+                        a.removeSerie(serie)
+                    else:
+                        a.addSerie(serie)
     
     def setLimit(self):
         showAvgLimit = self.alienAvgLimitCheck.isChecked()
         showLimit = self.alienLimitCheck.isChecked()
-        if self._analysis:
-            if showLimit:
-                self._analysis.addLimit()
-            else:
-                self._analysis.removeLimit()
-            if showAvgLimit:
-                self._analysis.addAverageLimit()
-            else:
-                self._analysis.removeAverageLimit()
+        for a in self._analyses:
+            if a:
+                if showLimit:
+                    a.addLimit()
+                else:
+                    a.removeLimit()
+                if showAvgLimit:
+                    a.addAverageLimit()
+                else:
+                    a.removeAverageLimit()
 
     def setAverage(self):
         showAvg = self.alienAvg.isChecked()
-        if showAvg:
-            self._analysis.addAverage()
-        else:
-            self._analysis.removeAverage()
+        for a in self._analyses:
+            if a:
+                if showAvg:
+                    a.addAverage()
+                else:
+                    a.removeAverage()
 
     def getCheckButtons(self):
         test = self.testTypeGroup.checkedButton().text()
