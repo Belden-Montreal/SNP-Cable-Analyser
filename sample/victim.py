@@ -1,5 +1,6 @@
 from sample.alien import AlienSample
 from parameters.type import ParameterType
+from analysis.alien_parameter import AlienParameterAnalysis
 
 class VictimSample(AlienSample):
     def __init__(self, snp, samples, config=None, **kwargs):
@@ -15,6 +16,26 @@ class VictimSample(AlienSample):
         else:
             remote=False
         super(VictimSample, self).__init__(snp, remote=remote, config=config, **kwargs)
+
+    def createAnalyses(self):
+        super(VictimSample, self).createAnalyses()
+        if self._remote:
+            self._analyses[ParameterType.PSAFEXT] = AlienParameterAnalysis(self._parameters[ParameterType.PSAFEXT])
+            self._analyses[ParameterType.PSAACRF] = AlienParameterAnalysis(self._parameters[ParameterType.PSAACRF])
+        else:
+            self._analyses[ParameterType.PSANEXT] = AlienParameterAnalysis(self._parameters[ParameterType.PSANEXT])
+            self._analyses[ParameterType.PSAACRN] = AlienParameterAnalysis(self._parameters[ParameterType.PSAACRN])
+
+    def setStandard(self, standard):
+        super(VictimSample, self).setStandard(standard)
+        if self._remote:
+            if len(standard.limits["AVG"+ParameterType.PSAACRF.name].functions) > 0:
+                self._parameters[ParameterType.PSAACRF].setAverageLimit(standard.limits["AVG"+ParameterType.PSAACRF.name])
+                self._analyses[ParameterType.PSAACRF].addAverageLimit()
+        else:
+            if len(standard.limits["AVG"+ParameterType.PSANEXT.name].functions) > 0:
+                self._parameters[ParameterType.PSANEXT].setAverageLimit(standard.limits["AVG"+ParameterType.PSANEXT.name])
+                self._analyses[ParameterType.PSANEXT].addAverageLimit()
 
     def getDefaultConfiguration(self):
         # make sure all configuration are the same

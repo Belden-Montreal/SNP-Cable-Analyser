@@ -2,7 +2,7 @@ class DataSerie(object):
     def getName(self):
         raise NotImplementedError
 
-class LimitDataSerie(DataSerie):
+class GenericDataSerie(DataSerie):
     def __init__(self, name, data=None):
         self._name = name
         self._data = data

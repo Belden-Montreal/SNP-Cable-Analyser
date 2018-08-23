@@ -30,9 +30,6 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
         self.alienLimitCheck.toggled.connect(lambda: self.updateStateDraw())
         self.alienAvgLimitCheck.toggled.connect(lambda: self.updateStateDraw())
         self.alienAvg.toggled.connect(lambda: self.updateStateDraw())
-        self._showLimit = True
-        self._showAvgLimit = True
-        self._showAvg = True
         self._vna = vnaManager
         self._vna.connection.connect(lambda: self.connect())
         self.alienRun.clicked.connect(lambda: self.acquireDisturbers())
@@ -84,68 +81,6 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
         self.navBar = NavigationToolbar(self.graphicsView, self)
         self.verticalLayout.insertWidget(1, self.navBar)
         self.graphicsView.draw()
-
-    # def drawFigure(self, end, test):
-    #     self._figure.clear()
-    #     sample = self._alien.victims()[test][end]
-    #     if test == "PSANEXT":
-    #         names = [ParameterType.PSANEXT, ParameterType.PSAACRN]
-    #     else:
-    #         names = [ParameterType.PSAFEXT, ParameterType.PSAACRF]
-    #     if sample:
-    #         params = [sample.getParameter(names[0]), sample.getParameter(names[1])]
-    #         for i, param in enumerate(params):
-    #             if param is None:
-    #                 continue
-    #             colors = iter(plt.cm.rainbow(np.linspace(0, 1, len(param.getPorts())+3)))
-
-    #             ax = self._figure.add_subplot(1,2,i+1)
-    #             ax.set_title(end+" "+params[i].getName())
-    #             ax.set_xlabel("Frequency")
-    #             ax.set_ylabel("dB")
-    #             avg = np.array(list())
-    #             for serie in param.getDataSeries():
-    #                 color = next(colors)
-    #                 try:
-    #                     data = list(map(lambda val: val[0], param.getParameter()[serie]))
-    #                 except:
-    #                     data = param[serie]
-    #                 if len(avg) == 0:
-    #                     avg = np.array(data)
-    #                 else:
-    #                     avg = np.add(avg, data)
-    #                 if serie.getName() not in self._hiddenPorts:
-    #                     ax.semilogx(param.getFrequencies(),
-    #                                 data,
-    #                                 label=serie.getName(), c=color)
-
-    #             limit = param.getLimit()
-    #             avg = avg/(len(param.getDataSeries()))
-    #             if self._showAvg and len(avg):
-    #                 color = next(colors)
-    #                 ax.semilogx(
-    #                     param.getFrequencies(),
-    #                     avg,
-    #                     label="average", c=color,)
-    #             if self._showLimit and limit:
-    #                 color = next(colors)
-    #                 ax.semilogx(
-    #                     *zip(*limit.evaluateArray({'f': param.getFrequencies()}, len(param.getFrequencies()), neg=True)),
-    #                     label="limit", c=color,
-    #                     linestyle="--")
-    #             if self._showAvgLimit and sample.getStandard():
-    #                 if "AVG"+params[i].getName() in sample.getStandard().limits:
-    #                     limit = sample.getStandard().limits["AVG"+params[i].getName()]
-    #                     if limit:
-    #                         color = next(colors)
-    #                         ax.semilogx(
-    #                             *zip(*limit.evaluateArray({'f': param.getFrequencies()}, len(param.getFrequencies()), neg=True)),
-    #                             label="average limit", c=color,
-    #                             linestyle="--")
-    #             ax.xaxis.set_major_formatter(ScalarFormatter())
-    #             ax.grid(which='both')
-    #             ax.legend(loc='best')
-    #     self.graphicsView.draw()
 
     def importVictim(self):
         fileName,_ = QtWidgets.QFileDialog.getOpenFileName(self, "Select victim", "", "sNp Files (*.s*p)")
@@ -223,11 +158,24 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
                     self._analysis.addSerie(serie)
     
     def setLimit(self):
-        self._showAvgLimit = self.alienLimitCheck.isChecked()
-        self._showLimit = self.alienAvgLimitCheck.isChecked()
+        showAvgLimit = self.alienAvgLimitCheck.isChecked()
+        showLimit = self.alienLimitCheck.isChecked()
+        if self._analysis:
+            if showLimit:
+                self._analysis.addLimit()
+            else:
+                self._analysis.removeLimit()
+            if showAvgLimit:
+                self._analysis.addAverageLimit()
+            else:
+                self._analysis.removeAverageLimit()
 
     def setAverage(self):
-        self._showAvg = self.alienAvg.isChecked()
+        showAvg = self.alienAvg.isChecked()
+        if showAvg:
+            self._analysis.addAverage()
+        else:
+            self._analysis.removeAverage()
 
     def getCheckButtons(self):
         test = self.testTypeGroup.checkedButton().text()

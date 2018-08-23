@@ -3,7 +3,7 @@ from matplotlib.ticker import ScalarFormatter
 from analysis.figure import FigureAnalysis, autoscaleY
 from analysis.format import DataFormat, formatParameterData
 from analysis.scale import PlotScale
-from parameters.dataserie import LimitDataSerie
+from parameters.dataserie import GenericDataSerie
 from overrides import overrides
 
 class ParameterAnalysis(FigureAnalysis):
@@ -39,6 +39,12 @@ class ParameterAnalysis(FigureAnalysis):
             return self._parameter.getLimit().evaluateDict({'f': self._parameter.getFrequencies()}, len(self._parameter.getFrequencies()), neg=True).values()
         return formatParameterData(self._parameter, serie, self.getFormat())
 
+    @overrides
+    def _getLineStyle(self, serie):
+        if serie.getName() == "limit":
+            return "--"
+        return "-"
+    
     @overrides
     def _getLabel(self, serie):
         return serie.getName()
@@ -91,10 +97,13 @@ class ParameterAnalysis(FigureAnalysis):
         return self._parameter
 
     def addLimit(self):
-        serie = LimitDataSerie("limit")
+        serie = GenericDataSerie("limit")
 
-        if serie in self._series:
+        if not self._parameter.getLimit():
             return
         self._colors[serie] = (1, 0, 0) # red
-        self._addLine(serie)
-        self._series.add(serie)
+        self.addSerie(serie)
+
+    def removeLimit(self):
+        serie = GenericDataSerie("limit")
+        self.removeSerie(serie)

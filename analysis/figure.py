@@ -63,7 +63,7 @@ class FigureAnalysis(Analysis):
         self._setYLabel()
 
     def _setXLabel(self):
-        self._axis.set_xlabel("Frequency (Hz)")
+        self._axis.set_xlabel("Frequency (MHz)")
 
     def _setYLabel(self):
         self._axis.set_ylabel(self._format.getTitle())
@@ -96,7 +96,8 @@ class FigureAnalysis(Analysis):
             x, y,
             label=label,
             linewidth=0.6,
-            c=color
+            c=color,
+            linestyle=self._getLineStyle(identifier)
         )
         
         # scale Y axis to fit data
@@ -123,6 +124,9 @@ class FigureAnalysis(Analysis):
         raise NotImplementedError
 
     def _getLabel(self, identifier):
+        raise NotImplementedError
+
+    def _getLineStyle(self, identifier):
         raise NotImplementedError
 
     def getDefaultTitle(self):

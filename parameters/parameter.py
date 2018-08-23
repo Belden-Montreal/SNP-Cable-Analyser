@@ -55,6 +55,7 @@ class Parameter(object):
         self._series = self.computeDataSeries()
         (self._parameter, self._complexParameter) = self.computeParameter()
         self._limit = None
+        self._averageLimit = None
         self._worstMargin = DataAnalysis()
         self._worstValue = DataAnalysis()
 
@@ -95,6 +96,12 @@ class Parameter(object):
         self._limit = limit
         self._worstMargin = DataAnalysis()
         self._worstValue = DataAnalysis()
+
+    def getAverageLimit(self):
+        return self._averageLimit
+
+    def setAverageLimit(self, limit):
+        self._averageLimit = limit
 
     def getPorts(self):
         return self._ports
