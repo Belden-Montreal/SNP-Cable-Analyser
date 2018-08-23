@@ -2,7 +2,7 @@ from widgets.tab_widget import TabWidget
 from PyQt5 import QtWidgets
 from matplotlib.figure import Figure
 from matplotlib.ticker import ScalarFormatter
-from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
+from widgets.navbar import NavigationToolbar
 from canvas import Canvas
 from analysis.case import CaseAnalysis
 
@@ -16,7 +16,7 @@ class CaseTab(TabWidget):
         self._layout = QtWidgets.QVBoxLayout(self)
         self._figure = self._analysis.getFigure()
         self._graphicsView = Canvas(self._figure, self)
-        self._navBar = NavigationToolbar(self._graphicsView, self)
+        self._navBar = NavigationToolbar(self._graphicsView, self._analysis, self)
         self._layout.addWidget(self._graphicsView)
         self._layout.addWidget(self._navBar)
         self._limit = limit

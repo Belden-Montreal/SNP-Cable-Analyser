@@ -2,7 +2,8 @@ from widgets.tab_widget import TabWidget
 from widgets import parameter_widget_ui
 from canvas import Canvas
 from PyQt5 import QtWidgets
-from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
+# from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
+from widgets.navbar import NavigationToolbar
 
 class valueType():
     MARGIN = 0
@@ -22,7 +23,7 @@ class ParameterWidget(TabWidget, parameter_widget_ui.Ui_ParameterWidget):
         self.analysis = analysis
         self.graphicsView = Canvas(analysis.getFigure())
         self.verticalLayout.insertWidget(0, self.graphicsView)
-        self.navBar = NavigationToolbar(self.graphicsView, self)
+        self.navBar = NavigationToolbar(self.graphicsView, self.analysis, self)
         self.verticalLayout.insertWidget(1, self.navBar)
         if worstVal.hasData():
             self.worstValue = worstVal

@@ -5,7 +5,7 @@ from parameters.type import ParameterType
 import numpy as np
 from canvas import Canvas
 from matplotlib.figure import Figure
-from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
+from widgets.navbar import NavigationToolbar
 
 class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
     def __init__(self, alienNode, vnaManager):
@@ -37,7 +37,7 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
         self._analysis, self._analysis2 = None, None
         self.graphicsView = Canvas(Figure())
         self.verticalLayout.insertWidget(0, self.graphicsView)
-        self.navBar = NavigationToolbar(self.graphicsView, self)
+        self.navBar = NavigationToolbar(self.graphicsView, None, parent=self)
         self.verticalLayout.insertWidget(1, self.navBar)
         end, test = self.getCheckButtons()
         self.changeFigure(end, test)
@@ -78,7 +78,7 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
             figure = Figure()
         self.graphicsView = Canvas(figure)
         self.verticalLayout.insertWidget(0, self.graphicsView)
-        self.navBar = NavigationToolbar(self.graphicsView, self)
+        self.navBar = NavigationToolbar(self.graphicsView, None, self)
         self.verticalLayout.insertWidget(1, self.navBar)
         self.graphicsView.draw()
 
