@@ -1,4 +1,4 @@
-from jinja2 import Template, Environment, FileSystemLoader, StrictUndefined
+from jinja2 import Template, Environment, PackageLoader, StrictUndefined
 from os.path import abspath
 from os import getcwd, chdir
 from subprocess import call
@@ -44,7 +44,7 @@ class DocumentObject(object):
 	    line_comment_prefix = '%#',
 	    trim_blocks = True,
 	    autoescape = False,
-	    loader = FileSystemLoader(abspath('template')),
+	    loader = PackageLoader('snpanalyzer', 'template'),
             undefined=StrictUndefined
         )
 
