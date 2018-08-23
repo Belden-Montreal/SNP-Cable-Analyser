@@ -6,7 +6,7 @@ DIR_GUI="."
 DIR_UI="$DIR_GUI/ui"
 DIR_RES="$DIR_GUI/ressources"
 
-PACKAGE_RES="gui.ressources"
+PACKAGE_RES="snpanalyzer.gui.ressources"
 
 find "$DIR_UI" -type f -iname "*.ui" | while read UI_FILE; do
     BASENAME=$(basename "$UI_FILE" ".ui")
