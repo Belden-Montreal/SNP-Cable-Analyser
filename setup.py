@@ -16,6 +16,7 @@ setup(
 
     install_requires=[
         "appdirs",
+        "json",
         "matplotlib",
         "numpy",
         "overrides",
