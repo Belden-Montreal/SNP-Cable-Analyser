@@ -9,3 +9,6 @@
 
 # allow TeX files in template directory
 !template/*.tex
+
+# allow PDF in document directory
+!doc/*.pdf
