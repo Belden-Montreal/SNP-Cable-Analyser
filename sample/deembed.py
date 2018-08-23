@@ -26,7 +26,7 @@ class DeembedSample(PlugSample):
     def setStandard(self, standard):
         super(DeembedSample, self).setStandard(standard)
         for name, parameter in self._parameters.items():
-            if name == "Case":
+            if name.name == "CASE":
                 parameter.setLimit(standard.limits["NEXT"])
 
 class ReverseDeembedSample(DeembedSample):
