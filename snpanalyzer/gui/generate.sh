@@ -24,8 +24,18 @@ find "$DIR_UI" -type f -iname "*.ui" | while read UI_FILE; do
     pyuic5 -x "$UI_FILE" -o "$PY_FILE" --import-from="$PACKAGE_RES"
 done
 
-find "$DIR_RES" -type f -iname "*.qrc" | while read QRC_FILE; do
-    FILENAME=$(basename "$QRC_FILE" ".qrc")
-    echo "Generating '$DIR_RES/$FILENAME.py'"
-    pyrcc5 -o "$DIR_RES/$FILENAME.py" "$DIR_RES/$FILENAME.qrc"
+find "$DIR_RES" -type f -iname "*.qrc" | while read RC_FILE; do
+    BASENAME=$(basename "$RC_FILE" ".qrc")
+    DIRNAME=$(dirname "$RC_FILE")
+
+    RC_FILE="$DIRNAME/$BASENAME.qrc"
+    PY_FILE="$DIRNAME/$BASENAME.py"
+
+    if [[ "$PY_FILE" -nt "$RC_FILE" ]]; then
+        echo "No changed made to '$PY_FILE'"
+        continue
+    fi
+
+    echo "Generating '$PY_FILE'"
+    pyrcc5 -o "$PY_FILE" "$RC_FILE"
 done
