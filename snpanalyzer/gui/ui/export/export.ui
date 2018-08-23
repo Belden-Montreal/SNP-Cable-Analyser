@@ -139,13 +139,13 @@
   <customwidget>
    <class>PresetsWidget</class>
    <extends>QWidget</extends>
-   <header>gui/widget/presets.h</header>
+   <header>snpanalyzer/gui/widget/presets.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>ExportProjectWidget</class>
    <extends>QWidget</extends>
-   <header>gui/widget/export/project.h</header>
+   <header>snpanalyzer/gui/widget/export/project.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

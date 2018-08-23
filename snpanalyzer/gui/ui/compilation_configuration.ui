@@ -343,21 +343,21 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PresetsWidget</class>
-   <extends>QWidget</extends>
-   <header>gui/widget/presets.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>FormatSelectionWidget</class>
    <extends>QWidget</extends>
-   <header>gui/widget/format.h</header>
+   <header>snpanalyzer/gui/widget/format.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>ScaleSelectionWidget</class>
    <extends>QWidget</extends>
-   <header>gui/widget/scale.h</header>
+   <header>snpanalyzer/gui/widget/scale.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PresetsWidget</class>
+   <extends>QWidget</extends>
+   <header>snpanalyzer/gui/widget/presets.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
