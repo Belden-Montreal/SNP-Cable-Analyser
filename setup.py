@@ -15,6 +15,7 @@ setup(
     },
 
     install_requires=[
+        "appdirs",
         "matplotlib",
         "numpy",
         "overrides",
@@ -23,6 +24,7 @@ setup(
         "pyvisa",
         "scikit-rf",
         "scipy",
+        "singleton_decorator",
         "sympy",
         "xlsxwriter",
         "xmltodict",
