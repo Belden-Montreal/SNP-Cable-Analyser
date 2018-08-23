@@ -1,7 +1,7 @@
-from export.configuration import ExportConfiguration
-from document.parameter import ParameterDocumentObject
-from analysis.scale import PlotScale
-from analysis.format import DataFormat
+from snpanalyzer.export.configuration import ExportConfiguration
+from snpanalyzer.document.parameter import ParameterDocumentObject
+from snpanalyzer.analysis.scale import PlotScale
+from snpanalyzer.analysis.format import DataFormat
 from overrides import overrides
 
 class ParameterExportConfiguration(ExportConfiguration):

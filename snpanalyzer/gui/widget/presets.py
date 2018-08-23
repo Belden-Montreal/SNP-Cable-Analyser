@@ -1,4 +1,4 @@
-from gui.ui.presets import Ui_presetsWidget
+from snpanalyzer.gui.ui.presets import Ui_presetsWidget
 
 from PyQt5.QtWidgets import QWidget
 

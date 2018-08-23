@@ -1,7 +1,7 @@
-from parameters.parameter import Parameter, diffDiffMatrix
-from parameters.dataserie import PortDataSerie
-from parameters.type import ParameterType
-from analysis.format import DataFormat
+from snpanalyzer.parameters.parameter import Parameter, diffDiffMatrix
+from snpanalyzer.parameters.dataserie import PortDataSerie
+from snpanalyzer.parameters.type import ParameterType
+from snpanalyzer.analysis.format import DataFormat
 
 class PSAACRX(Parameter):
     '''

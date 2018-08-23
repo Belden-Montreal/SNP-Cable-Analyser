@@ -1,9 +1,9 @@
 import unittest
-from limits.Limit import Limit
-from parameters.parameter import complex2db
-from parameters.test_parameter import TestParameter
-from parameters.insertionloss import InsertionLoss
-from parameters.dataserie import WireDataSerie
+from snpanalyzer.limits.Limit import Limit
+from snpanalyzer.parameters.parameter import complex2db
+from snpanalyzer.parameters.test_parameter import TestParameter
+from snpanalyzer.parameters.insertionloss import InsertionLoss
+from snpanalyzer.parameters.dataserie import WireDataSerie
 
 class TestInsertionLoss(TestParameter):
     def setUp(self):

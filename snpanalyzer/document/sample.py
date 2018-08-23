@@ -1,4 +1,4 @@
-from document.object import DocumentObject, normalize, latex
+from snpanalyzer.document.object import DocumentObject, normalize, latex
 from overrides import overrides
 
 class SampleDocumentObject(DocumentObject):

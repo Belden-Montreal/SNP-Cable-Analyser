@@ -1,8 +1,8 @@
-from parameters.parameter import Parameter, complex2db, complex2phase, diffDiffMatrix
-from parameters.next import NEXT
-from parameters.dataserie import PortDataSerie
-from parameters.type import ParameterType
-from analysis.format import DataFormat
+from snpanalyzer.parameters.parameter import Parameter, complex2db, complex2phase, diffDiffMatrix
+from snpanalyzer.parameters.next import NEXT
+from snpanalyzer.parameters.dataserie import PortDataSerie
+from snpanalyzer.parameters.type import ParameterType
+from snpanalyzer.analysis.format import DataFormat
 
 import numpy as np
 import math

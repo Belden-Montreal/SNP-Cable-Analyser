@@ -1,6 +1,6 @@
-from export.configuration import ExportConfiguration
-from export.sample import SampleExportConfiguration
-from document.project import ProjectDocumentObject
+from snpanalyzer.export.configuration import ExportConfiguration
+from snpanalyzer.export.sample import SampleExportConfiguration
+from snpanalyzer.document.project import ProjectDocumentObject
 from overrides import overrides
 
 class ProjectExportConfiguration(ExportConfiguration):

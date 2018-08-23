@@ -1,8 +1,8 @@
-from project.project import Project, ProjectNode
-from sample.disturber import DisturberSample
-from sample.victim import VictimSample
-from project.alien_import_dialog import AlienImportDialog
-from parameters.type import ParameterType
+from snpanalyzer.project.project import Project, ProjectNode
+from snpanalyzer.sample.disturber import DisturberSample
+from snpanalyzer.sample.victim import VictimSample
+from snpanalyzer.project.alien_import_dialog import AlienImportDialog
+from snpanalyzer.parameters.type import ParameterType
 from multiprocessing.dummy import Pool as ThreadPool
 from copy import deepcopy
 import xlsxwriter
@@ -146,7 +146,7 @@ class Alien(Project):
         return None, None
 
 from app.node import Node
-from sample.sample import SampleNode
+from snpanalyzer.sample.sample import SampleNode
 from widgets.alien_widget import AlienWidget
 from PyQt5 import QtWidgets
 class AlienNode(ProjectNode):

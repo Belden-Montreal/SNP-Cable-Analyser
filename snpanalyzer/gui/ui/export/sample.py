@@ -36,7 +36,7 @@ class Ui_form(object):
         form.setWindowTitle(_translate("form", "Form"))
         self.parametersLabel.setText(_translate("form", "Parameters"))
 
-from gui.widget.export.parameter import ExportParameterWidget
+from snpanalyzer.gui.widget.export.parameter import ExportParameterWidget
 
 if __name__ == "__main__":
     import sys

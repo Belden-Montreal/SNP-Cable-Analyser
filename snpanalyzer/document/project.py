@@ -1,4 +1,4 @@
-from document.object import DocumentObject, normalize
+from snpanalyzer.document.object import DocumentObject, normalize
 from overrides import overrides
 
 class ProjectDocumentObject(DocumentObject):

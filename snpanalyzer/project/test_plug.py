@@ -1,6 +1,6 @@
 import unittest
 from xlrd import open_workbook
-from project.plug import Plug
+from snpanalyzer.project.plug import Plug
 
 class TestPlug(unittest.TestCase):
     def setUp(self):

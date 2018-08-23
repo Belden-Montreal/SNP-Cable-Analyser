@@ -35,7 +35,7 @@ class Ui_form(object):
         form.setWindowTitle(_translate("form", "Form"))
         self.samplesLabel.setText(_translate("form", "Samples"))
 
-from gui.widget.export.sample import ExportSampleWidget
+from snpanalyzer.gui.widget.export.sample import ExportSampleWidget
 
 if __name__ == "__main__":
     import sys

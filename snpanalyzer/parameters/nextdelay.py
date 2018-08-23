@@ -1,7 +1,7 @@
-from parameters.parameter import Parameter
-from parameters.dataserie import PortOrderedPairDataSerie, PortDataSerie
-from parameters.type import ParameterType
-from analysis.format import DataFormat
+from snpanalyzer.parameters.parameter import Parameter
+from snpanalyzer.parameters.dataserie import PortOrderedPairDataSerie, PortDataSerie
+from snpanalyzer.parameters.type import ParameterType
+from snpanalyzer.analysis.format import DataFormat
 
 import itertools
 

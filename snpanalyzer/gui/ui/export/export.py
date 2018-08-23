@@ -77,8 +77,8 @@ class Ui_dialog(object):
         self.docLabel.setText(_translate("dialog", "Output Document:"))
         self.docBrowsePushButton.setText(_translate("dialog", "Browse"))
 
-from gui.widget.export.project import ExportProjectWidget
-from gui.widget.presets import PresetsWidget
+from snpanalyzer.gui.widget.export.project import ExportProjectWidget
+from snpanalyzer.gui.widget.presets import PresetsWidget
 
 if __name__ == "__main__":
     import sys

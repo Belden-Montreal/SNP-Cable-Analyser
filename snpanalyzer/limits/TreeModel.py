@@ -1,7 +1,7 @@
 from PyQt5 import QtCore
-from limits.TreeItem import TreeItem
-from limits.Limit import Limit
-from limits.LimitParser import LimitParser
+from snpanalyzer.limits.TreeItem import TreeItem
+from snpanalyzer.limits.Limit import Limit
+from snpanalyzer.limits.LimitParser import LimitParser
 from collections import OrderedDict
 import xmltodict
 

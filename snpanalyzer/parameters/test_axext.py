@@ -1,11 +1,11 @@
 import unittest
 
-from parameters.parameter import complex2db, complex2phase
-from parameters.test_parameter import TestParameter
-from parameters.fext import FEXT
-from parameters.insertionloss import InsertionLoss
-from parameters.axext import AXEXT
-from parameters.dataserie import PortPairDataSerie
+from snpanalyzer.parameters.parameter import complex2db, complex2phase
+from snpanalyzer.parameters.test_parameter import TestParameter
+from snpanalyzer.parameters.fext import FEXT
+from snpanalyzer.parameters.insertionloss import InsertionLoss
+from snpanalyzer.parameters.axext import AXEXT
+from snpanalyzer.parameters.dataserie import PortPairDataSerie
 
 class TestAXEXT(TestParameter):
     def createParameter(self):

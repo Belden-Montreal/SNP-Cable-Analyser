@@ -1,6 +1,6 @@
-from sample.sample import Sample, PORTS_NAME
-from sample.port import EthernetPair, NetworkPort, PlugConfiguration
-from parameters.type import ParameterType
+from snpanalyzer.sample.sample import Sample, PORTS_NAME
+from snpanalyzer.sample.port import EthernetPair, NetworkPort, PlugConfiguration
+from snpanalyzer.parameters.type import ParameterType
 
 class PlugSample(Sample):
     def getDefaultConfiguration(self):

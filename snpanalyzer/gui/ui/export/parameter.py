@@ -36,8 +36,8 @@ class Ui_form(object):
         form.setWindowTitle(_translate("form", "Form"))
         self.dataSeriesLabel.setText(_translate("form", "Data Series"))
 
-from gui.widget.format import FormatSelectionWidget
-from gui.widget.scale import ScaleSelectionWidget
+from snpanalyzer.gui.widget.format import FormatSelectionWidget
+from snpanalyzer.gui.widget.scale import ScaleSelectionWidget
 
 if __name__ == "__main__":
     import sys

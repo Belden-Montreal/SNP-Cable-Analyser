@@ -1,32 +1,32 @@
-from parameters.returnloss       import ReturnLoss
-from parameters.next             import NEXT
-from parameters.propagationdelay import PropagationDelay
-from parameters.insertionloss    import InsertionLoss
-from parameters.psnext           import PSNEXT
-from parameters.lcl              import LCL
-from parameters.tcl              import TCL
-from parameters.cmrl             import CMRL
-from parameters.cmnext           import CMNEXT
-from parameters.cmdmnext         import CMDMNEXT
-from parameters.cmdmrl           import CMDMRL
-from parameters.dmcmnext         import DMCMNEXT
-from parameters.dmcmrl           import DMCMRL
-from parameters.tctl             import TCTL
-from parameters.lctl             import LCTL
-from parameters.psacrf           import PSACRF
-from parameters.psfext           import PSFEXT
-from parameters.acrf             import ACRF
-from parameters.eltctl           import ELTCTL
-from parameters.fext             import FEXT
-from parameters.axext            import ANEXT, AFEXT
-from parameters.psaxext          import PSANEXT, PSAFEXT
-from parameters.psaacrx          import PSAACRX, PSAACRN, PSAACRF
-from parameters.dfdelay          import DFDelay
-from parameters.plugdelay        import PlugDelay, JackDelay
-from parameters.nextdelay        import NEXTDelay, JackNEXTDelay
-from parameters.correctednext    import CorrectedNEXT
-from parameters.dnext            import DNEXT, ReverseDNEXT
-from parameters.case             import Case, ReverseCase
+from snpanalyzer.parameters.returnloss       import ReturnLoss
+from snpanalyzer.parameters.next             import NEXT
+from snpanalyzer.parameters.propagationdelay import PropagationDelay
+from snpanalyzer.parameters.insertionloss    import InsertionLoss
+from snpanalyzer.parameters.psnext           import PSNEXT
+from snpanalyzer.parameters.lcl              import LCL
+from snpanalyzer.parameters.tcl              import TCL
+from snpanalyzer.parameters.cmrl             import CMRL
+from snpanalyzer.parameters.cmnext           import CMNEXT
+from snpanalyzer.parameters.cmdmnext         import CMDMNEXT
+from snpanalyzer.parameters.cmdmrl           import CMDMRL
+from snpanalyzer.parameters.dmcmnext         import DMCMNEXT
+from snpanalyzer.parameters.dmcmrl           import DMCMRL
+from snpanalyzer.parameters.tctl             import TCTL
+from snpanalyzer.parameters.lctl             import LCTL
+from snpanalyzer.parameters.psacrf           import PSACRF
+from snpanalyzer.parameters.psfext           import PSFEXT
+from snpanalyzer.parameters.acrf             import ACRF
+from snpanalyzer.parameters.eltctl           import ELTCTL
+from snpanalyzer.parameters.fext             import FEXT
+from snpanalyzer.parameters.axext            import ANEXT, AFEXT
+from snpanalyzer.parameters.psaxext          import PSANEXT, PSAFEXT
+from snpanalyzer.parameters.psaacrx          import PSAACRX, PSAACRN, PSAACRF
+from snpanalyzer.parameters.dfdelay          import DFDelay
+from snpanalyzer.parameters.plugdelay        import PlugDelay, JackDelay
+from snpanalyzer.parameters.nextdelay        import NEXTDelay, JackNEXTDelay
+from snpanalyzer.parameters.correctednext    import CorrectedNEXT
+from snpanalyzer.parameters.dnext            import DNEXT, ReverseDNEXT
+from snpanalyzer.parameters.case             import Case, ReverseCase
 
 class ParameterFactory(object):
     def __init__(self, config, freq, matrices, parameters):

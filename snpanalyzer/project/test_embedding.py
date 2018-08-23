@@ -1,7 +1,7 @@
 import unittest
 from xlrd import open_workbook
-from project.embedding import Embedding
-from project.plug import Plug
+from snpanalyzer.project.embedding import Embedding
+from snpanalyzer.project.plug import Plug
 class TestEmbedding(unittest.TestCase):
     def setUp(self):
         self._fileName = "testout_mm.s8p"

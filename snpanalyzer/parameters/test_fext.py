@@ -1,8 +1,8 @@
 import unittest
 
-from parameters.test_parameter import TestParameter
-from parameters.fext import FEXT
-from parameters.dataserie import PortPairDataSerie
+from snpanalyzer.parameters.test_parameter import TestParameter
+from snpanalyzer.parameters.fext import FEXT
+from snpanalyzer.parameters.dataserie import PortPairDataSerie
 
 class TestFEXT(TestParameter):
     def createParameter(self):

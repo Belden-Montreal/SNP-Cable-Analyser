@@ -1,5 +1,5 @@
-from sample.cable import CableSample
-from sample.plug import PlugSample
+from snpanalyzer.sample.cable import CableSample
+from snpanalyzer.sample.plug import PlugSample
 from multiprocessing.dummy import Pool as ThreadPool
 from os.path import splitext
 import xlsxwriter
@@ -119,7 +119,7 @@ class Project(object):
             sample.setStandard(standard)
 
 from app.node import Node
-from sample.sample import SampleNode
+from snpanalyzer.sample.sample import SampleNode
 class ProjectNode(Node):
     def __init__(self, project):
         super(ProjectNode, self).__init__(project.getName())

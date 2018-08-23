@@ -1,5 +1,5 @@
-from analysis.analysis import Analysis
-from analysis.scale import PlotScale
+from snpanalyzer.analysis.analysis import Analysis
+from snpanalyzer.analysis.scale import PlotScale
 
 import matplotlib.pyplot as plt
 import numpy as np

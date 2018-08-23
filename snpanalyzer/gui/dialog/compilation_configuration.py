@@ -1,8 +1,8 @@
-from gui.ui.compilation_configuration import Ui_dialog
-from gui.widget.navigation import NavigationToolbar
-from analysis.compilation import CompilationAnalysis
-from analysis.scale import PlotScale
-from analysis.format import DataFormat
+from snpanalyzer.gui.ui.compilation_configuration import Ui_dialog
+from snpanalyzer.gui.widget.navigation import NavigationToolbar
+from snpanalyzer.analysis.compilation import CompilationAnalysis
+from snpanalyzer.analysis.scale import PlotScale
+from snpanalyzer.analysis.format import DataFormat
 
 from PyQt5.QtCore import Qt, QVariant
 from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QSizePolicy

@@ -1,9 +1,9 @@
 import unittest
 
-from parameters.parameter import complex2db, complex2phase
-from parameters.test_parameter import TestParameter
-from parameters.next import NEXT
-from parameters.dataserie import PortPairDataSerie
+from snpanalyzer.parameters.parameter import complex2db, complex2phase
+from snpanalyzer.parameters.test_parameter import TestParameter
+from snpanalyzer.parameters.next import NEXT
+from snpanalyzer.parameters.dataserie import PortPairDataSerie
 
 class TestNEXT(TestParameter):
     def createParameter(self):

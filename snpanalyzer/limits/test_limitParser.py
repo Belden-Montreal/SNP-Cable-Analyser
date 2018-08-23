@@ -1,7 +1,7 @@
 import unittest
-from limits.LimitParser import LimitParser
-from limits.TreeItem import TreeItem
-from limits.Limit import Limit
+from snpanalyzer.limits.LimitParser import LimitParser
+from snpanalyzer.limits.TreeItem import TreeItem
+from snpanalyzer.limits.Limit import Limit
 
 class TestLimitParser(unittest.TestCase):
     def setUp(self):

@@ -1,5 +1,5 @@
-from sample.plug import PlugSample
-from parameters.type import ParameterType
+from snpanalyzer.sample.plug import PlugSample
+from snpanalyzer.parameters.type import ParameterType
 
 class DeembedSample(PlugSample):
     def __init__(self, snp, plugNext, plugNEXTDelay, cases, **kwargs):

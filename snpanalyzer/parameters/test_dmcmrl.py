@@ -1,8 +1,8 @@
 import unittest
 
-from parameters.test_parameter import TestParameter
-from parameters.dmcmrl import DMCMRL
-from parameters.dataserie import PortDataSerie
+from snpanalyzer.parameters.test_parameter import TestParameter
+from snpanalyzer.parameters.dmcmrl import DMCMRL
+from snpanalyzer.parameters.dataserie import PortDataSerie
 
 class TestDMCMRL(TestParameter):
     def createParameter(self):

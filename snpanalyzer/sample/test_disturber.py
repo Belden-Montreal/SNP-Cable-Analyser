@@ -1,7 +1,7 @@
 from unittest import TestCase
-from sample.test_alien import TestAlienSample
-from sample.disturber import DisturberSample
-from parameters.type import ParameterType
+from snpanalyzer.sample.test_alien import TestAlienSample
+from snpanalyzer.sample.disturber import DisturberSample
+from snpanalyzer.parameters.type import ParameterType
 
 class TestDisturberRemoteSample(TestAlienSample, TestCase):
     def createSample(self):

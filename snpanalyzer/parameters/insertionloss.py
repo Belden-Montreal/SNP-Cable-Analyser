@@ -1,7 +1,7 @@
-from parameters.parameter import Parameter, complex2db, complex2phase, diffDiffMatrix, DataAnalysis, PairValues
-from parameters.dataserie import WireDataSerie
-from parameters.type import ParameterType
-from analysis.format import DataFormat
+from snpanalyzer.parameters.parameter import Parameter, complex2db, complex2phase, diffDiffMatrix, DataAnalysis, PairValues
+from snpanalyzer.parameters.dataserie import WireDataSerie
+from snpanalyzer.parameters.type import ParameterType
+from snpanalyzer.analysis.format import DataFormat
 
 class InsertionLoss(Parameter):
     '''

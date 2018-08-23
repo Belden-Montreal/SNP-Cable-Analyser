@@ -1,10 +1,10 @@
 import unittest
 
-from parameters.test_parameter import TestParameter
-from parameters.eltctl import ELTCTL
-from parameters.tctl import TCTL
-from parameters.insertionloss import InsertionLoss
-from parameters.dataserie import WireDataSerie
+from snpanalyzer.parameters.test_parameter import TestParameter
+from snpanalyzer.parameters.eltctl import ELTCTL
+from snpanalyzer.parameters.tctl import TCTL
+from snpanalyzer.parameters.insertionloss import InsertionLoss
+from snpanalyzer.parameters.dataserie import WireDataSerie
 
 class TestELTCTL(TestParameter):
     def createParameter(self):

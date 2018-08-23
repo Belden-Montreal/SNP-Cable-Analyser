@@ -1,5 +1,5 @@
-from gui.ui.format import Ui_form
-from analysis.format import DataFormat
+from snpanalyzer.gui.ui.format import Ui_form
+from snpanalyzer.analysis.format import DataFormat
 
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QWidget

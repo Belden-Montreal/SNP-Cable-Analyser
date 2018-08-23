@@ -1,7 +1,7 @@
-from parameters.parameter import Parameter, complex2db, complex2phase, diffDiffMatrix
-from parameters.dataserie import PortPairDataSerie, PortOrderedPairDataSerie
-from parameters.type import ParameterType
-from analysis.format import DataFormat
+from snpanalyzer.parameters.parameter import Parameter, complex2db, complex2phase, diffDiffMatrix
+from snpanalyzer.parameters.dataserie import PortPairDataSerie, PortOrderedPairDataSerie
+from snpanalyzer.parameters.type import ParameterType
+from snpanalyzer.analysis.format import DataFormat
 
 import itertools
 

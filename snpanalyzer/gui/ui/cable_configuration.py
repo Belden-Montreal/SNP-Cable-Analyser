@@ -276,7 +276,7 @@ class Ui_form(object):
         self.pair45Label.setText(_translate("form", "Pair 45"))
         self.hideNamesCheckBox.setText(_translate("form", "Hide Names"))
 
-from gui.ressources import icons_rc
+from snpanalyzer.gui.ressources import icons_rc
 
 if __name__ == "__main__":
     import sys

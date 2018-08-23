@@ -1,4 +1,4 @@
-from limits.Standard import Standard
+from snpanalyzer.limits.Standard import Standard
 
 class TreeItem():
     def __init__(self, name, parent=None):

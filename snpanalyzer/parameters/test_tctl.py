@@ -1,8 +1,8 @@
 import unittest
 
-from parameters.test_parameter import TestParameter
-from parameters.tctl import TCTL
-from parameters.dataserie import WireDataSerie
+from snpanalyzer.parameters.test_parameter import TestParameter
+from snpanalyzer.parameters.tctl import TCTL
+from snpanalyzer.parameters.dataserie import WireDataSerie
 
 class TestTCTL(TestParameter):
     def createParameter(self):

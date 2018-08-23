@@ -1,7 +1,7 @@
 from PyQt5 import QtWidgets, QtCore
-from limits import Edit_Limit_Dialog
-from limits.TreeItem import TreeItem
-from limits.Limit import Limit
+from snpanalyzer.limits import Edit_Limit_Dialog
+from snpanalyzer.limits.TreeItem import TreeItem
+from snpanalyzer.limits.Limit import Limit
 import math
 
 class Box():

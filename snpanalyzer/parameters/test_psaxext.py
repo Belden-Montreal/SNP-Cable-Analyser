@@ -1,10 +1,10 @@
 import unittest
 import numpy as np
-from parameters.test_parameter import TestParameter
-from parameters.psaxext import PSAXEXT
-from parameters.axext import AXEXT
-from parameters.parameter import complex2db
-from parameters.dataserie import PortDataSerie, PortPairDataSerie
+from snpanalyzer.parameters.test_parameter import TestParameter
+from snpanalyzer.parameters.psaxext import PSAXEXT
+from snpanalyzer.parameters.axext import AXEXT
+from snpanalyzer.parameters.parameter import complex2db
+from snpanalyzer.parameters.dataserie import PortDataSerie, PortPairDataSerie
 
 class TestPSAXEXT(TestParameter):
     def assertIn(self, value, collection):

@@ -1,6 +1,6 @@
-from parameters.insertionloss import InsertionLoss
-from parameters.parameter import comDiffMatrix
-from parameters.type import ParameterType
+from snpanalyzer.parameters.insertionloss import InsertionLoss
+from snpanalyzer.parameters.parameter import comDiffMatrix
+from snpanalyzer.parameters.type import ParameterType
 
 class TCTL(InsertionLoss):
     '''

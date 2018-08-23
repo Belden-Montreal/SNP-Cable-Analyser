@@ -1,4 +1,4 @@
-from sample.test_sample import TestSample
+from snpanalyzer.sample.test_sample import TestSample
 
 class TestAlienSample(TestSample):
     def getNumberOfPorts(self):

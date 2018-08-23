@@ -1,7 +1,7 @@
 import unittest
 from xlrd import open_workbook
 
-from project.project import Project
+from snpanalyzer.project.project import Project
 
 class TestProject(unittest.TestCase):
     def setUp(self):

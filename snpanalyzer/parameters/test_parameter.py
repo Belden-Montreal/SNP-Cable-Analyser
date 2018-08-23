@@ -1,9 +1,9 @@
 import unittest
 import numpy as np
 
-from parameters.parameter import Parameter, complex2db, complex2phase
-from sample.port import WirePort, Wire, CableConfiguration, NetworkPort, PlugConfiguration
-from sample.port import EthernetPair
+from snpanalyzer.parameters.parameter import Parameter, complex2db, complex2phase
+from snpanalyzer.sample.port import WirePort, Wire, CableConfiguration, NetworkPort, PlugConfiguration
+from snpanalyzer.sample.port import EthernetPair
 
 class TestParameter(unittest.TestCase):
     def assertComplexAlmostEqual(self, dbParam, cpExpected):

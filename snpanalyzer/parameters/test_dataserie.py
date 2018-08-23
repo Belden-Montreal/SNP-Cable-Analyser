@@ -1,8 +1,8 @@
 from unittest import TestCase
 
-from sample.port import NetworkPort, WirePort, EthernetPair, Wire, ReversedWire
-from parameters.dataserie import PortDataSerie, WireDataSerie
-from parameters.dataserie import PortPairDataSerie, PortOrderedPairDataSerie
+from snpanalyzer.sample.port import NetworkPort, WirePort, EthernetPair, Wire, ReversedWire
+from snpanalyzer.parameters.dataserie import PortDataSerie, WireDataSerie
+from snpanalyzer.parameters.dataserie import PortPairDataSerie, PortOrderedPairDataSerie
 
 class TestPortDataSerie(TestCase):
     def testEqualSameType(self):

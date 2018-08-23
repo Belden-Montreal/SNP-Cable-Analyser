@@ -1,6 +1,6 @@
-from parameters.returnloss import ReturnLoss
-from parameters.parameter import diffComMatrix
-from parameters.type import ParameterType
+from snpanalyzer.parameters.returnloss import ReturnLoss
+from snpanalyzer.parameters.parameter import diffComMatrix
+from snpanalyzer.parameters.type import ParameterType
 
 class DMCMRL(ReturnLoss):
     '''

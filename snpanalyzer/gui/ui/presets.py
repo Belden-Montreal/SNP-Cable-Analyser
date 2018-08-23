@@ -68,7 +68,7 @@ class Ui_presetsWidget(object):
         presetsWidget.setWindowTitle(_translate("presetsWidget", "Form"))
         self.presetsLabel.setText(_translate("presetsWidget", "Presets"))
 
-from gui.ressources import icons_rc
+from snpanalyzer.gui.ressources import icons_rc
 
 if __name__ == "__main__":
     import sys

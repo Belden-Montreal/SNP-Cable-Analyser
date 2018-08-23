@@ -1,8 +1,8 @@
 from unittest.mock import MagicMock
 
-from sample.test_plug import TestPlugSample
-from sample.plugdelay import PlugDelaySample
-from parameters.type import ParameterType
+from snpanalyzer.sample.test_plug import TestPlugSample
+from snpanalyzer.sample.plugdelay import PlugDelaySample
+from snpanalyzer.parameters.type import ParameterType
 
 class TestPlugDelaySample(TestPlugSample):
     def createSample(self):

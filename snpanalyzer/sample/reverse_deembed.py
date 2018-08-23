@@ -1,4 +1,4 @@
-from sample.single_ended import SingleEnded
+from snpanalyzer.sample.single_ended import SingleEnded
 
 class ReverseDeembed(SingleEnded):
 

@@ -1,7 +1,7 @@
 from PyQt5 import QtWidgets, QtCore
-from limits import Set_Limit_Dialog
-from limits.TreeModel import TreeModel
-from limits.EditLimitDialog import EditLimitDialog
+from snpanalyzer.limits import Set_Limit_Dialog
+from snpanalyzer.limits.TreeModel import TreeModel
+from snpanalyzer.limits.EditLimitDialog import EditLimitDialog
 
 class LimitDialog(object):
     def __init__(self, limitsFile = "limits/limits.xml"):

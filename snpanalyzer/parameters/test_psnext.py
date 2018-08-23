@@ -1,11 +1,11 @@
 import unittest
 
-from parameters.parameter import complex2db
-from parameters.test_parameter import TestParameter, TestPlugParameter
-from parameters.next import NEXT
-from parameters.psnext import PSNEXT
-from parameters.dataserie import PortDataSerie, PortOrderedPairDataSerie
-from sample.port import NetworkPort, PlugConfiguration
+from snpanalyzer.parameters.parameter import complex2db
+from snpanalyzer.parameters.test_parameter import TestParameter, TestPlugParameter
+from snpanalyzer.parameters.next import NEXT
+from snpanalyzer.parameters.psnext import PSNEXT
+from snpanalyzer.parameters.dataserie import PortDataSerie, PortOrderedPairDataSerie
+from snpanalyzer.sample.port import NetworkPort, PlugConfiguration
 import numpy as np
 
 def powerSum(values):

@@ -1,6 +1,6 @@
-from parameters.next import NEXT
-from parameters.parameter import comDiffMatrix
-from parameters.type import ParameterType
+from snpanalyzer.parameters.next import NEXT
+from snpanalyzer.parameters.parameter import comDiffMatrix
+from snpanalyzer.parameters.type import ParameterType
 
 class CMDMNEXT(NEXT):
     '''

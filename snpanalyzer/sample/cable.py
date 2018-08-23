@@ -2,9 +2,9 @@ from skrf import Network
 from os.path import getctime
 from time import ctime
 
-from sample.sample import Sample
-from sample.port import WirePort, Wire, CableConfiguration, EthernetPair
-from parameters.type import ParameterType
+from snpanalyzer.sample.sample import Sample
+from snpanalyzer.sample.port import WirePort, Wire, CableConfiguration, EthernetPair
+from snpanalyzer.parameters.type import ParameterType
 
 class CableSample(Sample):
     @staticmethod

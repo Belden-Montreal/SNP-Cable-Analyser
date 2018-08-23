@@ -1,6 +1,6 @@
-from parameters.returnloss import ReturnLoss
-from parameters.parameter import comComMatrix
-from parameters.type import ParameterType
+from snpanalyzer.parameters.returnloss import ReturnLoss
+from snpanalyzer.parameters.parameter import comComMatrix
+from snpanalyzer.parameters.type import ParameterType
 
 class CMRL(ReturnLoss):
     @staticmethod

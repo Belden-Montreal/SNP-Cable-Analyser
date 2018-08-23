@@ -1,10 +1,10 @@
 import unittest
 
-from parameters.test_parameter import TestParameter
-from parameters.fext import FEXT
-from parameters.psfext import PSFEXT
-from parameters.dataserie import PortDataSerie, PortPairDataSerie
-from sample.port import NetworkPort, PlugConfiguration
+from snpanalyzer.parameters.test_parameter import TestParameter
+from snpanalyzer.parameters.fext import FEXT
+from snpanalyzer.parameters.psfext import PSFEXT
+from snpanalyzer.parameters.dataserie import PortDataSerie, PortPairDataSerie
+from snpanalyzer.sample.port import NetworkPort, PlugConfiguration
 import numpy as np
 
 def powerSum(values):

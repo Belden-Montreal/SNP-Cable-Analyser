@@ -1,5 +1,5 @@
-from document.object import DocumentObject, normalize
-from analysis.parameter import ParameterAnalysis
+from snpanalyzer.document.object import DocumentObject, normalize
+from snpanalyzer.analysis.parameter import ParameterAnalysis
 from overrides import overrides
 
 class ParameterDocumentObject(DocumentObject):

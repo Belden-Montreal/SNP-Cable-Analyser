@@ -1,6 +1,6 @@
-from parameters.parameter import comDiffMatrix
-from parameters.returnloss import ReturnLoss
-from parameters.type import ParameterType
+from snpanalyzer.parameters.parameter import comDiffMatrix
+from snpanalyzer.parameters.returnloss import ReturnLoss
+from snpanalyzer.parameters.type import ParameterType
 
 class TCL(ReturnLoss):
     '''

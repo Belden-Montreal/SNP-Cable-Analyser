@@ -1,6 +1,6 @@
-from parameters.parameter import Parameter
-from parameters.type import ParameterType
-from analysis.format import DataFormat
+from snpanalyzer.parameters.parameter import Parameter
+from snpanalyzer.parameters.type import ParameterType
+from snpanalyzer.analysis.format import DataFormat
 
 class ELTCTL(Parameter):
     '''

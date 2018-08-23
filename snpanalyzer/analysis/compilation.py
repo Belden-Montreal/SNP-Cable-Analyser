@@ -1,6 +1,6 @@
 from matplotlib import pyplot as plt
-from analysis.format import DataFormat
-from analysis.scale import PlotScale
+from snpanalyzer.analysis.format import DataFormat
+from snpanalyzer.analysis.scale import PlotScale
 
 def autoscale_y(axis, margin=0.1):
     """

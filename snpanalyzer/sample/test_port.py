@@ -1,6 +1,6 @@
 import unittest
-from sample.port import EthernetPair, NetworkPort, WirePort, Wire, ReversedWire
-from sample.port import PlugConfiguration, CableConfiguration
+from snpanalyzer.sample.port import EthernetPair, NetworkPort, WirePort, Wire, ReversedWire
+from snpanalyzer.sample.port import PlugConfiguration, CableConfiguration
 
 class TestNetworkPort(unittest.TestCase):
     def setUp(self):

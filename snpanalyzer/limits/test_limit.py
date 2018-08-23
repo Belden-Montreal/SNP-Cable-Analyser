@@ -1,5 +1,5 @@
 import unittest
-from limits.Limit import Limit
+from snpanalyzer.limits.Limit import Limit
 from sympy import Symbol
 import numpy as num
 

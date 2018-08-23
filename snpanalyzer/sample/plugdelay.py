@@ -1,5 +1,5 @@
-from sample.plug import PlugSample
-from parameters.type import ParameterType
+from snpanalyzer.sample.plug import PlugSample
+from snpanalyzer.parameters.type import ParameterType
 
 class PlugDelaySample(PlugSample):
     def __init__(self, snp, openDelay, shortDelay, dfOpenDelay, dfShortDelay, k1, k2, k3, config=None):

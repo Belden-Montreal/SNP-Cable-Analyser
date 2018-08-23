@@ -1,6 +1,6 @@
-from analysis.parameter import ParameterAnalysis
-from analysis.figure import autoscaleY
-from analysis.format import formatCaseData
+from snpanalyzer.analysis.parameter import ParameterAnalysis
+from snpanalyzer.analysis.figure import autoscaleY
+from snpanalyzer.analysis.format import formatCaseData
 from overrides import overrides
 
 class CaseAnalysis(ParameterAnalysis):

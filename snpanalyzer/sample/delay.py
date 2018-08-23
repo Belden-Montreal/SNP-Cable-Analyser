@@ -1,5 +1,5 @@
-from sample.plug import PlugSample
-from parameters.type import ParameterType
+from snpanalyzer.sample.plug import PlugSample
+from snpanalyzer.parameters.type import ParameterType
 
 class DelaySample(PlugSample):
     def getAvailableParameters(self):

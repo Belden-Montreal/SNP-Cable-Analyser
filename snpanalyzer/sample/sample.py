@@ -1,6 +1,6 @@
-from parameters.factory import ParameterFactory
-from analysis.parameter import ParameterAnalysis
-from document.sample import SampleDocumentObject
+from snpanalyzer.parameters.factory import ParameterFactory
+from snpanalyzer.analysis.parameter import ParameterAnalysis
+from snpanalyzer.document.sample import SampleDocumentObject
 
 from skrf import Network
 from time import ctime

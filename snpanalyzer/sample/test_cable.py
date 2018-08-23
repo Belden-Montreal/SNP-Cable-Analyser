@@ -1,8 +1,8 @@
 from unittest import TestCase
 
-from sample.test_sample import TestSample
-from sample.cable import CableSample
-from parameters.type import ParameterType
+from snpanalyzer.sample.test_sample import TestSample
+from snpanalyzer.sample.cable import CableSample
+from snpanalyzer.parameters.type import ParameterType
 
 class TestCableSample(TestSample, TestCase):
     def createSample(self):

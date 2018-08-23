@@ -1,4 +1,4 @@
-from gui.ui.export.sample import Ui_form
+from snpanalyzer.gui.ui.export.sample import Ui_form
 
 from PyQt5.QtCore import Qt, QVariant, QItemSelectionModel
 from PyQt5.QtWidgets import QWidget

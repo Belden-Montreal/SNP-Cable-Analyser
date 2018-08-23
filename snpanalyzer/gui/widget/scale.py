@@ -1,5 +1,5 @@
-from gui.ui.scale import Ui_form
-from analysis.scale import PlotScale
+from snpanalyzer.gui.ui.scale import Ui_form
+from snpanalyzer.analysis.scale import PlotScale
 
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QWidget

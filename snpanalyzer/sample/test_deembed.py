@@ -1,8 +1,8 @@
 from unittest.mock import MagicMock
 
-from sample.test_plug import TestPlugSample
-from sample.deembed import DeembedSample
-from parameters.type import ParameterType
+from snpanalyzer.sample.test_plug import TestPlugSample
+from snpanalyzer.sample.deembed import DeembedSample
+from snpanalyzer.parameters.type import ParameterType
 
 class TestDeembedSample(TestPlugSample):
     def createSample(self):

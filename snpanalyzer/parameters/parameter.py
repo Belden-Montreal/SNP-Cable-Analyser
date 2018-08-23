@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from bisect import bisect_left
-from limits.Limit import Limit
+from snpanalyzer.limits.Limit import Limit
 from copy import deepcopy
 
 def diffDiffMatrix(matrices):

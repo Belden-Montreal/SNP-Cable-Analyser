@@ -1,5 +1,5 @@
-from gui.ui.cable_configuration import Ui_form
-from sample.port import EthernetPair
+from snpanalyzer.gui.ui.cable_configuration import Ui_form
+from snpanalyzer.sample.port import EthernetPair
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QDialogButtonBox

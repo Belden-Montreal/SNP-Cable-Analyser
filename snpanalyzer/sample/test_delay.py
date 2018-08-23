@@ -1,5 +1,5 @@
-from sample.test_cable import TestCableSample
-from sample.delay import CableDelaySample
+from snpanalyzer.sample.test_cable import TestCableSample
+from snpanalyzer.sample.delay import CableDelaySample
 
 class TestCableDelaySample(TestCableSample):
     def createSample(self):

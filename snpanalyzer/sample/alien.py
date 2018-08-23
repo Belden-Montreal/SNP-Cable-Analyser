@@ -1,5 +1,5 @@
-from sample.sample import Sample
-from sample.port import EthernetPair, WirePort, AlienConfiguration
+from snpanalyzer.sample.sample import Sample
+from snpanalyzer.sample.port import EthernetPair, WirePort, AlienConfiguration
 
 class AlienSample(Sample):
     '''

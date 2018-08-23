@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 plt.rcParams.update({'figure.max_open_warning': 0})
 from matplotlib.ticker import ScalarFormatter
-from parameters.plot import ParameterPlot
+from snpanalyzer.parameters.plot import ParameterPlot
 import numpy as np
 
 class CasePlot(ParameterPlot):

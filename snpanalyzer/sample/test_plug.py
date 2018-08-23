@@ -1,8 +1,8 @@
 from unittest import TestCase
 
-from sample.test_sample import TestSample
-from sample.plug import PlugSample
-from parameters.type import ParameterType
+from snpanalyzer.sample.test_sample import TestSample
+from snpanalyzer.sample.plug import PlugSample
+from snpanalyzer.parameters.type import ParameterType
 
 class TestPlugSample(TestSample, TestCase):
     def createSample(self):

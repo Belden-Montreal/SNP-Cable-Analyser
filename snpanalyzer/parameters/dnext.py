@@ -1,6 +1,6 @@
-from parameters.parameter import complex2phase, complex2db
-from parameters.correctednext import CorrectedNEXT
-from parameters.type import ParameterType
+from snpanalyzer.parameters.parameter import complex2phase, complex2db
+from snpanalyzer.parameters.correctednext import CorrectedNEXT
+from snpanalyzer.parameters.type import ParameterType
 
 import numpy as np
 

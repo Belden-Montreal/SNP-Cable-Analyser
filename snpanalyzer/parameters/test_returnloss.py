@@ -1,10 +1,10 @@
 import unittest
-from parameters.parameter import complex2db, complex2phase
-from parameters.test_parameter import TestParameter
-from parameters.returnloss import ReturnLoss
-from parameters.dataserie import PortDataSerie
-from limits.Standard import Standard
-from limits.Limit import Limit
+from snpanalyzer.parameters.parameter import complex2db, complex2phase
+from snpanalyzer.parameters.test_parameter import TestParameter
+from snpanalyzer.parameters.returnloss import ReturnLoss
+from snpanalyzer.parameters.dataserie import PortDataSerie
+from snpanalyzer.limits.Standard import Standard
+from snpanalyzer.limits.Limit import Limit
 
 class TestReturnLoss(TestParameter):
     def createParameter(self):

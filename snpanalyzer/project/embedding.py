@@ -1,9 +1,9 @@
-from project.project import Project, ProjectNode
-from project.embedding_import_dialog import EmbedImportDialog, ReverseState
+from snpanalyzer.project.project import Project, ProjectNode
+from snpanalyzer.project.embedding_import_dialog import EmbedImportDialog, ReverseState
 from app.save_manager import SaveManager
-from sample.delay import DelaySample
-from sample.deembed import DeembedSample, ReverseDeembedSample
-from parameters.type import ParameterType
+from snpanalyzer.sample.delay import DelaySample
+from snpanalyzer.sample.deembed import DeembedSample, ReverseDeembedSample
+from snpanalyzer.parameters.type import ParameterType
 import numpy as np
 import xlsxwriter
 
@@ -193,8 +193,8 @@ class Embedding(Project):
 
 
 from app.node import Node
-from sample.sample import SampleNode
-from project.plug import PlugNode
+from snpanalyzer.sample.sample import SampleNode
+from snpanalyzer.project.plug import PlugNode
 from widgets.embed_widget import EmbedWidget
 from PyQt5 import QtWidgets
 class EmbeddingNode(ProjectNode):

@@ -1,8 +1,8 @@
 import unittest
 
-from parameters.test_parameter import TestParameter
-from parameters.lcl import LCL
-from parameters.dataserie import PortDataSerie
+from snpanalyzer.parameters.test_parameter import TestParameter
+from snpanalyzer.parameters.lcl import LCL
+from snpanalyzer.parameters.dataserie import PortDataSerie
 
 class TestLCL(TestParameter):
     def createParameter(self):

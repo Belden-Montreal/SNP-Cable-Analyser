@@ -1,6 +1,6 @@
-from sample.alien import AlienSample
-from sample.port import NetworkPort, AlienConfiguration
-from parameters.type import ParameterType
+from snpanalyzer.sample.alien import AlienSample
+from snpanalyzer.sample.port import NetworkPort, AlienConfiguration
+from snpanalyzer.parameters.type import ParameterType
 
 class DisturberSample(AlienSample):
     '''

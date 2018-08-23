@@ -1,8 +1,8 @@
 import unittest
 
-from parameters.test_parameter import TestParameter
-from parameters.dmcmnext import DMCMNEXT
-from parameters.dataserie import PortPairDataSerie
+from snpanalyzer.parameters.test_parameter import TestParameter
+from snpanalyzer.parameters.dmcmnext import DMCMNEXT
+from snpanalyzer.parameters.dataserie import PortPairDataSerie
 
 class TestDMCMNEXT(TestParameter):
     def createParameter(self):

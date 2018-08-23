@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 
 from unittest.mock import MagicMock, patch, call, DEFAULT
-from parameters.plot import ParameterPlot
+from snpanalyzer.parameters.plot import ParameterPlot
 
 class DummyParameter(object):
     def getName(self):

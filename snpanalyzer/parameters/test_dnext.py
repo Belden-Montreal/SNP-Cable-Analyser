@@ -1,15 +1,15 @@
 import unittest
 
-from parameters.test_parameter import TestPlugParameter
-from parameters.propagationdelay import PropagationDelay
-from parameters.returnloss import ReturnLoss
-from parameters.dfdelay import DFDelay
-from parameters.plugdelay import PlugDelay
-from parameters.nextdelay import NEXTDelay
-from parameters.next import NEXT
-from parameters.dnext import DNEXT
-from parameters.correctednext import CorrectedNEXT
-from parameters.dataserie import PortPairDataSerie
+from snpanalyzer.parameters.test_parameter import TestPlugParameter
+from snpanalyzer.parameters.propagationdelay import PropagationDelay
+from snpanalyzer.parameters.returnloss import ReturnLoss
+from snpanalyzer.parameters.dfdelay import DFDelay
+from snpanalyzer.parameters.plugdelay import PlugDelay
+from snpanalyzer.parameters.nextdelay import NEXTDelay
+from snpanalyzer.parameters.next import NEXT
+from snpanalyzer.parameters.dnext import DNEXT
+from snpanalyzer.parameters.correctednext import CorrectedNEXT
+from snpanalyzer.parameters.dataserie import PortPairDataSerie
 
 import numpy as np
 

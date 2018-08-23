@@ -1,4 +1,4 @@
-from gui.ui.export.export import Ui_dialog
+from snpanalyzer.gui.ui.export.export import Ui_dialog
 from tempfile import gettempdir
 from pathlib import Path
 

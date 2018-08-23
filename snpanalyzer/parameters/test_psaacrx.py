@@ -1,10 +1,10 @@
 import unittest
-from parameters.test_parameter import TestParameter
-from parameters.insertionloss import InsertionLoss
-from parameters.psaxext import PSAXEXT
-from parameters.psaacrx import PSAACRX
-from parameters.axext import AXEXT
-from parameters.dataserie import PortDataSerie, PortPairDataSerie, WireDataSerie
+from snpanalyzer.parameters.test_parameter import TestParameter
+from snpanalyzer.parameters.insertionloss import InsertionLoss
+from snpanalyzer.parameters.psaxext import PSAXEXT
+from snpanalyzer.parameters.psaacrx import PSAACRX
+from snpanalyzer.parameters.axext import AXEXT
+from snpanalyzer.parameters.dataserie import PortDataSerie, PortPairDataSerie, WireDataSerie
 
 class TestPSAACRX(TestParameter):
     def createParameter(self):

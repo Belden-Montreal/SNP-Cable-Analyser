@@ -151,9 +151,9 @@ class Ui_dialog(object):
         self.titleLabel.setText(_translate("dialog", "Title"))
         self.dataseriesLabel.setText(_translate("dialog", "Data Series"))
 
-from gui.widget.format import FormatSelectionWidget
-from gui.widget.presets import PresetsWidget
-from gui.widget.scale import ScaleSelectionWidget
+from snpanalyzer.gui.widget.format import FormatSelectionWidget
+from snpanalyzer.gui.widget.presets import PresetsWidget
+from snpanalyzer.gui.widget.scale import ScaleSelectionWidget
 
 if __name__ == "__main__":
     import sys

@@ -1,5 +1,5 @@
-from sample.alien import AlienSample
-from parameters.type import ParameterType
+from snpanalyzer.sample.alien import AlienSample
+from snpanalyzer.parameters.type import ParameterType
 
 class VictimSample(AlienSample):
     def __init__(self, snp, samples, config=None, **kwargs):

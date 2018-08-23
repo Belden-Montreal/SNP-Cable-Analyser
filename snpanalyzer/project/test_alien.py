@@ -1,6 +1,6 @@
 import unittest
 from xlrd import open_workbook
-from project.alien import Alien
+from snpanalyzer.project.alien import Alien
 
 class TestAlien(unittest.TestCase):
     def setUp(self):

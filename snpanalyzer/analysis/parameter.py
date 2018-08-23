@@ -1,8 +1,8 @@
 from matplotlib import pyplot as plt
 from matplotlib.ticker import ScalarFormatter
-from analysis.figure import FigureAnalysis
-from analysis.format import DataFormat, formatParameterData
-from analysis.scale import PlotScale
+from snpanalyzer.analysis.figure import FigureAnalysis
+from snpanalyzer.analysis.format import DataFormat, formatParameterData
+from snpanalyzer.analysis.scale import PlotScale
 from overrides import overrides
 
 class ParameterAnalysis(FigureAnalysis):

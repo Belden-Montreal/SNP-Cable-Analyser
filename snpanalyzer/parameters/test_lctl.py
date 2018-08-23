@@ -1,8 +1,8 @@
 import unittest
 
-from parameters.test_parameter import TestParameter
-from parameters.lctl import LCTL
-from parameters.dataserie import WireDataSerie
+from snpanalyzer.parameters.test_parameter import TestParameter
+from snpanalyzer.parameters.lctl import LCTL
+from snpanalyzer.parameters.dataserie import WireDataSerie
 
 class TestLCTL(TestParameter):
     def createParameter(self):

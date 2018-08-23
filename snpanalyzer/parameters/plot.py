@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 # plt.rcParams.update({'figure.max_open_warning': 0})
 from matplotlib.figure import Figure
 from matplotlib.ticker import ScalarFormatter
-from parameters.type import ParameterType
+from snpanalyzer.parameters.type import ParameterType
 import numpy as np
 
 class ParameterPlot(object):

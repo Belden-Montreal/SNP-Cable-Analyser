@@ -1,9 +1,9 @@
 import unittest
 
-from parameters.parameter import complex2db, complex2phase
-from parameters.test_parameter import TestParameter
-from parameters.cmrl import CMRL
-from parameters.dataserie import PortDataSerie
+from snpanalyzer.parameters.parameter import complex2db, complex2phase
+from snpanalyzer.parameters.test_parameter import TestParameter
+from snpanalyzer.parameters.cmrl import CMRL
+from snpanalyzer.parameters.dataserie import PortDataSerie
 
 class TestCMRL(TestParameter):
     def createParameter(self):

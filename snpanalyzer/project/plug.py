@@ -1,8 +1,8 @@
-from project.project import Project, ProjectNode
-from parameters.type import ParameterType
-from sample.delay import DelaySample
-from sample.plugdelay import PlugDelaySample
-from project.plug_import_dialog import PlugImportDialog
+from snpanalyzer.project.project import Project, ProjectNode
+from snpanalyzer.parameters.type import ParameterType
+from snpanalyzer.sample.delay import DelaySample
+from snpanalyzer.sample.plugdelay import PlugDelaySample
+from snpanalyzer.project.plug_import_dialog import PlugImportDialog
 import numpy as np
 import xlsxwriter
 
@@ -133,7 +133,7 @@ class Plug(Project):
             curPos += numSignals*2
         workbook.close()
 
-from sample.sample import SampleNode
+from snpanalyzer.sample.sample import SampleNode
 from widgets.plug_widget import PlugWidget
 from app.node import Node
 class PlugNode(ProjectNode):

@@ -1,8 +1,8 @@
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
 
-from parameters.factory import ParameterFactory
-from parameters.type import ParameterType
+from snpanalyzer.parameters.factory import ParameterFactory
+from snpanalyzer.parameters.type import ParameterType
 
 class TestParameterFactory(TestCase):
     def setUp(self):

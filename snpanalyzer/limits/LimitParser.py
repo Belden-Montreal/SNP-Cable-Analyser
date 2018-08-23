@@ -1,7 +1,7 @@
 import xmltodict
 import math
-from limits.TreeItem import TreeItem
-from limits.Limit import Limit
+from snpanalyzer.limits.TreeItem import TreeItem
+from snpanalyzer.limits.Limit import Limit
 class LimitParser():
 
     def __init__(self, url):

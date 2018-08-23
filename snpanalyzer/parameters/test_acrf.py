@@ -1,10 +1,10 @@
 import unittest
 
-from parameters.test_parameter import TestParameter
-from parameters.acrf import ACRF
-from parameters.fext import FEXT
-from parameters.insertionloss import InsertionLoss
-from parameters.dataserie import PortPairDataSerie, WireDataSerie
+from snpanalyzer.parameters.test_parameter import TestParameter
+from snpanalyzer.parameters.acrf import ACRF
+from snpanalyzer.parameters.fext import FEXT
+from snpanalyzer.parameters.insertionloss import InsertionLoss
+from snpanalyzer.parameters.dataserie import PortPairDataSerie, WireDataSerie
 
 class TestACRF(TestParameter):
     def setUp(self):

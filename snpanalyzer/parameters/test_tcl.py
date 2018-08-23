@@ -1,8 +1,8 @@
 import unittest
 
-from parameters.test_parameter import TestParameter
-from parameters.tcl import TCL
-from parameters.dataserie import PortDataSerie
+from snpanalyzer.parameters.test_parameter import TestParameter
+from snpanalyzer.parameters.tcl import TCL
+from snpanalyzer.parameters.dataserie import PortDataSerie
 
 class TestTCL(TestParameter):
     def createParameter(self):
