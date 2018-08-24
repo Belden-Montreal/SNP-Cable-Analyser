@@ -5,6 +5,7 @@ class VNAConfiguration(JSONConfiguration):
     def __init__(self):
         # set default value
         self.__address    = "TCPIP0::10.29.48.46::hislip0::INSTR"
+        self.__bandwidth  = 1
         self.__minfreq    = 10000000
         self.__maxfreq    = 500000000
         self.__resolution = 1000
@@ -21,6 +22,12 @@ class VNAConfiguration(JSONConfiguration):
         The address of the VNA.
         """
         return self.__address
+
+    def setBandwidth(self, bandwidth):
+        self.__bandwidth = bandwidth
+
+    def getBandwidth(self):
+        return self.__bandwidth
 
     def setMinimumFrequency(self, minfreq):
         if minfreq > self.__maxfreq:
@@ -113,6 +120,7 @@ class VNAConfiguration(JSONConfiguration):
     @overrides
     def toJSON(self):
         return {
+            "bandwidth"  : self.getBandwidth(),
             "address"    : self.getAddress(),
             "minfreq"    : self.getMinimumFrequency(),
             "maxfreq"    : self.getMaximumFrequency(),
@@ -127,6 +135,7 @@ class VNAConfiguration(JSONConfiguration):
     @overrides
     def fromJSON(json):
         vna = VNAConfiguration()
+        vna.setBandwidth(json["bandwidth"])
         vna.setAddress(json["address"])
         vna.setMinimumFrequency(json["minfreq"])
         vna.setMaximumFrequency(json["maxfreq"])
