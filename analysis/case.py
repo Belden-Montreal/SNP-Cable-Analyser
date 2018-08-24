@@ -41,6 +41,27 @@ class CaseAnalysis(ParameterAnalysis):
         return super(CaseAnalysis, self)._getLineStyle(identifier)
     
     @overrides
+    def setFormat(self, pformat):
+        # make sure the format changed
+        if self._format == pformat:
+            return
+
+        # make sure the format is supported
+        if pformat not in self.getAvailableFormats():
+            return
+
+        # update the format
+        self._format = pformat
+
+        # replace all lines in the figure
+        for serie in self._series:
+            self.removeSerie(serie)
+            self.addSerie(serie)
+
+        # set Y axis label
+        self._setYLabel()
+
+    @overrides 
     def addSerie(self, serie):
         # make sure the serie isn't already in the figure
         if serie in self._series:
