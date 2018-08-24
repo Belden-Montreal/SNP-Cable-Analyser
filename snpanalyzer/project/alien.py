@@ -3,8 +3,10 @@ from snpanalyzer.sample.disturber import DisturberSample
 from snpanalyzer.sample.victim import VictimSample
 from snpanalyzer.project.alien_import_dialog import AlienImportDialog
 from snpanalyzer.parameters.type import ParameterType
+
 from multiprocessing.dummy import Pool as ThreadPool
 from copy import deepcopy
+
 import xlsxwriter
 
 class Alien(Project):
@@ -44,7 +46,7 @@ class Alien(Project):
         return DisturberSample(name, self.__isRemote(param), standard=self._standard)
 
     def __createVictim(self, name, param, disturbers):
-        return VictimSample(name, disturbers, standard=self._standard)
+        return VictimSample(name, disturbers, remote=self.__isRemote(param), standard=self._standard)
 
     def __isRemote(self, name):
         return name == "PSAACRF"
@@ -146,7 +148,7 @@ class Alien(Project):
         return None, None
 
 from app.node import Node
-from snpanalyzer.sample.sample import SampleNode
+from sample.sample import SampleNode
 from widgets.alien_widget import AlienWidget
 from PyQt5 import QtWidgets
 class AlienNode(ProjectNode):
@@ -194,10 +196,10 @@ class AlienNode(ProjectNode):
     def getWidgets(self, vnaManager):
         if not self._alienTab:
             self._alienTab = AlienWidget(self, vnaManager)
-        else:
-            self._alienTab.updateWidget()
+
         return {"Alien": self._alienTab}
 
     def setStandard(self, standard):
         self._dataObject.setStandard(standard)
         self._alienTab.updateWidget()
+        
