@@ -62,3 +62,9 @@ class ReverseDeembedSample(DeembedSample):
             ParameterType.RDNEXT,
             ParameterType.RCASE,       
         ]
+
+    def setStandard(self, standard):
+        super(ReverseDeembedSample, self).setStandard(standard)
+        for name, parameter in self._parameters.items():
+            if name.name == "RCASE":
+                parameter.setLimit(standard.limits["NEXT"])
