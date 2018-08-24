@@ -15,7 +15,7 @@ class QIComboBox(QtWidgets.QComboBox):
         super(QIComboBox, self).__init__(parent)
  
  
-class CalWizard(QtWidgets.QWizard):
+class CalibrationWizard(QtWidgets.QWizard):
     def __init__(self, comm, parent=None):
         
         super(CalWizard, self).__init__(parent)
