@@ -12,10 +12,9 @@ class VictimSample(AlienSample):
             if len(remotes) != 1:
                 error = ValueError("Remote mismatch between disturber samples")
                 raise error
-            remote = next(iter(remotes))
-        else:
-            remote=False
-        super(VictimSample, self).__init__(snp, remote=remote, config=config, **kwargs)
+            kwargs["remote"] = next(iter(remotes))
+
+        super(VictimSample, self).__init__(snp, config=config, **kwargs)
 
     def createAnalyses(self):
         super(VictimSample, self).createAnalyses()

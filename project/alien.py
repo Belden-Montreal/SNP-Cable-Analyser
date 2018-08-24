@@ -44,7 +44,7 @@ class Alien(Project):
         return DisturberSample(name, self.__isRemote(param), standard=self._standard)
 
     def __createVictim(self, name, param, disturbers):
-        return VictimSample(name, disturbers, standard=self._standard)
+        return VictimSample(name, disturbers, remote=self.__isRemote(param), standard=self._standard)
 
     def __isRemote(self, name):
         return name == "PSAACRF"
