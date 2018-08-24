@@ -1,15 +1,15 @@
+from snpanalyzer.calibration import Calibration
+
 from PyQt5 import QtCore
 from PyQt5 import QtGui
 from PyQt5.QtCore import pyqtProperty
 from PyQt5 import QtCore, QtWidgets
 
-from calibration import Calibration
-
 import time
-
 
 import visa
 import pyvisa
+
 class QIComboBox(QtWidgets.QComboBox):
     def __init__(self,parent=None):
         super(QIComboBox, self).__init__(parent)
