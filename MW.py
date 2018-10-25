@@ -274,4 +274,4 @@ class Ui_MainWindow(object):
         self.actionDeembed.setText(_translate("MainWindow", "Deembed"))
         self.actionDeembed.setToolTip(_translate("MainWindow", "Deembed"))
 
-import images_rc
+import snpanalyzer.gui.ressources.icons_rc

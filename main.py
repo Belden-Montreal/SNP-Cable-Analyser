@@ -2,10 +2,11 @@ import sys
 from PyQt5 import QtWidgets, QtCore, QtGui
 import MW
 import new_project_dialog
-from app.project_manager import ProjectManager
-from app.vna_manager import VNAManager
-from app.tree_model import TreeModel
-from limits.LimitDialog import LimitDialog
+from snpanalyzer.app.project_manager import ProjectManager
+from snpanalyzer.vna import VNA
+from snpanalyzer.app.tree_model import TreeModel
+from snpanalyzer.gui.dialog.vna_test import VNATestDialog
+from snpanalyzer.gui.dialog.LimitDialog import LimitDialog
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 
 class Main():
@@ -25,7 +26,7 @@ class Main():
         self._projectManager = ProjectManager()
         self._mainWindow.actionToolbar_Import_SnP.setDisabled(True)
         self._mainWindow.actionImport_SnP.setDisabled(True)
-        self._vnaManager = VNAManager()
+        self._vnaManager = VNA()
 
         #Here, we process any arguments that might be sent the program from outside of the interface.
         #In other words, when ever a user right click on an SNP files, rather than opening them in Notepad, it would be opened in this interface.
@@ -38,7 +39,7 @@ class Main():
         self._mainWindow.actionToolbar_Import_SnP.triggered.connect(lambda:self.importSNP())
         self._mainWindow.actionNew_Project.triggered.connect(lambda:self.newProject())
         self._mainWindow.sampleTable.clicked.connect(lambda:self.setActiveSample())
-        self._mainWindow.actionRun.triggered.connect(lambda:self._vnaManager.acquire())
+        self._mainWindow.actionRun.triggered.connect(lambda:self.acquire())
         # self._mainWindow.actionImport_SnP.triggered.connect(lambda:self._vnaManager.acquire())
         self._mainWindow.actionConnect.triggered.connect(lambda:self.connect())
         self._mainWindow.actionWho_am_I.triggered.connect(lambda:self._vnaManager.whoAmI())
@@ -51,6 +52,13 @@ class Main():
         # QtCore.QMetaObject.connectSlotsByName(MainWindow)
         self._mainWindow.actionImport_Project.triggered.connect(lambda: self.loadProject())
         self._mainWindow.actionSave_Project.triggered.connect(lambda: self.saveProject())
+
+    def acquire(self):
+        vnaDialog = VNATestDialog()
+        vnaDialog.exec_()
+        name = vnaDialog.getSampleName()
+        ports = vnaDialog.getPorts()
+        self._vnaManager.acquire(name, ports)
 
     def connect(self):
         self._vnaManager.connect()

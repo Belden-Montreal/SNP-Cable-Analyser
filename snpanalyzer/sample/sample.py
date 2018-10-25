@@ -205,9 +205,9 @@ class Sample2(object):
     def getDate(self):
         return self._date
 
-from app.node import Node
-from widgets.parameter_widget import ParameterWidget
-from widgets.main_widget import MainWidget
+from snpanalyzer.app.node import Node
+from snpanalyzer.gui.widget.parameter_widget import ParameterWidget
+from snpanalyzer.gui.widget.main_widget import MainWidget
 from PyQt5 import QtWidgets
 
 class SampleNode(Node):

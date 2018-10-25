@@ -1,8 +1,9 @@
 from matplotlib import pyplot as plt
 from matplotlib.ticker import ScalarFormatter
-from snpanalyzer.analysis.figure import FigureAnalysis
+from snpanalyzer.analysis.figure import FigureAnalysis, autoscaleY
 from snpanalyzer.analysis.format import DataFormat, formatParameterData
 from snpanalyzer.analysis.scale import PlotScale
+from snpanalyzer.parameters.dataserie import GenericDataSerie
 from overrides import overrides
 
 class ParameterAnalysis(FigureAnalysis):
@@ -22,14 +23,28 @@ class ParameterAnalysis(FigureAnalysis):
         # show the selected series
         {self.addSerie(serie) for serie in series}
 
+        # add the limit if it exists
+        if self._parameter.getLimit():
+            self.addLimit()
+
     @overrides
     def _getXData(self, serie):
+        if serie.getName() == "limit":
+            return self._parameter.getLimit().evaluateDict({'f': self._parameter.getFrequencies()}, len(self._parameter.getFrequencies()), neg=True).keys()
         return self._parameter.getFrequencies()
 
     @overrides
     def _getYData(self, serie):
+        if serie.getName() == "limit":
+            return self._parameter.getLimit().evaluateDict({'f': self._parameter.getFrequencies()}, len(self._parameter.getFrequencies()), neg=True).values()
         return formatParameterData(self._parameter, serie, self.getFormat())
 
+    @overrides
+    def _getLineStyle(self, serie):
+        if serie.getName() == "limit":
+            return "--"
+        return "-"
+    
     @overrides
     def _getLabel(self, serie):
         return serie.getName()
@@ -80,3 +95,15 @@ class ParameterAnalysis(FigureAnalysis):
 
     def getParameter(self):
         return self._parameter
+
+    def addLimit(self):
+        serie = GenericDataSerie("limit")
+
+        if not self._parameter.getLimit():
+            return
+        self._colors[serie] = (1, 0, 0) # red
+        self.addSerie(serie)
+
+    def removeLimit(self):
+        serie = GenericDataSerie("limit")
+        self.removeSerie(serie)

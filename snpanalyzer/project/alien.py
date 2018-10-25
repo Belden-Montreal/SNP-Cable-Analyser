@@ -1,7 +1,7 @@
 from snpanalyzer.project.project import Project, ProjectNode
 from snpanalyzer.sample.disturber import DisturberSample
 from snpanalyzer.sample.victim import VictimSample
-from snpanalyzer.project.alien_import_dialog import AlienImportDialog
+from snpanalyzer.gui.dialog.alien_import_dialog import AlienImportDialog
 from snpanalyzer.parameters.type import ParameterType
 
 from multiprocessing.dummy import Pool as ThreadPool
@@ -147,9 +147,9 @@ class Alien(Project):
             return v.getAnalysis(ptype), v.getAnalysis(ptype2)
         return None, None
 
-from app.node import Node
-from sample.sample import SampleNode
-from widgets.alien_widget import AlienWidget
+from snpanalyzer.app.node import Node
+from snpanalyzer.sample.sample import SampleNode
+from snpanalyzer.gui.widget.alien_widget import AlienWidget
 from PyQt5 import QtWidgets
 class AlienNode(ProjectNode):
     def __init__(self, alien):

@@ -1,6 +1,6 @@
 from snpanalyzer.project.project import Project, ProjectNode
-from snpanalyzer.project.embedding_import_dialog import EmbedImportDialog, ReverseState
-from app.save_manager import SaveManager
+from snpanalyzer.gui.dialog.embedding_import_dialog import EmbedImportDialog, ReverseState
+from snpanalyzer.app.save_manager import SaveManager
 from snpanalyzer.sample.delay import DelaySample
 from snpanalyzer.sample.deembed import DeembedSample, ReverseDeembedSample
 from snpanalyzer.parameters.type import ParameterType
@@ -192,10 +192,10 @@ class Embedding(Project):
                 side.setStandard(standard)
 
 
-from app.node import Node
+from snpanalyzer.app.node import Node
 from snpanalyzer.sample.sample import SampleNode
 from snpanalyzer.project.plug import PlugNode
-from widgets.embed_widget import EmbedWidget
+from snpanalyzer.gui.widget.embed_widget import EmbedWidget
 from PyQt5 import QtWidgets
 class EmbeddingNode(ProjectNode):
     def __init__(self, embedding):

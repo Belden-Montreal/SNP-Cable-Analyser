@@ -23,3 +23,6 @@ class VNATestDialog(QDialog):
 
     def getLimit(self):
         return self.__ui.limitLineEdit.text()
+
+    def getPorts(self):
+        return float(self._ui.portsLineEdit.text())

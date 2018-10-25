@@ -118,7 +118,7 @@ class Project(object):
         for sample in self._samples:
             sample.setStandard(standard)
 
-from app.node import Node
+from snpanalyzer.app.node import Node
 from snpanalyzer.sample.sample import SampleNode
 class ProjectNode(Node):
     def __init__(self, project):

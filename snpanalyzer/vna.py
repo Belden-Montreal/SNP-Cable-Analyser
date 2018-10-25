@@ -1,29 +1,42 @@
 from snpanalyzer.gui.wizard.calibration import CalibrationWizard
 from snpanalyzer.config.vna import VNAConfiguration
-
+from PyQt5 import QtWidgets, QtCore
 from visa import Error as VisaError
 from pyvisa import ResourceManager
 
-class VNA(object):
-    def __init__(self, config=None):
+class VNA(QtCore.QObject):
+    connection = QtCore.pyqtSignal()
+
+    def __init__(self):
+        super(QtCore.QObject, self).__init__()
         self._connected = False
-        if config is None:
-            config = VNAConfiguration()
-        self._config = config
+        self._config = VNAConfiguration()
         self._manager = None
         self._session = None
 
     def connect(self):
         self._manager = ResourceManager()
-        self._session = self._manager.open_resouce(self._config.getAddress())
-        self._connected = True
-
+        try:
+            self._session = self._manager.open_resource(self._config.getAddress())
+            self.connection.emit()
+            self._connected = True
+        except Exception as e:
+            dialog = QtWidgets.QErrorMessage()
+            dialog.showMessage("Error : {}".format(e))
+            dialog.exec_()
+        
     def disconnect(self):
-        self._session.close()
-        self._session = None
-        self._manager.close()
-        self._manager = None
-        self.connected = False
+        try:
+            self._session.close()
+            self._session = None
+            self._manager.close()
+            self._manager = None
+            self.connected = False
+            self.connection.emit()
+        except Exception as e:
+            dialog = QtWidgets.QErrorMessage()
+            dialog.showMessage("Error : {}".format(e))
+            dialog.exec_()
 
     def acquire(self, name, ports):
         if self._manager is None:
@@ -57,3 +70,5 @@ class VNA(object):
             return "None"
         return self._session.query('*IDN?')
 
+    def connected(self):
+        return self._connected

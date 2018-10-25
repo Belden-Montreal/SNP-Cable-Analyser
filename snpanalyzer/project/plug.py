@@ -2,7 +2,7 @@ from snpanalyzer.project.project import Project, ProjectNode
 from snpanalyzer.parameters.type import ParameterType
 from snpanalyzer.sample.delay import DelaySample
 from snpanalyzer.sample.plugdelay import PlugDelaySample
-from snpanalyzer.project.plug_import_dialog import PlugImportDialog
+from snpanalyzer.gui.dialog.plug_import_dialog import PlugImportDialog
 import numpy as np
 import xlsxwriter
 
@@ -134,8 +134,8 @@ class Plug(Project):
         workbook.close()
 
 from snpanalyzer.sample.sample import SampleNode
-from widgets.plug_widget import PlugWidget
-from app.node import Node
+from snpanalyzer.gui.widget.plug_widget import PlugWidget
+from snpanalyzer.app.node import Node
 class PlugNode(ProjectNode):
     def __init__(self, plug):
         super(PlugNode, self).__init__(plug)

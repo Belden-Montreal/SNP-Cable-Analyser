@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file './ui/vna_test.ui'
+# Form implementation generated from reading ui file 'vna_test.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.2
+# Created by: PyQt5 UI code generator 5.11.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -22,20 +22,26 @@ class Ui_dialog(object):
         self.groupBox.setObjectName("groupBox")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.groupBox)
         self.gridLayout_2.setObjectName("gridLayout_2")
-        self.limitLabel = QtWidgets.QLabel(self.groupBox)
-        self.limitLabel.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.limitLabel.setObjectName("limitLabel")
-        self.gridLayout_2.addWidget(self.limitLabel, 1, 0, 1, 1)
-        self.limitLineEdit = QtWidgets.QLineEdit(self.groupBox)
-        self.limitLineEdit.setObjectName("limitLineEdit")
-        self.gridLayout_2.addWidget(self.limitLineEdit, 1, 1, 1, 1)
+        self.portsLineEdit = QtWidgets.QLineEdit(self.groupBox)
+        self.portsLineEdit.setObjectName("portsLineEdit")
+        self.gridLayout_2.addWidget(self.portsLineEdit, 2, 1, 1, 1)
         self.nameLabel = QtWidgets.QLabel(self.groupBox)
         self.nameLabel.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.nameLabel.setObjectName("nameLabel")
         self.gridLayout_2.addWidget(self.nameLabel, 0, 0, 1, 1)
+        self.limitLabel = QtWidgets.QLabel(self.groupBox)
+        self.limitLabel.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.limitLabel.setObjectName("limitLabel")
+        self.gridLayout_2.addWidget(self.limitLabel, 3, 0, 1, 1)
+        self.limitLineEdit = QtWidgets.QLineEdit(self.groupBox)
+        self.limitLineEdit.setObjectName("limitLineEdit")
+        self.gridLayout_2.addWidget(self.limitLineEdit, 3, 1, 1, 1)
         self.nameLineEdit = QtWidgets.QLineEdit(self.groupBox)
         self.nameLineEdit.setObjectName("nameLineEdit")
         self.gridLayout_2.addWidget(self.nameLineEdit, 0, 1, 1, 1)
+        self.portsLabel = QtWidgets.QLabel(self.groupBox)
+        self.portsLabel.setObjectName("portsLabel")
+        self.gridLayout_2.addWidget(self.portsLabel, 2, 0, 1, 1)
         self.sampleConfigVerticalLayout.addWidget(self.groupBox)
         spacerItem = QtWidgets.QSpacerItem(20, 210, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.sampleConfigVerticalLayout.addItem(spacerItem)
@@ -69,17 +75,8 @@ class Ui_dialog(object):
         _translate = QtCore.QCoreApplication.translate
         dialog.setWindowTitle(_translate("dialog", "Dialog"))
         self.groupBox.setTitle(_translate("dialog", "Sample Configuration"))
-        self.limitLabel.setText(_translate("dialog", "Limit"))
         self.nameLabel.setText(_translate("dialog", "Name"))
+        self.limitLabel.setText(_translate("dialog", "Limit"))
+        self.portsLabel.setText(_translate("dialog", "Number of Ports"))
 
 from snpanalyzer.gui.widget.vna_configuration import VNAConfigurationWidget
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    dialog = QtWidgets.QDialog()
-    ui = Ui_dialog()
-    ui.setupUi(dialog)
-    dialog.show()
-    sys.exit(app.exec_())
-
