@@ -3,7 +3,7 @@ from snpanalyzer.gui.widget.tab_widget import TabWidget
 from snpanalyzer.gui.ui import alien_widget_ui
 from snpanalyzer.parameters.type import ParameterType
 import numpy as np
-from canvas import Canvas
+from snpanalyzer.gui.widget.canvas import Canvas
 from matplotlib.figure import Figure
 from snpanalyzer.gui.widget.alien_navbar import AlienNavigationToolbar
 

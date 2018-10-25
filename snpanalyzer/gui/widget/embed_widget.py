@@ -3,7 +3,7 @@ from snpanalyzer.gui.widget.tab_widget import TabWidget
 from snpanalyzer.gui.widget.case_tab import CaseTab
 from snpanalyzer.gui.ui import embed_widget_ui
 from snpanalyzer.parameters.type import ParameterType
-from canvas import Canvas
+from snpanalyzer.gui.widget.canvas import Canvas
 from matplotlib.figure import Figure
 from matplotlib.ticker import ScalarFormatter
 

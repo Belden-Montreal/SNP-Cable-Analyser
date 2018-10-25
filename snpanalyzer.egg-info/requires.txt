@@ -1,0 +1,15 @@
+appdirs
+json
+matplotlib
+numpy
+overrides
+pathlib
+pyqt5
+pyvisa
+scikit-rf
+scipy
+singleton_decorator
+sympy
+xlsxwriter
+xmltodict
+dill

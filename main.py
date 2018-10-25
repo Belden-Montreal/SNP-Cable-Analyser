@@ -1,7 +1,7 @@
 import sys
 from PyQt5 import QtWidgets, QtCore, QtGui
-import MW
-import new_project_dialog
+from snpanalyzer.gui.ui import MW
+from snpanalyzer.gui.ui import new_project_dialog
 from snpanalyzer.app.project_manager import ProjectManager
 from snpanalyzer.vna import VNA
 from snpanalyzer.app.tree_model import TreeModel

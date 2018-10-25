@@ -1,7 +1,6 @@
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT
-from widgets import dataFormatDialog
+from snpanalyzer.gui.ui import dataFormatDialog
 from PyQt5 import QtWidgets
-from canvas import Canvas
 
 class AlienNavigationToolbar(NavigationToolbar2QT):
     def __init__(self, canvas, psaxextAnalysis, psaacrxAnalysis, parent=None):

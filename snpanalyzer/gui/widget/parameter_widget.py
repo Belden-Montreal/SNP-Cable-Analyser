@@ -1,6 +1,6 @@
 from snpanalyzer.gui.widget.tab_widget import TabWidget 
 from snpanalyzer.gui.ui import parameter_widget_ui
-from canvas import Canvas
+from snpanalyzer.gui.widget.canvas import Canvas
 from PyQt5 import QtWidgets
 # from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from snpanalyzer.gui.widget.navbar import NavigationToolbar

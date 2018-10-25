@@ -3,7 +3,7 @@ from PyQt5 import QtWidgets
 from matplotlib.figure import Figure
 from matplotlib.ticker import ScalarFormatter
 from snpanalyzer.gui.widget.navbar import NavigationToolbar
-from canvas import Canvas
+from snpanalyzer.gui.widget.canvas import Canvas
 from snpanalyzer.analysis.parameter import ParameterAnalysis
 from copy import deepcopy
 

@@ -29,6 +29,7 @@ setup(
         "sympy",
         "xlsxwriter",
         "xmltodict",
+        "dill",
     ],
 
     url="https://github.com/liamaltarac/SNP-Cable-Analyser",

@@ -1,5 +1,5 @@
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT
-from widgets import dataFormatDialog
+from snpanalyzer.gui.ui import dataFormatDialog
 from PyQt5 import QtWidgets
 
 class NavigationToolbar(NavigationToolbar2QT):
