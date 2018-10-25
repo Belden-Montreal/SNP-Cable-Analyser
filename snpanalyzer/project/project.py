@@ -25,8 +25,8 @@ class Project(object):
     def __createSample(self, name):
         _, extension = splitext(name)
         if extension[2] == "8" or extension[2] == "4":
-            return PlugSample(name)
-        return CableSample(name)
+            return PlugSample(name, standard=self._standard)
+        return CableSample(name, standard=self._standard)
 
     def removeSample(self, sample):
         if sample in self._samples:
@@ -115,6 +115,7 @@ class Project(object):
         return ProjectNode(self)
 
     def setStandard(self, standard):
+        self._standard = standard
         for sample in self._samples:
             sample.setStandard(standard)
 
