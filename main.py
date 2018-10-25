@@ -40,7 +40,6 @@ class Main():
         self._mainWindow.actionNew_Project.triggered.connect(lambda:self.newProject())
         self._mainWindow.sampleTable.clicked.connect(lambda:self.setActiveSample())
         self._mainWindow.actionRun.triggered.connect(lambda:self.acquire())
-        # self._mainWindow.actionImport_SnP.triggered.connect(lambda:self._vnaManager.acquire())
         self._mainWindow.actionConnect.triggered.connect(lambda:self.connect())
         self._mainWindow.actionWho_am_I.triggered.connect(lambda:self._vnaManager.whoAmI())
         self._mainWindow.actionMeasure.triggered.connect(lambda:self._vnaManager.acquire())
@@ -48,8 +47,6 @@ class Main():
         self._mainWindow.actionDisconnect.triggered.connect(lambda:self.disconnect())
         self._mainWindow.actionAlien.triggered.connect(lambda:self.newProject(0))
         self._mainWindow.actionDeembed.triggered.connect(lambda:self.newProject(2))
-        # self._mainWindow.param_tabs.currentChanged['int'].connect(lambda:self.tabChanged())
-        # QtCore.QMetaObject.connectSlotsByName(MainWindow)
         self._mainWindow.actionImport_Project.triggered.connect(lambda: self.loadProject())
         self._mainWindow.actionSave_Project.triggered.connect(lambda: self.saveProject())
 

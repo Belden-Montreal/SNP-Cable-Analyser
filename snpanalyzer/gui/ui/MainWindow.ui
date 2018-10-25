@@ -341,8 +341,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>:/Pictures/Icons/ImportFIle2.png</normaloff>:/Pictures/Icons/ImportFIle2.png</iconset>
+    <iconset resource="../ressources/icons.qrc">
+     <normaloff>:/icons/import.png</normaloff>:/icons/import.png</iconset>
    </property>
    <property name="text">
     <string>Import Snp</string>
@@ -357,7 +357,8 @@
    </property>
    <property name="icon">
     <iconset>
-     <normaloff>:/Pictures/Icons/newProject.png</normaloff>:/Pictures/Icons/newProject.png</iconset>
+     <normalon>:/icons/new_project.png</normalon>
+    </iconset>
    </property>
    <property name="text">
     <string>New Project</string>
@@ -408,10 +409,10 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>:/Pictures/Icons/Run.png</normaloff>
-     <disabledoff>:/Pictures/Icons/Run_disabled.png</disabledoff>
-     <disabledon>:/Pictures/Icons/Run_disabled.png</disabledon>:/Pictures/Icons/Run.png</iconset>
+    <iconset resource="../ressources/icons.qrc">
+     <normaloff>:/icons/run.png</normaloff>
+     <disabledoff>:/icons/run_disabled.png</disabledoff>
+     <disabledon>:/icons/run_disabled.png</disabledon>:/icons/run.png</iconset>
    </property>
    <property name="text">
     <string>Run</string>
@@ -422,10 +423,10 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>:/Pictures/Icons/calibrate.png</normaloff>
-     <disabledoff>:/Pictures/Icons/calibrate_disabled.png</disabledoff>
-     <disabledon>:/Pictures/Icons/calibrate_disabled.png</disabledon>:/Pictures/Icons/calibrate.png</iconset>
+    <iconset resource="../ressources/icons.qrc">
+     <normaloff>:/icons/calibrate.png</normaloff>
+     <disabledoff>:/icons/calibrate_disabled.png</disabledoff>
+     <disabledon>:/icons/calibrate_disabled.png</disabledon>:/icons/calibrate.png</iconset>
    </property>
    <property name="text">
     <string>Calibrate</string>
@@ -433,8 +434,8 @@
   </action>
   <action name="actionAlien">
    <property name="icon">
-    <iconset>
-     <normaloff>:/Pictures/Icons/alien.png</normaloff>:/Pictures/Icons/alien.png</iconset>
+    <iconset resource="../ressources/icons.qrc">
+     <normaloff>:/icons/alien.png</normaloff>:/icons/alien.png</iconset>
    </property>
    <property name="text">
     <string>Alien</string>
@@ -445,8 +446,8 @@
   </action>
   <action name="actionDeembed">
    <property name="icon">
-    <iconset>
-     <normaloff>:/Pictures/Icons/deembed.png</normaloff>:/Pictures/Icons/deembed.png</iconset>
+    <iconset resource="../ressources/icons.qrc">
+     <normaloff>:/icons/deembed.png</normaloff>:/icons/deembed.png</iconset>
    </property>
    <property name="text">
     <string>Deembed</string>
