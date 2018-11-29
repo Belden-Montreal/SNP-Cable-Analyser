@@ -7,6 +7,13 @@
 *.log
 *.pdf
 
+#build and dist files
+build/*
+dist/*
+
+#exe file (setup)
+*.exe
+
 # allow TeX files in template directory
 !template/*.tex
 
