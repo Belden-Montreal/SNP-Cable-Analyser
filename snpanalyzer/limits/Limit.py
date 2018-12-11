@@ -41,7 +41,7 @@ class Limit:
                         val = self.maxValue
                     return val
                 except Exception as e:
-                    print(e)
+                    continue
         return 0
 
     def evaluateDict(self, vals, nb, neg=False):

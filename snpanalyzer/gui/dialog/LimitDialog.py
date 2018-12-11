@@ -4,7 +4,7 @@ from snpanalyzer.limits.TreeModel import TreeModel
 from snpanalyzer.gui.dialog.EditLimitDialog import EditLimitDialog
 
 class LimitDialog(object):
-    def __init__(self, limitsFile = "snpanalyzer/limits/limits.xml"):
+    def __init__(self, limitsFile = "limits/limits.xml"):
         self.dialog = QtWidgets.QDialog()
         self.limitDialog = Set_Limit_Dialog.Ui_LimitDialog()
         self.limitDialog.setupUi(self.dialog)

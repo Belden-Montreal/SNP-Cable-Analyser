@@ -1,0 +1,16 @@
+Source: "C:\Users\cedryk\Documents\SNP-Cable-Analyser\dist\main\Include\*"; DestDir: "{app}\Include"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\cedryk\Documents\SNP-Cable-Analyser\dist\main\IPython\*"; DestDir: "{app}\IPython"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\cedryk\Documents\SNP-Cable-Analyser\dist\main\jedi\*"; DestDir: "{app}\jedi"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\cedryk\Documents\SNP-Cable-Analyser\dist\main\lib2to3\*"; DestDir: "{app}\lib2to3"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\cedryk\Documents\SNP-Cable-Analyser\dist\main\limits\*"; DestDir: "{app}\limits"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\cedryk\Documents\SNP-Cable-Analyser\dist\main\markupsafe\*"; DestDir: "{app}\markupsafe"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\cedryk\Documents\SNP-Cable-Analyser\dist\main\matplotlib\*"; DestDir: "{app}\matplotlib"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\cedryk\Documents\SNP-Cable-Analyser\dist\main\mpl-data\*"; DestDir: "{app}\mpl-data"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\cedryk\Documents\SNP-Cable-Analyser\dist\main\numpy\*"; DestDir: "{app}\numpy"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\cedryk\Documents\SNP-Cable-Analyser\dist\main\pandas\*"; DestDir: "{app}\pandas"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\cedryk\Documents\SNP-Cable-Analyser\dist\main\PyQt5\*"; DestDir: "{app}\PyQt5"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\cedryk\Documents\SNP-Cable-Analyser\dist\main\pytz\*"; DestDir: "{app}\pytz"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\cedryk\Documents\SNP-Cable-Analyser\dist\main\scipy\*"; DestDir: "{app}\scipy"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\cedryk\Documents\SNP-Cable-Analyser\dist\main\skrf\*"; DestDir: "{app}\skrf"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\cedryk\Documents\SNP-Cable-Analyser\dist\main\tcl\*"; DestDir: "{app}\tcl"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\cedryk\Documents\SNP-Cable-Analyser\dist\main\tk\*"; DestDir: "{app}\tk"; Flags: ignoreversion recursesubdirs createallsubdirs

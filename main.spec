@@ -2,11 +2,15 @@
 
 block_cipher = None
 
+added_files = [
+        ('C:/Users/cedryk/AppData/Local/Programs/Python/Python37/Lib/site-packages/skrf/data/*.s*p', 'skrf/data/'),
+        ('C:/Users/cedryk/Documents/SNP-Cable-Analyser/limits/limits.xml', 'limits/'),
+]
 
 a = Analysis(['main.py'],
-             pathex=['C:\\Users\\polki\\Documents\\Belden\\SNP-Cable-Analyser'],
+             pathex=['C:\\Users\\cedryk\\Documents\\SNP-Cable-Analyser'],
              binaries=[],
-             datas=[('C:/Users/polki/AppData/Local/Programs/Python/Python37/Lib/site-packages/skrf/data/*.s*p', 'skrf/data/')],
+             datas=added_files,
              hiddenimports=["skrf", "matplotlib.backends.backend_tkagg"],
              hookspath=[],
              runtime_hooks=[],

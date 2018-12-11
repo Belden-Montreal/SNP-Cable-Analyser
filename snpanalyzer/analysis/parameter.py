@@ -36,6 +36,8 @@ class ParameterAnalysis(FigureAnalysis):
     @overrides
     def _getYData(self, serie):
         if serie.getName() == "limit":
+            if self._parameter.getName() == "Propagation Delay":
+                return self._parameter.getLimit().evaluateDict({'f': self._parameter.getFrequencies()}, len(self._parameter.getFrequencies()), neg=False).values()
             return self._parameter.getLimit().evaluateDict({'f': self._parameter.getFrequencies()}, len(self._parameter.getFrequencies()), neg=True).values()
         return formatParameterData(self._parameter, serie, self.getFormat())
 

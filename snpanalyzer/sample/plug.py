@@ -1,4 +1,4 @@
-from snpanalyzer.sample.sample import Sample, PORTS_NAME
+from snpanalyzer.sample.sample import Sample
 from snpanalyzer.sample.port import EthernetPair, NetworkPort, PlugConfiguration
 from snpanalyzer.parameters.type import ParameterType
 
