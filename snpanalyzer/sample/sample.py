@@ -43,14 +43,14 @@ class Sample(object):
             if parameter in self._parameters.keys():
                 continue
             self._parameters[parameter] = self._factory.getParameter(parameter)
+        
+        self.createAnalyses()
 
-        #  set the standard
+         #  set the standard
         if standard:
             self.setStandard(standard)
         else:
             self._standard = None
-        
-        self.createAnalyses()
 
     def createAnalyses(self):
         self._analyses = dict()
@@ -86,6 +86,7 @@ class Sample(object):
         for (name, parameter) in self._parameters.items():
             if name.name in standard.limits:
                 parameter.setLimit(standard.limits[name.name])
+                self._analyses[name].addLimit()
 
     def getStandard(self):
         return self._standard
@@ -148,62 +149,62 @@ class Sample(object):
     def generateDocumentObject(self, prefix):
         return SampleDocumentObject(prefix, self)
 
-PORTS_NAME = ["45", "12", "36", "78"]
-class Sample2(object):
-    '''
-    The sample class contains the measurements for one object
-    '''
-    def __init__(self, snpFile, standard=None):
-        self._parameters = dict()
-        if snpFile:
-            self._snp = SNPAnalyzer(snpFile)
-            self._mm, self._freq, self._portsNumber = self._snp.getMM()
-            (self._name, self._extension), self._date = self._snp.getFileInfo()
-            self._ports = dict()
-            self.setPorts()
-            self._factory = ParameterFactory(self._ports, self._freq, self._mm, self._parameters)
-            self.addParameters()
-            if standard:
-                self.setStandard(standard)
-            else:
-                self._standard = None
+#   PORTS_NAME = ["45", "12", "36", "78"]
+# class Sample2(object):
+#     '''
+#     The sample class contains the measurements for one object
+#     '''
+#     def __init__(self, snpFile, standard=None):
+#         self._parameters = dict()
+#         if snpFile:
+#             self._snp = SNPAnalyzer(snpFile)
+#             self._mm, self._freq, self._portsNumber = self._snp.getMM()
+#             (self._name, self._extension), self._date = self._snp.getFileInfo()
+#             self._ports = dict()
+#             self.setPorts()
+#             self._factory = ParameterFactory(self._ports, self._freq, self._mm, self._parameters)
+#             self.addParameters()
+#             if standard:
+#                 self.setStandard(standard)
+#             else:
+#                 self._standard = None
 
-    def addParameters(self):
-        raise NotImplementedError
+#     def addParameters(self):
+#         raise NotImplementedError
 
-    def setStandard(self, standard):
-        self._standard = standard
-        for name, parameter in self._parameters.items():
-            if name in standard.limits:
-                parameter.setLimit(standard.limits[name])
+#     def setStandard(self, standard):
+#         self._standard = standard
+#         for name, parameter in self._parameters.items():
+#             if name in standard.limits:
+#                 parameter.setLimit(standard.limits[name])
 
-    '''
-    Ports follow the following format: {port_number: (port_name, isRemote)}
-    '''
-    def setPorts(self):
-        for i in range(self._portsNumber):
-            self._ports[i] = (PORTS_NAME[i], False)
+#     '''
+#     Ports follow the following format: {port_number: (port_name, isRemote)}
+#     '''
+#     def setPorts(self):
+#         for i in range(self._portsNumber):
+#             self._ports[i] = (PORTS_NAME[i], False)
 
-    def getFrequencies(self):
-        return self._freq
+#     def getFrequencies(self):
+#         return self._freq
 
-    def getParameters(self):
-        return self._parameters
+#     def getParameters(self):
+#         return self._parameters
 
-    def getNumPorts(self):
-        return self._portsNumber
+#     def getNumPorts(self):
+#         return self._portsNumber
 
-    def getStandard(self):
-        return self._standard
+#     def getStandard(self):
+#         return self._standard
 
-    def getName(self):
-         return self._name
+#     def getName(self):
+#          return self._name
 
-    def getFileName(self):
-        return self._snp.getFile()
+#     def getFileName(self):
+#         return self._snp.getFile()
 
-    def getDate(self):
-        return self._date
+#     def getDate(self):
+#         return self._date
 
 from snpanalyzer.app.node import Node
 from snpanalyzer.gui.widget.parameter_widget import ParameterWidget
