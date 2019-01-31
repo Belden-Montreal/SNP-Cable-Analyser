@@ -5,7 +5,7 @@ class VNAConfiguration(JSONConfiguration):
     def __init__(self):
         # set default value
         self.__address    = "TCPIP0::10.29.48.46::hislip0::INSTR"
-        self.__bandwidth  = 1
+        self.__bandwidth  = 300
         self.__minfreq    = 10000000
         self.__maxfreq    = 500000000
         self.__resolution = 1000

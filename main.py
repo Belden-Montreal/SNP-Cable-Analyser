@@ -42,7 +42,7 @@ class Main():
         self._mainWindow.actionRun.triggered.connect(lambda:self.acquire())
         self._mainWindow.actionConnect.triggered.connect(lambda:self.connect())
         self._mainWindow.actionWho_am_I.triggered.connect(lambda:self._vnaManager.whoAmI())
-        self._mainWindow.actionMeasure.triggered.connect(lambda:self._vnaManager.acquire())
+        self._mainWindow.actionMeasure.triggered.connect(lambda:self.acquire())
         self._mainWindow.actionCalibrate_2.triggered.connect(lambda:self._vnaManager.calibrate())
         self._mainWindow.actionDisconnect.triggered.connect(lambda:self.disconnect())
         self._mainWindow.actionAlien.triggered.connect(lambda:self.newProject(0))
@@ -51,12 +51,15 @@ class Main():
         self._mainWindow.actionSave_Project.triggered.connect(lambda: self.saveProject())
 
     def acquire(self):
+        print(self.getRootProject())
+
         vnaDialog = VNATestDialog()
         vnaDialog.exec_()
         name = vnaDialog.getSampleName()
         ports = vnaDialog.getPorts()
-        self._vnaManager.acquire(name, ports)
-
+        sample_file = self._vnaManager.acquire(name, ports)
+        self.getRootProject().addSamples([sample_file])
+        
     def connect(self):
         self._vnaManager.connect()
         if self._vnaManager.connected():
@@ -67,7 +70,7 @@ class Main():
             self._mainWindow.actionDisconnect.setEnabled(True)
             self._mainWindow.actionRun.setEnabled(True)
             self._mainWindow.actionConnect.setEnabled(False)
-
+            
     def disconnect(self):
         self._vnaManager.disconnect()
         self._mainWindow.actionMeasure.setEnabled(False)
@@ -158,8 +161,20 @@ class Main():
                     else:
                         z = False
                     file, _ = QtWidgets.QFileDialog.getSaveFileName(self._qmw,"Export Excel Report", "","Excel File (*.xlsx)")
+                    selected_samples = []
+                    for s in selected:
+                        s = self._model.itemFromIndex(s).getObject()
+                        if(type(s.getSamples()) is list):  
+                            selected_samples.extend(s.getSamples())
+                        else:
+                            selected_samples.append(s.getSamples())
+                    print(selected_samples)
                     try:
-                        selectedProj.generateExcel(file , [self._model.itemFromIndex(s) for s in selected], z)
+                        for x in selected_samples:
+                            print("Here : "+ x.getName())
+        
+                        #print([self._model.itemFromIndex(s).getObject().getSamples().getName() for s in selected])
+                        selectedProj.generateExcel(file, [s.getName() for s in selected_samples], z)
                     except Exception as e:
                         errorMessage = QtWidgets.QErrorMessage(self._qmw)
                         errorMessage.showMessage(str(e))

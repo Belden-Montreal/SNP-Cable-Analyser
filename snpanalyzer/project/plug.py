@@ -161,6 +161,9 @@ class PlugNode(ProjectNode):
     def addChildren(self, samples):
         for sample in samples:
             self.appendRow(SampleNode(sample, self._dataObject))
+
+    def addChildren(self, samples):
+        pass
     
     def updateChildren(self):
         node = self.hasChild("DFOpen")

@@ -149,6 +149,9 @@ class Sample(object):
     def generateDocumentObject(self, prefix):
         return SampleDocumentObject(prefix, self)
 
+    def getSamples(self):
+        return self
+
 #   PORTS_NAME = ["45", "12", "36", "78"]
 # class Sample2(object):
 #     '''

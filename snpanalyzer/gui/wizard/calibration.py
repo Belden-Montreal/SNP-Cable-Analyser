@@ -18,7 +18,7 @@ class QIComboBox(QtWidgets.QComboBox):
 class CalibrationWizard(QtWidgets.QWizard):
     def __init__(self, comm, parent=None):
         
-        super(CalWizard, self).__init__(parent)
+        super(CalibrationWizard, self).__init__(parent)
 
         self.cal = Calibration(comm.session)
         time.sleep(3)
@@ -57,6 +57,7 @@ class CalibrationWizard(QtWidgets.QWizard):
                             "seq4":[(7,12), (8,11)]}}
         
         self.setWindowTitle("Cal Wizard")
+        print("Setting title")
 
         self.addPage(self.Intro())
         self.addPage(self.Open())
@@ -253,6 +254,7 @@ Press Next once you've done so'''.format(attach,  str(self.thruTwoEnd[attach][se
     def finishButtonAction(self):
          self.cal.save()
          self.cal.close()
+         print("Done")
 
 if __name__ == '__main__':
     import sys

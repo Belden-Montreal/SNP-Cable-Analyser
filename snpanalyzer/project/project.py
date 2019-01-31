@@ -24,6 +24,8 @@ class Project(object):
 
     def __createSample(self, name):
         _, extension = splitext(name)
+        print("file name "+name )
+        print("extension "+extension )
         if extension[2] == "8" or extension[2] == "4":
             return PlugSample(name, standard=self._standard)
         return CableSample(name, standard=self._standard)
@@ -35,9 +37,13 @@ class Project(object):
     def generateExcel(self, outputName, sampleNames, z=False):
         workbook = xlsxwriter.Workbook(outputName, options={'nan_inf_to_errors': True})
         samples = [x for x in self._samples if x.getName() in sampleNames]
+        #print(samples[0].getParameters().getDataSeries())
+##        for x in self._samples:
+##            print(x.getName())
         for i,sample in enumerate(samples):
             try:
                 worksheet = workbook.add_worksheet(sample.getName())
+                #print(sample.getName())
             except:
                 worksheet = workbook.add_worksheet(sample.getName()+str(i))
             worksheet.write('A1', 'Sample ID:')
@@ -50,33 +56,39 @@ class Project(object):
 
             curPos = 1
             for i, (paramName, parameter) in enumerate(sample.getParameters().items()):
-                numSignals = len(parameter.getPorts())
-                worksheet.merge_range(2, curPos, 2, curPos+numSignals*2-1,  paramName, cell_format)
-                for i, (key, (portName,_)) in enumerate(parameter.getPorts().items()):
+                #print(paramName)
+                numSignals = len(parameter.getParameter().keys())
+                worksheet.merge_range(2, curPos, 2, curPos+numSignals*2-1,  str(paramName), cell_format)
+                #print(parameter.getDataSeries().pop().getName())
+                #print(parameter.getPorts()._ports.getName())
+                for i, portName in enumerate(list(parameter.getDataSeries())):
+                    portSeries = portName
+                    portName = portName.getName()
                     worksheet.merge_range(3, curPos+i*2, 3, curPos+i*2+1, str(portName), cell_format)
                     if paramName == "Propagation Delay":
                         worksheet.merge_range(4, curPos+i*2, 4, curPos+i*2+1, "ns", cell_format)
                         param = parameter.getParameter()
-                        for j, data in enumerate(param[key]):
+                        for j, data in enumerate(param[portSeries]):
                             worksheet.merge_range(5+j, curPos+i*2, 5+j, curPos+i*2+1, "")
-                            self.box(workbook, worksheet, param, key, i*2, j, data, curPos)
+                            self.box(workbook, worksheet, param, portSeries, i*2, j, data, curPos)
                     else:
                         if z:
-                            worksheet.write(4,curPos+i*2, "real", cell_format)
+                            worksheet.write(4, curPos+i*2, "real", cell_format)
                             worksheet.write(4,curPos+i*2+1, "imaginary", cell_format)
                             param = parameter.getComplexParameter()
-                            for j,data in enumerate(param[key]):
+                            for j,data in enumerate(param[portSeries]):
                                 worksheet.write(5+j, 0, sample.getFrequencies()[j])
-                                self.box(workbook, worksheet, param, key, i*2, j, data.real, curPos)
-                                self.box(workbook, worksheet, param, key, i*2+1, j, data.imag, curPos)
+                                self.box(workbook, worksheet, param, portSeries, i*2, j, data.real, curPos)
+                                self.box(workbook, worksheet, param, portSeries, i*2+1, j, data.imag, curPos)
                         else:
                             worksheet.write(4,curPos+i*2, "mag", cell_format)
                             worksheet.write(4,curPos+i*2+1, "phase", cell_format)
                             param = parameter.getParameter()
-                            for j, (mag, phase) in enumerate(param[key]):
+                            print(param.keys())
+                            for j, (mag, phase) in enumerate(param[portSeries]):
                                 worksheet.write(5+j, 0, sample.getFrequencies()[j])
-                                self.box(workbook, worksheet, param, key, i*2, j, mag, curPos)
-                                self.box(workbook, worksheet, param, key, i*2+1, j, phase, curPos)
+                                self.box(workbook, worksheet, param, portSeries, i*2, j, mag, curPos)
+                                self.box(workbook, worksheet, param, portSeries, i*2+1, j, phase, curPos)
             
                 curPos += numSignals*2
         workbook.close()
@@ -91,7 +103,7 @@ class Project(object):
             box_form.set_bottom(6)
         if i == len(parameter)*2-1:
             box_form.set_right(6)
-        worksheet.write(j+5, curPos+i, data, box_form)
+        worksheet.write(j+5, curPos+i, str(data), box_form)
 
     def findSamplesByName(self, names):
         return [x for x in self._samples if x.getName() in names]
@@ -135,7 +147,12 @@ class ProjectNode(Node):
         names,_ = QtWidgets.QFileDialog.getOpenFileNames(parent, caption="Select SNP(s)", directory="",filter="sNp Files (*.s*p)")
         if names:
             self.addChildren(self._dataObject.importSamples(names))
-    
+            
+    def addSamples(self, name):
+        if name:
+            self.addChildren(self._dataObject.importSamples(name))
+        
+     
     def delete(self):
         if self.parent():
             self.parent().removeRow(self.row())
@@ -153,3 +170,12 @@ class ProjectNode(Node):
 
     # def getWidgets(self, vnaManager):
     #     return list()
+    
+##
+##if __name__ == "main":
+##
+##    p = Project()
+##    p.importSamples("cable3.s16p")
+##    p.generateExcel("123", "cable3", True)
+##    
+
