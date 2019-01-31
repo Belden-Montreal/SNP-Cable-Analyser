@@ -58,14 +58,16 @@ class Project(object):
             for i, (paramName, parameter) in enumerate(sample.getParameters().items()):
                 #print(paramName)
                 numSignals = len(parameter.getParameter().keys())
-                worksheet.merge_range(2, curPos, 2, curPos+numSignals*2-1,  str(paramName), cell_format)
+                print(str(paramName))
+                paramName = str(paramName).replace("ParameterType.", "").replace("_", " ")
+                worksheet.merge_range(2, curPos, 2, curPos+numSignals*2-1, paramName, cell_format)
                 #print(parameter.getDataSeries().pop().getName())
                 #print(parameter.getPorts()._ports.getName())
                 for i, portName in enumerate(list(parameter.getDataSeries())):
                     portSeries = portName
                     portName = portName.getName()
                     worksheet.merge_range(3, curPos+i*2, 3, curPos+i*2+1, str(portName), cell_format)
-                    if paramName == "Propagation Delay":
+                    if paramName == "PROPAGATION DELAY":
                         worksheet.merge_range(4, curPos+i*2, 4, curPos+i*2+1, "ns", cell_format)
                         param = parameter.getParameter()
                         for j, data in enumerate(param[portSeries]):

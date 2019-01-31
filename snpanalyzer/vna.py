@@ -49,29 +49,38 @@ class VNA(QtCore.QObject):
             dialog.exec_()
 
     def acquire(self, name, ports):
+        config = self._config
+
+        timeOut = self._config.getTimeout()
+        bw = config.getBandwidth()
+        minFreq = config.getMinimumFrequency()
+        maxFreq = config.getMaximumFrequency()
+        res = config.getResolution()
+        average = config.getAverage()
         if self.rm is None:
             return
 
-        config = self._config
 
         try:
-            self.session.timeout = self._config.getTimeout()
-            print()
+            self.session.timeout = timeOut
+            print(self._config.getTimeout())
 
-            self.session.write("SENS:BWID " + str(config.getBandwidth()))
+            self.session.write("SENS:BWID " + str(bw))
+            print(self.session.query(";*OPC?"))
+
             print("set if")
-            self.session.write("SENS:FREQ:STAR " + str(config.getMinimumFrequency()))
+            self.session.write("SENS:FREQ:STAR " + str(minFreq))
             print("set min f")
 
-            self.session.write("SENS:FREQ:STOP " + str(config.getMaximumFrequency()))
-            print("set max f")
+            self.session.write("SENS:FREQ:STOP " + str(maxFreq))
+            print("set max f:"+str(maxFreq))
             print("set avg")
             self.session.write("SENS:SWE:TYPE LIN")
-            self.session.write("SENS:SWE:POIN " + str(config.getResolution()))
-            print("ok")
+            self.session.write("SENS:SWE:POIN " + str(res))
+            print("res " + str(res))
             self.session.write(":SENS:AVER:CLE")
             self.session.write(":ABOR")
-            self.session.write("SENS:AVER:COUN {}".format(str(config.getAverage())))
+            self.session.write("SENS:AVER:COUN {}".format(str(average)))
             self.session.write(":INIT1:CONT ON")
             self.session.write(":TRIG:SOUR immediate")
             self.session.write("SENS:SWE:GRO:COUN 4") # "+str(self.average))
@@ -80,12 +89,7 @@ class VNA(QtCore.QObject):
             self.session.write("SENS:SWE:MODE GRO;*OPC?")
             
             self.session.write(":CALC:PAR:SEL 'CH1_S11_1'")
-            print(name)
-            print(ports)
             print(self.session.query(";*OPC?"))
-            print(name)
-            print(ports)
-
             self.session.write(":CALC:DATA:SNP:PORT:SAVE '{}', '{}.s{}p'".format(str([i for i in range(1,int(ports)+1)])[1:-1], "Y:\\"+name, str(int(ports)) ))
             print(self.session.query(";*OPC?"))
             #rm.list_resources()

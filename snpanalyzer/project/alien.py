@@ -92,12 +92,21 @@ class Alien(Project):
                 if sample:
                     worksheet.merge_range(1, curPos, 1, curPos+sample.getNumPorts()*2-1, end, cell_format)
                     for i, (paramName, parameter) in enumerate(sample.getParameters().items()):
+                        print(str(paramName))
+                        paramName = str(paramName).replace("ParameterType.", "").replace("_", " ")
+
                         numSignals = 0
                         try:
-                            if parameter.getName() == "PSAXEXT" or parameter.getName() == "PSAACRX":
+                            print(paramName)
+                            if paramName in ["PSANEXT","PSAFEXT","PSAACRN","PSAACRF"] :
                                 numSignals = len(parameter.getPorts())
-                                worksheet.merge_range(2, curPos, 2, curPos+numSignals*2-1,  paramName, cell_format)
-                                for i, (key, (portName,_)) in enumerate(parameter.getPorts().items()):
+                                worksheet.merge_range(2, curPos, 2, curPos+numSignals-1,  paramName, cell_format)
+                                param = parameter.getParameter()
+                                print(list(parameter.getDataSeries()))
+
+                                for i, portName in enumerate(list(parameter.getDataSeries())):
+                                    key = portName
+                                    portName = portName.getName()
                                     worksheet.merge_range(3, curPos+i*2, 3, curPos+i*2+1, str(portName), cell_format)
                                     # TODO: alien phase/complex values
                                     # if z:
@@ -120,7 +129,7 @@ class Alien(Project):
                         except AttributeError as e:
                             print(e)
                     
-                        curPos += numSignals*2
+                        curPos += numSignals
         workbook.close()
 
     def nodeFromProject(self):
