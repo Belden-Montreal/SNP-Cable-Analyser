@@ -3,9 +3,12 @@ from os.path import abspath
 from os import getcwd, chdir
 from subprocess import call
 from shutil import copyfile
+from pathlib import Path, PureWindowsPath
+
 
 def normalize(name):
-    return name.lower().replace(' ', '-')
+    name = name.lower().replace(' ', '-')
+    return name
 
 def latex(name):
     return name.replace('_', '\\_')
@@ -16,9 +19,11 @@ class DocumentObject(object):
         self._configuration = configuration
 
         # create required directories if needed
+        print(root)
         self._root   = root
         self._prefix = prefix
         self._path   = self._root.joinpath(self._prefix)
+
         self._path.mkdir(exist_ok=True, parents=True)
  
         # get the filename
@@ -27,10 +32,11 @@ class DocumentObject(object):
         self._filename  = self._basename+self._extension
 
         # create the path to this document object
-        self._fullpath = self._path.joinpath(self._filename)
+        self._fullpath = str(self._path.joinpath(self._filename)).replace("\\", '/')
 
         # create the relative path
-        self._relpath = self._prefix.joinpath(self._filename)
+        self._relpath = str(self._prefix.joinpath(self._filename)).replace("\\",'/')
+        print("Rel: "+self._relpath)
 
         # create the environment
         self._env = Environment(

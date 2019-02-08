@@ -168,6 +168,8 @@
    <addaction name="actionCalibrate_2"/>
    <addaction name="actionAlien"/>
    <addaction name="actionDeembed"/>
+   <addaction name="actionExport_PDF"/>
+   <addaction name="actionExport_Excel_2"/>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -454,6 +456,27 @@
    </property>
    <property name="toolTip">
     <string>Deembed</string>
+   </property>
+  </action>
+  <action name="actionExport_PDF">
+   <property name="icon">
+    <iconset resource="../ressources/icons.qrc">
+     <normaloff>:/icons/ExportPDF.png</normaloff>:/icons/ExportPDF.png</iconset>
+   </property>
+   <property name="text">
+    <string>Export PDF Repport</string>
+   </property>
+  </action>
+  <action name="actionExport_Excel_2">
+   <property name="icon">
+    <iconset resource="../ressources/icons.qrc">
+     <normaloff>:/icons/ExportExcel.png</normaloff>:/icons/ExportExcel.png</iconset>
+   </property>
+   <property name="text">
+    <string>Export Excel Repport</string>
+   </property>
+   <property name="toolTip">
+    <string>Export Excel Repport</string>
    </property>
   </action>
  </widget>

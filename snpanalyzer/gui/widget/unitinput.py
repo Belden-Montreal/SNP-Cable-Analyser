@@ -47,7 +47,10 @@ class UnitInputWidget(QWidget):
         self.__ui.unitComboBox.setCurrentIndex(default)
 
     def getValue(self):
-        value = int(self.__ui.valueLineEdit.text())
+        value = self.__ui.valueLineEdit.text()
+        if not value.isdigit():
+            value = 0
+        value = int(value)
         unit = self.__ui.unitComboBox.currentData()
         return value*unit.getFactor()
 

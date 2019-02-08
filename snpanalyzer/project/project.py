@@ -1,6 +1,8 @@
 from snpanalyzer.sample.cable import CableSample
 from snpanalyzer.sample.plug import PlugSample
-from multiprocessing.dummy import Pool as ThreadPool
+#from multiprocessing.dummy import Pool as ThreadPool
+import threading
+
 from os.path import splitext
 import xlsxwriter
 from PyQt5 import QtWidgets, QtGui
@@ -13,22 +15,33 @@ class Project(object):
     def __init__(self, name):
         self._name = name
         self._date = ""
+        self.samplesList = []
         self._samples = list()
         self._standard = None
 
     def importSamples(self, fileNames):
-        pool = ThreadPool()
-        samples = pool.map(self.__createSample, fileNames)
-        self._samples.extend(samples)
-        return samples
+        threads = []
+        self.samplesList = []
+        for sample in fileNames:
+            t = threading.Thread(target=self.__createSample(sample))
+            threads.append(t)
+            t.start()
+            print("starting")
+        for t in threads:
+            print("done")
+            t.join()   
+        self._samples.extend(self.samplesList)
+        return self.samplesList 
 
     def __createSample(self, name):
+        print("Sample name : "+ name)
         _, extension = splitext(name)
         print("file name "+name )
         print("extension "+extension )
         if extension[2] == "8" or extension[2] == "4":
-            return PlugSample(name, standard=self._standard)
-        return CableSample(name, standard=self._standard)
+            self.samplesList.append(PlugSample(name, standard=self._standard))
+            return
+        self.samplesList.append(CableSample(name, standard=self._standard))
 
     def removeSample(self, sample):
         if sample in self._samples:

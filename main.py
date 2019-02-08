@@ -8,6 +8,9 @@ from snpanalyzer.app.tree_model import TreeModel
 from snpanalyzer.gui.dialog.vna_test import VNATestDialog
 from snpanalyzer.gui.dialog.LimitDialog import LimitDialog
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
+from snpanalyzer.export.project import ProjectExportConfiguration
+from snpanalyzer.gui.dialog.export_configuration import ExportConfigurationDialog
+from pathlib import Path
 
 class Main():
 
@@ -49,16 +52,20 @@ class Main():
         self._mainWindow.actionDeembed.triggered.connect(lambda:self.newProject(2))
         self._mainWindow.actionImport_Project.triggered.connect(lambda: self.loadProject())
         self._mainWindow.actionSave_Project.triggered.connect(lambda: self.saveProject())
+        self._mainWindow.actionExport_PDF.triggered.connect(lambda: self.exportPDF())
+
 
     def acquire(self):
         print(self.getRootProject())
-
-        vnaDialog = VNATestDialog()
-        vnaDialog.exec_()
-        name = vnaDialog.getSampleName()
-        ports = vnaDialog.getPorts()
-        sample_file = self._vnaManager.acquire(name, ports)
-        self.getRootProject().addSamples([sample_file])
+        try:
+            vnaDialog = VNATestDialog()
+            vnaDialog.exec_()
+            name = vnaDialog.getSampleName()
+            ports = vnaDialog.getPorts()
+            sample_file = self._vnaManager.acquire(name, ports)
+            self.getRootProject().addSamples([sample_file])
+        except Exception as e:
+            print(e)
         
     def connect(self):
         self._vnaManager.connect()
@@ -126,9 +133,11 @@ class Main():
         if not index:
             self._mainWindow.param_tabs.clear()
             return
-
+        
         self._mainWindow.param_tabs.clear()
         node = self._model.itemFromIndex(index)
+        if "ProjectNode" not in str(type(node)):
+            node._dataObject.createAnalyses()
         tabs = node.getWidgets(self._vnaManager)
         for name, tab in tabs.items():
             self._mainWindow.param_tabs.addTab(tab, name)
@@ -205,6 +214,23 @@ class Main():
         elif action == addSNP:
             self.newProject()
 
+    def exportPDF(self):
+        selected = self.getSelected()
+        if self.getRootProject():
+            selectedProj = self.getRootProject().getObject()
+        else:
+            selectedProj = None
+        if selectedProj and len(selected) > 0:
+            config = ProjectExportConfiguration(selectedProj)
+            dialog = ExportConfigurationDialog(config)
+            #.show()
+            dialog.exec_()
+            obj = config.generateDocumentObject(
+                dialog.getTemporaryDirectory(),
+                Path("")
+            )
+            obj.compile(filename=dialog.getDocumentFilename())
+    
     def setLimit(self):
         
         limitDialog = LimitDialog()

@@ -4,6 +4,15 @@ from snpanalyzer.analysis.scale import PlotScale
 import matplotlib.pyplot as plt
 import numpy as np
 
+plt.rcParams.update({
+    "pgf.texsystem": "pdflatex",
+    "pgf.preamble": [
+         r"\usepackage[utf8x]{inputenc}",
+         r"\usepackage[T1]{fontenc}",
+         r"\usepackage{cmbright}",
+         ]
+})
+
 def autoscaleY(axis, margin=0.1):
     """
     Taken from: https://stackoverflow.com/a/35094823

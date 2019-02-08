@@ -1,5 +1,7 @@
 <RCC>
   <qresource>
+    <file>icons/ExportExcel.png</file>
+    <file>icons/ExportPDF.png</file>
     <file>icons/alien.png</file>
     <file>icons/calibrate_disabled.png</file>
     <file>icons/calibrate.png</file>

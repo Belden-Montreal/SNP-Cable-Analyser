@@ -31,6 +31,7 @@ class VNAConfigurationWidget(QWidget):
         self.__ui.averageLineEdit.textChanged.connect(self.__setAverage)
         self.__ui.portsLineEdit.textChanged.connect(self.__setPorts)
         self.__ui.timeoutLineEdit.textChanged.connect(self.__setTimeout)
+        #self.__ui.buttonBox.accepted().connect(self.__getEnteredConfiguration)
 
     def setConfiguration(self, vna):
         self.__vna = vna
@@ -57,14 +58,20 @@ class VNAConfigurationWidget(QWidget):
             self.__ui.bandwithInput.setValue(self.__vna.getBandwidth())
 
     def __setStartFreq(self, freq):
+        if not str(freq).isdigit():
+            freq = 0
+        
         self.__vna.setMinimumFrequency(freq)
-        if self.__vna.getMinimumFrequency() != freq:
-            self.__ui.startFreqInput.setValue(self.__vna.getMinimumFrequency())
-
+        
+        print("start freq = "+str(freq))
+##        if self.__vna.getMinimumFrequency() != freq:
+##            self.__ui.startFreqInput.setValue(self.__vna.getMinimumFrequency())
+            
     def __setStopFreq(self, freq):
         self.__vna.setMaximumFrequency(freq)
-        if self.__vna.getMaximumFrequency() != freq:
-            self.__ui.stopFreqInput.setValue(self.__vna.getMaximumFrequency())
+        print("stop freq = "+str(freq))
+##        if self.__vna.getMaximumFrequency() != freq:
+##            self.__ui.stopFreqInput.setValue(self.__vna.getMaximumFrequency())
 
     def __setResolution(self, resolution):
         try:
@@ -102,3 +109,5 @@ class VNAConfigurationWidget(QWidget):
         if self.__vna.getTimeout() != timeout:
             self.__ui.timeoutLineEdit.setText(str(self.__vna.getTimeout()))
 
+    def __getEnteredConfiguration(self):
+        print("ok pressed")

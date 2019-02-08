@@ -23,8 +23,9 @@ class ParameterDocumentObject(DocumentObject):
         analysis.setScale(configuration.getScale())
 
         # save the figure
-        relative = str(self.getPrefix().joinpath(self.getBasename()+".pgf"))
+        relative = str(self.getPrefix().joinpath(self.getBasename()+".pgf")).replace("\\",'/')
         figure = str(self.getRoot().joinpath(relative))
+        print("Figure : "+figure)
         analysis.getFigure().savefig(figure)
 
         # create the arguments

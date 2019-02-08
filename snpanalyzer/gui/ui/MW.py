@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'MainWindow.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created by: PyQt5 UI code generator 5.10.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -187,12 +187,24 @@ class Ui_MainWindow(object):
         icon5.addPixmap(QtGui.QPixmap(":/icons/deembed.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionDeembed.setIcon(icon5)
         self.actionDeembed.setObjectName("actionDeembed")
+        self.actionExport_PDF = QtWidgets.QAction(MainWindow)
+        icon6 = QtGui.QIcon()
+        icon6.addPixmap(QtGui.QPixmap(":/icons/ExportPDF.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionExport_PDF.setIcon(icon6)
+        self.actionExport_PDF.setObjectName("actionExport_PDF")
+        self.actionExport_Excel_2 = QtWidgets.QAction(MainWindow)
+        icon7 = QtGui.QIcon()
+        icon7.addPixmap(QtGui.QPixmap(":/icons/ExportExcel.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionExport_Excel_2.setIcon(icon7)
+        self.actionExport_Excel_2.setObjectName("actionExport_Excel_2")
         self.toolBar.addAction(self.actionNew_Project)
         self.toolBar.addAction(self.actionToolbar_Import_SnP)
         self.toolBar.addAction(self.actionRun)
         self.toolBar.addAction(self.actionCalibrate_2)
         self.toolBar.addAction(self.actionAlien)
         self.toolBar.addAction(self.actionDeembed)
+        self.toolBar.addAction(self.actionExport_PDF)
+        self.toolBar.addAction(self.actionExport_Excel_2)
         self.menuFile.addAction(self.actionImport_Project)
         self.menuFile.addAction(self.actionImport_SnP)
         self.menuFile.addSeparator()
@@ -277,5 +289,18 @@ class Ui_MainWindow(object):
         self.actionAlien.setToolTip(_translate("MainWindow", "Alien"))
         self.actionDeembed.setText(_translate("MainWindow", "Deembed"))
         self.actionDeembed.setToolTip(_translate("MainWindow", "Deembed"))
+        self.actionExport_PDF.setText(_translate("MainWindow", "Export PDF Repport"))
+        self.actionExport_Excel_2.setText(_translate("MainWindow", "Export Excel Repport"))
+        self.actionExport_Excel_2.setToolTip(_translate("MainWindow", "Export Excel Repport"))
 
-import snpanalyzer.gui.ressources.icons
+import snpanalyzer.gui.ressources.icons  
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec_())
+

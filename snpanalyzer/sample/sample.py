@@ -30,9 +30,11 @@ class Sample(object):
         # change frequency unit
         self._network.f = self._network.f * (1000 ** -2)
         self._network.frequency.unit = 'mhz'
+        print(len(self._config.getPorts()), self.getNumPorts())
 
         # config and network should have the same number of ports
         if len(self._config.getPorts()) != self.getNumPorts():
+            print(self.getNumPorts())
             raise ValueError
 
         # create the parameter factory
@@ -44,7 +46,7 @@ class Sample(object):
                 continue
             self._parameters[parameter] = self._factory.getParameter(parameter)
         
-        self.createAnalyses()
+        #self.createAnalyses()
 
          #  set the standard
         if standard:
@@ -54,6 +56,7 @@ class Sample(object):
 
     def createAnalyses(self):
         self._analyses = dict()
+        
         for (ptype, parameter) in self._parameters.items():
             try:
                 self._analyses[ptype] = ParameterAnalysis(parameter)
