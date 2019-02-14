@@ -20,11 +20,11 @@ class ParameterWidget(TabWidget, parameter_widget_ui.Ui_ParameterWidget):
         self.marginListWidget.currentItemChanged.connect(lambda current: self.pairSelected(current, valueType.MARGIN))
         self.worstListWidget.currentItemChanged.connect(lambda current: self.pairSelected(current, valueType.VALUE))
         self.setPairsList()
-        self.analysis = analysis
-        self.graphicsView = Canvas(analysis.getFigure())
-        self.verticalLayout.insertWidget(0, self.graphicsView)
-        self.navBar = NavigationToolbar(self.graphicsView, self.analysis, self)
-        self.verticalLayout.insertWidget(1, self.navBar)
+        #self.analysis = analysis
+        #self.graphicsView = Canvas(None)#analysis.getFigure())
+        #self.verticalLayout.insertWidget(0, self.graphicsView)
+        #self.navBar = NavigationToolbar(self.graphicsView, self.analysis, self)
+        #self.verticalLayout.insertWidget(1, self.navBar)
         if worstVal.hasData():
             self.worstValue = worstVal
             self.worstMargin = worstMarg
@@ -68,6 +68,21 @@ class ParameterWidget(TabWidget, parameter_widget_ui.Ui_ParameterWidget):
                 self.worstMarginLabel.setText("{0:.2f}".format(abs(self.worstValue.pairs[pair.number].margin)))
         except:
             return
+        
+    def setGraphic(self, analysis):
+        try:
+            self.canvasLayout.removeWidget(self.graphicsView)
+            self.canvasLayout.removeWidget(self.navBar)
+        except:
+            print("Doesnt exist yet !")
+            
+        self.analysis = analysis
+        self.graphicsView = Canvas(analysis.getFigure())
+        self.canvasLayout.insertWidget(0, self.graphicsView)
+        self.navBar = NavigationToolbar(self.graphicsView, self.analysis, self)
+        self.canvasLayout.insertWidget(1, self.navBar)
+        print("Set Graphic Done")
+
             
 class PairItem(QtWidgets.QListWidgetItem):
     def __init__(self, text, number, parent = None, type = QtWidgets.QListWidgetItem.Type):

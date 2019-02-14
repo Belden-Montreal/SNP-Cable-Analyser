@@ -30,6 +30,7 @@ class Main():
         self._mainWindow.actionToolbar_Import_SnP.setDisabled(True)
         self._mainWindow.actionImport_SnP.setDisabled(True)
         self._vnaManager = VNA()
+        self.activeNode = None
 
         #Here, we process any arguments that might be sent the program from outside of the interface.
         #In other words, when ever a user right click on an SNP files, rather than opening them in Notepad, it would be opened in this interface.
@@ -53,6 +54,7 @@ class Main():
         self._mainWindow.actionImport_Project.triggered.connect(lambda: self.loadProject())
         self._mainWindow.actionSave_Project.triggered.connect(lambda: self.saveProject())
         self._mainWindow.actionExport_PDF.triggered.connect(lambda: self.exportPDF())
+        self._mainWindow.param_tabs.currentChanged.connect(lambda: self.tabChanged())
 
 
     def acquire(self):
@@ -136,11 +138,38 @@ class Main():
         
         self._mainWindow.param_tabs.clear()
         node = self._model.itemFromIndex(index)
-        if "ProjectNode" not in str(type(node)):
-            node._dataObject.createAnalyses()
+        self.activeNode = node
+        #if "ProjectNode" not in str(type(node)):
+        #    node._dataObject.createAnalyses()
         tabs = node.getWidgets(self._vnaManager)
         for name, tab in tabs.items():
             self._mainWindow.param_tabs.addTab(tab, name)
+
+    def tabChanged(self):
+        # if self._mainWindow.param_tabs.currentIndex() == 0 or self._mainWindow.param_tabs.count() <= 1:
+        #      self._mainWindow.graphicsView.setVisible(False)
+        #      return
+        # self._mainWindow.graphicsView.setVisible(True)
+        # parameter = self._mainWindow.param_tabs.currentWidget().parameter
+        # plot = parameter.getPlot()
+        # currentTab = self._mainWindow.param_tabs.currentWidget()
+        # if currentTab:
+        #     currentTab.showTab()
+        self.tab_index = self._mainWindow.param_tabs.currentIndex()
+        self.activeParameter = self._mainWindow.param_tabs.tabText(self.tab_index)
+        print(self.activeParameter)
+        if "ProjectNode" not in str(type(self.activeNode )):
+            try:
+                print("Created")
+                self.activeNode._dataObject.createAnalyses(desiredParam = self.activeParameter)
+                self._mainWindow.param_tabs.currentWidget().setGraphic(self.activeNode._dataObject.getAnalysis(self.activeParameter))
+                print("Creating Graphic")
+            except Exception as e:
+                print(e)
+        if self._mainWindow.param_tabs.currentIndex() == 0 or self._mainWindow.param_tabs.count() <= 1:
+            #self._mainWindow.graphicsView.setVisible(False)
+            print("Tab Changed")
+            return
 
     def tableContextMenu(self, pos):
         selected = self.getSelected()
@@ -242,16 +271,7 @@ class Main():
                 node.setStandard(item)
             self.displaySampleParams(self.getSelected()[0])
 
-    # def tabChanged(self):
-    #     # if self._mainWindow.param_tabs.currentIndex() == 0 or self._mainWindow.param_tabs.count() <= 1:
-    #     #     self._mainWindow.graphicsView.setVisible(False)
-    #     #     return
-    #     # self._mainWindow.graphicsView.setVisible(True)
-    #     # parameter = self._mainWindow.param_tabs.currentWidget().parameter
-    #     # plot = parameter.getPlot()
-    #     currentTab = self._mainWindow.param_tabs.currentWidget()
-    #     # if currentTab:
-    #     #     currentTab.showTab()
+
 
     def loadProject(self):
         f, ok = QtWidgets.QFileDialog.getOpenFileName(self._qmw, caption="Load a project", directory="projects/", filter="Belden Network Analyzer Project file (*.bnap)")

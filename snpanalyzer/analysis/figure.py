@@ -60,8 +60,8 @@ class FigureAnalysis(Analysis):
         else:
             self._figure = figure
             self._axis = axis
+            
         self._legend = None
-
         # default scale and format
         self.setTitle(self.getDefaultTitle())
         self.setScale(self.getDefaultScale())

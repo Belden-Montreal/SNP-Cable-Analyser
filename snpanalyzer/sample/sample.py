@@ -54,12 +54,22 @@ class Sample(object):
         else:
             self._standard = None
 
-    def createAnalyses(self):
+    def createAnalyses(self, desiredParam=None):
         self._analyses = dict()
         
         for (ptype, parameter) in self._parameters.items():
             try:
-                self._analyses[ptype] = ParameterAnalysis(parameter)
+                if parameter.getName() == desiredParam or desiredParam == None:
+                    print(str(ptype) + ", " +  str(parameter) + "123")
+                    
+                    # try:
+                    #     del self._analyses[ptype]
+                    # except:
+                    #     print("Doesnt exist yet !!")
+                    self._analyses[ptype] = ParameterAnalysis(parameter)
+                    print("doing analysis on : " + parameter.getName())
+                    #print(ptype+" Done")
+
             except:
                 continue
 
@@ -132,10 +142,32 @@ class Sample(object):
     def getParameters(self):
         return self._parameters
 
-    def getAnalysis(self, name):
-        if name not in self._analyses.keys():
-            return None
-        return self._analyses[name]
+    def getAnalysis(self, desiredParam):
+
+        # for ptype, param in self.getParameters().items():
+        #     print("Desired = "+str(desiredParam))
+        #     print("Param.name = "+str(param.getName()))
+
+        #     if param.visible():
+        #         if param.getName() is desiredParam:
+        #             print("Found it")
+        #             return self._analyses[ptype]   
+
+        # return None
+
+        for (ptype, parameter) in self._parameters.items():
+            try:
+                #print(str(ptype) + ", " +  str(parameter) + "123")
+                if parameter.getName() == desiredParam:
+                    print(str(ptype) + " IN getAnalysis")
+                    return self._analyses[ptype]                     
+            except:
+                continue
+        print("Analysis non existant")
+        return None 
+
+        
+        
 
     def getAnalyses(self):
         return self._analyses
@@ -235,15 +267,18 @@ class SampleNode(Node):
         widgets["main"] = None
         failParams = list()
         for ptype, param in self._dataObject.getParameters().items():
-            try:
-                if param.visible():
-                    if ptype.name not in self._paramTabs:
-                        self._paramTabs[ptype.name] = ParameterWidget(param.getName(), param, self._dataObject.getAnalysis(ptype))
-                    widgets[param.getName()] = self._paramTabs[ptype.name]
-                    if not self._paramTabs[ptype.name].hasPassed:
-                            failParams.append(ptype.name)
-            except:
-                continue
+            #try:
+            if param.visible():
+                if ptype.name not in self._paramTabs:
+                    self._paramTabs[ptype.name] = ParameterWidget(param.getName(), param, None)#self._dataObject.getAnalysis(ptype))
+                    print("pytpe name: "+ str(ptype.name))
+
+                widgets[param.getName()] = self._paramTabs[ptype.name]
+                if not self._paramTabs[ptype.name].hasPassed:
+                        failParams.append(ptype.name)
+            #except:
+                #print("Fail")
+                #continue
         if not self._mainTab:
             self._mainTab = MainWidget(self._dataObject, failParams)
         else:
