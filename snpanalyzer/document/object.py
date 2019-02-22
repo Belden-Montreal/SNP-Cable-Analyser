@@ -132,7 +132,7 @@ class DocumentObject(object):
         chdir(str(self.getRoot()))
 
         # call pdflatex and build the document
-        call(["pdflatex", str(self.getRelativePath())])
+        call(["lualatex", str(self.getRelativePath())])
 
         # go back into the saved directory
         chdir(current)

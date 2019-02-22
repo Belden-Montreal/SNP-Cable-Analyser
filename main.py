@@ -54,7 +54,9 @@ class Main():
         self._mainWindow.actionImport_Project.triggered.connect(lambda: self.loadProject())
         self._mainWindow.actionSave_Project.triggered.connect(lambda: self.saveProject())
         self._mainWindow.actionExport_PDF.triggered.connect(lambda: self.exportPDF())
-        self._mainWindow.param_tabs.currentChanged.connect(lambda: self.tabChanged())
+        self._mainWindow.actionExport_Excel_2.triggered.connect(lambda: self.exportExcel())
+
+        #self._mainWindow.param_tabs.currentChanged.connect(lambda: self.tabChanged())
 
 
     def acquire(self):
@@ -145,7 +147,10 @@ class Main():
         for name, tab in tabs.items():
             self._mainWindow.param_tabs.addTab(tab, name)
 
+
     def tabChanged(self):
+        self._mainWindow.param_tabs.currentWidget().setGraphic(self.activeNode._dataObject.getAnalysis(self.activeParameter))
+
         # if self._mainWindow.param_tabs.currentIndex() == 0 or self._mainWindow.param_tabs.count() <= 1:
         #      self._mainWindow.graphicsView.setVisible(False)
         #      return
@@ -155,7 +160,7 @@ class Main():
         # currentTab = self._mainWindow.param_tabs.currentWidget()
         # if currentTab:
         #     currentTab.showTab()
-        self.tab_index = self._mainWindow.param_tabs.currentIndex()
+        '''self.tab_index = self._mainWindow.param_tabs.currentIndex()
         self.activeParameter = self._mainWindow.param_tabs.tabText(self.tab_index)
         print(self.activeParameter)
         if "ProjectNode" not in str(type(self.activeNode )):
@@ -169,8 +174,39 @@ class Main():
         if self._mainWindow.param_tabs.currentIndex() == 0 or self._mainWindow.param_tabs.count() <= 1:
             #self._mainWindow.graphicsView.setVisible(False)
             print("Tab Changed")
-            return
+            return'''
 
+    def exportExcel(self):
+        selected = self.getSelected()
+        if self.getRootProject():
+            selectedProj = self.getRootProject().getObject()
+        else:
+            selectedProj = None
+        if selectedProj and len(selected) > 0:
+            res, ok = QtWidgets.QInputDialog.getItem(self._qmw, "Select the Data type", "Data Type", ["Complex", "magnitude/phase"], editable=False)
+            if ok:
+                if res == "Complex":
+                    z = True
+                else:
+                    z = False
+                file, _ = QtWidgets.QFileDialog.getSaveFileName(self._qmw,"Export Excel Report", "","Excel File (*.xlsx)")
+                selected_samples = []
+                for s in selected:
+                    s = self._model.itemFromIndex(s).getObject()
+                    if(type(s.getSamples()) is list):  
+                        selected_samples.extend(s.getSamples())
+                    else:
+                        selected_samples.append(s.getSamples())
+                print(selected_samples)
+                #try:
+                for x in selected_samples:
+                    print("Here : "+ x.getName())
+
+                #print([self._model.itemFromIndex(s).getObject().getSamples().getName() for s in selected])
+                selectedProj.generateExcel(file, [s.getName() for s in selected_samples], z)
+                #except Exception as e:
+                    #errorMessage = QtWidgets.QErrorMessage(self._qmw)
+                    #errorMessage.showMessage(str(e))
     def tableContextMenu(self, pos):
         selected = self.getSelected()
         if self.getRootProject():
@@ -192,37 +228,14 @@ class Main():
             action = menu.exec_(QtGui.QCursor.pos())
 
             if action == exportExcel:
-                res, ok = QtWidgets.QInputDialog.getItem(self._qmw, "Select the Data type", "Data Type", ["Complex", "magnitude/phase"], editable=False)
-                if ok:
-                    if res == "Complex":
-                        z = True
-                    else:
-                        z = False
-                    file, _ = QtWidgets.QFileDialog.getSaveFileName(self._qmw,"Export Excel Report", "","Excel File (*.xlsx)")
-                    selected_samples = []
-                    for s in selected:
-                        s = self._model.itemFromIndex(s).getObject()
-                        if(type(s.getSamples()) is list):  
-                            selected_samples.extend(s.getSamples())
-                        else:
-                            selected_samples.append(s.getSamples())
-                    print(selected_samples)
-                    try:
-                        for x in selected_samples:
-                            print("Here : "+ x.getName())
-        
-                        #print([self._model.itemFromIndex(s).getObject().getSamples().getName() for s in selected])
-                        selectedProj.generateExcel(file, [s.getName() for s in selected_samples], z)
-                    except Exception as e:
-                        errorMessage = QtWidgets.QErrorMessage(self._qmw)
-                        errorMessage.showMessage(str(e))
+                self.exportExcel()
 
 
             elif action == delete:
                 sel = [self._model.itemFromIndex(s) for s in selected]
                 for s in sel:
                     s.delete()
-
+            
             elif action == setLimit:
                 self.setLimit()
 

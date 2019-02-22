@@ -67,7 +67,7 @@ class Project(object):
                                                 'border': 6,})
             worksheet.merge_range('A3:A5', "Frequency", cell_format)
 
-            curPos = 1
+            curPos = 1  
             for i, (paramName, parameter) in enumerate(sample.getParameters().items()):
                 #print(paramName)
                 numSignals = len(parameter.getParameter().keys())
@@ -76,7 +76,7 @@ class Project(object):
                 worksheet.merge_range(2, curPos, 2, curPos+numSignals*2-1, paramName, cell_format)
                 #print(parameter.getDataSeries().pop().getName())
                 #print(parameter.getPorts()._ports.getName())
-                for i, portName in enumerate(list(parameter.getDataSeries())):
+                for i, portName in enumerate(sorted(list(parameter.getDataSeries()), key=lambda params: params.getName())):#enumerate(list(parameter.getDataSeries())):
                     portSeries = portName
                     portName = portName.getName()
                     worksheet.merge_range(3, curPos+i*2, 3, curPos+i*2+1, str(portName), cell_format)

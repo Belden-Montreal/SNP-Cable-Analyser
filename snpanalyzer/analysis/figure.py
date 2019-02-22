@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 plt.rcParams.update({
-    "pgf.texsystem": "pdflatex",
+    "pgf.texsystem": "lualatex",
     "pgf.preamble": [
          r"\usepackage[utf8x]{inputenc}",
          r"\usepackage[T1]{fontenc}",
@@ -60,8 +60,8 @@ class FigureAnalysis(Analysis):
         else:
             self._figure = figure
             self._axis = axis
-            
         self._legend = None
+
         # default scale and format
         self.setTitle(self.getDefaultTitle())
         self.setScale(self.getDefaultScale())

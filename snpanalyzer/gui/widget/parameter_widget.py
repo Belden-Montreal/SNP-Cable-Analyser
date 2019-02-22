@@ -67,14 +67,15 @@ class ParameterWidget(TabWidget, parameter_widget_ui.Ui_ParameterWidget):
                 self.worstLimitLabel.setText("{0:.2f}".format(self.worstValue.pairs[pair.number].limit))
                 self.worstMarginLabel.setText("{0:.2f}".format(abs(self.worstValue.pairs[pair.number].margin)))
         except:
-            return
+            return 
         
     def setGraphic(self, analysis):
         try:
-            self.canvasLayout.removeWidget(self.graphicsView)
-            self.canvasLayout.removeWidget(self.navBar)
-        except:
-            print("Doesnt exist yet !")
+            self.canvasLayout.itemAt(0).widget().remove()
+            self.canvasLayout.itemAt(1).widget().deleteLater()
+
+        except Exception as e:
+            print(e)
             
         self.analysis = analysis
         self.graphicsView = Canvas(analysis.getFigure())
