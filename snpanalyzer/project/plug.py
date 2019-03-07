@@ -18,6 +18,7 @@ class Plug(Project):
         self._k1 = 0
         self._k2 = 0
         self._k3 = 0
+        self.type = "Plug"
 
     def importDfOpen(self, fileName):
         self._dfOpenDelay = DelaySample(fileName)

@@ -235,7 +235,7 @@ class Main():
                 sel = [self._model.itemFromIndex(s) for s in selected]
                 for s in sel:
                     s.delete()
-            
+
             elif action == setLimit:
                 self.setLimit()
 
@@ -287,7 +287,7 @@ class Main():
 
 
     def loadProject(self):
-        f, ok = QtWidgets.QFileDialog.getOpenFileName(self._qmw, caption="Load a project", directory="projects/", filter="Belden Network Analyzer Project file (*.bnap)")
+        f, ok = QtWidgets.QFileDialog.getOpenFileName(self._qmw, caption="Load a project", directory="projects/", filter="Project File (*.xml)")
         if ok:
             node = self._projectManager.loadProject(f)
             self._model.appendRow(node)
@@ -295,8 +295,9 @@ class Main():
             self._mainWindow.actionImport_SnP.setDisabled(False)
 
     def saveProject(self):
-        f, ok = QtWidgets.QFileDialog.getSaveFileName(self._qmw, caption="Save project", directory="projects/", filter="Belden Network Analyzer Project file (*.bnap)")
+        f, ok = QtWidgets.QFileDialog.getSaveFileName(self._qmw, caption="Save project", directory="projects/")#, filter="Belden Network Analyzer Project file (*.bnap)")
         if ok:
+            print(self._projectManager.getProjects())
             self._projectManager.saveProject(f, self.getRootProject().getObject())
 
     def showMaximized(self):

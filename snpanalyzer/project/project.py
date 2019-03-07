@@ -6,7 +6,7 @@ import threading
 from os.path import splitext
 import xlsxwriter
 from PyQt5 import QtWidgets, QtGui
-
+from pathlib import Path
 class Project(object):
     '''
     The project class represents a simple project containing a number of regular samples.
@@ -18,11 +18,13 @@ class Project(object):
         self.samplesList = []
         self._samples = list()
         self._standard = None
+        self.type = "Other"
 
     def importSamples(self, fileNames):
         threads = []
         self.samplesList = []
         for sample in fileNames:
+            print("Importing  ", sample)
             t = threading.Thread(target=self.__createSample(sample))
             threads.append(t)
             t.start()
@@ -35,7 +37,7 @@ class Project(object):
 
     def __createSample(self, name):
         print("Sample name : "+ name)
-        _, extension = splitext(name)
+        extension = Path(name).suffix
         print("file name "+name )
         print("extension "+extension )
         if extension[2] == "8" or extension[2] == "4":

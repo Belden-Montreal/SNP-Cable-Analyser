@@ -32,6 +32,8 @@ class ParameterDocumentObject(DocumentObject):
         arguments["figure"] = dict()
         arguments["figure"]["path"]  = relative
         arguments["figure"]["scale"] = 0.4
+        # arguments["parameter"] = dict()
+        #arguments["parameter"]["name"] = parameter. 
 
         return arguments
         

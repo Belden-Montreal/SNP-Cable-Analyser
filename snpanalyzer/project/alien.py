@@ -15,6 +15,7 @@ class Alien(Project):
     '''
     def __init__(self, name):
         super(Alien, self).__init__(name)
+        self.type = "Alien"
         self._disturbers = dict()
         self._victims = dict()
         self._disturbers["PSANEXT"] = dict()

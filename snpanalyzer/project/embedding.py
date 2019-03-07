@@ -53,6 +53,7 @@ class Embedding(Project):
         self._load["Reverse"] = None
         self._open = None
         self._short = None
+        self.type = "Embedding"
 
     def importPlug(self, plugFile):
         self._plug = SaveManager().loadProject(plugFile)
