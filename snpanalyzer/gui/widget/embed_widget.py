@@ -125,7 +125,7 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
             self.loadFileName.setText(self._loadFile)
 
     def getPlug(self):
-        fileName,_ = QtWidgets.QFileDialog.getOpenFileName(self, "Select plug file", "", "Belden Network Analyzer Project files (*.bnap)")
+        fileName,_ = QtWidgets.QFileDialog.getOpenFileName(self, "Select plug file", "", " (*.xml)")
         if fileName:
             plug = self._embedding.importPlug(fileName)
             self.plugLabel.setText(plug.getName())

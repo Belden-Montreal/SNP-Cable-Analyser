@@ -60,7 +60,6 @@ class VNA(QtCore.QObject):
         if self.rm is None:
             return
 
-
         try:
             self.session.timeout = timeOut
             print(self._config.getTimeout())

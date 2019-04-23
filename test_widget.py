@@ -2,6 +2,7 @@ from snpanalyzer.gui.widget.export.parameter import ExportParameterWidget
 from snpanalyzer.gui.widget.export.sample import ExportSampleWidget
 from snpanalyzer.gui.widget.export.project import ExportProjectWidget
 from snpanalyzer.gui.dialog.export_configuration import ExportConfigurationDialog
+from snpanalyzer.gui.dialog.compilation_configuration import CompilationConfigurationDialog
 
 from snpanalyzer.export.parameter import ParameterExportConfiguration
 from snpanalyzer.export.sample import SampleExportConfiguration
@@ -31,6 +32,7 @@ project.importSamples({
     "./snps/plug/plug4.s8p",
     "./snps/plug/plug5.s8p",
 })
+
 config = ProjectExportConfiguration(project)
 
 app = QApplication(argv)
@@ -41,7 +43,15 @@ app = QApplication(argv)
 #window = MainWindow()
 #window.widget.setExportConfiguration(config)
 #window.show()
-dialog = ExportConfigurationDialog(config)
+'''dialog = ExportConfigurationDialog(config)
+dialog.show()
+app.exec_()
+obj = config.generateDocumentObject(
+    dialog.getTemporaryDirectory(),
+    Path("")
+) '''
+
+dialog = CompilationConfigurationDialog(project.getSamples())
 dialog.show()
 app.exec_()
 obj = config.generateDocumentObject(

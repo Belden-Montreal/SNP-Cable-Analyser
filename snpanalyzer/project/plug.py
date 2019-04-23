@@ -92,6 +92,8 @@ class Plug(Project):
         return self._openDelay
 
     def shortSample(self):
+        if self._shortDelay is not None:
+            print("Short Sample name is : ", self._shortDelay.getFileName())
         return self._shortDelay
 
     def loadSample(self):
@@ -133,6 +135,9 @@ class Plug(Project):
         
             curPos += numSignals*2
         workbook.close()
+
+
+
 
 from snpanalyzer.sample.sample import SampleNode
 from snpanalyzer.gui.widget.plug_widget import PlugWidget

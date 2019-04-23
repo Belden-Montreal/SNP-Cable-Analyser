@@ -82,8 +82,9 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
         self.verticalLayout.insertWidget(1, self.navBar)
         self.graphicsView.draw()
 
-    def importVictim(self):
-        fileName,_ = QtWidgets.QFileDialog.getOpenFileName(self, "Select victim", "", "sNp Files (*.s*p)")
+    def importVictim(self,fileName=None):
+        if fileName is None:
+            fileName,_ = QtWidgets.QFileDialog.getOpenFileName(self, "Select victim", "", "sNp Files (*.s*p)")
         if fileName:
             end, test = self.getCheckButtons()
             self._alien.importSamples([fileName], end, test, disturber=False)
@@ -100,8 +101,9 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
             self.victimLabel.setText(self._alien.victims()[test][end].getName())
             self.changeFigure(end, test)
 
-    def importDisturbers(self):
-        files,_ = QtWidgets.QFileDialog.getOpenFileNames(self, "Select disturbers", "", "sNp Files (*.s*p)")
+    def importDisturbers(self,files = None):
+        if files is None:
+            files,_ = QtWidgets.QFileDialog.getOpenFileNames(self, "Select disturbers", "", "sNp Files (*.s*p)")
         if files:
             end, test = self.getCheckButtons()
             self._alien.importSamples(files, end, test, disturber=True)

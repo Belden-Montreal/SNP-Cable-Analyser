@@ -54,7 +54,7 @@ class EmbedImportDialog(QtWidgets.QDialog):
         self._load = fileName
 
     def __getPlug(self):
-        fileName,_ = QtWidgets.QFileDialog.getOpenFileName(self, "Select Plug Project", "projects/", "Belden Network Analyzer Project files (*.bnap)")
+        fileName,_ = QtWidgets.QFileDialog.getOpenFileName(self, "Select Plug Project", "projects/", "(*.xml)")
         self._dial.plugLabel.setText(basename(fileName))
         self._plug = fileName
 

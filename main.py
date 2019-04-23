@@ -293,12 +293,26 @@ class Main():
             self._model.appendRow(node)
             self._mainWindow.actionToolbar_Import_SnP.setDisabled(False)
             self._mainWindow.actionImport_SnP.setDisabled(False)
+            try:
+                projType, tab = list(node.getWidgets(self._vnaManager).items())[0]
+                if projType is "Alien":
+                    node.getWidgets(self._vnaManager)["Alien"].updateWidget()
+            except:
+                pass
+
 
     def saveProject(self):
-        f, ok = QtWidgets.QFileDialog.getSaveFileName(self._qmw, caption="Save project", directory="projects/")#, filter="Belden Network Analyzer Project file (*.bnap)")
-        if ok:
-            print(self._projectManager.getProjects())
-            self._projectManager.saveProject(f, self.getRootProject().getObject())
+        selected = self.getSelected()
+        if self.getRootProject():
+            selectedProj = self.getRootProject().getObject()
+        else:
+            selectedProj = None
+        if selectedProj and len(selected) > 0:
+            f, ok = QtWidgets.QFileDialog.getSaveFileName(self._qmw, caption="Save project", directory="projects/")#, filter="Belden Network Analyzer Project file (*.bnap)")
+            if ok:
+                projects = self._projectManager.getProjects()
+                print(self._projectManager.getProjects())
+                self._projectManager.saveProject(f, projects)
 
     def showMaximized(self):
         self._qmw.showMaximized()

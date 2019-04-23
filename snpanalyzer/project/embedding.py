@@ -1,6 +1,5 @@
 from snpanalyzer.project.project import Project, ProjectNode
 from snpanalyzer.gui.dialog.embedding_import_dialog import EmbedImportDialog, ReverseState
-from snpanalyzer.app.save_manager import SaveManager
 from snpanalyzer.sample.delay import DelaySample
 from snpanalyzer.sample.deembed import DeembedSample, ReverseDeembedSample
 from snpanalyzer.parameters.type import ParameterType
@@ -54,9 +53,13 @@ class Embedding(Project):
         self._open = None
         self._short = None
         self.type = "Embedding"
+        self.plugFile = None #Quick patch to get XML File of the plug
 
     def importPlug(self, plugFile):
+        from snpanalyzer.app.save_manager import SaveManager
+
         self._plug = SaveManager().loadProject(plugFile)
+        self.plugFile  = plugFile
         return self._plug
 
     def importLoad(self, loadFile, side, cat="CAT5e"):

@@ -27,10 +27,14 @@ class ParameterAnalysis(FigureAnalysis):
         if self._parameter.getLimit():
             self.addLimit()
 
+    def _getWorstVal(self):
+        return self._parameter.getWorstValue()
+
     @overrides
     def _getXData(self, serie):
-        if serie.getName() == "limit":
-            return self._parameter.getLimit().evaluateDict({'f': self._parameter.getFrequencies()}, len(self._parameter.getFrequencies()), neg=True).keys()
+        if serie is not None:
+            if serie.getName() == "limit":
+                return self._parameter.getLimit().evaluateDict({'f': self._parameter.getFrequencies()}, len(self._parameter.getFrequencies()), neg=True).keys()
         return self._parameter.getFrequencies()
 
     @overrides

@@ -9,7 +9,7 @@ class ParameterDocumentObject(DocumentObject):
 
     @overrides
     def getTemplateName(self):
-        return "parameter.tex"
+        return "parameter_table.tex"
 
     @overrides
     def getTemplateArguments(self, configuration):
@@ -23,15 +23,23 @@ class ParameterDocumentObject(DocumentObject):
         analysis.setScale(configuration.getScale())
 
         # save the figure
-        relative = str(self.getPrefix().joinpath(self.getBasename()+".pgf")).replace("\\",'/')
+        relative = str(self.getPrefix().joinpath(self.getBasename()+".png")).replace("\\",'/')
         figure = str(self.getRoot().joinpath(relative))
         print("Figure : "+figure)
-        analysis.getFigure().savefig(figure)
+        analysis.getFigure().savefig(figure, transparent=True)
 
         # create the arguments
         arguments["figure"] = dict()
         arguments["figure"]["path"]  = relative
-        arguments["figure"]["scale"] = 0.4
+        arguments["figure"]["scale"] = .7
+        arguments["results"] = dict()
+        #arguments["results"]["freq"] = analysis._getXData(serie = None)
+
+        #arguments["results"]["limit"] = analysis._getYData(series = "limit")
+        #arguments["results"]["worstCase"] = analysis._getWorstVal
+
+
+        
         # arguments["parameter"] = dict()
         #arguments["parameter"]["name"] = parameter. 
 
