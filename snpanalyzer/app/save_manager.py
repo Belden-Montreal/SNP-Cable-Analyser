@@ -81,16 +81,34 @@ class SaveManager(object):
             if projType == "Embedding":
                 project = Embedding(projName)
                 #load plug file
-                project.importPlug(os.path.normpath(savedProj["Plug"]["file_name"]))
-
-
-
-
-
-
-
-            
-
+                try:
+                    project.importPlug(os.path.normpath(savedProj["Plug"]["file_name"]))
+                except:
+                    pass
+                try:
+                    project.importLoad(os.path.normpath(savedProj["Load"]["Forward"]["file_name"]), "Forward")
+                except:
+                    pass
+                try:
+                    project.importOpen(os.path.normpath(savedProj["Open"]["Forward"]["file_name"]))
+                except:
+                    pass
+                try:
+                    project.importShort(os.path.normpath(savedProj["Short"]["Forward"]["file_name"]))
+                except:
+                    pass
+                try:
+                    project.importLoad(os.path.normpath(savedProj["Load"]["Reverse"]["file_name"]), "Reverse")
+                except:
+                    pass
+                try:
+                    project.importOpen(os.path.normpath(savedProj["Open"]["Reverse"]["file_name"]))
+                except:
+                    pass
+                try:
+                    project.importShort(os.path.normpath(savedProj["Short"]["Reverse"]["file_name"]))
+                except:
+                    pass
         return project
 
     '''def saveProject(self, fileName, project):
@@ -148,13 +166,17 @@ class SaveManager(object):
                             ET.SubElement(sampleBranch, "standard").text = str(sample.getStandard())
                             shutil.copy2(sample.getFileName(), os.path.join(snpDir, sample.getName())) # complete target filename given
 
+
+
+
+
             if project.type == "Embedding":
                 sampleBranch = ET.SubElement(projectBranch, "Plug")
+                print("snpDir" , snpDir)
                 ET.SubElement(sampleBranch, "file_name").text =  str(os.path.join(snpDir, project.plugFileName))
+                print("new Location : ", str(os.path.join(snpDir, project.plugFileName)))
                 #shutil.copy2(project.plugFile, os.path.join(snpDir, project.plug().getName())) # complete target filename given
                 copy_tree(os.path.dirname(project.plugFile), snpDir) # complete target filename given
-
-                if(project_type == "Embedding")
 
                 #save load files  (Fwd, Rev)
                 for side in project.load():
@@ -194,10 +216,21 @@ class SaveManager(object):
                 ET.SubElement(sampleBranch, "k3").text = str(project.getConstants()[2])
             
             
+
+
+
+
+
+
+
+
+
+
             #root.append(projectBranch)
 
         tree = ET.ElementTree(root)
         tree.write(configurationPath)     
+
 
 
 

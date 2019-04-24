@@ -109,30 +109,60 @@ class Plug(Project):
         cell_format = workbook.add_format({'align': 'center',
                                             'valign': 'vcenter',
                                             'border': 6,})
-        worksheet.merge_range('A3:A5', "Frequency", cell_format)
+        
+        
+        
+        
+        
+        #This first page will contain a summery of the plug 
 
+        worksheet.merge_range("B3:D3", "Constants", cell_format)
+        worksheet.write("B4", "SJ 12, 45, 78", cell_format)
+        worksheet.write("C4", "SJ 36", cell_format)
+        worksheet.write("D4", "Thru Calib", cell_format)
+        worksheet.write("B5", self._k1, cell_format)
+        worksheet.write("C5", self._k2, cell_format)
+        worksheet.write("D5", self._k3, cell_format)
+
+        print("Next Delay ",self.getNextDelay())
+
+
+        worksheet = workbook.add_worksheet("Delays")
+        worksheet.merge_range('A3:A5', "Frequency", cell_format)
         curPos = 1
-        parameters = {"RL": sample.getParameters()["RL"], "CNEXT": sample.getParameters()["CNEXT"]}
-        for i, (paramName, parameter) in enumerate(parameters.items()):
-            numSignals = len(parameter.getPorts())
+        #parameters = {"RL": sample.getParameters()["RL"], "CNEXT": sample.getParameters()["CNEXT"]}
+        for i, (paramName, parameter) in enumerate(sample.getParameters().items()):
+            print((paramName, parameter))
+            try:
+                numSignals = len(parameter.getParameter().keys())
+            except:
+                continue
+            paramName = str(paramName).replace("ParameterType.", "").replace("_", " ").split(":")[0]
             worksheet.merge_range(2, curPos, 2, curPos+numSignals*2-1,  paramName, cell_format)
-            for i, (key, (portName,_)) in enumerate(parameter.getPorts().items()):
+            for i, portName in enumerate(sorted(list(parameter.getDataSeries()), key=lambda params: params.getName())):#enumerate(list(parameter.getDataSeries())):
+                portSeries = portName
+                portName = portName.getName()
                 worksheet.merge_range(3, curPos+i*2, 3, curPos+i*2+1, str(portName), cell_format)
                 if paramName == "Propagation Delay":
                     worksheet.merge_range(4, curPos+i*2, 4, curPos+i*2+1, "ns", cell_format)
                     param = parameter.getParameter()
-                    for j, data in enumerate(param[key]):
+                    for j, data in enumerate(param[portSeries]):
                         worksheet.merge_range(5+j, curPos+i*2, 5+j, curPos+i*2+1, "")
-                        self.box(workbook, worksheet, param, key, i*2, j, data, curPos)
+                        self.box(workbook, worksheet, param, portSeries, i*2, j, data, curPos)
                 else:
                     worksheet.write(4,curPos+i*2, "mag", cell_format)
                     worksheet.write(4,curPos+i*2+1, "phase", cell_format)
                     param = parameter.getParameter()
-                    for j, (mag, phase) in enumerate(param[key]):
-                        worksheet.write(5+j, 0, sample.getFrequencies()[j])
-                        self.box(workbook, worksheet, param, key, i*2, j, mag, curPos)
-                        self.box(workbook, worksheet, param, key, i*2+1, j, phase, curPos)
-        
+                    #print(param[portSeries])
+                    try:
+                        for j, (mag) in enumerate(param[portSeries]):
+                            worksheet.write(5+j, 0, sample.getFrequencies()[j])
+                            self.box(workbook, worksheet, param, portSeries, i*2, j, mag, curPos)
+
+                            #self.box(workbook, worksheet, param, portSeries, i*2+1, j, phase, curPos)
+                    except:
+                        continue
+            
             curPos += numSignals*2
         workbook.close()
 

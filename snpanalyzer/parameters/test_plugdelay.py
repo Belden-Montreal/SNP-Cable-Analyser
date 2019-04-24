@@ -2,7 +2,7 @@ import unittest
 
 from snpanalyzer.parameters.parameter import complex2phase
 from snpanalyzer.parameters.test_parameter import TestParameter
-from snpanalyzer.parameters.propagationdelay import PropagationDelay
+from snpanalyzer.parameters.propagationdelay import 
 from snpanalyzer.parameters.returnloss import ReturnLoss
 from snpanalyzer.parameters.dfdelay import DFDelay
 from snpanalyzer.parameters.plugdelay import PlugDelay
@@ -26,11 +26,11 @@ class TestPlugDelay(TestParameter):
 
     def createParameter(self):
         rl = ReturnLoss(self._config, self._freq, self._matrices)
-        opendfDelay = PropagationDelay(self._config, self._freq, self._matrices, rl)
-        shortdfDelay = PropagationDelay(self._config, self._freq, self._matrices, rl)
+        opendfDelay = (self._config, self._freq, self._matrices, rl)
+        shortdfDelay = (self._config, self._freq, self._matrices, rl)
         dfDelay = DFDelay(self._config, self._freq, self._matrices, opendfDelay, shortdfDelay)
-        openDelay = PropagationDelay(self._config, self._freq, self._matrices, rl)
-        shortDelay = PropagationDelay(self._config, self._freq, self._matrices, rl)
+        openDelay = (self._config, self._freq, self._matrices, rl)
+        shortDelay = (self._config, self._freq, self._matrices, rl)
 
         k1 = 1
         k2 = 2

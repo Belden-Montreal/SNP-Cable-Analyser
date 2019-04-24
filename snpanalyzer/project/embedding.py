@@ -53,13 +53,15 @@ class Embedding(Project):
         self._open = None
         self._short = None
         self.type = "Embedding"
-        self.plugFile = None #Quick patch to get XML File of the plug
+        self.plugFileName = None #Quick patch to get XML File of the plug
+        self.plugFile = None
 
     def importPlug(self, plugFile):
         from snpanalyzer.app.save_manager import SaveManager
-
+        import os
         self._plug = SaveManager().loadProject(plugFile)
         self.plugFile  = plugFile
+        self.plugFileName = os.path.basename(plugFile)
         return self._plug
 
     def importLoad(self, loadFile, side, cat="CAT5e"):

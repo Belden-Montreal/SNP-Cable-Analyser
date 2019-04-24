@@ -7,7 +7,7 @@ class PlugDelaySample(PlugSample):
         self._shortDelay = shortDelay
         self._dfOpenDelay = dfOpenDelay
         self._dfShortDelay = dfShortDelay
-        self._k1 = k1
+        self._k1 = k1 
         self._k2 = k2
         self._k3 = k3
         super(PlugDelaySample, self).__init__(snp, config=config)

@@ -297,6 +297,8 @@ class Main():
                 projType, tab = list(node.getWidgets(self._vnaManager).items())[0]
                 if projType is "Alien":
                     node.getWidgets(self._vnaManager)["Alien"].updateWidget()
+                if projType is "Embedding":
+                    node.getWidgets(self._vnaManager)["Embedding"].updateWidget()
             except:
                 pass
 
