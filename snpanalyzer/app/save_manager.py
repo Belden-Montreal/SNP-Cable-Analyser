@@ -61,7 +61,6 @@ class SaveManager(object):
                                           param = sample[0]["@powerSum"],
                                           disturber=disturber)
 
-
             if projType == "Plug":
                 project = Plug(projName)
                 #project.setConstants(k1, k2, k3)
@@ -80,35 +79,39 @@ class SaveManager(object):
 
             if projType == "Embedding":
                 project = Embedding(projName)
+                print(savedProj)
                 #load plug file
                 try:
                     project.importPlug(os.path.normpath(savedProj["Plug"]["file_name"]))
                 except:
                     pass
                 try:
-                    project.importLoad(os.path.normpath(savedProj["Load"]["Forward"]["file_name"]), "Forward")
+                    project.importLoad(os.path.normpath(savedProj["Load_Forward"]["file_name"]),side = "Forward")
+                except Exception as e:
+                    print(e)
+
+
+                try:
+                    project.importOpen(os.path.normpath(savedProj["Open"]["file_name"]))
                 except:
                     pass
                 try:
-                    project.importOpen(os.path.normpath(savedProj["Open"]["Forward"]["file_name"]))
+                    project.importShort(os.path.normpath(savedProj["Short"]["file_name"]))
                 except:
                     pass
                 try:
-                    project.importShort(os.path.normpath(savedProj["Short"]["Forward"]["file_name"]))
+                    project.importOpen(os.path.normpath(savedProj["Open"]["file_name"]))
                 except:
                     pass
                 try:
-                    project.importLoad(os.path.normpath(savedProj["Load"]["Reverse"]["file_name"]), "Reverse")
+                    project.importShort(os.path.normpath(savedProj["Short"]["file_name"]))
                 except:
                     pass
                 try:
-                    project.importOpen(os.path.normpath(savedProj["Open"]["Reverse"]["file_name"]))
-                except:
-                    pass
-                try:
-                    project.importShort(os.path.normpath(savedProj["Short"]["Reverse"]["file_name"]))
-                except:
-                    pass
+                    print(savedProj["Load_Reverse"])
+                    project.importLoad(os.path.normpath(savedProj["Load_Reverse"]["file_name"]),side = "Reverse")
+                except Exception as e:
+                    print(e)
         return project
 
     '''def saveProject(self, fileName, project):
@@ -182,7 +185,7 @@ class SaveManager(object):
                 for side in project.load():
                     sample = project.load()[side]
                     if sample is not None:                    
-                        sampleBranch = ET.SubElement(projectBranch, "Load", attrib = {"side" : side})
+                        sampleBranch = ET.SubElement(projectBranch, "Load_"+side)
                         ET.SubElement(sampleBranch, "file_name").text = str(os.path.join(snpDir, sample.getName()))
                         shutil.copy2(sample.getFileName(), os.path.join(snpDir, sample.getName())) # complete target filename given
 

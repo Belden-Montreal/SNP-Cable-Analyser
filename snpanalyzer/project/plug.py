@@ -124,8 +124,35 @@ class Plug(Project):
         worksheet.write("C5", self._k2, cell_format)
         worksheet.write("D5", self._k3, cell_format)
 
-        print("Next Delay ",self.getNextDelay())
+        print("Next Delay ",self.getNextDelay().getDataSeries())
 
+        #Exporting Next Delay
+        series = self.getNextDelay().getDataSeries()
+        print("series ", len(series))
+        next_delay = self.getNextDelay().getParameter()
+        worksheet.merge_range(2,5,2,5+len(series)-1, "Next Delay (DNEXT)", cell_format)
+        for i, portSeries in enumerate(sorted(list(series), key=lambda params: params.getName())):#enumerate(list(parameter.getDataSeries())):
+            if type(next_delay) is not list:
+                next_delay[portSeries] = [next_delay[portSeries]] 
+            for j, (mag) in enumerate(list(next_delay[portSeries])):
+                #worksheet.write(5+j, 0, sample.getFrequencies()[j])
+                worksheet.write(3, 5+i, portSeries.getName(), cell_format) 
+                worksheet.write(4, 5+i, mag, cell_format) 
+
+        #Exporting plug Delay
+        series = self.getPlugDelay().getDataSeries()
+        print("series ", len(series))
+        plug_delay = self.getPlugDelay().getParameter()
+        worksheet.merge_range(7,1,7,1+len(series)-1, "Plug Delay", cell_format)
+        for i, portSeries in enumerate(sorted(list(series), key=lambda params: params.getName())):#enumerate(list(parameter.getDataSeries())):
+            if type(plug_delay) is not list:
+                plug_delay[portSeries] = [plug_delay[portSeries]] 
+            for j, (mag) in enumerate(list(plug_delay[portSeries])):
+                #worksheet.write(5+j, 0, sample.getFrequencies()[j])
+                worksheet.write(8, 1+i, portSeries.getName(), cell_format) 
+                worksheet.write(9, 1+i, mag, cell_format) 
+
+        #worksheet.wirte()
 
         worksheet = workbook.add_worksheet("Delays")
         worksheet.merge_range('A3:A5', "Frequency", cell_format)
@@ -138,35 +165,38 @@ class Plug(Project):
             except:
                 continue
             paramName = str(paramName).replace("ParameterType.", "").replace("_", " ").split(":")[0]
-            worksheet.merge_range(2, curPos, 2, curPos+numSignals*2-1,  paramName, cell_format)
+            worksheet.merge_range(2, curPos, 2, curPos+numSignals-1,  paramName, cell_format)
             for i, portName in enumerate(sorted(list(parameter.getDataSeries()), key=lambda params: params.getName())):#enumerate(list(parameter.getDataSeries())):
                 portSeries = portName
+                #print(parameter)
                 portName = portName.getName()
-                worksheet.merge_range(3, curPos+i*2, 3, curPos+i*2+1, str(portName), cell_format)
+                worksheet.write(3, curPos+i, str(portName), cell_format)
                 if paramName == "Propagation Delay":
-                    worksheet.merge_range(4, curPos+i*2, 4, curPos+i*2+1, "ns", cell_format)
+                    worksheet.write(4, curPos+i, "ns", cell_format)
                     param = parameter.getParameter()
                     for j, data in enumerate(param[portSeries]):
-                        worksheet.merge_range(5+j, curPos+i*2, 5+j, curPos+i*2+1, "")
-                        self.box(workbook, worksheet, param, portSeries, i*2, j, data, curPos)
+                        worksheet.write(5+j, curPos+i, "")
+                        self.box(workbook, worksheet, param, portSeries, i, j, data, curPos)
                 else:
-                    worksheet.write(4,curPos+i*2, "mag", cell_format)
-                    worksheet.write(4,curPos+i*2+1, "phase", cell_format)
+                    worksheet.write(4,curPos+i, "mag", cell_format)
+                    #worksheet.write(4,curPos+i*2+1, "phase", cell_format)
                     param = parameter.getParameter()
                     #print(param[portSeries])
                     try:
-                        for j, (mag) in enumerate(param[portSeries]):
+                        if type(param[portSeries] ) is not list:
+                            param[portSeries] = [param[portSeries]]
+                        for j, (mag) in enumerate(list(param[portSeries])):
                             worksheet.write(5+j, 0, sample.getFrequencies()[j])
-                            self.box(workbook, worksheet, param, portSeries, i*2, j, mag, curPos)
+                            if paramName ==  "CORRECTED NEXT":
+                                mag = mag[0]
+                            self.box(workbook, worksheet, param, portSeries, i, j, mag, curPos)
 
                             #self.box(workbook, worksheet, param, portSeries, i*2+1, j, phase, curPos)
-                    except:
-                        continue
+                    except Exception as e:
+                        print(e)
             
-            curPos += numSignals*2
+            curPos += numSignals
         workbook.close()
-
-
 
 
 from snpanalyzer.sample.sample import SampleNode

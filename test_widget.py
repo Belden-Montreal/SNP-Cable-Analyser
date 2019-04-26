@@ -18,7 +18,7 @@ from PyQt5.QtCore import Qt
 from sys import argv
 from pathlib import Path
 
-class MainWindow(QMainWindow):
+class MainWindow(QMainWindow): 
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.widget = ExportProjectWidget()

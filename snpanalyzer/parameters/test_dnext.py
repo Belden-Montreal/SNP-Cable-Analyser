@@ -1,7 +1,7 @@
 import unittest
 
 from snpanalyzer.parameters.test_parameter import TestPlugParameter
-from snpanalyzer.parameters.propagationdelay import 
+from snpanalyzer.parameters.propagationdelay import PropagationDelay
 from snpanalyzer.parameters.returnloss import ReturnLoss
 from snpanalyzer.parameters.dfdelay import DFDelay
 from snpanalyzer.parameters.plugdelay import PlugDelay
@@ -33,11 +33,11 @@ class TestDNEXT(TestPlugParameter):
  
     def createParameter(self):
         rl = ReturnLoss(self._config, self._freq, self._matrices)
-        opendfDelay = (self._config, self._freq, self._matrices, rl)
-        shortdfDelay = (self._config, self._freq, self._matrices, rl)
+        opendfDelay = PropagationDelay(self._config, self._freq, self._matrices, rl)
+        shortdfDelay = PropagationDelay(self._config, self._freq, self._matrices, rl)
         dfDelay = DFDelay(self._config, self._freq, self._matrices, opendfDelay, shortdfDelay)
-        openDelay = (self._config, self._freq, self._matrices, rl)
-        shortDelay = (self._config, self._freq, self._matrices, rl)
+        openDelay = PropagationDelay(self._config, self._freq, self._matrices, rl)
+        shortDelay = PropagationDelay(self._config, self._freq, self._matrices, rl)
         plugDelay = PlugDelay(self._config, self._freq, self._matrices, openDelay, shortDelay, dfDelay, 1, 2, 3)
         nextDelay = NEXTDelay(self._config, self._freq, self._matrices, plugDelay)
         pnext = CorrectedNEXT(self._config, self._freq, self._matrices, nextDelay)

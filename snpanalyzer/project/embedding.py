@@ -124,22 +124,28 @@ class Embedding(Project):
                 worksheet.merge_range('A3:A5', "Frequency", cell_format)
 
                 curPos = 1
-                parameters = {"RL": sample.getParameters()["RL"], "NEXT": sample.getParameters()["NEXT"], "DNEXT": sample.getParameters()["DNEXT"], "Case": sample.getParameters()["Case"]}
-                for (paramName, parameter) in (parameters.items()):
-                    numSignals = len(parameter.getPorts())
-                    if paramName == "Case":
+                #parameters = {"RL": sample.getParameters()["RL"], "NEXT": sample.getParameters()["NEXT"], "DNEXT": sample.getParameters()["DNEXT"], "Case": sample.getParameters()["Case"]}
+                for i, (paramName, parameter) in enumerate(sample.getParameters().items()):
+                    print((paramName, parameter))
+                    try:
+                        numSignals = len(parameter.getParameter().keys())
+                    except:
+                        continue
+                    paramName = str(paramName).replace("ParameterType.", "").replace("_", " ").split(":")[0]
+                    if paramName == "CASE":
                         nc = 0
                         for p in parameter.getParameter().values():
                             nc += len(p)
                         worksheet.merge_range(2, curPos, 2, curPos+nc*2-1,  paramName, cell_format)
                     else:
                         worksheet.merge_range(2, curPos, 3, curPos+numSignals*2-1,  paramName, cell_format)
-                    for i, (key, (portName,_)) in enumerate(parameter.getPorts().items()):
-                        if paramName == "Case":
+                    for i, portName in enumerate(sorted(list(parameter.getDataSeries()), key=lambda params: params.getName())):#enumerate(list(parameter.getDataSeries())):
+                        portSeries = portName
+                        if paramName == "CASE":
                             param = self.__getParam(parameter, z)
-                            numCases = len(param[key])
-                            worksheet.merge_range(4, curPos, 4, curPos+numCases*2-1, str(portName), cell_format)
-                            for k, (n, case) in enumerate(param[key].items()):
+                            numCases = len(param[portSeries])
+                            worksheet.merge_range(4, curPos, 4, curPos+numCases*2-1, str(portName.getName()), cell_format)
+                            for k, (n, case) in enumerate(param[portSeries].items()):
                                 worksheet.merge_range(3, curPos+k*2, 3, curPos+k*2+1, str(n), cell_format)
                                 worksheet.write(5,curPos+k*2, dataTitle[0], cell_format)
                                 worksheet.write(5,curPos+k*2+1, dataTitle[1], cell_format)
@@ -151,15 +157,24 @@ class Embedding(Project):
                             curPos+=numCases*2
                             
                         else:
-                            worksheet.merge_range(4, curPos+i*2, 4, curPos+i*2+1, str(portName), cell_format)
+                            worksheet.merge_range(4, curPos+i*2, 4, curPos+i*2+1, str(portName.getName()), cell_format)
                             worksheet.write(5,curPos+i*2, dataTitle[0], cell_format)
                             worksheet.write(5,curPos+i*2+1, dataTitle[1], cell_format)
                             param = self.__getParam(parameter, z)
-                            for j, (data) in enumerate(param[key]):
-                                d1,d2 = self.__getData(data, z)
+                            if type(param[portSeries] ) is not list:
+                                param[portSeries] = [param[portSeries]]
+                            for j, (data) in enumerate(param[portSeries]):
+                                #d1,d2 = self.__getData(data, z)
                                 worksheet.write(6+j, 0, sample.getFrequencies()[j])
-                                self.box(workbook, worksheet, param[key], i*2, j, d1, curPos, len(param)*2)
-                                self.box(workbook, worksheet, param[key], i*2+1, j, d2, curPos, len(param)*2)
+                                if type(data) is not list:
+                                    d1 = data
+                                    d2 = 0
+                                else:
+                                    print(data)
+                                    d1 = data[0]
+                                    d2 = data[1]
+                                self.box(workbook, worksheet, param[portSeries], i*2, j, str(d1), curPos, len(param)*2)
+                                self.box(workbook, worksheet, param[portSeries], i*2+1, j, str(d2), curPos, len(param)*2)
                 
                     curPos += numSignals*2
             workbook.close()
