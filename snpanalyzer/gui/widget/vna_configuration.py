@@ -63,13 +63,13 @@ class VNAConfigurationWidget(QWidget):
         
         self.__vna.setMinimumFrequency(freq)
         
-        print("start freq = "+str(freq))
+        print("setting start freq = "+str(self.__vna.getMinimumFrequency()))
 ##        if self.__vna.getMinimumFrequency() != freq:
 ##            self.__ui.startFreqInput.setValue(self.__vna.getMinimumFrequency())
             
     def __setStopFreq(self, freq):
         self.__vna.setMaximumFrequency(freq)
-        print("stop freq = "+str(freq))
+        print("stop freq . star freq = "+str(self.__vna.getMinimumFrequency()))
 ##        if self.__vna.getMaximumFrequency() != freq:
 ##            self.__ui.stopFreqInput.setValue(self.__vna.getMaximumFrequency())
 
@@ -87,6 +87,7 @@ class VNAConfigurationWidget(QWidget):
             average = int(average)
         except:
             average = -1
+            
         self.__vna.setAverage(average)
         if self.__vna.getAverage() != average:
             self.__ui.averageLineEdit.setText(str(self.__vna.getAverage()))
@@ -96,6 +97,7 @@ class VNAConfigurationWidget(QWidget):
             ports = int(ports)
         except:
             ports = -1
+            
         self.__vna.setNumberOfPorts(ports)
         if self.__vna.getNumberOfPorts() != ports:
             self.__ui.portsLineEdit.setText(str(self.__vna.getNumberOfPorts()))
@@ -111,3 +113,4 @@ class VNAConfigurationWidget(QWidget):
 
     def __getEnteredConfiguration(self):
         print("ok pressed")
+

@@ -66,7 +66,7 @@ class Main():
             vnaDialog.exec_()
             name = vnaDialog.getSampleName()
             ports = vnaDialog.getPorts()
-            sample_file = self._vnaManager.acquire(name, ports)
+            sample_file = self._vnaManager.acquire(name, ports, vnaDialog.getVNACOnfiguration())
             self.getRootProject().addSamples([sample_file])
         except Exception as e:
             print(e)

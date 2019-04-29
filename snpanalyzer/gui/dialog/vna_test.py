@@ -16,7 +16,7 @@ class VNATestDialog(QDialog):
         self.__ui.vna.setConfiguration(config)
 
     def getVNACOnfiguration(self):
-        return self.__ui.vna.getVNAConfiguration()
+        return self.__ui.vna.getConfiguration()
 
     def getSampleName(self):
         return self.__ui.nameLineEdit.text()

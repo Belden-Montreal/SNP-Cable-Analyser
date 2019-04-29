@@ -17,6 +17,7 @@ class VNA(QtCore.QObject):
         self._manager = None
         #self._session = None
         self.session = None
+        self.useMachineSettings = False
     def connect(self):
         #self._manager = ResourceManager()
         try:
@@ -48,12 +49,13 @@ class VNA(QtCore.QObject):
             dialog.showMessage("Error : {}".format(e))
             dialog.exec_()
 
-    def acquire(self, name, ports):
-        config = self._config
+    def acquire(self, name, ports, config):
+        #config = self._config
 
         timeOut = self._config.getTimeout()
         bw = config.getBandwidth()
         minFreq = config.getMinimumFrequency()
+        print("testing with min freq at ", minFreq)
         maxFreq = config.getMaximumFrequency()
         res = config.getResolution()
         average = config.getAverage()
@@ -72,8 +74,10 @@ class VNA(QtCore.QObject):
             print("set min f")
 
             self.session.write("SENS:FREQ:STOP " + str(maxFreq))
+
             print("set max f:"+str(maxFreq))
             print("set avg")
+
             self.session.write("SENS:SWE:TYPE LIN")
             self.session.write("SENS:SWE:POIN " + str(res))
             print("res " + str(res))
@@ -83,7 +87,6 @@ class VNA(QtCore.QObject):
             self.session.write(":INIT1:CONT ON")
             self.session.write(":TRIG:SOUR immediate")
             self.session.write("SENS:SWE:GRO:COUN 4") # "+str(self.average))
-            print("ok")
 
             self.session.write("SENS:SWE:MODE GRO;*OPC?")
             
@@ -97,9 +100,7 @@ class VNA(QtCore.QObject):
             
         except VisaError as ex:
             print(ex)
-        
-
-
+    
         '''self._session.timeout = self._config.getTimeout()
         print(self._config.getTimeout())
         self._session.write("SENS:BWID "      + str(config.getBandwidth()))
@@ -140,7 +141,7 @@ class VNA(QtCore.QObject):
         print("wAi")
         if self.session is None:
             return "None"
-            print("wAi2")
+        print("wAi2")
 
         print(self.session.query('*IDN?'))
         return self.session.query('*IDN?')

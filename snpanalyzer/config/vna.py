@@ -39,7 +39,7 @@ class VNAConfiguration(JSONConfiguration):
         The minimum frequency to scan.
         """
         return self.__minfreq
-
+        
     def setMaximumFrequency(self, maxfreq):
         if maxfreq < self.__minfreq:
             return
