@@ -175,6 +175,9 @@ class Embedding(Project):
                                     d2 = data[1]
                                 self.box(workbook, worksheet, param[portSeries], i*2, j, str(d1), curPos, len(param)*2)
                                 self.box(workbook, worksheet, param[portSeries], i*2+1, j, str(d2), curPos, len(param)*2)
+
+
+
                 
                     curPos += numSignals*2
             workbook.close()

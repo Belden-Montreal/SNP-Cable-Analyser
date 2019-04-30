@@ -13,6 +13,9 @@ class VNAConfiguration(JSONConfiguration):
         self.__average    = 1
         self.__testname   = "sample"
         self.__ports      = 8
+        self.__noConfig     = False #When set to true, the program only launches an aquisition, 
+                                    #but doesnt specify any of the parameters. This allows the user
+                                    #to specify more complex parameters from the machine interface
 
     def setAddress(self, address):
         self.__address = address
@@ -116,6 +119,12 @@ class VNAConfiguration(JSONConfiguration):
         The number of port to scan.
         """
         return self.__ports
+    
+    def getNoConfig(self):
+        return self.__noConfig
+
+    def setNoConfig(self, state):
+        self.__noConfig = state
 
     @overrides
     def toJSON(self):

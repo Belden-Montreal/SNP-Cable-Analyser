@@ -151,6 +151,7 @@ class Main():
     def tabChanged(self):
         self._mainWindow.param_tabs.currentWidget().setGraphic(self.activeNode._dataObject.getAnalysis(self.activeParameter))
 
+
         # if self._mainWindow.param_tabs.currentIndex() == 0 or self._mainWindow.param_tabs.count() <= 1:
         #      self._mainWindow.graphicsView.setVisible(False)
         #      return
@@ -285,7 +286,6 @@ class Main():
             self.displaySampleParams(self.getSelected()[0])
 
 
-
     def loadProject(self):
         f, ok = QtWidgets.QFileDialog.getOpenFileName(self._qmw, caption="Load a project", directory="projects/", filter="Project File (*.xml)")
         if ok:
@@ -302,7 +302,7 @@ class Main():
             except:
                 pass
 
-
+    
     def saveProject(self):
         selected = self.getSelected()
         if self.getRootProject():

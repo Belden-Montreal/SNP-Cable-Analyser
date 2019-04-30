@@ -108,6 +108,7 @@ class Alien(Project):
                                 for i, portName in enumerate(sorted(list(parameter.getDataSeries()), key=lambda params: params.getName())): # enumerate(list(parameter.getDataSeries())):
                                     key = portName
                                     portName = portName.getName()
+
                                     worksheet.merge_range(3, curPos+i*2, 3, curPos+i*2+1, str(portName), cell_format)
                                     # TODO: alien phase/complex values
                                     # if z:

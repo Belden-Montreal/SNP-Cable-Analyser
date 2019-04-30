@@ -23,6 +23,7 @@ class VNAConfigurationWidget(QWidget):
         self.setConfiguration(VNAConfiguration())
 
         # connect signals
+        self.__ui.machineParamsBool.toggled.connect(self.__setNoConfig)
         self.__ui.addressLineEdit.textChanged.connect(self.__setAddress)
         self.__ui.bandwidthInput.changed.connect(self.__setBandwidth)
         self.__ui.startFreqInput.changed.connect(self.__setStartFreq)
@@ -31,10 +32,12 @@ class VNAConfigurationWidget(QWidget):
         self.__ui.averageLineEdit.textChanged.connect(self.__setAverage)
         self.__ui.portsLineEdit.textChanged.connect(self.__setPorts)
         self.__ui.timeoutLineEdit.textChanged.connect(self.__setTimeout)
+
         #self.__ui.buttonBox.accepted().connect(self.__getEnteredConfiguration)
 
     def setConfiguration(self, vna):
         self.__vna = vna
+        self.__ui.machineParamsBool.setChecked(vna.getNoConfig())
         self.__ui.addressLineEdit.setText(vna.getAddress())
         self.__ui.bandwidthInput.setValue(vna.getBandwidth())
         self.__ui.startFreqInput.setValue(vna.getMinimumFrequency())
@@ -110,6 +113,26 @@ class VNAConfigurationWidget(QWidget):
         self.__vna.setTimeout(timeout)
         if self.__vna.getTimeout() != timeout:
             self.__ui.timeoutLineEdit.setText(str(self.__vna.getTimeout()))
+
+    def __setNoConfig(self):
+        '''state is either true or false'''
+        state = self.__ui.machineParamsBool.isChecked()
+        self.__vna.setNoConfig(state)
+        if state:
+            self.__ui.bandwidthInput.setDisabled(True)
+            self.__ui.startFreqInput.setDisabled(True)
+            self.__ui.stopFreqInput.setDisabled(True)
+            self.__ui.resolutionLineEdit.setDisabled(True)
+            self.__ui.averageLineEdit.setDisabled(True)
+            return
+
+        self.__ui.bandwidthInput.setDisabled(False)
+        self.__ui.startFreqInput.setDisabled(False)
+        self.__ui.stopFreqInput.setDisabled(False)
+        self.__ui.resolutionLineEdit.setDisabled(False)
+        self.__ui.averageLineEdit.setDisabled(False)
+
+
 
     def __getEnteredConfiguration(self):
         print("ok pressed")

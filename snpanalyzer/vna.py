@@ -59,31 +59,33 @@ class VNA(QtCore.QObject):
         maxFreq = config.getMaximumFrequency()
         res = config.getResolution()
         average = config.getAverage()
+        noConfig = config.getNoConfig()
         if self.rm is None:
             return
-
         try:
             self.session.timeout = timeOut
             print(self._config.getTimeout())
+            
+            if noConfig == False:
+                self.session.write("SENS:BWID " + str(bw))
+                print(self.session.query(";*OPC?"))
 
-            self.session.write("SENS:BWID " + str(bw))
-            print(self.session.query(";*OPC?"))
+                print("set if")
+                self.session.write("SENS:FREQ:STAR " + str(minFreq))
+                print("set min f")
 
-            print("set if")
-            self.session.write("SENS:FREQ:STAR " + str(minFreq))
-            print("set min f")
+                self.session.write("SENS:FREQ:STOP " + str(maxFreq))
 
-            self.session.write("SENS:FREQ:STOP " + str(maxFreq))
+                print("set max f:"+str(maxFreq))
+                print("set avg")
 
-            print("set max f:"+str(maxFreq))
-            print("set avg")
-
-            self.session.write("SENS:SWE:TYPE LIN")
-            self.session.write("SENS:SWE:POIN " + str(res))
-            print("res " + str(res))
-            self.session.write(":SENS:AVER:CLE")
-            self.session.write(":ABOR")
-            self.session.write("SENS:AVER:COUN {}".format(str(average)))
+                self.session.write("SENS:SWE:TYPE LIN")
+                self.session.write("SENS:SWE:POIN " + str(res))
+                print("res " + str(res))
+                self.session.write(":SENS:AVER:CLE")
+                self.session.write(":ABOR")
+                self.session.write("SENS:AVER:COUN {}".format(str(average)))
+            
             self.session.write(":INIT1:CONT ON")
             self.session.write(":TRIG:SOUR immediate")
             self.session.write("SENS:SWE:GRO:COUN 4") # "+str(self.average))

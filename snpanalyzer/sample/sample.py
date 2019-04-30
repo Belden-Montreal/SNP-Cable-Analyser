@@ -86,10 +86,15 @@ class Sample(object):
 
     def setStandard(self, standard):
         self._standard = standard
+        print(self._analyses)
         for (name, parameter) in self._parameters.items():
+            print(name, parameter)
             if name.name in standard.limits:
                 parameter.setLimit(standard.limits[name.name])
-                self._analyses[name].addLimit()
+                try:
+                    self._analyses[name].addLimit()
+                except:
+                    pass
 
     def getStandard(self):
         return self._standard
