@@ -15,16 +15,29 @@ from snpanalyzer.parameters.type import ParameterType
 from snpanalyzer.app.project_manager import ProjectManager
 
 
+from snpanalyzer.limits.LimitParser import LimitParser
+from snpanalyzer.limits.TreeItem import TreeItem
+from snpanalyzer.limits.Limit import Limit
+
 from PyQt5.QtWidgets import QApplication, QLabel, QMainWindow
 from PyQt5.QtCore import Qt
 
 from sys import argv
 from pathlib import Path
 
-f = r"C:\Users\LXF09011\Desktop\SNP-Cable-Analyser\embeddingNew2\embeddingNew2.xml"
+f = r"C:\Users\LXF09011\Desktop\SNP-Cable-Analyser\testOtherProj\snps\plug4.s8p"
 
 projectManager = ProjectManager()
-node = projectManager.loadProject(f)
+node = projectManager.newProject("test")
 project = node.getObject()
+project.importSamples([r"C:\Users\LXF09011\Desktop\SNP-Cable-Analyser\testOtherProj\snps\plug4.s8p"])
 
-project.generateExcel("output2.xlsx", [f], z=False)
+parser = LimitParser("snpanalyzer/limits/test.xml")
+root = parser.parseFile()
+standard = root.child(0).child(0).child(0) #Connecting Hardware
+project.setStandard(standard.standard)
+
+print(project._standard.__str__())
+print(project.getSamples())
+
+project.generateExcel("output2.xlsx", ["plug4.s8p"], z=False)

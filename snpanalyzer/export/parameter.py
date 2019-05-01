@@ -34,7 +34,8 @@ class ParameterExportConfiguration(ExportConfiguration):
         if serie in self._series:
             self._series[serie] = False
 
-    def getDataSeries(self):
+    def getDataSeries(self, limit=False):
+        print("Getting Data Series (Export")
         return self._series
 
     def addMargin(self, serie):

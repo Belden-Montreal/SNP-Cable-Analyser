@@ -2,6 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from bisect import bisect_left
 from snpanalyzer.limits.Limit import Limit
+
+from snpanalyzer.parameters.dataserie import GenericDataSerie
+
 from copy import deepcopy
 
 def diffDiffMatrix(matrices):
@@ -80,18 +83,29 @@ class Parameter(object):
     def computeParameter(self):
         raise NotImplementedError
 
-    def getDataSeries(self):
+    def getDataSeries(self, limit = False):
+        print("Getting Data Series (Parameters")
+        print(self._series)
+        if limit:
+            try:
+                limitDataSeries = GenericDataSerie(name="Limit", data=self.getLimit() )
+                self._series.add(limitDataSeries)
+            except:
+                pass
         return self._series
 
-    def getParameter(self):
+    def getParameter(self,limit=False):
+        if limit:
+            return {**self._parameter, **{GenericDataSerie(name="Limit", data=self.getLimit()) : [self.getLimit()]}}
         return self._parameter
 
     def getComplexParameter(self):
         return self._complexParameter
 
     def getLimit(self):
+        print(self._limit)
         return self._limit
-
+ 
     def setLimit(self, limit):
         self._limit = deepcopy(limit)
         self._worstMargin = DataAnalysis()

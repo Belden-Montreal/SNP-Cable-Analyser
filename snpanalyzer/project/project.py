@@ -50,19 +50,26 @@ class Project(object):
             self._samples.remove(sample)
 
     def generateExcel(self, outputName, sampleNames, z=False):
+        print("Starting Excel")
+        print("self.samples", self._samples[0].getName(), sampleNames)
         workbook = xlsxwriter.Workbook(outputName, options={'nan_inf_to_errors': True})
         samples = [x for x in self._samples if x.getName() in sampleNames]
         #print(samples[0].getParameters().getDataSeries())
 ##        for x in self._samples:
 ##            print(x.getName())
+        print("samples",samples)
         for i,sample in enumerate(samples):
             try:
                 worksheet = workbook.add_worksheet(sample.getName())
                 #print(sample.getName())
-            except:
+            except Exception as e:
+                print(e)
                 worksheet = workbook.add_worksheet(sample.getName()+str(i))
             worksheet.write('A1', 'Sample ID:')
             worksheet.write('B1', sample.getName())
+
+            worksheet.write('A2', 'Sample Standard:')
+            worksheet.write('B2', sample.getStandard().__str__())
 
             cell_format = workbook.add_format({'align': 'center',
                                                 'valign': 'vcenter',
@@ -70,6 +77,7 @@ class Project(object):
             worksheet.merge_range('A3:A5', "Frequency", cell_format)
 
             curPos = 1  
+            print("Done Setup")
             for i, (paramName, parameter) in enumerate(sample.getParameters().items()):
                 #print(paramName)
                 numSignals = len(parameter.getParameter().keys())
@@ -78,6 +86,10 @@ class Project(object):
                 worksheet.merge_range(2, curPos, 2, curPos+numSignals*2-1, paramName, cell_format)
                 #print(parameter.getDataSeries().pop().getName())
                 #print(parameter.getPorts()._ports.getName())
+
+                #paramLimit = parameter.
+
+
                 for i, portName in enumerate(sorted(list(parameter.getDataSeries()), key=lambda params: params.getName())):#enumerate(list(parameter.getDataSeries())):
                     portSeries = portName
                     portName = portName.getName()
@@ -87,7 +99,8 @@ class Project(object):
                         param = parameter.getParameter()
                         for j, data in enumerate(param[portSeries]):
                             worksheet.merge_range(5+j, curPos+i*2, 5+j, curPos+i*2+1, "")
-                            self.box(workbook, worksheet, param, portSeries, i*2, j, data, curPos)
+                            self.box(workbook, worksheet, param, portSeries, i*2, j, float(data), curPos)
+
                     else:
                         if z:
                             worksheet.write(4, curPos+i*2, "real", cell_format)
@@ -102,8 +115,8 @@ class Project(object):
                             worksheet.write(4,curPos+i*2+1, "phase", cell_format)
                             param = parameter.getParameter()
                             print(param.keys())
-                            for j, (mag, phase) in enumerate(param[portSeries]):
-                                worksheet.write(5+j, 0, sample.getFrequencies()[j])
+                            for j, (mag,phase) in enumerate(param[portSeries]):
+                                worksheet.write_number(5+j, 0, sample.getFrequencies()[j])
                                 self.box(workbook, worksheet, param, portSeries, i*2, j, mag, curPos)
                                 self.box(workbook, worksheet, param, portSeries, i*2+1, j, phase, curPos)
             
@@ -120,7 +133,11 @@ class Project(object):
             box_form.set_bottom(6)
         if i == len(parameter)*2-1:
             box_form.set_right(6)
-        worksheet.write(j+5, curPos+i, str(data), box_form)
+
+        if type(data) is not str:
+            worksheet.write_number(j+5, curPos+i, data, box_form)
+        else:
+            worksheet.write(j+5, curPos+i, str(data), box_form)
 
     def findSamplesByName(self, names):
         return [x for x in self._samples if x.getName() in names]
@@ -144,6 +161,7 @@ class Project(object):
         return ProjectNode(self)
 
     def setStandard(self, standard):
+        print(standard)
         self._standard = standard
         for sample in self._samples:
             sample.setStandard(standard)

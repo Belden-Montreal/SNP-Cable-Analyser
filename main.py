@@ -12,6 +12,9 @@ from snpanalyzer.export.project import ProjectExportConfiguration
 from snpanalyzer.gui.dialog.export_configuration import ExportConfigurationDialog
 from pathlib import Path
 
+import multiprocessing as mp
+
+
 class Main():
 
     def __init__(self):
@@ -280,6 +283,7 @@ class Main():
         result = limitDialog.showDialog()
         if result:
             item = limitDialog.getSelection().internalPointer().standard
+            print(item, type(item))
             selected = [self._model.itemFromIndex(x) for x in self.getSelected()]
             for node in selected:
                 node.setStandard(item)

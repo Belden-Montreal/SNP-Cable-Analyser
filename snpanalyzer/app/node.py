@@ -1,4 +1,5 @@
 from PyQt5 import QtGui, QtCore
+import multiprocessing as mp
 
 class Node(QtGui.QStandardItem):
     def __init__(self, name):
@@ -28,5 +29,15 @@ class Node(QtGui.QStandardItem):
         return dict()
 
     def setStandard(self, standard):
-        for i in range(self.rowCount()):
-            self.child(i).setStandard(standard)
+        processes = [mp.Process(target=self.setStandardProcess, 
+                     args=(self.child(i), standard)) for i in range(self.rowCount())]
+        # Run processes
+        for p in processes:
+            p.start()
+
+        # Exit the completed processes
+        for p in processes:
+            p.join()
+
+    def setStandardProcess(self, child ,standard):
+        child.setStandard(standard)

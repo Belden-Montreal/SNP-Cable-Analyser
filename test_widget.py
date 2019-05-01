@@ -43,20 +43,20 @@ app = QApplication(argv)
 #window = MainWindow()
 #window.widget.setExportConfiguration(config)
 #window.show()
-'''dialog = ExportConfigurationDialog(config)
+dialog = ExportConfigurationDialog(config)
 dialog.show()
 app.exec_()
 obj = config.generateDocumentObject(
     dialog.getTemporaryDirectory(),
     Path("")
-) '''
+) 
 
-dialog = CompilationConfigurationDialog(project.getSamples())
-dialog.show()
-app.exec_()
-obj = config.generateDocumentObject(
-    dialog.getTemporaryDirectory(),
-    Path("")
-)
+# dialog = CompilationConfigurationDialog(project.getSamples())
+# dialog.show()
+# app.exec_()
+# obj = config.generateDocumentObject(
+#     dialog.getTemporaryDirectory(),
+#     Path("")
+# )
 
-obj.compile(filename=dialog.getDocumentFilename())
+# obj.compile(filename=dialog.getDocumentFilename())

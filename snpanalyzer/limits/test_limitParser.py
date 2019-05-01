@@ -17,7 +17,7 @@ class TestLimitParser(unittest.TestCase):
         self.assertEqual("CAT6", root.child(0).child(0).name)
         self.assertEqual("Connecting Hardware", root.child(0).child(0).child(0).name)
         self.assertEqual(30, root.child(0).child(0).child(0).standard.limits["RL"].functions[0])
-
+ 
     def test_write(self):
         root = TreeItem("Standard")
         std = TreeItem("Tia", root)
