@@ -49,17 +49,17 @@ class VNA(QtCore.QObject):
             dialog.showMessage("Error : {}".format(e))
             dialog.exec_()
 
-    def acquire(self, name, ports, config):
+    def acquire(self, name = None, ports = None, config = None):
         #config = self._config
-
-        timeOut = self._config.getTimeout()
-        bw = config.getBandwidth()
-        minFreq = config.getMinimumFrequency()
-        print("testing with min freq at ", minFreq)
-        maxFreq = config.getMaximumFrequency()
-        res = config.getResolution()
-        average = config.getAverage()
-        noConfig = config.getNoConfig()
+        if config is not None:
+            timeOut = self._config.getTimeout()
+            bw = config.getBandwidth()
+            minFreq = config.getMinimumFrequency()
+            print("testing with min freq at ", minFreq)
+            maxFreq = config.getMaximumFrequency()
+            res = config.getResolution()
+            average = config.getAverage()
+            noConfig = config.getNoConfig()
         if self.rm is None:
             return
         try:

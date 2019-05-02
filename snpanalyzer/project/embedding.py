@@ -173,26 +173,27 @@ class Embedding(Project):
                                     print(data)
                                     d1 = data[0]
                                     d2 = data[1]
-                                self.box(workbook, worksheet, param[portSeries], i*2, j, str(d1), curPos, len(param)*2)
-                                self.box(workbook, worksheet, param[portSeries], i*2+1, j, str(d2), curPos, len(param)*2)
-
-
-
+                                self.box(workbook, worksheet, param[portSeries], i*2, j, d1, curPos, len(param)*2)
+                                self.box(workbook, worksheet, param[portSeries], i*2+1, j, d2, curPos, len(param)*2)
                 
                     curPos += numSignals*2
             workbook.close()
 
-    def box(self, workbook, worksheet, case, i, j, data, curPos, nCases):
+    def box(self, workbook, worksheet, parameter, port, i, j, data, curPos):
         box_form = workbook.add_format()
         if j == 0:
             box_form.set_top(6)
         if i == 0:
             box_form.set_left(6)
-        if j == len(case)-1:
+        if j == len(parameter[port])-1:
             box_form.set_bottom(6)
-        if i == nCases-1:
+        if i == len(parameter)*2-1:
             box_form.set_right(6)
-        worksheet.write(j+6, curPos+i, data, box_form)
+
+        if type(data) is not str:
+            worksheet.write_number(j+5, curPos+i, data, box_form)
+        else:
+            worksheet.write(j+5, curPos+i, str(data), box_form)
         
     def __getParam(self, param, z=False):
         if z:
@@ -248,6 +249,7 @@ class EmbeddingNode(ProjectNode):
                 self._embedTab.createTabs(reverse)
                 self._embedTab.updateWidget()
             self.updateChildren()
+
 
     def addChildren(self, samples, plug, side):
         node = self.hasChild(side)

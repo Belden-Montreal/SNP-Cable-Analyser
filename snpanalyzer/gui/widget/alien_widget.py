@@ -109,7 +109,7 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
             self._alien.importSamples(files, end, test, disturber=True)
             self._node.updateChildren()
             self.updateWidget()
-
+  
     def acquireDisturbers(self):
         n, ok = QtWidgets.QInputDialog.getInt(self, "Number of disturbers", "Please enter the number of disturbers to acquire", 1, 1, 32)
         files = list()

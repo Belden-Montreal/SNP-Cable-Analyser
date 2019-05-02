@@ -75,6 +75,7 @@ class Main():
             print(e)
         
     def connect(self):
+
         self._vnaManager.connect()
         if self._vnaManager.connected():
             self._mainWindow.actionMeasure.setEnabled(True)
@@ -84,7 +85,19 @@ class Main():
             self._mainWindow.actionDisconnect.setEnabled(True)
             self._mainWindow.actionRun.setEnabled(True)
             self._mainWindow.actionConnect.setEnabled(False)
-            
+                
+        try:
+
+                projType, tab = list(self.activeNode.getWidgets(self._vnaManager).items())[0]
+
+                if projType is "Alien":
+                    self.activeNode.getWidgets(self._vnaManager)["Alien"].updateWidget()
+                if projType is "Embedding":
+                    self.activeNode.getWidgets(self._vnaManager)["Embedding"].updateWidget()    
+        except:
+            pass 
+               
+
     def disconnect(self):
         self._vnaManager.disconnect()
         self._mainWindow.actionMeasure.setEnabled(False)

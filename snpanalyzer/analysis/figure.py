@@ -98,6 +98,20 @@ class FigureAnalysis(Analysis):
         # get the data
         x = self._getXData(identifier)
         y = self._getYData(identifier)
+        x = np.array(x)  
+        y = np.array(y)
+      
+        x= x[y != np.inf]
+        x = x[y != -np.inf]
+        y= y[y != np.inf]
+        y = y[y != -np.inf]
+
+        print("figure type", type(y))
+
+
+
+
+
         label = self._getLabel(identifier)
 
         # add the line

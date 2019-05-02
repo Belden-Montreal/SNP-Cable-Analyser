@@ -6,6 +6,7 @@ from snpanalyzer.parameters.type import ParameterType
 from snpanalyzer.gui.widget.canvas import Canvas
 from matplotlib.figure import Figure
 from matplotlib.ticker import ScalarFormatter
+from snpanalyzer.gui.dialog.vna_test import VNATestDialog
 
 class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
     def __init__(self, embedNode, vnaManager):
@@ -84,6 +85,15 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
         for name, tab in self._pairTabs[side].items():
             self.tabWidget.addTab(tab, name)
 
+        if self._vna.connected():
+            self.acquireLoad.setEnabled(True)
+            self.acquireOpen.setEnabled(True and self._isReverse)
+            self.acquireShort.setEnabled(True and self._isReverse)
+        else:
+            self.acquireLoad.setEnabled(False)
+            self.acquireOpen.setEnabled(False)
+            self.acquireShort.setEnabled(False)
+
     def createTabs(self, side):
         sample = self._embedding.load()[side]
         if sample:
@@ -148,22 +158,54 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
             self.shortFileName.setText(self._shortFile)
 
     def getVnaLoad(self):
-        fileName = self._vna.acquire()
-        if fileName:
-            self._loadFile = fileName
-            self.loadFileName.setText(self._loadFile)
+        try:
+            vnaDialog = VNATestDialog()
+            vnaDialog.exec_()
+            name = vnaDialog.getSampleName()
+            ports = vnaDialog.getPorts()
+            fileName = self._vnaManager.acquire(name, ports, vnaDialog.getVNACOnfiguration())
+
+            if fileName:
+                self._loadFile = fileName
+                self.loadFileName.setText(self._loadFile)
+        except Exception as e:
+            print(e)  
+
 
     def getVnaOpen(self):
-        fileName = self._vna.acquire()
-        if fileName:
-            self._openFile = fileName
-            self.openFileName.setText(self._openFile)
+
+        try:
+            vnaDialog = VNATestDialog()
+            vnaDialog.exec_()
+            name = vnaDialog.getSampleName()
+            ports = vnaDialog.getPorts()
+            fileName = self._vnaManager.acquire(name, ports, vnaDialog.getVNACOnfiguration())
+
+            if fileName:
+                self._openFile = fileName
+                self.openFileName.setText(self._openFile)
+        except Exception as e:
+            print(e)  
+
+
     
     def getVnaShort(self):
         fileName = self._vna.acquire()
-        if fileName:
-            self._shortFile = fileName
-            self.shortFileName.setText(self._shortFile)
+    
+        try:
+            vnaDialog = VNATestDialog()
+            vnaDialog.exec_()
+            name = vnaDialog.getSampleName()
+            ports = vnaDialog.getPorts()
+            fileName = self._vnaManager.acquire(name, ports, vnaDialog.getVNACOnfiguration())
+
+            if fileName:
+                self._shortFile = fileName
+                self.shortFileName.setText(self._shortFile)
+        except Exception as e:
+            print(e)    
+
+
 
     def reembed(self):
         if self._isReverse:
