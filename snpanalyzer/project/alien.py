@@ -32,7 +32,7 @@ class Alien(Project):
         if disturber:
             pool = ThreadPool()
             samples = pool.starmap(self.__createDisturber, zip(fileNames, [param]*len(fileNames)))
-            self._disturbers[param][end] = samples
+            self._disturbers[param][end].extend(samples)
             if self._victims[param][end]:
                 self._victims[param][end].setDisturbers(samples)
             return samples

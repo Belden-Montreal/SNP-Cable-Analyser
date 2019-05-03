@@ -90,6 +90,7 @@ class VictimSample(AlienSample):
         self.recalculate(self._samples)
 
     def setDisturbers(self, samples):
+        print("setting Disturbers ", samples )
         self._samples = samples
         remotes = set(d.isRemote() for d in self._samples)
         if len(remotes) != 1:
@@ -98,3 +99,5 @@ class VictimSample(AlienSample):
         remote = next(iter(remotes))
         self._remote = remote
         self.recalculate(self._samples)
+
+

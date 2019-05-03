@@ -2,6 +2,8 @@ from snpanalyzer.gui.widget.tab_widget import TabWidget
 from snpanalyzer.gui.ui import plug_widget_ui
 from snpanalyzer.gui.widget.cnext_tab import CNEXTTab
 from PyQt5 import QtWidgets
+from snpanalyzer.gui.dialog.vna_test import VNATestDialog
+
 from snpanalyzer.parameters.type import ParameterType
 
 class PlugWidget(TabWidget, plug_widget_ui.Ui_Form):
@@ -47,29 +49,78 @@ class PlugWidget(TabWidget, plug_widget_ui.Ui_Form):
             self.acquireLoad.setEnabled(False)
 
     def getVnaDfOpen(self):
-        fileName = self._vna.acquire()
-        self._dfOpenName = fileName
-        self.dfOpenFileName.setText(fileName)
+        try:
+            vnaDialog = VNATestDialog()
+            vnaDialog.exec_()
+            name = vnaDialog.getSampleName()
+            ports = vnaDialog.getPorts()
+            fileName = self._vna.acquire(name, ports, vnaDialog.getVNACOnfiguration())
+
+            if fileName:
+                self._dfOpenName = fileName
+                self.dfOpenFileName.setText(self._dfOpenName)
+        except Exception as e:
+            print(e)    
+
 
     def getVnaDfShort(self):
-        fileName = self._vna.acquire()
-        self._dfShortName = fileName
-        self.dfShortFileName.setText(fileName)
+        try:
+            vnaDialog = VNATestDialog()
+            vnaDialog.exec_()
+            name = vnaDialog.getSampleName()
+            ports = vnaDialog.getPorts()
+            fileName = self._vna.acquire(name, ports, vnaDialog.getVNACOnfiguration())
+
+            if fileName:
+                self._dfShortName = fileName
+                self.dfShortFileName.setText(self._dfShortName)
+        except Exception as e:
+            print(e)    
+
 
     def getVnaOpen(self):
-        fileName = self._vna.acquire()
-        self._openName = fileName
-        self.openFileName.setText(fileName)
+        try:
+            vnaDialog = VNATestDialog()
+            vnaDialog.exec_()
+            name = vnaDialog.getSampleName()
+            ports = vnaDialog.getPorts()
+            fileName = self._vna.acquire(name, ports, vnaDialog.getVNACOnfiguration())
+
+            if fileName:
+                self._openFile = fileName
+                self.openFileName.setText(self._openFile)
+        except Exception as e:
+            print(e)  
 
     def getVnaShort(self):
-        fileName = self._vna.acquire()
-        self._shortName = fileName
-        self.shortFileName.setText(fileName)
+        try:
+            vnaDialog = VNATestDialog()
+            vnaDialog.exec_()
+            name = vnaDialog.getSampleName()
+            ports = vnaDialog.getPorts()
+            fileName = self._vna.acquire(name, ports, vnaDialog.getVNACOnfiguration())
+
+            if fileName:
+                self._shortFile = fileName
+                self.shortFileName.setText(self._shortFile)
+        except Exception as e:
+            print(e)    
+
+
 
     def getVnaLoad(self):
-        fileName = self._vna.acquire()
-        self._loadName = fileName
-        self.loadFileName.setText(fileName)
+        try:
+            vnaDialog = VNATestDialog()
+            vnaDialog.exec_()
+            name = vnaDialog.getSampleName()
+            ports = vnaDialog.getPorts()
+            fileName = self._vna.acquire(name, ports, vnaDialog.getVNACOnfiguration())
+
+            if fileName:
+                self._loadFile = fileName
+                self.loadFileName.setText(self._loadFile)
+        except Exception as e:
+            print(e)  
 
     def getDfOpen(self):
         fileName,_ = QtWidgets.QFileDialog.getOpenFileName(self, "Select Direct Fixture open file", "", "sNp Files (*.s*p)")
@@ -122,6 +173,20 @@ class PlugWidget(TabWidget, plug_widget_ui.Ui_Form):
         #     error.exec_()
 
     def updateWidget(self):
+
+        if self._vna.connected():
+            self.dfOpenAcquire.setEnabled(True)
+            self.dfShortAcquire.setEnabled(True)
+            self.acquireOpen.setEnabled(True)
+            self.acquireShort.setEnabled(True)
+            self.acquireLoad.setEnabled(True)
+        else:
+            self.dfOpenAcquire.setEnabled(False)
+            self.dfShortAcquire.setEnabled(False)
+            self.acquireOpen.setEnabled(False)
+            self.acquireShort.setEnabled(False)
+            self.acquireLoad.setEnabled(False)
+
         if self._plug.dfOpen():
             self._dfOpenName = self._plug.dfOpen().getFileName()
             self.dfOpenFileName.setText(self._plug._dfOpenDelay.getName())

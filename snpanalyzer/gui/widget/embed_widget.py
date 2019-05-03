@@ -163,7 +163,7 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
             vnaDialog.exec_()
             name = vnaDialog.getSampleName()
             ports = vnaDialog.getPorts()
-            fileName = self._vnaManager.acquire(name, ports, vnaDialog.getVNACOnfiguration())
+            fileName = self._vna.acquire(name, ports, vnaDialog.getVNACOnfiguration())
 
             if fileName:
                 self._loadFile = fileName
@@ -179,7 +179,7 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
             vnaDialog.exec_()
             name = vnaDialog.getSampleName()
             ports = vnaDialog.getPorts()
-            fileName = self._vnaManager.acquire(name, ports, vnaDialog.getVNACOnfiguration())
+            fileName = self._vna.acquire(name, ports, vnaDialog.getVNACOnfiguration())
 
             if fileName:
                 self._openFile = fileName
@@ -189,15 +189,13 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
 
 
     
-    def getVnaShort(self):
-        fileName = self._vna.acquire()
-    
+    def getVnaShort(self):    
         try:
             vnaDialog = VNATestDialog()
             vnaDialog.exec_()
             name = vnaDialog.getSampleName()
             ports = vnaDialog.getPorts()
-            fileName = self._vnaManager.acquire(name, ports, vnaDialog.getVNACOnfiguration())
+            fileName = self._vna.acquire(name, ports, vnaDialog.getVNACOnfiguration())
 
             if fileName:
                 self._shortFile = fileName

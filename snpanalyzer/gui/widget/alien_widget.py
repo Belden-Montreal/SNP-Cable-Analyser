@@ -6,6 +6,7 @@ import numpy as np
 from snpanalyzer.gui.widget.canvas import Canvas
 from matplotlib.figure import Figure
 from snpanalyzer.gui.widget.alien_navbar import AlienNavigationToolbar
+from snpanalyzer.gui.dialog.vna_test import VNATestDialog
 
 class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
     def __init__(self, alienNode, vnaManager):
@@ -48,6 +49,16 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
         self.victimRun.setEnabled(self._vna.connected())
         
     def updateWidget(self):
+
+        if self._vna.connected():
+            self.alienRun.setEnabled(True)
+            self.victimRun.setEnabled(True)
+        else:
+            self.alienRun.setEnabled(False)
+            self.victimRun.setEnabled(False)
+
+
+
         end, test = self.getCheckButtons()
         self._alien.resetDisturbers(end, test)
         self.alienDisturbers.clear()
@@ -93,13 +104,25 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
             self.changeFigure(end, test)
 
     def acquireVictim(self):
-        fileName = self._vna.acquire()
-        if fileName:
-            end, test = self.getCheckButtons()
-            self._alien.importSamples([fileName], end, test, disturber=False)
-            self._node.updateChildren()
-            self.victimLabel.setText(self._alien.victims()[test][end].getName())
-            self.changeFigure(end, test)
+
+        try:
+            vnaDialog = VNATestDialog()
+            vnaDialog.exec_()
+            name = vnaDialog.getSampleName()
+            ports = vnaDialog.getPorts()
+            fileName = self._vna.acquire(name, ports, vnaDialog.getVNACOnfiguration())
+
+            if fileName:
+                end, test = self.getCheckButtons()
+                self._alien.importSamples([fileName], end, test, disturber=False)
+                self._node.updateChildren()
+                self.victimLabel.setText(self._alien.victims()[test][end].getName())
+                self.changeFigure(end, test)
+                self.updateWidget()
+
+        except Exception as e:
+            print(e)  
+
 
     def importDisturbers(self,files = None):
         if files is None:
@@ -111,17 +134,37 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
             self.updateWidget()
   
     def acquireDisturbers(self):
+
+        try:
+            vnaDialog = VNATestDialog()
+            vnaDialog.exec_()
+            name = vnaDialog.getSampleName()
+            ports = vnaDialog.getPorts()
+            fileName = self._vna.acquire(name, ports, vnaDialog.getVNACOnfiguration())
+
+            if fileName:
+                end, test = self.getCheckButtons()
+
+                self._alien.importSamples([fileName], end, test, disturber=True)
+                self._node.updateChildren()
+                self.updateWidget()
+
+        except Exception as e:
+            print(e)  
+
+        """ 
         n, ok = QtWidgets.QInputDialog.getInt(self, "Number of disturbers", "Please enter the number of disturbers to acquire", 1, 1, 32)
         files = list()
+
         if ok:
             for _ in range(n):
                 fileName = self._vna.acquire()
                 if fileName:
                     files.append(fileName)
             end, test = self.getCheckButtons()
-            self._alien.importSamples(files, end, test, disturber=True)
+            self._alien.importSamples([fileName], end, test, disturber=True)
             self._node.updateChildren()
-            self.updateWidget()
+            self.updateWidget() """
 
     def disturbersChanged(self):
         disturbers = list()
