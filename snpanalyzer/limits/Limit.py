@@ -30,6 +30,7 @@ class Limit:
                 self.functions.append(parse_expr(clause, local_dict={"log":lambda x: log(x, 10), "e": E}, transformations=transformation))
 
     def evaluate(self, vals):
+       # print("evaluate limit")
         for i, function in enumerate(self.functions):
             for symbol in function.free_symbols:
                 if not(symbol.__str__() in vals):

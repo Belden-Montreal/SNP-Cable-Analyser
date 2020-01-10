@@ -55,6 +55,7 @@ class Parameter(object):
         self._ports = ports
         self._freq = freq
         self._matrices = self.chooseMatrices(mixedModeMatrices)
+
         self._series = self.computeDataSeries()
         (self._parameter, self._complexParameter) = self.computeParameter()
         self._limit = None
@@ -83,9 +84,11 @@ class Parameter(object):
     def computeParameter(self):
         raise NotImplementedError
 
+    def _getYData(self, identifier):
+        raise NotImplementedError
+
     def getDataSeries(self, limit = False):
-        print("Getting Data Series (Parameters")
-        print(self._series)
+        # print("Getting Data Series (Parameters")
         if limit:
             try:
                 limitDataSeries = GenericDataSerie(name="Limit", data=self.getLimit() )
@@ -103,7 +106,7 @@ class Parameter(object):
         return self._complexParameter
 
     def getLimit(self):
-        print(self._limit)
+
         return self._limit
  
     def setLimit(self, limit):

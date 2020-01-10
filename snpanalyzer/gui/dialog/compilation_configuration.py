@@ -72,6 +72,7 @@ class CompilationConfigurationDialog(QDialog):
         # find all parameters in all samples
         parameters = dict()
         for sample in self.__samples:
+
             for (ptype, parameter) in sample.getParameters().items():
                 name = parameter.getName()
                 formats = parameter.getAvailableFormats()
@@ -166,7 +167,6 @@ class CompilationConfigurationDialog(QDialog):
     def __sampleStateChanged(self, item):
         # get the sample from the checked item
         sample = item.data()
-
         # add/remove corresponding sample
         if item.checkState() == Qt.Checked:
             self._compilation.addSample(sample)

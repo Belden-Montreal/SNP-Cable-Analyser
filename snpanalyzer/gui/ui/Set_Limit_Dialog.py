@@ -27,6 +27,7 @@ class Ui_LimitDialog(object):
         self.retranslateUi(LimitDialog)
         self.buttonBox.accepted.connect(LimitDialog.accept)
         self.buttonBox.rejected.connect(LimitDialog.reject)
+
         QtCore.QMetaObject.connectSlotsByName(LimitDialog)
 
     def retranslateUi(self, LimitDialog):

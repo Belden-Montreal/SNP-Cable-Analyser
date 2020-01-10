@@ -9,8 +9,8 @@ class CasePlot(ParameterPlot):
         super(CasePlot, self).__init__(parameter, selection, limit)
 
     def drawFigure(self):
-        self._figure = plt.figure(figsize=(18.75,6.25), dpi=80) #might not work for all screen resolutions
-
+        self._figure = plt.figure(figsize=(18.75,6.25), dpi=100) #might not work for all screen resolutions
+        print("DRAWING FIGURE")
         for i, (port, (name,_)) in enumerate(self._parameter.getPorts().items()):
 
             portData = self._parameter.getParameter()[port]

@@ -6,6 +6,9 @@ class Node(QtGui.QStandardItem):
         super(Node, self).__init__(name)
         self._dataObject = None
         self.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
+        self._name = name
+    def getName(self):
+        return self._name
 
     def removeRow(self, row):
         super(Node, self).removeRow(row)
@@ -24,7 +27,6 @@ class Node(QtGui.QStandardItem):
             if text == child.text():
                 return child
         return 0
-
     def getWidgets(self, vnaManager):
         return dict()
 

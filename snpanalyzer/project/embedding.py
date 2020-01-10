@@ -6,6 +6,8 @@ from snpanalyzer.parameters.type import ParameterType
 import numpy as np
 import xlsxwriter
 
+
+
 class Case():
     CAT5E = {
             1:((0,2),(lambda f, cnext: (-35.8+20*np.log10(f/100), np.angle(cnext, deg=True)))),
@@ -55,6 +57,17 @@ class Embedding(Project):
         self.type = "Embedding"
         self.plugFileName = None #Quick patch to get XML File of the plug
         self.plugFile = None
+    def getSamples(self):
+        sample=list()
+        if self._load["Reverse"]:
+            sample.append(self._load["Reverse"])
+        if self._open:
+            sample.append(self._open)
+        if self._short:
+            sample.append(self._short)
+        if self._load["Forward"]:
+            sample.append(self._load["Forward"])
+        return sample
 
     def importPlug(self, plugFile):
         from snpanalyzer.app.save_manager import SaveManager
@@ -62,6 +75,7 @@ class Embedding(Project):
         self._plug = SaveManager().loadProject(plugFile)
         self.plugFile  = plugFile
         self.plugFileName = os.path.basename(plugFile)
+        print(self._plug.getSamples())
         return self._plug
 
     def importLoad(self, loadFile, side, cat="CAT5e"):
@@ -72,10 +86,18 @@ class Embedding(Project):
         if side == "Forward":
             self._load[side] = DeembedSample(loadFile, self._plug.getPlugNext(), self._plug.getNextDelay(), cases, standard=self._standard)
         else:
+            print(side)
             k1, k2, k3 = self._plug.getConstants()
             self._load[side] = ReverseDeembedSample(loadFile, self._plug.getPlugNext(), self._plug.getPlugDelay(),
                                               self._open.getParameter(ParameterType.PROPAGATION_DELAY), self._short.getParameter(ParameterType.PROPAGATION_DELAY), k1, k2, k3, cases, standard=self._standard)
         return self._load[side]
+
+    def getCaseF(self):
+        return self._load["Forward"].getParameters()[ParameterType.CASE]
+
+    def getCaseR(self):
+        return self._load["Reverse"].getParameters()[ParameterType.RCASE]
+
 
     def importOpen(self, openFile):
         self._open = DelaySample(openFile)
@@ -103,16 +125,16 @@ class Embedding(Project):
     def shortSample(self):
         return self._short
 
+    def getType(self):
+        return self.type
+
     def plug(self):
         return self._plug
 
     def generateExcel(self, outputName, sampleNames, z=False):
         workbook = xlsxwriter.Workbook(outputName, options={'nan_inf_to_errors': True})
-        if z:
-            dataTitle = ["Real", "Imag"]
-        else:
-            dataTitle = ["Mag", "Phase"]
         for side, sample in self._load.items():
+            print(side, sample)
             if sample:
                 worksheet = workbook.add_worksheet(side)
                 worksheet.write('A1', 'De-embedding ID:')
@@ -126,69 +148,138 @@ class Embedding(Project):
                 curPos = 1
                 #parameters = {"RL": sample.getParameters()["RL"], "NEXT": sample.getParameters()["NEXT"], "DNEXT": sample.getParameters()["DNEXT"], "Case": sample.getParameters()["Case"]}
                 for i, (paramName, parameter) in enumerate(sample.getParameters().items()):
-                    print((paramName, parameter))
                     try:
                         numSignals = len(parameter.getParameter().keys())
                     except:
                         continue
                     paramName = str(paramName).replace("ParameterType.", "").replace("_", " ").split(":")[0]
-                    if paramName == "CASE":
-                        nc = 0
-                        for p in parameter.getParameter().values():
-                            nc += len(p)
-                        worksheet.merge_range(2, curPos, 2, curPos+nc*2-1,  paramName, cell_format)
-                    else:
-                        worksheet.merge_range(2, curPos, 3, curPos+numSignals*2-1,  paramName, cell_format)
-                    for i, portName in enumerate(sorted(list(parameter.getDataSeries()), key=lambda params: params.getName())):#enumerate(list(parameter.getDataSeries())):
-                        portSeries = portName
-                        if paramName == "CASE":
-                            param = self.__getParam(parameter, z)
-                            numCases = len(param[portSeries])
-                            worksheet.merge_range(4, curPos, 4, curPos+numCases*2-1, str(portName.getName()), cell_format)
-                            for k, (n, case) in enumerate(param[portSeries].items()):
-                                worksheet.merge_range(3, curPos+k*2, 3, curPos+k*2+1, str(n), cell_format)
-                                worksheet.write(5,curPos+k*2, dataTitle[0], cell_format)
-                                worksheet.write(5,curPos+k*2+1, dataTitle[1], cell_format)
-                                for j, (data) in enumerate(case):
-                                    d1,d2 = self.__getData(data, z)
-                                    worksheet.write(6+j, 0, sample.getFrequencies()[j])
-                                    self.box(workbook, worksheet, case, k*2, j, d1, curPos, numCases*2)
-                                    self.box(workbook, worksheet, case, k*2+1, j, d2, curPos, numCases*2)
-                            curPos+=numCases*2
-                            
-                        else:
-                            worksheet.merge_range(4, curPos+i*2, 4, curPos+i*2+1, str(portName.getName()), cell_format)
-                            worksheet.write(5,curPos+i*2, dataTitle[0], cell_format)
-                            worksheet.write(5,curPos+i*2+1, dataTitle[1], cell_format)
-                            param = self.__getParam(parameter, z)
-                            if type(param[portSeries] ) is not list:
-                                param[portSeries] = [param[portSeries]]
-                            for j, (data) in enumerate(param[portSeries]):
-                                #d1,d2 = self.__getData(data, z)
-                                worksheet.write(6+j, 0, sample.getFrequencies()[j])
-                                if type(data) is not list:
-                                    d1 = data
-                                    d2 = 0
-                                else:
-                                    print(data)
-                                    d1 = data[0]
-                                    d2 = data[1]
-                                self.box(workbook, worksheet, param[portSeries], i*2, j, d1, curPos, len(param)*2)
-                                self.box(workbook, worksheet, param[portSeries], i*2+1, j, d2, curPos, len(param)*2)
-                
-                    curPos += numSignals*2
-            workbook.close()
 
-    def box(self, workbook, worksheet, parameter, port, i, j, data, curPos):
+                    if "DELAY" in paramName:
+                        worksheet.merge_range(2, curPos, 2, curPos + numSignals - 1, paramName, cell_format)
+                        for i, portName in enumerate(sorted(list(parameter.getDataSeries()), key=lambda
+                                params: params.getName())):  # enumerate(list(parameter.getDataSeries())):
+                            portSeries = portName
+                            # print(parameter)
+                            portName = portName.getName()
+                            worksheet.write(3, curPos + i, str(portName), cell_format)
+                            worksheet.write(4, curPos + i, "ns", cell_format)
+                            param = parameter.getParameter()
+                            try:
+                                if type(param[portSeries]) is not list:
+                                    param[portSeries] = [param[portSeries]]
+                                for j, ns in enumerate(list(param[portSeries])):
+                                    worksheet.write(5 + j, 0, sample.getFrequencies()[j])
+                                    self.box(workbook, worksheet, param, portSeries, i, j, ns, curPos, line=True)
+
+                            except Exception as e:
+                                print(e)
+                        curPos += numSignals
+                    elif "CASE" in paramName:
+                        cases = 0
+                        activeCase= len([t for t,(a,b) in parameter.getCases().items() if b is not None])
+                        worksheet.merge_range(1, curPos, 1, curPos + activeCase * 2 - 1, paramName, cell_format)
+                        for i, portName in enumerate(
+                            sorted(list(parameter.getDataSeries()), key=lambda params: params.getName())):
+                            portSeries = portName
+                            portName = portName.getName()
+                            if z:
+                                param = parameter.getComplexParameter()
+                                ncp = len(param[portSeries].keys())
+
+                                worksheet.merge_range(2, curPos + cases * 2, 2, curPos + cases*2 + ncp * 2 -1, str(portName), cell_format)
+
+                                for x, c in enumerate(param[portSeries]):
+                                    worksheet.merge_range(3, curPos+cases*2+x*2, 3, curPos+cases*2+x*2+1 ,"Case "+str(c),cell_format)
+                                    worksheet.write(4, curPos+cases*2+x*2, "real", cell_format)
+                                    worksheet.write(4, curPos+cases*2+x*2+1, "imaginary", cell_format)
+                                    for j, data in enumerate(param[portSeries][c]):
+
+                                            worksheet.write(5 + j, 0, sample.getFrequencies()[j])
+                                            self.box(workbook, worksheet, param[portSeries], c, cases*2+x*2, j, data.real,
+                                                         curPos,case=activeCase)
+                                            self.box(workbook, worksheet, param[portSeries], c, cases*2+x*2+1, j, data.imag,
+                                                         curPos,case=activeCase, line = True)
+
+                            else:
+                                param = parameter.getParameter()
+                                ncp = len(param[portSeries].keys())
+
+                                worksheet.merge_range(2, curPos + cases * 2, 2, curPos + cases * 2 + ncp * 2 - 1,
+                                                      str(portName), cell_format)
+
+                                for x, c in enumerate(param[portSeries]):
+                                    worksheet.merge_range(3, curPos + cases * 2 + x * 2, 3,
+                                                          curPos + cases * 2 + x * 2 + 1, "Case " + str(c), cell_format)
+                                    worksheet.write(4, curPos + cases * 2 + x * 2, "mag", cell_format)
+                                    worksheet.write(4, curPos + cases * 2 + x * 2 + 1, "phase", cell_format)
+                                    for j, (mag,phase) in enumerate(param[portSeries][c]):
+                                        worksheet.write(5 + j, 0, sample.getFrequencies()[j])
+                                        self.box(workbook, worksheet, param[portSeries], c, cases * 2 + x * 2, j,
+                                                 mag,
+                                                 curPos, case=activeCase)
+                                        self.box(workbook, worksheet, param[portSeries], c, cases * 2 + x * 2 + 1, j,
+                                                 phase,
+                                                 curPos, case=activeCase, line=True)
+                            cases += ncp
+                        curPos += activeCase * 2
+
+                    else:
+                        worksheet.merge_range(2, curPos, 2, curPos+numSignals*2-1,  paramName, cell_format)
+                        for i, portName in enumerate(
+                            sorted(list(parameter.getDataSeries()), key=lambda params: params.getName())):
+                            portSeries = portName
+                            # print(parameter)
+                            portName = portName.getName()
+                            worksheet.merge_range(3, curPos + i * 2, 3, curPos + i * 2 + 1, str(portName), cell_format)
+                            if z:
+                                worksheet.write(4, curPos + i * 2, "real", cell_format)
+                                worksheet.write(4, curPos + i * 2 + 1, "imaginary", cell_format)
+                                param = parameter.getComplexParameter()
+                                for j, data in enumerate(param[portSeries]):
+
+                                    worksheet.write(5 + j, 0, sample.getFrequencies()[j])
+                                    self.box(workbook, worksheet, param, portSeries, i * 2, j, data.real, curPos)
+                                    self.box(workbook, worksheet, param, portSeries, i * 2 + 1, j, data.imag, curPos, line=True)
+
+                            else:
+                                worksheet.write(4, curPos + i * 2, "mag", cell_format)
+                                worksheet.write(4, curPos + i * 2 + 1, "phase", cell_format)
+                                param = parameter.getParameter()
+
+                                # print(param[portSeries])
+                                try:
+                                    if type(param[portSeries]) is not list:
+                                        param[portSeries] = [param[portSeries]]
+                                    for j, (mag, phase) in enumerate(list(param[portSeries])):
+                                        worksheet.write_number(5 + j, 0, sample.getFrequencies()[j])
+                                        self.box(workbook, worksheet, param, portSeries, i * 2, j, mag, curPos)
+                                        self.box(workbook, worksheet, param, portSeries, i * 2 + 1, j, phase,curPos, line=True)
+                                except Exception as e:
+                                    print(e)
+                        curPos += numSignals * 2
+
+
+
+
+        workbook.close()
+
+    def box(self, workbook, worksheet, parameter, port, i, j, data, curPos, case= None, line= None):
         box_form = workbook.add_format()
+        if line:
+            box_form.set_right()
         if j == 0:
             box_form.set_top(6)
         if i == 0:
             box_form.set_left(6)
         if j == len(parameter[port])-1:
             box_form.set_bottom(6)
-        if i == len(parameter)*2-1:
-            box_form.set_right(6)
+        if case:
+            if i == case*2-1:
+                box_form.set_right(6)
+        else:
+            if i == len(parameter)*2-1:
+                box_form.set_right(6)
+
 
         if type(data) is not str:
             worksheet.write_number(j+5, curPos+i, data, box_form)
@@ -271,8 +362,6 @@ class EmbeddingNode(ProjectNode):
                 node = Node(side)
                 self.appendRow(node)
             node.setRowCount(0)
-            if self._dataObject.load()[side]:
-                node.appendRow(SampleNode(self._dataObject.load()[side], self._dataObject))
             if side == "Reverse":
                 if self._dataObject.shortSample():
                     shortNode = Node("Short")
@@ -282,6 +371,8 @@ class EmbeddingNode(ProjectNode):
                     openNode = Node("Open")
                     node.appendRow(openNode)
                     openNode.appendRow(SampleNode(self._dataObject.openSample(), self._dataObject))
+            if self._dataObject.load()[side]:
+                node.appendRow(SampleNode(self._dataObject.load()[side], self._dataObject))
 
     def setupInitialData(self):
         self.updateChildren()

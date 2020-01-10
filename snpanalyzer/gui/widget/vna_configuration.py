@@ -46,7 +46,11 @@ class VNAConfigurationWidget(QWidget):
         self.__ui.averageLineEdit.setText(str(vna.getAverage()))
         self.__ui.portsLineEdit.setText(str(vna.getNumberOfPorts()))
         self.__ui.timeoutLineEdit.setText(str(vna.getTimeout()))
-
+        self.__ui.bandwidthInput.setDisabled(True)
+        self.__ui.startFreqInput.setDisabled(True)
+        self.__ui.stopFreqInput.setDisabled(True)
+        self.__ui.resolutionLineEdit.setDisabled(True)
+        self.__ui.averageLineEdit.setDisabled(True)
     def getConfiguration(self):
         return self.__vna
 
@@ -80,7 +84,7 @@ class VNAConfigurationWidget(QWidget):
         try:
             resolution = int(resolution)
         except:
-            resolution = -1
+            resolution = 1
         self.__vna.setResolution(resolution)
         if self.__vna.getResolution() != resolution:
             self.__ui.resolutionLineEdit.setText(str(self.__vna.getResolution()))
@@ -89,7 +93,7 @@ class VNAConfigurationWidget(QWidget):
         try:
             average = int(average)
         except:
-            average = -1
+            average = 1
             
         self.__vna.setAverage(average)
         if self.__vna.getAverage() != average:
@@ -99,7 +103,7 @@ class VNAConfigurationWidget(QWidget):
         try:
             ports = int(ports)
         except:
-            ports = -1
+            ports = 1
             
         self.__vna.setNumberOfPorts(ports)
         if self.__vna.getNumberOfPorts() != ports:
@@ -109,7 +113,7 @@ class VNAConfigurationWidget(QWidget):
         try:
             timeout = int(timeout)
         except:
-            timeout = -1
+            timeout = 1
         self.__vna.setTimeout(timeout)
         if self.__vna.getTimeout() != timeout:
             self.__ui.timeoutLineEdit.setText(str(self.__vna.getTimeout()))

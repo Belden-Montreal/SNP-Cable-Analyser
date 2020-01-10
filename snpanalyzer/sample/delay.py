@@ -7,3 +7,5 @@ class DelaySample(PlugSample):
             ParameterType.RL,
             ParameterType.PROPAGATION_DELAY,
         ]
+    def getAvailableExport(self):
+        return self.getAvailableParameters()

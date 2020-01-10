@@ -117,6 +117,11 @@ class CaseAnalysis(ParameterAnalysis):
             self._removeLine(serie, n)
         self._series.discard(serie)
 
+    def setColorSeries(self,r,g,b):
+        for serie in self._series:
+            self._colors[serie] = (r, g, b)
+
+
     @overrides
     def _removeLine(self, identifier, case=0):
         # make sure the serie in preset

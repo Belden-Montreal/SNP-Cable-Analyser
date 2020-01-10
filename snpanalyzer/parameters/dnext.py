@@ -10,6 +10,7 @@ class DNEXT(CorrectedNEXT):
     '''
     def __init__(self, ports, freq, matrices, plugNextDelay, plugNext):
         self._plugNext = plugNext
+        print("ports DNEXT:",str(ports))
         super(DNEXT, self).__init__(ports, freq, matrices, plugNextDelay)
     
     @staticmethod

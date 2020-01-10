@@ -1,8 +1,9 @@
+from snpanalyzer.analysis.parameter import ParameterAnalysis
 from snpanalyzer.sample.cable import CableSample
 from snpanalyzer.sample.plug import PlugSample
 #from multiprocessing.dummy import Pool as ThreadPool
 import threading
-
+from snpanalyzer.gui.ui import MW
 from os.path import splitext
 import xlsxwriter
 from PyQt5 import QtWidgets, QtGui
@@ -24,6 +25,7 @@ class Project(object):
         threads = []
         self.samplesList = []
         for sample in fileNames:
+            print(len(fileNames))
             print("Importing  ", sample)
             t = threading.Thread(target=self.__createSample(sample))
             threads.append(t)
@@ -41,6 +43,7 @@ class Project(object):
         print("file name "+name )
         print("extension "+extension )
         if extension[2] == "8" or extension[2] == "4":
+            print("append")
             self.samplesList.append(PlugSample(name, standard=self._standard))
             return
         self.samplesList.append(CableSample(name, standard=self._standard))
@@ -50,21 +53,28 @@ class Project(object):
             self._samples.remove(sample)
 
     def generateExcel(self, outputName, sampleNames, z=False):
+
         print("Starting Excel")
-        print("self.samples", self._samples[0].getName(), sampleNames)
+        #print("self.samples", self._samples[0].getName(), sampleNames)
+      #  self.setStandard()
+    #    for x in self._samples:
+     #       print(x.getName())
         workbook = xlsxwriter.Workbook(outputName, options={'nan_inf_to_errors': True})
-        samples = [x for x in self._samples if x.getName() in sampleNames]
-        #print(samples[0].getParameters().getDataSeries())
-##        for x in self._samples:
-##            print(x.getName())
+        samples = [x for x in self._samples]
+       # samples = [x for x in self._samples if x.getName() in sampleNames]
+        #for j in samples:
+    #        print(j.getName())
+       # for x in self._samples:
+        #    print(x.getName())
         print("samples",samples)
         for i,sample in enumerate(samples):
             try:
                 worksheet = workbook.add_worksheet(sample.getName())
-                #print(sample.getName())
+                print(sample.getName())
             except Exception as e:
                 print(e)
                 worksheet = workbook.add_worksheet(sample.getName()+str(i))
+            #sample.setStandard(sample.getStandard())
             worksheet.write('A1', 'Sample ID:')
             worksheet.write('B1', sample.getName())
 
@@ -80,19 +90,28 @@ class Project(object):
             print("Done Setup")
             for i, (paramName, parameter) in enumerate(sample.getParameters().items()):
                 #print(paramName)
+
                 numSignals = len(parameter.getParameter().keys())
                 print(str(paramName))
+
                 paramName = str(paramName).replace("ParameterType.", "").replace("_", " ")
                 worksheet.merge_range(2, curPos, 2, curPos+numSignals*2-1, paramName, cell_format)
                 #print(parameter.getDataSeries().pop().getName())
                 #print(parameter.getPorts()._ports.getName())
 
                 #paramLimit = parameter.
+              #  if parameter.getLimit() is not None:
+              #      limit = True
+             #   else:
+              #      limit = False
 
 
-                for i, portName in enumerate(sorted(list(parameter.getDataSeries()), key=lambda params: params.getName())):#enumerate(list(parameter.getDataSeries())):
+                for i, portName in enumerate(parameter.getDataSeries()):#, key=lambda params: params.getName()):#enumerate(list(parameter.getDataSeries())):
+
+
                     portSeries = portName
                     portName = portName.getName()
+                    print(str(portName))
                     worksheet.merge_range(3, curPos+i*2, 3, curPos+i*2+1, str(portName), cell_format)
                     if paramName == "PROPAGATION DELAY":
                         worksheet.merge_range(4, curPos+i*2, 4, curPos+i*2+1, "ns", cell_format)
@@ -123,15 +142,17 @@ class Project(object):
                 curPos += numSignals*2
         workbook.close()
 
-    def box(self, workbook, worksheet, parameter, port, i, j, data, curPos):
+    def box(self, workbook, worksheet, parameter, port, i, j, data, curPos, n=2):
         box_form = workbook.add_format()
+
         if j == 0:
             box_form.set_top(6)
         if i == 0:
             box_form.set_left(6)
         if j == len(parameter[port])-1:
             box_form.set_bottom(6)
-        if i == len(parameter)*2-1:
+
+        if i == len(parameter)*n-1:
             box_form.set_right(6)
 
         if type(data) is not str:
@@ -157,11 +178,13 @@ class Project(object):
     def getDate(self):
         return self._date
 
+    def getType(self):
+        return self.type
+
     def nodeFromProject(self):
         return ProjectNode(self)
 
     def setStandard(self, standard):
-        print(standard)
         self._standard = standard
         for sample in self._samples:
             sample.setStandard(standard)
@@ -202,6 +225,7 @@ class ProjectNode(Node):
 
     def setStandard(self, standard):
         self._dataObject.setStandard(standard)
+
 
     # def getWidgets(self, vnaManager):
     #     return list()

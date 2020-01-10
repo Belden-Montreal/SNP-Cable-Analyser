@@ -72,10 +72,13 @@ class CalibrationWizard(QtWidgets.QWizard):
                 for seq in self.thruTwoEnd[attach]:
                     self.addPage(self.Thru2E(attach, seq))
 
+        self.addPage(self.SaveCal())
+
         self.addPage(self.Finished())
                 
         #self.button(self.NextButton).clicked.connect(self.nextButtonAction)
         self.button(self.FinishButton).clicked.connect(self.finishButtonAction)
+
 
         self.resize(640,480)
 
@@ -193,7 +196,6 @@ Press Next once you've done so'''.format(attach,  str(self.thruTwoEnd[attach][se
 
         page.setLayout(layout)
 
-        print("Cal here")
 
         self.thruOut = self.thruTwoEnd[attach][seq]
 
@@ -250,6 +252,32 @@ Press Next once you've done so'''.format(attach,  str(self.thruTwoEnd[attach][se
         seq = title.split(",")[2]
         self.thruOut = self.thruTwoEnd[attach][seq]
         self.cal.thruCalib(self.thruOut)
+
+    def SaveCal(self):
+            page = QtWidgets.QWizardPage()
+            page.setTitle("Save the calibration?")
+            self.label = QtWidgets.QLabel('''Do you want to save your calibration in the CalSet?''')
+            self.label.setWordWrap(True)
+            self.labelname= QtWidgets.QLabel('''Name:''')
+            self.saveButton = QtWidgets.QPushButton("Save Calset", self)
+            self.calSetEdit = QtWidgets.QLineEdit()
+            self.saveButton.clicked.connect(lambda: self.saveButtonAction())
+            layout2=QtWidgets.QHBoxLayout()
+            layout2.addWidget(self.labelname)
+            layout2.addWidget(self.calSetEdit)
+            layout = QtWidgets.QVBoxLayout()
+            layout.addWidget(self.label)
+            layout.addLayout(layout2)
+            layout.addWidget(self.saveButton)
+
+            page.setLayout(layout)
+
+            return page
+    def saveButtonAction(self):
+        title =  self.currentPage().title()
+        print(title)
+        print("SKIP")
+        self.cal.saveCalib(self.calSetEdit.text())
     
     def finishButtonAction(self):
          self.cal.save()
@@ -267,6 +295,6 @@ if __name__ == '__main__':
     session = rm.open_resource(VISA_ADDRESS)
     session.timeout = timeout
     
-    wizard = CalWizard()
+    wizard = CalibrationWizard()
     wizard.show()
     sys.exit(app.exec_())

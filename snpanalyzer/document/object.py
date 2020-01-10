@@ -19,7 +19,6 @@ class DocumentObject(object):
         self._configuration = configuration
 
         # create required directories if needed
-        print(root)
         self._root   = root
         self._prefix = prefix
         self._path   = self._root.joinpath(self._prefix)

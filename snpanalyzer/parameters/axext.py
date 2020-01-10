@@ -60,7 +60,6 @@ class AXEXT(Parameter):
     def computeDataSeries(self):
         # create each pair for the AXEXT
         series = set()
-
         # get all pairs
         mains = self._ports.getMainPorts()
         remotes = self._ports.getRemotePorts()

@@ -59,3 +59,7 @@ class CableSample(Sample):
             ParameterType.DMCMNEXT,
             ParameterType.DMCMRL, 
         ]
+
+    def getAvailableExport(self):
+        return self.getAvailableParameters()
+

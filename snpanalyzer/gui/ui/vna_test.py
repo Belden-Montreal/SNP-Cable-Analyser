@@ -8,10 +8,14 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
+
+
 class Ui_dialog(object):
     def setupUi(self, dialog):
         dialog.setObjectName("dialog")
         dialog.resize(852, 389)
+        self.port = None
         self.verticalLayout = QtWidgets.QVBoxLayout(dialog)
         self.verticalLayout.setObjectName("verticalLayout")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
@@ -78,5 +82,8 @@ class Ui_dialog(object):
         self.nameLabel.setText(_translate("dialog", "Name"))
         self.limitLabel.setText(_translate("dialog", "Limit"))
         self.portsLabel.setText(_translate("dialog", "Number of Ports"))
+
+    def setPort(self,port):
+        self.port = port
 
 from snpanalyzer.gui.widget.vna_configuration import VNAConfigurationWidget

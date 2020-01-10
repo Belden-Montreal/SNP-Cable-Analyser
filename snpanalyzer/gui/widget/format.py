@@ -18,10 +18,14 @@ class FormatSelectionWidget(QWidget):
         # setup radios
         self.__radios = dict()
         self.__radios[DataFormat.MAGNITUDE] = self.__ui.magnitudeRadioButton
-        self.__radios[DataFormat.PHASE]     = self.__ui.phaseRadioButton
-        self.__radios[DataFormat.IMAGINARY] = self.__ui.imaginaryRadioButton
+        # self.__radios[DataFormat.PHASE]     = self.__ui.phaseRadioButton
+        # self.__radios[DataFormat.IMAGINARY] = self.__ui.imaginaryRadioButton
         self.__radios[DataFormat.REAL]      = self.__ui.realRadioButton
         self.__radios[DataFormat.DELAY]     = self.__ui.delayRadioButton
+        self._export = dict()
+        self._export[DataFormat.MAGNITUDE] = [DataFormat.MAGNITUDE, DataFormat.PHASE]
+        self._export[DataFormat.REAL] = [DataFormat.REAL, DataFormat.IMAGINARY]
+        self._export[DataFormat.DELAY] = [DataFormat.DELAY]
 
         # setup the radio button signals
         for (f, r) in self.__radios.items():
@@ -49,6 +53,9 @@ class FormatSelectionWidget(QWidget):
 
     def getFormat(self):
         return self.__format
+
+    def getFormatExport(self):
+        return self._export[self.__format]
         
 
 

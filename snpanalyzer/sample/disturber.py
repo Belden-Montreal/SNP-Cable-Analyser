@@ -15,3 +15,7 @@ class DisturberSample(AlienSample):
             return {ParameterType.AFEXT}
         else:
             return {ParameterType.ANEXT}
+
+    def getAvailableExport(self):
+        return self.getAvailableParameters()
+

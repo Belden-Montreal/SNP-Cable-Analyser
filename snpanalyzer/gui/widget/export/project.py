@@ -68,13 +68,18 @@ class ExportProjectWidget(QWidget):
         model = QStandardItemModel()
         for (sample, export) in config.getSamples().items():
             item = QStandardItem()
-            item.setText(sample.getName())
-            item.setCheckable(True)
-            item.setCheckState(Qt.Checked if export.doExport() else Qt.Unchecked)
-            item.setData(QVariant(sample))
+            if isinstance(export, str):
+                item.setText(export)
+                item.setCheckable(False)
+                item.setFlags(Qt.NoItemFlags)
+            else:
+                item.setText(export.getName())
+                item.setCheckable(True)
+                item.setCheckState(Qt.Checked if export.doExport() else Qt.Unchecked)
+                item.setData(QVariant(sample))
             model.appendRow(item)
         model.itemChanged.connect(self.__sampleStateChanged)
-        model.sort(0)
+        #model.sort(0)
         
         # update the model of the list view
         self.__ui.samplesListView.setModel(model)

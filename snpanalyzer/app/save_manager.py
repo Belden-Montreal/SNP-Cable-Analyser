@@ -56,10 +56,11 @@ class SaveManager(object):
                         disturber = False
                     else:
                         disturber = True
-                    project.importSamples(fileNames = [os.path.normpath(sample[0]["file_name"])],
-                                          end = sample[0]["@end"],
-                                          param = sample[0]["@powerSum"],
-                                          disturber=disturber)
+                    for s in sample:
+                        project.importSamples(fileNames = [os.path.normpath(s["file_name"])],
+                                              end = s["@end"],
+                                              param = s["@powerSum"],
+                                              disturber=disturber)
 
             if projType == "Plug":
                 project = Plug(projName)
@@ -89,16 +90,6 @@ class SaveManager(object):
                     project.importLoad(os.path.normpath(savedProj["Load_Forward"]["file_name"]),side = "Forward")
                 except Exception as e:
                     print(e)
-
-
-                try:
-                    project.importOpen(os.path.normpath(savedProj["Open"]["file_name"]))
-                except:
-                    pass
-                try:
-                    project.importShort(os.path.normpath(savedProj["Short"]["file_name"]))
-                except:
-                    pass
                 try:
                     project.importOpen(os.path.normpath(savedProj["Open"]["file_name"]))
                 except:
@@ -204,6 +195,7 @@ class SaveManager(object):
                     shutil.copy2(sample.getFileName(), os.path.join(snpDir, sample.getName())) # complete target filename given
 
             if project.type == "Plug":
+
                 samples = [project.dfOpen, 
                            project.dfShort,
                            project.openSample,
@@ -218,16 +210,6 @@ class SaveManager(object):
                 ET.SubElement(sampleBranch, "k2").text = str(project.getConstants()[1])
                 ET.SubElement(sampleBranch, "k3").text = str(project.getConstants()[2])
             
-            
-
-
-
-
-
-
-
-
-
 
             #root.append(projectBranch)
 

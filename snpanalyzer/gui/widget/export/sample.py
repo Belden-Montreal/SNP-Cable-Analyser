@@ -39,8 +39,9 @@ class ExportSampleWidget(QWidget):
 
         # get the parameter
         ptype = self.__model.itemFromIndex(current).data()
-        if ptype == self.__parameter:
-            return
+        if isinstance(ptype,type(self.__parameter)):
+            if ptype == self.__parameter:
+                return
         self.__parameter = ptype
 
         # get the configuration
@@ -64,7 +65,7 @@ class ExportSampleWidget(QWidget):
         model = QStandardItemModel()
         for (ptype, export) in config.getParameters().items():
             item = QStandardItem()
-            item.setText(export.getParameter().getName())
+            item.setText(export.getName())
             item.setCheckable(True)
             item.setCheckState(Qt.Checked if export.doExport() else Qt.Unchecked)
             item.setData(QVariant(ptype))

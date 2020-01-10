@@ -1,3 +1,4 @@
+from matplotlib import rcParams
 from snpanalyzer.analysis.analysis import Analysis
 from snpanalyzer.analysis.scale import PlotScale
 
@@ -98,36 +99,41 @@ class FigureAnalysis(Analysis):
         # get the data
         x = self._getXData(identifier)
         y = self._getYData(identifier)
-        x = np.array(x)  
+
+
+        x = np.array(x)
         y = np.array(y)
-      
+
         x= x[y != np.inf]
         x = x[y != -np.inf]
         y= y[y != np.inf]
         y = y[y != -np.inf]
 
-        print("figure type", type(y))
+       # print(identifier)
 
-
+       # print("figure type", type(y))
 
 
 
         label = self._getLabel(identifier)
-
+        linestyle = self._getLineStyle(identifier)
+       # print(label)
         # add the line
         self._lines[identifier] = self._axis.plot(
             x, y,
             label=label,
             linewidth=0.6,
             c=color,
-            linestyle=self._getLineStyle(identifier)
+            linestyle=linestyle
         )
-        
+
         # scale Y axis to fit data
         autoscaleY(self._axis)
 
+
         # update the legend
         self._updateLegend()
+        #print("legend updated")
 
     def _removeLine(self, identifier):
         # make sure the serie in preset
@@ -201,8 +207,12 @@ class FigureAnalysis(Analysis):
         # set Y axis label
         self._setYLabel()
 
-    def setTitle(self, title):
-        self._axis.set_title(title)
+    def setTitle(self, title, fontsize= 30):
+        self._axis.set_title(title, fontdict= {
+            'fontsize': fontsize,
+            'fontweight': rcParams['axes.titleweight'],
+            'verticalalignment': 'baseline',
+            'horizontalalignment': "center".lower()})
 
     def getFormat(self):
         return self._format

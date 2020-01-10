@@ -1,16 +1,21 @@
+from abc import ABC
+
 from snpanalyzer.sample.sample import Sample
 from snpanalyzer.sample.port import EthernetPair, WirePort, AlienConfiguration
 
-class AlienSample(Sample):
+
+class AlienSample(Sample, ABC):
     '''
     Abstract class for alien sample.
     '''
-    def __init__(self, snp, remote=False, **kwargs):
+
+    def __init__(self, snp, strName=None, remote=False, **kwargs):
         self._remote = remote
-        super(AlienSample, self).__init__(snp, **kwargs)
-    
+        super(AlienSample, self).__init__(snp, strName=strName, **kwargs)
+
     def isRemote(self):
         return self._remote
+
 
     def getDefaultConfiguration(self):
         # create the victim ports

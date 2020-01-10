@@ -70,6 +70,7 @@ class ParameterWidget(TabWidget, parameter_widget_ui.Ui_ParameterWidget):
             return 
         
     def setGraphic(self, analysis):
+        print("Set Graphic")
         try:
             self.canvasLayout.itemAt(0).widget().remove()
             self.canvasLayout.itemAt(1).widget().deleteLater()
@@ -96,3 +97,4 @@ class PairItem(QtWidgets.QListWidgetItem):
             if pair is not None:
                 if pair == item.number:
                     return item
+

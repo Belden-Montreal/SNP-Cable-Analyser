@@ -160,14 +160,15 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
     def getVnaLoad(self):
         try:
             vnaDialog = VNATestDialog()
-            vnaDialog.exec_()
-            name = vnaDialog.getSampleName()
-            ports = vnaDialog.getPorts()
-            fileName = self._vna.acquire(name, ports, vnaDialog.getVNACOnfiguration())
+            res = vnaDialog.exec_()
+            if res:
+                name = vnaDialog.getSampleName()
+                ports = vnaDialog.getPorts()
+                fileName = self._vna.acquire(name, ports, vnaDialog.getVNACOnfiguration())
 
-            if fileName:
-                self._loadFile = fileName
-                self.loadFileName.setText(self._loadFile)
+                if fileName:
+                    self._loadFile = fileName
+                    self.loadFileName.setText(self._loadFile)
         except Exception as e:
             print(e)  
 
@@ -176,14 +177,15 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
 
         try:
             vnaDialog = VNATestDialog()
-            vnaDialog.exec_()
-            name = vnaDialog.getSampleName()
-            ports = vnaDialog.getPorts()
-            fileName = self._vna.acquire(name, ports, vnaDialog.getVNACOnfiguration())
+            res= vnaDialog.exec_()
+            if res:
+                name = vnaDialog.getSampleName()
+                ports = vnaDialog.getPorts()
+                fileName = self._vna.acquire(name, ports, vnaDialog.getVNACOnfiguration())
 
-            if fileName:
-                self._openFile = fileName
-                self.openFileName.setText(self._openFile)
+                if fileName:
+                    self._openFile = fileName
+                    self.openFileName.setText(self._openFile)
         except Exception as e:
             print(e)  
 
@@ -192,14 +194,15 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
     def getVnaShort(self):    
         try:
             vnaDialog = VNATestDialog()
-            vnaDialog.exec_()
-            name = vnaDialog.getSampleName()
-            ports = vnaDialog.getPorts()
-            fileName = self._vna.acquire(name, ports, vnaDialog.getVNACOnfiguration())
+            res= vnaDialog.exec_()
+            if res:
+                name = vnaDialog.getSampleName()
+                ports = vnaDialog.getPorts()
+                fileName = self._vna.acquire(name, ports, vnaDialog.getVNACOnfiguration())
 
-            if fileName:
-                self._shortFile = fileName
-                self.shortFileName.setText(self._shortFile)
+                if fileName:
+                    self._shortFile = fileName
+                    self.shortFileName.setText(self._shortFile)
         except Exception as e:
             print(e)    
 

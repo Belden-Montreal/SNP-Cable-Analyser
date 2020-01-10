@@ -6,14 +6,18 @@ from skrf import Network
 from time import ctime
 from os.path import getctime, basename
 
+
 class Sample(object):
-    def __init__(self, snp, config=None, standard=None):
+    def __init__(self, snp,strName=None, config=None, standard=None):
         # load the network
         (self._network, self._date) = Sample.loadSNP(snp)
 
         # get the name of the file
         self._name = basename(snp)
         self._fileName = snp
+        if strName:
+            self._name = strName
+
 
         # get the network's configuration
         if config:
@@ -37,16 +41,19 @@ class Sample(object):
 
         # create the parameter factory
         self._factory = self.getFactory()
-
+        self._param=dict()
         # create the parameter
         for parameter in self.getAvailableParameters():
             if parameter in self._parameters.keys():
                 continue
             self._parameters[parameter] = self._factory.getParameter(parameter)
-        
+        for parameter in self.getAvailableExport():
+            # if parameter in self._parameters.keys():
+            #   continue
+            self._param[parameter] = self._factory.getParameter(parameter)
         self.createAnalyses()
 
-         #  set the standard
+        #  set the standard
         if standard:
             self.setStandard(standard)
         else:
@@ -59,9 +66,6 @@ class Sample(object):
                 self._analyses[ptype] = ParameterAnalysis(parameter)
             except:
                 continue
-
-
-
 
     @staticmethod
     def loadSNP(snp):
@@ -84,13 +88,14 @@ class Sample(object):
     def getDefaultParameters():
         raise NotImplementedError
 
+
     def setStandard(self, standard):
         self._standard = standard
-        print(self._analyses)
         for (name, parameter) in self._parameters.items():
-            print(name, parameter)
             if name.name in standard.limits:
                 parameter.setLimit(standard.limits[name.name])
+
+
                 try:
                     self._analyses[name].addLimit()
                 except:
@@ -113,6 +118,9 @@ class Sample(object):
     def getAvailableParameters(self):
         raise NotImplementedError
 
+    def getAvailableExport(self):
+        raise NotImplementedError
+
     def getNetwork(self):
         return self._network
 
@@ -127,7 +135,7 @@ class Sample(object):
 
     def getNumPorts(self):
         # we divide by two since we're in mixed mode
-        return self._network.number_of_ports//2
+        return self._network.number_of_ports // 2
 
     def getParameter(self, name):
         if name not in self._parameters.keys():
@@ -136,6 +144,9 @@ class Sample(object):
 
     def getParameters(self):
         return self._parameters
+
+    def getParam(self):
+        return self._param
 
     def getAnalysis(self, name):
         if name not in self._analyses.keys():
@@ -159,6 +170,7 @@ class Sample(object):
 
     def getSamples(self):
         return self
+
 
 #   PORTS_NAME = ["45", "12", "36", "78"]
 # class Sample2(object):
@@ -222,6 +234,7 @@ from snpanalyzer.gui.widget.parameter_widget import ParameterWidget
 from snpanalyzer.gui.widget.main_widget import MainWidget
 from PyQt5 import QtWidgets
 
+
 class SampleNode(Node):
     def __init__(self, sample, project):
         super(SampleNode, self).__init__(sample.getName())
@@ -236,18 +249,19 @@ class SampleNode(Node):
 
     def getWidgets(self, none):
         widgets = dict()
-        
+
         widgets["main"] = None
         failParams = list()
         for ptype, param in self._dataObject.getParameters().items():
             try:
                 if param.visible():
                     if ptype.name not in self._paramTabs:
-                        self._paramTabs[ptype.name] = ParameterWidget(param.getName(), param, self._dataObject.getAnalysis(ptype))
+                        self._paramTabs[ptype.name] = ParameterWidget(param.getName(), param,
+                                                                      self._dataObject.getAnalysis(ptype))
                         self._paramTabs[ptype.name].setGraphic(self._dataObject.getAnalysis(ptype))
                     widgets[param.getName()] = self._paramTabs[ptype.name]
                     if not self._paramTabs[ptype.name].hasPassed:
-                            failParams.append(ptype.name)
+                        failParams.append(ptype.name)
             except:
                 continue
         if not self._mainTab:

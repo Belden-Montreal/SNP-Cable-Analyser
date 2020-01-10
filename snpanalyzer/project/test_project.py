@@ -1,5 +1,5 @@
 import unittest
-from xlrs import open_workbook
+from xlrd import open_workbook
 
 from snpanalyzer.project.project import Project
 

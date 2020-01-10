@@ -2,8 +2,9 @@ from snpanalyzer.sample.alien import AlienSample
 from snpanalyzer.parameters.type import ParameterType
 from snpanalyzer.analysis.alien_parameter import AlienParameterAnalysis
 
+
 class VictimSample(AlienSample):
-    def __init__(self, snp, samples, config=None, **kwargs):
+    def __init__(self, snp, samples,strName=None, config=None, **kwargs):
         self._samples = samples
 
         # make sure all samples are all remote or main
@@ -14,7 +15,11 @@ class VictimSample(AlienSample):
                 raise error
             kwargs["remote"] = next(iter(remotes))
 
-        super(VictimSample, self).__init__(snp, config=config, **kwargs)
+        super(VictimSample, self).__init__(snp,strName=strName, config=config, **kwargs)
+
+
+    def getSamples(self):
+        return self._samples
 
     def createAnalyses(self):
         super(VictimSample, self).createAnalyses()
@@ -28,12 +33,14 @@ class VictimSample(AlienSample):
     def setStandard(self, standard):
         super(VictimSample, self).setStandard(standard)
         if self._remote:
-            if len(standard.limits["AVG"+ParameterType.PSAACRF.name].functions) > 0:
-                self._parameters[ParameterType.PSAACRF].setAverageLimit(standard.limits["AVG"+ParameterType.PSAACRF.name])
+            if len(standard.limits["AVG" + ParameterType.PSAACRF.name].functions) > 0:
+                self._parameters[ParameterType.PSAACRF].setAverageLimit(
+                    standard.limits["AVG" + ParameterType.PSAACRF.name])
                 self._analyses[ParameterType.PSAACRF].addAverageLimit()
         else:
-            if len(standard.limits["AVG"+ParameterType.PSANEXT.name].functions) > 0:
-                self._parameters[ParameterType.PSANEXT].setAverageLimit(standard.limits["AVG"+ParameterType.PSANEXT.name])
+            if len(standard.limits["AVG" + ParameterType.PSANEXT.name].functions) > 0:
+                self._parameters[ParameterType.PSANEXT].setAverageLimit(
+                    standard.limits["AVG" + ParameterType.PSANEXT.name])
                 self._analyses[ParameterType.PSANEXT].addAverageLimit()
 
     def getDefaultConfiguration(self):
@@ -52,6 +59,7 @@ class VictimSample(AlienSample):
     def getDefaultParameters(self):
         if self._remote:
             parameters = [s.getParameter(ParameterType.AFEXT) for s in self._samples]
+            print({ParameterType.AFEXTD: parameters})
             return {ParameterType.AFEXTD: parameters}
         else:
             parameters = [s.getParameter(ParameterType.ANEXT) for s in self._samples]
@@ -61,10 +69,13 @@ class VictimSample(AlienSample):
         if self._remote:
             return [ParameterType.IL, ParameterType.PSAFEXT, ParameterType.PSAACRF]
         else:
-            return [ParameterType.IL, ParameterType.PSANEXT, ParameterType.PSAACRN] 
+            return [ParameterType.IL, ParameterType.PSANEXT, ParameterType.PSAACRN]
+
+    def getAvailableExport(self):
+        return self.getAvailableParameters()
 
     def recalculate(self, disturbers):
-        #We keep the insertion loss to not recalculate it
+        # We keep the insertion loss to not recalculate it
         il = self._parameters[ParameterType.IL]
 
         if self._remote:
@@ -74,9 +85,9 @@ class VictimSample(AlienSample):
             param = ParameterType.ANEXTD
             parameters = [s.getParameter(ParameterType.ANEXT) for s in disturbers]
 
-        #re-create the parameters
+        # re-create the parameters
         self._parameters = {ParameterType.IL: il, param: parameters}
-        #re-create the factory
+        # re-create the factory
         self._factory = self.getFactory()
         for parameter in self.getAvailableParameters():
             if parameter in self._parameters.keys():
@@ -90,7 +101,7 @@ class VictimSample(AlienSample):
         self.recalculate(self._samples)
 
     def setDisturbers(self, samples):
-        print("setting Disturbers ", samples )
+        print("setting Disturbers ", samples)
         self._samples = samples
         remotes = set(d.isRemote() for d in self._samples)
         if len(remotes) != 1:
@@ -99,5 +110,3 @@ class VictimSample(AlienSample):
         remote = next(iter(remotes))
         self._remote = remote
         self.recalculate(self._samples)
-
-

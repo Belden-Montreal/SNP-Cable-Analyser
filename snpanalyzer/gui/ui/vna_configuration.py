@@ -7,7 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+from snpanalyzer.gui.widget.unitinput import UnitInputWidget
 class Ui_form(object):
     def setupUi(self, form):
         form.setObjectName("form")
@@ -99,4 +99,4 @@ class Ui_form(object):
         self.timeoutLabel.setText(_translate("form", "Timeout"))
         self.machineParamsBool.setText(_translate("form", "Use machine parameters"))
 
-from snpanalyzer.gui.widget.unitinput import UnitInputWidget
+

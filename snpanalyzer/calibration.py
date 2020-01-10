@@ -32,18 +32,18 @@ class Calibration(object):
             pairString = "1,2,1,3,1,4,1,5,1,6,1,7,1,8,1,11,1,12,1,13,1,14,1,11,1,12,1,13,1,14,2,3,2,4,2,5,2,6,2,7,2,8,2,11,2,12,2,13,2,14,3,4,3,5,3,6,3,7,3,8,3,13,3,14,3,15,3,16,4,5,4,6,4,7,4,8,4,13,4,14,4,15,4,16,5,6,5,7,5,8,5,9,5,10,5,15,5,16,6,7,6,8,6,9,6,10,6,15,6,16,7,8,7,9,7,10,7,11,7,12,8,9,8,10,8,11,8,12,9,10,9,11,9,12,9,13,9,14,9,15,9,16,10,11,10,12,10,13,10,14,10,15,10,16,11,12,11,13,11,14,11,15,11,16,12,13,12,14,12,15,12,16,13,14,13,15,13,16,14,15,14,16,15,16"
         for i in range(1, self.numPorts+1):
             self.session.write("SENS:CORR:COLL:GUID:CONN:PORT{} {}".format(i, dut_connector))
-        #print "done step1"
+        print("done step1")
 
         for i in range(1, self.numPorts+1):
             self.session.write("SENS:CORR:COLL:GUID:CKIT:PORT{} \'Direct_Fixture\'".format(i))
-        #print "done step2"
+        print("done step2")
             
 
         self.session.write("SENS:CORR:COLL:GUID:INIT")
-        #print "done step3"
+        print("done step3")
 
         self.session.write("SENS:CORR:COLL:GUID:THRU:PORT {}".format(pairString))
-        #print "done step4"
+        print("done step4")
 
         self.session.write("SENS:CORR:COLL:GUID:INIT")
         print("initialized")
@@ -60,7 +60,7 @@ class Calibration(object):
         #print "steps aquired"
 
         #print numSteps + "steps"
-        
+        print("get instruction")
         for i in range(1, int(numSteps)+1):
             self.instructionList.append(self.session.query("SENS:CORR:COLL:GUID:DESC? {}".format(i)))
         #print "appended"
@@ -74,13 +74,15 @@ class Calibration(object):
                 
                 if "\"Connect NULL OPEN to port "+str(i) +"\"\n" == instruction:
                     self.session.write("SENS:CORR:COLL:GUID:ACQ STAN{}".format(j+1))
-                    #print instruction
+                    print(instruction)
                     self.finished(j)
                     break
             else:
                 continue
         self.openMeasured = True
-        print(self.session.query("SYST:ACT:MEAS?"))
+        print("openMeasure =", self.openMeasured)
+   #     print(self.session.query("SYST:ACT:MEAS?"))
+        print("test")
     def shortCalib(self):
         self.lastInstruction = []
         for i in range(1, self.numPorts + 1):
@@ -223,6 +225,14 @@ class Calibration(object):
         #self.instructionList.remove(instructionNum)
         self.doneList.append(currentInstruction)
 
+
+    def saveCalib(self,calName):
+        self.session.query("SENS:CORR:CSET:ITEM:CAT?")
+        self.session.write("SENS:CORR:PREF:CSET:SAVE USER")
+        self.session.write("SENS:CORR:CSET:NAME '{}'".format(calName))
+        print(self.session.query("SENS:CORR:CSET:ITEM:CAT?"))
+
+
     def save(self):
         self.session.write("SENS:CORR:COLL:GUID:SAVE 1")
         
@@ -230,11 +240,14 @@ class Calibration(object):
         self.session.write("SENS:CORR:COLL:GUID:ABOR")
 
 
+
+
 if __name__ == "__main__":
     import visa
     import pyvisa
     
     VISA_ADDRESS  = "TCPIP0::10.29.48.46::hislip0::INSTR"
+
     timeout = 50000
     rm = visa.ResourceManager()
     session = rm.open_resource(VISA_ADDRESS)

@@ -11,7 +11,7 @@ class NEXTDelay(Parameter):
         self._remotes = remotes
         self._plugDelay = plugDelay
         super(NEXTDelay, self).__init__(ports, freq, matrices)
-        self._visible = False
+        #self._visible = False
 
     @staticmethod
     def getType():

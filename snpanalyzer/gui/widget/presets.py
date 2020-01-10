@@ -7,4 +7,9 @@ class PresetsWidget(QWidget):
         super(PresetsWidget, self).__init__(parent)
         self.__ui = Ui_presetsWidget()
         self.__ui.setupUi(self)
+
+        self.__ui.presetsButtonRemove.clicked.connect(self.testbutton)
+
+    def testbutton(self):
+        print("test action button")
     

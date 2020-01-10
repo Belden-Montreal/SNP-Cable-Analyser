@@ -9,19 +9,26 @@ class DeembedSample(PlugSample):
         super(DeembedSample, self).__init__(snp, **kwargs)
 
     def getDefaultParameters(self):
-        return {
-            ParameterType.PC_NEXT   : self._plugNEXT,
-            ParameterType.NEXT_DELAY: self._plugNEXTDelay,
-            ParameterType.CASES     : self._cases,
-        }
+        return dict([
+            (ParameterType.PC_NEXT   , self._plugNEXT),
+            (ParameterType.NEXT_DELAY, self._plugNEXTDelay),
+            (ParameterType.CASES     , self._cases)])
+
 
     def getAvailableParameters(self):
-        return {
+        return [
             ParameterType.RL,
             ParameterType.NEXT,
             ParameterType.DNEXT,
-            ParameterType.CASE,       
-        }.union(self.getDefaultParameters().keys())
+            ParameterType.CASE,
+        ]
+
+    def getAvailableExport(self):
+        return [
+            ParameterType.RL,
+            ParameterType.NEXT,
+            ParameterType.DNEXT,
+        ]
 
     def setStandard(self, standard):
         super(DeembedSample, self).setStandard(standard)
@@ -57,10 +64,14 @@ class ReverseDeembedSample(DeembedSample):
         return [
             ParameterType.RL,
             ParameterType.NEXT,
-            ParameterType.JACK_DELAY,
-            ParameterType.JACK_NEXT_DELAY,
             ParameterType.RDNEXT,
-            ParameterType.RCASE,       
+            ParameterType.RCASE,
+        ]
+    def getAvailableExport(self):
+        return[
+            ParameterType.RL,
+            ParameterType.NEXT,
+            ParameterType.RDNEXT,
         ]
 
     def setStandard(self, standard):

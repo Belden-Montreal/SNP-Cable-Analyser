@@ -4,11 +4,14 @@ from snpanalyzer.gui.widget.cnext_tab import CNEXTTab
 from PyQt5 import QtWidgets
 from snpanalyzer.gui.dialog.vna_test import VNATestDialog
 
-from snpanalyzer.parameters.type import ParameterType
+
+
+
 
 class PlugWidget(TabWidget, plug_widget_ui.Ui_Form):
     def __init__(self, plugNode, vnaManager):
         super(PlugWidget, self).__init__(self)
+        self._name=plugNode.getName()
         self._vna = vnaManager
         self._vna.connection.connect(lambda: self.connect())
         self._node = plugNode
@@ -33,6 +36,8 @@ class PlugWidget(TabWidget, plug_widget_ui.Ui_Form):
         self.createTabs()
         self.connect()
         self.updateWidget()
+        self._ports=None
+
 
     def connect(self):
         if self._vna.connected():
@@ -50,15 +55,19 @@ class PlugWidget(TabWidget, plug_widget_ui.Ui_Form):
 
     def getVnaDfOpen(self):
         try:
-            vnaDialog = VNATestDialog()
-            vnaDialog.exec_()
-            name = vnaDialog.getSampleName()
-            ports = vnaDialog.getPorts()
-            fileName = self._vna.acquire(name, ports, vnaDialog.getVNACOnfiguration())
 
-            if fileName:
-                self._dfOpenName = fileName
-                self.dfOpenFileName.setText(self._dfOpenName)
+            vnaDialog = VNATestDialog()
+            vnaDialog.setPorts(self._ports)
+            vnaDialog.setName(self._name+"_DFopen")
+            res = vnaDialog.exec_()
+            if res:
+                name = vnaDialog.getSampleName()
+                self._ports = vnaDialog.getPorts()
+                fileName = self._vna.acquire(name, self._ports, vnaDialog.getVNACOnfiguration())
+
+                if fileName:
+                    self._dfOpenName = fileName
+                    self.dfOpenFileName.setText(self._dfOpenName)
         except Exception as e:
             print(e)    
 
@@ -66,14 +75,17 @@ class PlugWidget(TabWidget, plug_widget_ui.Ui_Form):
     def getVnaDfShort(self):
         try:
             vnaDialog = VNATestDialog()
-            vnaDialog.exec_()
-            name = vnaDialog.getSampleName()
-            ports = vnaDialog.getPorts()
-            fileName = self._vna.acquire(name, ports, vnaDialog.getVNACOnfiguration())
+            vnaDialog.setPorts(self._ports)
+            vnaDialog.setName(str(self._name+"_DFshort"))
+            res = vnaDialog.exec_()
+            if res:
+                name = vnaDialog.getSampleName()
+                self._ports = vnaDialog.getPorts()
+                fileName = self._vna.acquire(name, self._ports, vnaDialog.getVNACOnfiguration())
 
-            if fileName:
-                self._dfShortName = fileName
-                self.dfShortFileName.setText(self._dfShortName)
+                if fileName:
+                    self._dfShortName = fileName
+                    self.dfShortFileName.setText(self._dfShortName)
         except Exception as e:
             print(e)    
 
@@ -81,28 +93,34 @@ class PlugWidget(TabWidget, plug_widget_ui.Ui_Form):
     def getVnaOpen(self):
         try:
             vnaDialog = VNATestDialog()
-            vnaDialog.exec_()
-            name = vnaDialog.getSampleName()
-            ports = vnaDialog.getPorts()
-            fileName = self._vna.acquire(name, ports, vnaDialog.getVNACOnfiguration())
+            vnaDialog.setPorts(self._ports)
+            vnaDialog.setName(self._name+"_DFPopen")
+            res = vnaDialog.exec_()
+            if res:
+                name = vnaDialog.getSampleName()
+                self._ports = vnaDialog.getPorts()
+                fileName = self._vna.acquire(name, self._ports, vnaDialog.getVNACOnfiguration())
 
-            if fileName:
-                self._openFile = fileName
-                self.openFileName.setText(self._openFile)
+                if fileName:
+                    self._openName = fileName
+                    self.openFileName.setText(self._openName)
         except Exception as e:
             print(e)  
 
     def getVnaShort(self):
         try:
             vnaDialog = VNATestDialog()
-            vnaDialog.exec_()
-            name = vnaDialog.getSampleName()
-            ports = vnaDialog.getPorts()
-            fileName = self._vna.acquire(name, ports, vnaDialog.getVNACOnfiguration())
+            vnaDialog.setPorts(self._ports)
+            vnaDialog.setName(self._name+"_DFPshort")
+            res = vnaDialog.exec_()
+            if res:
+                name = vnaDialog.getSampleName()
+                self._ports = vnaDialog.getPorts()
+                fileName = self._vna.acquire(name, self._ports, vnaDialog.getVNACOnfiguration())
 
-            if fileName:
-                self._shortFile = fileName
-                self.shortFileName.setText(self._shortFile)
+                if fileName:
+                    self._shortName = fileName
+                    self.shortFileName.setText(self._shortName)
         except Exception as e:
             print(e)    
 
@@ -111,14 +129,17 @@ class PlugWidget(TabWidget, plug_widget_ui.Ui_Form):
     def getVnaLoad(self):
         try:
             vnaDialog = VNATestDialog()
-            vnaDialog.exec_()
-            name = vnaDialog.getSampleName()
-            ports = vnaDialog.getPorts()
-            fileName = self._vna.acquire(name, ports, vnaDialog.getVNACOnfiguration())
+            vnaDialog.setPorts(self._ports)
+            vnaDialog.setName(self._name+"_DFPload")
+            res = vnaDialog.exec_()
+            if res:
+                name = vnaDialog.getSampleName()
+                self._ports = vnaDialog.getPorts()
+                fileName = self._vna.acquire(name, self._ports, vnaDialog.getVNACOnfiguration())
 
-            if fileName:
-                self._loadFile = fileName
-                self.loadFileName.setText(self._loadFile)
+                if fileName:
+                    self._loadName = fileName
+                    self.loadFileName.setText(self._loadName)
         except Exception as e:
             print(e)  
 
@@ -152,6 +173,7 @@ class PlugWidget(TabWidget, plug_widget_ui.Ui_Form):
         k1 = float(self.SJ_124578_LineEdit.text())
         k2 = float(self.sJ36LineEdit.text())
         k3 = float(self.thruCalibLineEdit.text())
+        print("k3: ", k3)
         if self._dfOpenName and self._dfShortName and self._openName and self._shortName and self._loadName:
             
             self._plug.setConstants(k1, k2, k3)
@@ -210,7 +232,16 @@ class PlugWidget(TabWidget, plug_widget_ui.Ui_Form):
     def createTabs(self):
         cnext = self._plug.getPlugNext()
         if cnext:
+            print("create tab")
             series = cnext.getDataSeries()
+
             for serie in series:
                 tab = CNEXTTab(serie, cnext)
                 self._pairTabs[serie.getName()] = tab
+
+    def getPorts(self):
+        return self._ports
+
+    def setName(self,name):
+        self._name = name
+

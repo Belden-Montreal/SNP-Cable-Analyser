@@ -29,20 +29,34 @@ class ParameterAnalysis(FigureAnalysis):
 
     def _getWorstVal(self):
         return self._parameter.getWorstValue()
+    def _getWorstMar(self):
+        return self._parameter.getWorstMargin()
+
+    def setColorSeries(self,r,g,b):
+        for serie in self._series:
+            self._colors[serie] = (r, g, b)
+
 
     @overrides
     def _getXData(self, serie):
+        if serie.getName() == "limit":
+            dict_keys = self._parameter.getLimit().evaluateDict({'f': self._parameter.getFrequencies()}, len(self._parameter.getFrequencies()), neg=True)
+            list_keys = [k for k in dict_keys]
+            return list_keys
         if serie is not None:
-            if serie.getName() == "limit":
-                return self._parameter.getLimit().evaluateDict({'f': self._parameter.getFrequencies()}, len(self._parameter.getFrequencies()), neg=True).keys()
-        return self._parameter.getFrequencies()
+            return self._parameter.getFrequencies()
 
     @overrides
     def _getYData(self, serie):
         if serie.getName() == "limit":
             if self._parameter.getName() == "Propagation Delay":
-                return self._parameter.getLimit().evaluateDict({'f': self._parameter.getFrequencies()}, len(self._parameter.getFrequencies()), neg=False).values()
-            return self._parameter.getLimit().evaluateDict({'f': self._parameter.getFrequencies()}, len(self._parameter.getFrequencies()), neg=True).values()
+                dict_values = self._parameter.getLimit().evaluateDict({'f': self._parameter.getFrequencies()}, len(self._parameter.getFrequencies()), neg=False).values()
+                list_values=[v for v in dict_values]
+                return list_values
+            dict_values = self._parameter.getLimit().evaluateDict({'f': self._parameter.getFrequencies()}, len(self._parameter.getFrequencies()), neg=True).values()
+            list_values =[v for v in dict_values]
+            return list_values
+
         return formatParameterData(self._parameter, serie, self.getFormat())
 
     @overrides
@@ -83,12 +97,16 @@ class ParameterAnalysis(FigureAnalysis):
 
     def addSerie(self, serie):
         # make sure the serie isn't already in the figure
+       # print("addseries")
         if serie in self._series:
+
             return
 
         # add the serie
-        self._addLine(serie)
         self._series.add(serie)
+        self._addLine(serie)
+
+
 
     def removeSerie(self, serie):
         # make sure the serie is in the figure
@@ -104,11 +122,13 @@ class ParameterAnalysis(FigureAnalysis):
 
     def addLimit(self):
         serie = GenericDataSerie("limit")
-
         if not self._parameter.getLimit():
             return
+
+
         self._colors[serie] = (1, 0, 0) # red
         self.addSerie(serie)
+
 
     def removeLimit(self):
         serie = GenericDataSerie("limit")

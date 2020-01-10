@@ -66,6 +66,8 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
             item = QtWidgets.QListWidgetItem()
             item.setFlags(item.flags() | QtCore.Qt.ItemIsUserCheckable)
             item.setCheckState(QtCore.Qt.Checked)
+            print(disturber)
+            print(disturber.getName())
             item.setText(disturber.getName())
             self.alienDisturbers.addItem(item)
         if self._alien.victims()[test][end]:
@@ -107,18 +109,19 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
 
         try:
             vnaDialog = VNATestDialog()
-            vnaDialog.exec_()
-            name = vnaDialog.getSampleName()
-            ports = vnaDialog.getPorts()
-            fileName = self._vna.acquire(name, ports, vnaDialog.getVNACOnfiguration())
+            res= vnaDialog.exec_()
+            if res:
+                name = vnaDialog.getSampleName()
+                ports = vnaDialog.getPorts()
+                fileName = self._vna.acquire(name, ports, vnaDialog.getVNACOnfiguration())
 
-            if fileName:
-                end, test = self.getCheckButtons()
-                self._alien.importSamples([fileName], end, test, disturber=False)
-                self._node.updateChildren()
-                self.victimLabel.setText(self._alien.victims()[test][end].getName())
-                self.changeFigure(end, test)
-                self.updateWidget()
+                if fileName:
+                    end, test = self.getCheckButtons()
+                    self._alien.importSamples([fileName], end, test, disturber=False)
+                    self._node.updateChildren()
+                    self.victimLabel.setText(self._alien.victims()[test][end].getName())
+                    self.changeFigure(end, test)
+                    self.updateWidget()
 
         except Exception as e:
             print(e)  
@@ -137,17 +140,18 @@ class AlienWidget(TabWidget, alien_widget_ui.Ui_Form):
 
         try:
             vnaDialog = VNATestDialog()
-            vnaDialog.exec_()
-            name = vnaDialog.getSampleName()
-            ports = vnaDialog.getPorts()
-            fileName = self._vna.acquire(name, ports, vnaDialog.getVNACOnfiguration())
+            res = vnaDialog.exec_()
+            if res:
+                name = vnaDialog.getSampleName()
+                ports = vnaDialog.getPorts()
+                fileName = self._vna.acquire(name, ports, vnaDialog.getVNACOnfiguration())
 
-            if fileName:
-                end, test = self.getCheckButtons()
+                if fileName:
+                    end, test = self.getCheckButtons()
 
-                self._alien.importSamples([fileName], end, test, disturber=True)
-                self._node.updateChildren()
-                self.updateWidget()
+                    self._alien.importSamples([fileName], end, test, disturber=True)
+                    self._node.updateChildren()
+                    self.updateWidget()
 
         except Exception as e:
             print(e)  

@@ -26,16 +26,6 @@ class Ui_dialog(object):
         self.verticalLayout.addItem(spacerItem)
         self.gridLayout = QtWidgets.QGridLayout()
         self.gridLayout.setObjectName("gridLayout")
-        self.tempLabel = QtWidgets.QLabel(dialog)
-        self.tempLabel.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.tempLabel.setObjectName("tempLabel")
-        self.gridLayout.addWidget(self.tempLabel, 0, 0, 1, 1)
-        self.tempLineEdit = QtWidgets.QLineEdit(dialog)
-        self.tempLineEdit.setObjectName("tempLineEdit")
-        self.gridLayout.addWidget(self.tempLineEdit, 0, 1, 1, 1)
-        self.tempBrowsePushButton = QtWidgets.QPushButton(dialog)
-        self.tempBrowsePushButton.setObjectName("tempBrowsePushButton")
-        self.gridLayout.addWidget(self.tempBrowsePushButton, 0, 2, 1, 1)
         self.docLabel = QtWidgets.QLabel(dialog)
         self.docLabel.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.docLabel.setObjectName("docLabel")
@@ -71,9 +61,7 @@ class Ui_dialog(object):
 
     def retranslateUi(self, dialog):
         _translate = QtCore.QCoreApplication.translate
-        dialog.setWindowTitle(_translate("dialog", "Dialog"))
-        self.tempLabel.setText(_translate("dialog", "Temporary Folder:"))
-        self.tempBrowsePushButton.setText(_translate("dialog", "Browse"))
+        dialog.setWindowTitle(_translate("dialog", "export"))
         self.docLabel.setText(_translate("dialog", "Output Document:"))
         self.docBrowsePushButton.setText(_translate("dialog", "Browse"))
 

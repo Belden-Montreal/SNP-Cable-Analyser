@@ -1,3 +1,5 @@
+import pyvisa
+from PyQt5.QtWidgets import QMessageBox
 from snpanalyzer.gui.wizard.calibration import CalibrationWizard
 from snpanalyzer.config.vna import VNAConfiguration
 from PyQt5 import QtWidgets, QtCore
@@ -17,18 +19,25 @@ class VNA(QtCore.QObject):
         self._manager = None
         #self._session = None
         self.session = None
+        self._sortedCset = list()
         self.useMachineSettings = False
+        self._date=list()
+
+
     def connect(self):
         #self._manager = ResourceManager()
+
         try:
             #self._session = self._manager.open_resource(self._config.getAddress())
             self.rm = visa.ResourceManager()
             self.session = self.rm.open_resource(self._config.getAddress())
+
             print(self._config.getAddress())
-            #print(self._config.getAddress())
             self.connection.emit()
             self._connected = True
+
             print("Connecting")
+
 
         except Exception as e:
             dialog = QtWidgets.QErrorMessage()
@@ -36,13 +45,14 @@ class VNA(QtCore.QObject):
             dialog.exec_()
             print(e)
 
+
     def disconnect(self):
         try:
             self.session.close()
             self.session = None
             self.rm.close()
             self.rm = None
-            self.connected = False
+            self._connected = False
             self.connection.emit()
         except Exception as e:
             dialog = QtWidgets.QErrorMessage()
@@ -50,7 +60,6 @@ class VNA(QtCore.QObject):
             dialog.exec_()
 
     def acquire(self, name = None, ports = None, config = None):
-        #config = self._config
         if config is not None:
             timeOut = self._config.getTimeout()
             bw = config.getBandwidth()
@@ -64,36 +73,48 @@ class VNA(QtCore.QObject):
             return
         try:
             self.session.timeout = timeOut
-            print(self._config.getTimeout())
+            print("timeout:", self._config.getTimeout())
             
             if noConfig == False:
                 self.session.write("SENS:BWID " + str(bw))
                 print(self.session.query(";*OPC?"))
 
-                print("set if")
+                print("set frequence:")
                 self.session.write("SENS:FREQ:STAR " + str(minFreq))
-                print("set min f")
-
+                print("min freq setted at "+ str(minFreq))
                 self.session.write("SENS:FREQ:STOP " + str(maxFreq))
+                print("max freq setted at "+str(maxFreq))
 
-                print("set max f:"+str(maxFreq))
-                print("set avg")
-
+                print("set average:")
                 self.session.write("SENS:SWE:TYPE LIN")
                 self.session.write("SENS:SWE:POIN " + str(res))
-                print("res " + str(res))
+                print("resolution setted at" + str(res))
                 self.session.write(":SENS:AVER:CLE")
                 self.session.write(":ABOR")
                 self.session.write("SENS:AVER:COUN {}".format(str(average)))
-            
-            self.session.write(":INIT1:CONT ON")
-            self.session.write(":TRIG:SOUR immediate")
-            self.session.write("SENS:SWE:GRO:COUN 4") # "+str(self.average))
+                print("average setted at "+str(average))
 
+            print(":INIT1:CONT ON")
+            self.session.write(":INIT1:CONT ON")
+            print(self.session.query(";*OPC?"))
+
+            print(":TRIG:SOUR immediate")
+            self.session.write(":TRIG:SOUR immediate")
+            print(self.session.query(";*OPC?"))
+
+            print("SENS:SWE:GRO:COUN 4")
+            self.session.write("SENS:SWE:GRO:COUN 4") # "+str(self.average))
+            print(self.session.query(";*OPC?"))
+
+            print("SENS:SWE:MODE GRO;*OPC?")
             self.session.write("SENS:SWE:MODE GRO;*OPC?")
-            
+            print(self.session.query(";*OPC?"))
+
+            print(":CALC:PAR:SEL 'CH1_S11_1'")
             self.session.write(":CALC:PAR:SEL 'CH1_S11_1'")
             print(self.session.query(";*OPC?"))
+
+            print(":CALC:DATA:SNP:PORT:SAVE '{}', '{}.s{}p'")
             self.session.write(":CALC:DATA:SNP:PORT:SAVE '{}', '{}.s{}p'".format(str([i for i in range(1,int(ports)+1)])[1:-1], "Y:\\"+name, str(int(ports)) ))
             print(self.session.query(";*OPC?"))
             #rm.list_resources()
@@ -137,16 +158,58 @@ class VNA(QtCore.QObject):
         wizard = CalibrationWizard(self)
         wizard.exec()
         print("Showing")
-        
+
+    def calibrateNew(self):
+        wizard = CalibrationWizard(self)
+        return wizard.exec()
+        print("Showing")
+
+    def calSet(self):
+        cset = self.session.query("CSET:CAT?")
+        cset=cset.replace('"','')
+        cset=cset.replace("\n","")
+        listCset= cset.split(",")
+        CsetDate=list()
+        for cal in listCset:
+            date=self.session.query("CSET:DATE? '{}'".format(cal))
+            for x in range(1,10):
+                date=date.replace("+{},".format(x),"+0{},".format(x))
+                date=date.replace("+{}\n".format(x),"+0{}\n".format(x))
+            date=date.replace("+","")
+            date=date.replace(",","-")
+            date = date.replace("\n","")
+            CsetDate.append("["+date+"] | "+cal)
+            self._date.append(date)
+            self._date.sort(reverse=True)
+
+        CsetDate.sort(reverse=True)
+        for i in CsetDate:
+            temp= i.split("] | ")
+            self._sortedCset.append(temp[1])
+        return CsetDate
+
+    def setCal(self,i):
+        print(self._sortedCset[i])
+       # self.session.write("SENS1:CORR:CSET:DEAC")
+        self.session.write("SENS:CORR:CSET:ACT '{}',1".format(str(self._sortedCset[i])))
+
+    def getDate(self):
+        return self._date
 
     def whoAmI(self):
-        print("wAi")
-        if self.session is None:
-            return "None"
-        print("wAi2")
-
-        print(self.session.query('*IDN?'))
-        return self.session.query('*IDN?')
+        start =float(self.session.query("SENS:FREQ:STAR?"))
+        end = float(self.session.query("SENS:FREQ:STOP?"))
+        type= str(self.session.query("SENS:SWE:TYPE?"))
+        res =float(self.session.query("SENS:SWE:POIN?"))
+        avg =float(self.session.query("SENS:AVER:COUN?"))
+        bwd= float(self.session.query("SENS:BWID?"))
+        msgBox = QMessageBox()
+        msgBox.setIcon(QMessageBox.Information)
+        msgBox.setText("\n"+str(self.session.query('*IDN?')))
+        msgBox.setInformativeText("CalSet:"+self.session.query('SENS:CORR:CSET:ACT? NAME'))
+        msgBox.setDetailedText("Start at: {}\nEnd at: {}\nType: {}Resolution:{}\nAverage: {}\nBandwidth: {}".format(start,end,type,res,avg,bwd))
+        msgBox.setWindowTitle("Who am I?")
+        msgBox.exec()
 
     def connected(self):
         return self._connected

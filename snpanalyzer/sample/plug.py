@@ -4,6 +4,7 @@ from snpanalyzer.parameters.type import ParameterType
 
 class PlugSample(Sample):
     def getDefaultConfiguration(self):
+        print("getDefaultConfiguration")
         # create the ports for this network
         ports = {
             NetworkPort(0, ptype=EthernetPair.PAIR45),
@@ -16,9 +17,11 @@ class PlugSample(Sample):
         return PlugConfiguration(ports=ports)
 
     def getDefaultParameters(self):
+        print("getDefaultParameters")
         return dict()
 
     def getAvailableParameters(self):
+        print("getAvailableParameters")
         return [
             ParameterType.RL,
             ParameterType.NEXT,
@@ -33,4 +36,8 @@ class PlugSample(Sample):
             ParameterType.DMCMNEXT,
             ParameterType.DMCMRL, 
         ]
+
+    def getAvailableExport(self):
+        return self.getAvailableParameters()
+
         

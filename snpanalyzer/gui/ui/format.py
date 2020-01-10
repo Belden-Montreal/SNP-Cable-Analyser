@@ -29,12 +29,12 @@ class Ui_form(object):
         self.delayRadioButton = QtWidgets.QRadioButton(self.groupBox)
         self.delayRadioButton.setObjectName("delayRadioButton")
         self.gridLayout_2.addWidget(self.delayRadioButton, 2, 0, 1, 1)
-        self.phaseRadioButton = QtWidgets.QRadioButton(self.groupBox)
-        self.phaseRadioButton.setObjectName("phaseRadioButton")
-        self.gridLayout_2.addWidget(self.phaseRadioButton, 0, 1, 1, 1)
-        self.imaginaryRadioButton = QtWidgets.QRadioButton(self.groupBox)
-        self.imaginaryRadioButton.setObjectName("imaginaryRadioButton")
-        self.gridLayout_2.addWidget(self.imaginaryRadioButton, 1, 1, 1, 1)
+        # self.phaseRadioButton = QtWidgets.QRadioButton(self.groupBox)
+        # self.phaseRadioButton.setObjectName("phaseRadioButton")
+        # self.gridLayout_2.addWidget(self.phaseRadioButton, 0, 1, 1, 1)
+        # self.imaginaryRadioButton = QtWidgets.QRadioButton(self.groupBox)
+        # self.imaginaryRadioButton.setObjectName("imaginaryRadioButton")
+        # self.gridLayout_2.addWidget(self.imaginaryRadioButton, 1, 1, 1, 1)
         self.gridLayout.addWidget(self.groupBox, 0, 0, 1, 1)
 
         self.retranslateUi(form)
@@ -44,11 +44,11 @@ class Ui_form(object):
         _translate = QtCore.QCoreApplication.translate
         form.setWindowTitle(_translate("form", "Form"))
         self.groupBox.setTitle(_translate("form", "Format"))
-        self.realRadioButton.setText(_translate("form", "Real"))
-        self.magnitudeRadioButton.setText(_translate("form", "Magnitude"))
+        self.realRadioButton.setText(_translate("form", "Real/Imaginary"))
+        self.magnitudeRadioButton.setText(_translate("form", "Magnitude/Phase"))
         self.delayRadioButton.setText(_translate("form", "Delay"))
-        self.phaseRadioButton.setText(_translate("form", "Phase"))
-        self.imaginaryRadioButton.setText(_translate("form", "Imaginary"))
+        # self.phaseRadioButton.setText(_translate("form", "Phase"))
+        # self.imaginaryRadioButton.setText(_translate("form", "Imaginary"))
 
 
 if __name__ == "__main__":

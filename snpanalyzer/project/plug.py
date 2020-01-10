@@ -19,6 +19,28 @@ class Plug(Project):
         self._k2 = 0
         self._k3 = 0
         self.type = "Plug"
+        self._ports=None
+
+    def getSamples(self):
+        return [self._openDelay,self._shortDelay,self._dfOpenDelay,self._dfShortDelay]
+
+    def getType(self):
+        return self.type
+
+    def getOpenDelay(self):
+        return self._openDelay
+
+    def getShortDelay(self):
+        return self._shortDelay
+
+    def getLoadSample(self):
+        return self._loadSample
+
+    def getDfOpenDelay(self):
+        return self._dfOpenDelay
+
+    def getDfShortDelay(self):
+        return self._dfShortDelay
 
     def importDfOpen(self, fileName):
         self._dfOpenDelay = DelaySample(fileName)
@@ -103,6 +125,55 @@ class Plug(Project):
         workbook = xlsxwriter.Workbook(outputName, options={'nan_inf_to_errors': True})
         sample = self._loadSample
         worksheet = workbook.add_worksheet(sample.getName())
+
+        cell_format = workbook.add_format({'align': 'center',
+                                           'valign': 'vcenter',
+                                           'border': 6, })
+        worksheet.merge_range('A3:A5', "Frequency", cell_format)
+        worksheet.write('A1', 'Plug ID:')
+        worksheet.write('B1', sample.getName())
+        curPos=1
+
+        for parameter in [sample.getParameter(ParameterType.CORRECTED_NEXT),sample.getParameter(ParameterType.RL)]:
+            try:
+                numSignals = len(parameter.getParameter().keys())
+            except:
+                continue
+            paramName = parameter.getName()
+            worksheet.merge_range(2, curPos, 2, curPos + numSignals * 2 - 1, paramName, cell_format)
+            for i, portName in enumerate(sorted(list(parameter.getDataSeries()), key=lambda
+                    params: params.getName())):  # enumerate(list(parameter.getDataSeries())):
+                portSeries = portName
+                # print(parameter)
+                portName = portName.getName()
+                worksheet.merge_range(3, curPos + i * 2, 3, curPos + i * 2 + 1, str(portName), cell_format)
+                if z:
+                    worksheet.write(4, curPos + i * 2, "real", cell_format)
+                    worksheet.write(4, curPos + i * 2 + 1, "imaginary", cell_format)
+                    param = parameter.getComplexParameter()
+                    for j, data in enumerate(param[portSeries]):
+                        worksheet.write(5 + j, 0, sample.getFrequencies()[j])
+                        self.box(workbook, worksheet, param, portSeries, i * 2, j, data.real, curPos)
+                        self.box(workbook, worksheet, param, portSeries, i * 2 + 1, j, data.imag, curPos)
+
+                else:
+                    worksheet.write(4, curPos + i * 2, "mag", cell_format)
+                    worksheet.write(4, curPos + i * 2 + 1, "phase", cell_format)
+                    param = parameter.getParameter()
+
+                        # print(param[portSeries])
+                    try:
+                        if type(param[portSeries]) is not list:
+                            param[portSeries] = [param[portSeries]]
+                        for j, (mag, phase) in enumerate(list(param[portSeries])):
+                                worksheet.write_number(5 + j, 0, sample.getFrequencies()[j])
+                                self.box(workbook, worksheet, param, portSeries, i * 2, j, mag, curPos)
+                                self.box(workbook, worksheet, param, portSeries, i * 2 + 1, j, phase, curPos)
+                    except Exception as e:
+                        print(e)
+
+            curPos += numSignals*2
+        '''worksheet = workbook.add_worksheet(sample.getName())
         worksheet.write('A1', 'Plug ID:')
         worksheet.write('B1', sample.getName())
     
@@ -153,49 +224,45 @@ class Plug(Project):
                 worksheet.write(9, 1+i, mag, cell_format) 
 
         #worksheet.wirte()
-
+                '''
+        #building the second page with the Delays
         worksheet = workbook.add_worksheet("Delays")
         worksheet.merge_range('A3:A5', "Frequency", cell_format)
         curPos = 1
-        #parameters = {"RL": sample.getParameters()["RL"], "CNEXT": sample.getParameters()["CNEXT"]}
         for i, (paramName, parameter) in enumerate(sample.getParameters().items()):
-            print((paramName, parameter))
             try:
                 numSignals = len(parameter.getParameter().keys())
             except:
                 continue
             paramName = str(paramName).replace("ParameterType.", "").replace("_", " ").split(":")[0]
-            worksheet.merge_range(2, curPos, 2, curPos+numSignals-1,  paramName, cell_format)
-            for i, portName in enumerate(sorted(list(parameter.getDataSeries()), key=lambda params: params.getName())):#enumerate(list(parameter.getDataSeries())):
-                portSeries = portName
-                #print(parameter)
-                portName = portName.getName()
-                worksheet.write(3, curPos+i, str(portName), cell_format)
-                if paramName == "Propagation Delay":
-                    worksheet.write(4, curPos+i, "ns", cell_format)
+            if "DELAY" in paramName:
+                worksheet.merge_range(2, curPos, 2, curPos+numSignals-1,  paramName, cell_format)
+                for i, portName in enumerate(sorted(list(parameter.getDataSeries()), key=lambda params: params.getName())):#enumerate(list(parameter.getDataSeries())):
+                    portSeries = portName
+                    #print(parameter)
+                    portName = portName.getName()
+                    worksheet.write(3, curPos + i, str(portName), cell_format)
+                    worksheet.write(4, curPos + i , "ns", cell_format)
                     param = parameter.getParameter()
-                    for j, data in enumerate(param[portSeries]):
-                        worksheet.write(5+j, curPos+i, "")
-                        self.box(workbook, worksheet, param, portSeries, i, j, data, curPos)
-                else:
-                    worksheet.write(4,curPos+i, "mag", cell_format)
-                    #worksheet.write(4,curPos+i*2+1, "phase", cell_format)
-                    param = parameter.getParameter()
-                    #print(param[portSeries])
                     try:
                         if type(param[portSeries] ) is not list:
-                            param[portSeries] = [param[portSeries]]
-                        for j, (mag) in enumerate(list(param[portSeries])):
-                            worksheet.write(5+j, 0, sample.getFrequencies()[j])
-                            if paramName ==  "CORRECTED NEXT":
-                                mag = mag[0]
-                            self.box(workbook, worksheet, param, portSeries, i, j, mag, curPos)
+                                param[portSeries] = [param[portSeries]]
+                        for j, mag in enumerate(list(param[portSeries])):
+                                worksheet.write(5 + j, 0, sample.getFrequencies()[j])
+                                self.box(workbook, worksheet, param, portSeries, i, j, mag, curPos, n=1)
 
-                            #self.box(workbook, worksheet, param, portSeries, i*2+1, j, phase, curPos)
                     except Exception as e:
                         print(e)
-            
-            curPos += numSignals
+                curPos += numSignals
+
+        #Writing the Constants
+        worksheet.merge_range(2,curPos,2,curPos+2, "Constants", cell_format)
+        worksheet.write(3,curPos, "SJ 12,45,78", cell_format)
+        worksheet.write(3,curPos+1, "SJ 36", cell_format)
+        worksheet.write(3,curPos+2, "Thru Calib", cell_format)
+        worksheet.write(4,curPos, self._k1, cell_format)
+        worksheet.write(4,curPos+1, self._k2, cell_format)
+        worksheet.write(4, curPos+2, self._k3, cell_format)
         workbook.close()
 
 
@@ -280,3 +347,6 @@ class PlugNode(ProjectNode):
         if not self._plugWidget:
             self._plugWidget = PlugWidget(self, vnaManager)
         return {"Plug": self._plugWidget}
+
+
+

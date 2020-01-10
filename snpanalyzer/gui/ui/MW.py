@@ -7,8 +7,12 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QAction
+
 
 class Ui_MainWindow(object):
+    actionCalibrate: QAction
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(896, 683)
@@ -64,7 +68,8 @@ class Ui_MainWindow(object):
         self.verticalLayout_3.addWidget(self.splitter)
         self.verticalLayout_4.addWidget(self.splitter_2)
         self.progressBar = QtWidgets.QProgressBar(self.centralwidget)
-        self.progressBar.setProperty("value", 0)
+        self.progressBar.setMinimum(0)
+        self.progressBar.setMaximum(100)
         self.progressBar.setTextVisible(True)
         self.progressBar.setObjectName("progressBar")
         self.verticalLayout_4.addWidget(self.progressBar)
@@ -103,10 +108,13 @@ class Ui_MainWindow(object):
         self.actionImport_Project.setObjectName("actionImport_Project")
         self.actionSave_Project = QtWidgets.QAction(MainWindow)
         self.actionSave_Project.setObjectName("actionSave_Project")
+        self.actionSave_Project.setEnabled(False)
         self.actionExport_Excel = QtWidgets.QAction(MainWindow)
         self.actionExport_Excel.setObjectName("actionExport_Excel")
+        self.actionExport_Excel.setEnabled(False)
         self.actionGenerate_Report = QtWidgets.QAction(MainWindow)
         self.actionGenerate_Report.setObjectName("actionGenerate_Report")
+        self.actionGenerate_Report.setEnabled(False)
         self.actionExit = QtWidgets.QAction(MainWindow)
         self.actionExit.setObjectName("actionExit")
         self.actionCut = QtWidgets.QAction(MainWindow)

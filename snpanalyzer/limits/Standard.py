@@ -1,6 +1,6 @@
 from collections import OrderedDict
 from snpanalyzer.limits.Limit import Limit
-parameters = ["RL", "IL", "PROPAGATION_DELAY", "NEXT", "PSNEXT","FEXT", "PSFEXT", "ACRF", "PSACRF", "LCL", "LCTL", "TCL", "TCTL", "ELTCTL","CMRL", "CMNEXT", "ANEXT", "PSANEXT", "AVGPSANEXT", "AFEXT", "PSAFEXT", "PSAACRF", "AVGPSAACRF"]
+parameters = ["RL", "IL", "_DELAY", "NEXT", "PSNEXT","FEXT", "PSFEXT", "ACRF", "PSACRF", "LCL", "LCTL", "TCL", "TCTL", "ELTCTL","CMRL", "CMNEXT", "ANEXT", "PSANEXT", "AVGPSANEXT", "AFEXT", "PSAFEXT", "PSAACRF", "AVGPSAACRF"]
 
 class Standard():
     def __init__(self, name):

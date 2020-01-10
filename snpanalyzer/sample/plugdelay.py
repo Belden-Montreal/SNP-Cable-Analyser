@@ -25,12 +25,17 @@ class PlugDelaySample(PlugSample):
 
     def getAvailableParameters(self):
         return [
+            ParameterType.RL,
             ParameterType.DF_DELAY,
             ParameterType.PLUG_DELAY,
             ParameterType.NEXT_DELAY,
             ParameterType.CORRECTED_NEXT,
         ]
 
+    def getAvailableExport(self):
+        return [
+            ParameterType.RL,
+        ]
     def recalculate(self, k1, k2, k3):
         self._k1 = k1
         self._k2 = k2

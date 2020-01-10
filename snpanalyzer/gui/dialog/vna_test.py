@@ -4,6 +4,9 @@ from pathlib import Path
 
 from PyQt5.QtWidgets import QDialog, QFileDialog
 
+
+
+
 class VNATestDialog(QDialog):
     def __init__(self):
         super(VNATestDialog, self).__init__()
@@ -25,5 +28,11 @@ class VNATestDialog(QDialog):
         return self.__ui.limitLineEdit.text()
 
     def getPorts(self):
-        return float(self.__ui.portsLineEdit.text())
+        return self.__ui.portsLineEdit.text()
+
+    def setPorts(self, port):
+        self.__ui.portsLineEdit.setText(port)
+
+    def setName(self, name):
+        self.__ui.nameLineEdit.setText(name)
     

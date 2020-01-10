@@ -72,6 +72,9 @@ class Case(Parameter):
                     cPlug = complex(re, im)
                     reembed = cPlug + jackVector[serie][f]
                     cpReembedded[serie][n].append(reembed)
+                    # print(cpReembedded[serie][n])
+                    # print(n)
+                    # print(serie)
                     dbReembedded[serie][n].append((complex2db(reembed), complex2phase(reembed)))
 
         return (dbReembedded, cpReembedded)

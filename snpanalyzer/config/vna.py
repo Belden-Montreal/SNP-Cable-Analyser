@@ -1,19 +1,30 @@
 from snpanalyzer.config.json import JSONConfiguration
 from overrides import overrides
-
+import visa
 class VNAConfiguration(JSONConfiguration):
     def __init__(self):
         # set default value
         self.__address    = "TCPIP0::10.29.48.46::hislip0::INSTR"
-        self.__bandwidth  = 300
-        self.__minfreq    = 10000000
-        self.__maxfreq    = 500000000
+        '''self.rm = visa.ResourceManager()
+        self.session = self.rm.open_resource(self.__address)
+        self.__bandwidth = float(self.session.query("SENS:BWID?"))
+        self.__minfreq = float(self.session.query("SENS:FREQ:STAR?"))
+        self.__maxfreq = float(self.session.query("SENS:FREQ:STOP?"))
+        self.__resolution = float(self.session.query("SENS:SWE:POIN?"))
+        self.__timeout = 500000
+        self.__average = float(self.session.query("SENS:AVER:COUN?"))'''
+
+        self.__bandwidth = 300
+        self.__minfreq = 10000000
+        self.__maxfreq = 500000000
         self.__resolution = 1000
-        self.__timeout    = 500000
-        self.__average    = 1
+        self.__timeout = 500000
+        self.__average = 1
+
         self.__testname   = "sample"
-        self.__ports      = 8
-        self.__noConfig     = False #When set to true, the program only launches an aquisition, 
+        self.__ports = 8
+        #self.__ports      = len((self.session.query("SOUR:CAT?")))
+        self.__noConfig     = True #When set to true, the program only launches an aquisition,
                                     #but doesnt specify any of the parameters. This allows the user
                                     #to specify more complex parameters from the machine interface
 
