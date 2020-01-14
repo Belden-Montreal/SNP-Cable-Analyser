@@ -41,3 +41,5 @@ print(project._standard.__str__())
 print(project.getSamples())
 
 project.generateExcel("output2.xlsx", ["plug4.s8p"], z=False)
+
+print(project._samples[0].getStandard().__str__())

@@ -24,26 +24,33 @@ class VNA(QtCore.QObject):
         self._date=list()
 
 
-    def connect(self):
+    def connect(self, address = None):
         #self._manager = ResourceManager()
+
+        if address == None:
+            address = self._config.getAddress()
 
         try:
             #self._session = self._manager.open_resource(self._config.getAddress())
             self.rm = visa.ResourceManager()
-            self.session = self.rm.open_resource(self._config.getAddress())
+            self.session = self.rm.open_resource(address)
 
             print(self._config.getAddress())
             self.connection.emit()
             self._connected = True
 
+            self._config.setAddress(address)
+
             print("Connecting")
 
 
         except Exception as e:
-            dialog = QtWidgets.QErrorMessage()
+            self._connected = False
+
+            '''dialog = QtWidgets.QErrorMessage()
             dialog.showMessage("Error : {}".format(e))
             dialog.exec_()
-            print(e)
+            print(e)'''
 
 
     def disconnect(self):

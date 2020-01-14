@@ -53,6 +53,8 @@ class Project(object):
             self._samples.remove(sample)
 
     def generateExcel(self, outputName, sampleNames, z=False):
+        
+
 
         print("Starting Excel")
         #print("self.samples", self._samples[0].getName(), sampleNames)
@@ -68,6 +70,7 @@ class Project(object):
         #    print(x.getName())
         print("samples",samples)
         for i,sample in enumerate(samples):
+            limit = False
             try:
                 worksheet = workbook.add_worksheet(sample.getName())
                 print(sample.getName())
@@ -95,7 +98,8 @@ class Project(object):
                 print(str(paramName))
 
                 paramName = str(paramName).replace("ParameterType.", "").replace("_", " ")
-                worksheet.merge_range(2, curPos, 2, curPos+numSignals*2-1, paramName, cell_format)
+                worksheet.merge_range(2, curPos, 2, curPos+numSignals*2, paramName, cell_format)
+
                 #print(parameter.getDataSeries().pop().getName())
                 #print(parameter.getPorts()._ports.getName())
 
@@ -104,8 +108,22 @@ class Project(object):
               #      limit = True
              #   else:
               #      limit = False
+                worksheet.write(3,curPos, "Limit", cell_format)
+                worksheet.write(4,curPos, "mag", cell_format)
 
+                if paramName == "PROPAGATION DELAY":
+                    limit = sample.getStandard().limits["_DELAY"].evaluateArray({'f':sample.getFrequencies()}, nb=len(sample.getFrequencies()))
+                else:
+                    try:
+                        limit = sample.getStandard().limits[paramName].evaluateArray({'f':sample.getFrequencies()}, nb=len(sample.getFrequencies()))
+                    except:
+                        pass
 
+                for n, val in enumerate(limit):
+                    worksheet.write_number(n+5, curPos, -val[1],None)
+                
+
+                curPos+=1
                 for i, portName in enumerate(parameter.getDataSeries()):#, key=lambda params: params.getName()):#enumerate(list(parameter.getDataSeries())):
 
 
@@ -130,6 +148,7 @@ class Project(object):
                                 self.box(workbook, worksheet, param, portSeries, i*2, j, data.real, curPos)
                                 self.box(workbook, worksheet, param, portSeries, i*2+1, j, data.imag, curPos)
                         else:
+                            
                             worksheet.write(4,curPos+i*2, "mag", cell_format)
                             worksheet.write(4,curPos+i*2+1, "phase", cell_format)
                             param = parameter.getParameter()
@@ -140,12 +159,30 @@ class Project(object):
                                 self.box(workbook, worksheet, param, portSeries, i*2+1, j, phase, curPos)
             
                 curPos += numSignals*2
+
+        #make a list of all the standards in the project
+
+        standards = set()
+        for sample in samples:
+            standards.add(sample.getStandard())
+        standards = list(standards)
+
+        print(samples[0].getStandard().limits["NEXT"].functions)
+
+        for standard in standards:
+            worksheet = workbook.add_worksheet(standard.__str__())
+            
+        #for name, limit in sample.getStandard().limits.items():
+
+        #print(sample.getFrequencies())
+        #print(sample.getStandard().limits["NEXT"].evaluateArray({'f':sample.getFrequencies()}, nb=len(sample.getFrequencies())))
+
         workbook.close()
 
     def box(self, workbook, worksheet, parameter, port, i, j, data, curPos, n=2):
         box_form = workbook.add_format()
 
-        if j == 0:
+        '''if j == 0:
             box_form.set_top(6)
         if i == 0:
             box_form.set_left(6)
@@ -153,7 +190,7 @@ class Project(object):
             box_form.set_bottom(6)
 
         if i == len(parameter)*n-1:
-            box_form.set_right(6)
+            box_form.set_right(6) '''
 
         if type(data) is not str:
             worksheet.write_number(j+5, curPos+i, data, box_form)

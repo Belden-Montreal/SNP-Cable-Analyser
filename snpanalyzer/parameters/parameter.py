@@ -4,6 +4,7 @@ from bisect import bisect_left
 from snpanalyzer.limits.Limit import Limit
 
 from snpanalyzer.parameters.dataserie import GenericDataSerie
+from snpanalyzer.parameters.dataserie import PortDataSerie
 
 from copy import deepcopy
 
@@ -98,8 +99,10 @@ class Parameter(object):
         return self._series
 
     def getParameter(self,limit=False):
+
         if limit:
-            return {**self._parameter, **{GenericDataSerie(name="Limit", data=self.getLimit()) : [self.getLimit()]}}
+            print("HAS LIMIT")
+            return {**self._parameter, **{GenericDataSerie(name="Limit") : self.getLimit()}}
         return self._parameter
 
     def getComplexParameter(self):

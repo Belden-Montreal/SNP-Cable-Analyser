@@ -87,22 +87,24 @@ class Main:
                 self.getRootProject().addSamples([sample_file])
         except Exception as e:
             print(e)
+            
     def connect(self):
-        self._vnaManager.connect()
-        if self._vnaManager.connected():
-            connectDialog= ConnectDialog(self._vnaManager)
-            res=connectDialog.showDialog()
-            if res:
-                    if connectDialog.calib is False:
-                       self._vnaManager.setCal(connectDialog.newDial.typeBox.currentIndex())
-                    self._mainWindow.actionWho_am_I.setEnabled(True)
-                    self._mainWindow.actionCalibrate.setEnabled(True)
-                    self._mainWindow.actionCalibrate_2.setEnabled(True)
-                    self._mainWindow.actionDisconnect.setEnabled(True)
-                    self._mainWindow.actionConnect.setEnabled(False)
-                    if self._selected:
-                        self._mainWindow.actionMeasure.setEnabled(True)
-                        self._mainWindow.actionRun.setEnabled(True)
+        #self._vnaManager.connect()
+        #if self._vnaManager.connected():
+        connectDialog = ConnectDialog(self._vnaManager)
+        #connectDialog.connect()
+        res=connectDialog.showDialog()
+        if res and self._vnaManager._connected:
+            if connectDialog.calib is False:
+                self._vnaManager.setCal(connectDialog.newDial.typeBox.currentIndex())
+            self._mainWindow.actionWho_am_I.setEnabled(True)
+            self._mainWindow.actionCalibrate.setEnabled(True)
+            self._mainWindow.actionCalibrate_2.setEnabled(True)
+            self._mainWindow.actionDisconnect.setEnabled(True)
+            self._mainWindow.actionConnect.setEnabled(False)
+            if self._selected:
+                self._mainWindow.actionMeasure.setEnabled(True)
+                self._mainWindow.actionRun.setEnabled(True)
         try:
 
             projType, tab = list(self.activeNode.getWidgets(self._vnaManager).items())[0]
