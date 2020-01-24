@@ -397,14 +397,14 @@ class Main:
 
 def main():
     app = QtWidgets.QApplication(sys.argv)  # A new instance of QApplication
-    app.setStyle('fusion')
+    app.setStyle('Windows')  #Fusion
     app.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
 
     screen_resolution = app.desktop().screenGeometry()
     width, height = screen_resolution.width(), screen_resolution.height()
-    # pixmap = QtGui.QPixmap("splash.jpeg")
-    # splash = QtWidgets.QSplashScreen(pixmap)
-    # splash.show()
+    '''pixmap = QtGui.QPixmap("splash.jpeg")
+    splash = QtWidgets.QSplashScreen(pixmap)
+    splash.show()'''
 
     # time.sleep(10)
     form = Main()  # We set the  form to be our ExampleApp (design)
