@@ -129,8 +129,9 @@ class Main:
         self._mainWindow.actionConnect.setEnabled(True)
 
     def getRootProject(self):
-        print("getRootProject")
+        #print("getRootProject")
         selected = self.getSelected()
+        print("getRootProject", len(selected))
         if len(selected) > 0:
             return self._model.itemFromIndex(self._model.getRootFromIndex(selected[0]))
 
@@ -161,11 +162,15 @@ class Main:
         self.getRootProject().openImportWindow(self._qmw)
 
     def getSelected(self):
+        self._selected.clear()
         if self._mainWindow.sampleTable.selectionModel().selectedRows():
             self._selected.clear()
             self._selected.append(self._mainWindow.sampleTable.selectionModel().selectedRows())
 
-        return self._selected[0]
+        try:
+            return self._selected[0]
+        except:
+            return []
 
     def setActiveSample(self):
         selected = self.getSelected()
@@ -261,7 +266,10 @@ class Main:
                 # errorMessage.showMessage(str(e))
 
     def tableContextMenu(self, pos):
-        selected = self.getSelected()
+        try:
+            selected = self.getSelected()
+        except:
+            selected = []
         if self.getRootProject():
             selectedProj = self.getRootProject().getObject()
         else:

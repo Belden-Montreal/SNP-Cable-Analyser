@@ -112,15 +112,23 @@ class Project(object):
                 worksheet.write(4,curPos, "mag", cell_format)
 
                 if paramName == "PROPAGATION DELAY":
-                    limit = sample.getStandard().limits["_DELAY"].evaluateArray({'f':sample.getFrequencies()}, nb=len(sample.getFrequencies()))
-                else:
+                    worksheet.write(3,curPos, "Limit", cell_format)
+                    worksheet.write(4,curPos, "ns", cell_format)
                     try:
-                        limit = sample.getStandard().limits[paramName].evaluateArray({'f':sample.getFrequencies()}, nb=len(sample.getFrequencies()))
+                        limit = sample.getStandard().limits["_DELAY"].evaluateArray({'f':sample.getFrequencies()}, nb=len(sample.getFrequencies()))
+
                     except:
                         pass
 
-                for n, val in enumerate(limit):
-                    worksheet.write_number(n+5, curPos, -val[1],None)
+                else:
+                    try:
+                        limit = sample.getStandard().limits[paramName].evaluateArray({'f':sample.getFrequencies()}, nb=len(sample.getFrequencies()))
+
+                    except:
+                        pass
+                if limit:
+                    for n, val in enumerate(limit):
+                        worksheet.write_number(n+5, curPos, -val[1],None)
                 
 
                 curPos+=1
@@ -162,7 +170,7 @@ class Project(object):
 
         #make a list of all the standards in the project
 
-        standards = set()
+        '''standards = set()
         for sample in samples:
             standards.add(sample.getStandard())
         standards = list(standards)
@@ -170,7 +178,7 @@ class Project(object):
         print(samples[0].getStandard().limits["NEXT"].functions)
 
         for standard in standards:
-            worksheet = workbook.add_worksheet(standard.__str__())
+            worksheet = workbook.add_worksheet(standard.__str__())'''
             
         #for name, limit in sample.getStandard().limits.items():
 
