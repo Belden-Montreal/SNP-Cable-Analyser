@@ -11,6 +11,8 @@ from snpanalyzer.project.project import Project
 from snpanalyzer.project.plug import Plug
 from snpanalyzer.project.alien import Alien
 from snpanalyzer.project.embedding import Embedding
+from snpanalyzer.limits.TreeModel import TreeModel
+from snpanalyzer.limits.LimitParser import LimitParser
 
 from collections import OrderedDict 
 
@@ -25,7 +27,13 @@ class SaveManager(object):
         return project'''
 
     def loadProject(self, fileName):
+        
+        #For if we need to set sample standard
+        parser = LimitParser("limits/limits.xml")
+        root = parser.parseFile()
 
+        projFilePath = os.path.dirname(fileName)
+        snpsPath     = os.path.join(projFilePath, "snps")
         f = open(fileName, "r")
         f = f.read()
         projectDict = xmltodict.parse(f)
@@ -46,9 +54,11 @@ class SaveManager(object):
                 for _, items in savedProj.items():  
                     for sample in items:
                         print(sample) 
+                        standard = sample["standard"].split("|")
                         #print(os.path.normpath(sample["file_name"]))
-                        samples = project.importSamples([os.path.normpath(sample["file_name"])])
-
+                        samples = project.importSamples([os.path.normpath(os.path.join(snpsPath, sample["file_name"]))])
+                        project.samplesList[-1].setStandard(root.getChildByName(standard).standard)
+            
             if projType == "Alien":
                 project = Alien(projName)
                 for key, sample in savedProj.items():
@@ -135,7 +145,7 @@ class SaveManager(object):
                     sampleBranch = ET.SubElement(projectBranch, "Sample")
                     ET.SubElement(sampleBranch, "name").text = str(sample.getName())
                     shutil.copy2(sample.getFileName(), os.path.join(snpDir, sample.getName())) # complete target filename given
-                    ET.SubElement(sampleBranch, "file_name").text = str(os.path.join(snpDir, sample.getName()))
+                    ET.SubElement(sampleBranch, "file_name").text = str(sample.getName())
                     ET.SubElement(sampleBranch, "standard").text = str(sample.getStandard())
 
             if project.type == "Alien":
@@ -146,7 +156,7 @@ class SaveManager(object):
                         sample = (project.victims())[powerSum][end]
                         victimBranch = ET.SubElement(projectBranch, "Victim", attrib = {"powerSum" : powerSum, "end": end})
                         ET.SubElement(victimBranch, "name").text = str(sample.getName())
-                        ET.SubElement(victimBranch, "file_name").text = str(os.path.join(snpDir, sample.getName()))
+                        ET.SubElement(victimBranch, "file_name").text = str(snpDir, sample.getName())
                         ET.SubElement(victimBranch, "standard").text = str(sample.getStandard())
                         shutil.copy2(sample.getFileName(), os.path.join(snpDir, sample.getName())) # complete target filename given
 
@@ -156,7 +166,7 @@ class SaveManager(object):
                             sampleBranch = ET.SubElement(projectBranch, "Disturber", attrib = {"powerSum" : powerSum, "end": end})
                             print(sample.getFileName()) 
                             ET.SubElement(sampleBranch, "name").text = str(sample.getName())
-                            ET.SubElement(sampleBranch, "file_name").text = str(os.path.join(snpDir, sample.getName()))
+                            ET.SubElement(sampleBranch, "file_name").text = str(sample.getName())
                             ET.SubElement(sampleBranch, "standard").text = str(sample.getStandard())
                             shutil.copy2(sample.getFileName(), os.path.join(snpDir, sample.getName())) # complete target filename given
 

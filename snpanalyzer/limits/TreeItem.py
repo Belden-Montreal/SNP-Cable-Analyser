@@ -39,3 +39,14 @@ class TreeItem():
             return "-"
         else:
             return self.standard.limit(column-1).__str__()
+
+    def getChildByName(self, names):
+        '''Ex.: getChildByName("Tia", "CAT6A", "Connecting Hardware")''' 
+        result = None
+        children = self.children
+        for name in names:
+            for child in children:
+                if child.name == name:
+                    result = child
+                    children = child.children
+        return result

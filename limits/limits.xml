@@ -11,9 +11,6 @@
 					<Part min="1.0" max="25.0">0.1</Part>
 					<Part max="500.0">0.02*sqrt(f)</Part>
 				</Limit>
-				<Limit param="PROPAGATION_DELAY">
-					<Part min="1.0" max="500.0">2.5</Part>
-				</Limit>
 				<Limit param="NEXT">
 					<Max>75.0</Max>
 					<Part min="1.0" max="250.0">54-20*log(f/100)</Part>
@@ -51,6 +48,9 @@
 					<Max>67.0</Max>
 					<Part min="1.0" max="500.0">67-20*log(f/100)</Part>
 				</Limit>
+				<Limit param="PROPAGATION_DELAY">
+					<Part min="1.0" max="500.0">2.5</Part>
+				</Limit>
 			</Hardware>
 			<Hardware name="Horizontal cable">
 				<Limit param="RL">
@@ -60,9 +60,6 @@
 				</Limit>
 				<Limit param="IL">
 					<Part min="1.0" max="500.0">1.82*sqrt(f)+0.0091*f+(0.25/sqrt(f))</Part>
-				</Limit>
-				<Limit param="PROPAGATION_DELAY">
-					<Part min="1.0" max="500.0">534+36/sqrt(f)</Part>
 				</Limit>
 				<Limit param="NEXT">
 					<Part min="1.0" max="500.0">44.3-15*log(f/100)</Part>
@@ -91,6 +88,9 @@
 					<Max>67.0</Max>
 					<Part min="1.0" max="500.0">38.2-20*log(f/100)</Part>
 				</Limit>
+				<Limit param="PROPAGATION_DELAY">
+					<Part min="1.0" max="500.0">534+36/sqrt(f)</Part>
+				</Limit>
 			</Hardware>
 			<Hardware name="Cords and jumpers">
 				<Limit param="RL">
@@ -114,9 +114,6 @@
 				</Limit>
 				<Limit param="IL">
 					<Part min="1.0" max="500.0">1.698*sqrt(f)+0.00819f+0.225/sqrt(f)+0.00015f^1.5</Part>
-				</Limit>
-				<Limit param="PROPAGATION_DELAY">
-					<Part min="1.0" max="500.0">0.9(534+36/sqrt(f))+3*2.5</Part>
 				</Limit>
 				<Limit param="NEXT">
 					<Max>65.0</Max>
@@ -152,6 +149,9 @@
 					<Max>67.0</Max>
 					<Part min="1.0" max="500.0">41.7-20*log(f/100)</Part>
 				</Limit>
+				<Limit param="PROPAGATION_DELAY">
+					<Part min="1.0" max="500.0">0.9(534+36/sqrt(f))+3*2.5</Part>
+				</Limit>
 			</Hardware>
 			<Hardware name="Channel">
 				<Limit param="RL">
@@ -162,9 +162,6 @@
 				</Limit>
 				<Limit param="IL">
 					<Part min="1.0" max="500.0">1.05(1.82*sqrt(f)+0.0091f+0.25/sqrt(f))+4*0.02*sqrt(f)</Part>
-				</Limit>
-				<Limit param="PROPAGATION_DELAY">
-					<Part min="1.0" max="500.0">534+36/sqrt(f)+4*2.5</Part>
 				</Limit>
 				<Limit param="NEXT">
 					<Max>65.0</Max>
@@ -207,6 +204,9 @@
 					<Max>67.0</Max>
 					<Part min="1.0" max="500.0">41-20*log(f/100)</Part>
 				</Limit>
+				<Limit param="PROPAGATION_DELAY">
+					<Part min="1.0" max="500.0">534+36/sqrt(f)+4*2.5</Part>
+				</Limit>
 			</Hardware>
 			<Hardware name="Cord Cable">
 				<Limit param="RL">
@@ -216,9 +216,6 @@
 				</Limit>
 				<Limit param="IL">
 					<Part min="1.0" max="500.0">1.2(1.82*sqrt(f)+0.0091f+0.25/sqrt(f))</Part>
-				</Limit>
-				<Limit param="PROPAGATION_DELAY">
-					<Part min="1.0" max="500.0">534+36/sqrt(f)</Part>
 				</Limit>
 				<Limit param="NEXT">
 					<Part min="1.0" max="500.0">44.3-15*log(f/100)</Part>
@@ -247,6 +244,9 @@
 					<Max>67.0</Max>
 					<Part min="1.0" max="500.0">38.2-20*log(f/100)</Part>
 				</Limit>
+				<Limit param="PROPAGATION_DELAY">
+					<Part min="1.0" max="500.0">534+36/sqrt(f)</Part>
+				</Limit>
 			</Hardware>
 		</Category>
 		<Category name="CAT6">
@@ -258,9 +258,6 @@
 				<Limit param="IL">
 					<Part min="1.0" max="25.0">0.1</Part>
 					<Part max="250.0">0.02*sqrt(f)</Part>
-				</Limit>
-				<Limit param="PROPAGATION_DELAY">
-					<Part min="1.0" max="250.0">2.5</Part>
 				</Limit>
 				<Limit param="NEXT">
 					<Max>75.0</Max>
@@ -286,6 +283,9 @@
 					<Max>40.0</Max>
 					<Part min="1.0" max="250.0">28-20*log(f/100)</Part>
 				</Limit>
+				<Limit param="PROPAGATION_DELAY">
+					<Part min="1.0" max="250.0">2.5</Part>
+				</Limit>
 			</Hardware>
 			<Hardware name="Horizontal cable">
 				<Limit param="RL">
@@ -293,9 +293,6 @@
 				</Limit>
 				<Limit param="IL">
 					<Part min="1.0" max="250.0">1.808*sqrt(f)+0.017*f+0.2/sqrt(f)</Part>
-				</Limit>
-				<Limit param="PROPAGATION_DELAY">
-					<Part min="1.0" max="250.0">534+36/sqrt(f)</Part>
 				</Limit>
 				<Limit param="NEXT">
 					<Part min="1.0" max="250.0">44.3-15*log(f/100)</Part>
@@ -315,6 +312,9 @@
 				</Limit>
 				<Limit param="ELTCTL">
 					<Part min="1.0" max="30.0">35-20*log(f)</Part>
+				</Limit>
+				<Limit param="PROPAGATION_DELAY">
+					<Part min="1.0" max="250.0">534+36/sqrt(f)</Part>
 				</Limit>
 			</Hardware>
 			<Hardware name="Cord Cable">
@@ -326,9 +326,6 @@
 				<Limit param="IL">
 					<Part min="1.0" max="250.0">1.2*(1.808*sqrt(f)+0.017*f+0.2/sqrt(f))</Part>
 				</Limit>
-				<Limit param="PROPAGATION_DELAY">
-					<Part min="1.0" max="250.0">534+36/sqrt(f)</Part>
-				</Limit>
 				<Limit param="NEXT">
 					<Part min="1.0" max="250.0">44.3-15*log(f/100)</Part>
 				</Limit>
@@ -348,13 +345,13 @@
 				<Limit param="ELTCTL">
 					<Part min="1.0" max="30.0">35-20*log(f)</Part>
 				</Limit>
+				<Limit param="PROPAGATION_DELAY">
+					<Part min="1.0" max="250.0">534+36/sqrt(f)</Part>
+				</Limit>
 			</Hardware>
 			<Hardware name="Backbone cable">
 				<Limit param="IL">
 					<Part min="1.0" max="250.0">1.808*sqrt(f)+0.017*f+0.2/sqrt(f)</Part>
-				</Limit>
-				<Limit param="PROPAGATION_DELAY">
-					<Part min="1.0" max="250.0">534+36/sqrt(f)</Part>
 				</Limit>
 				<Limit param="NEXT">
 					<Part min="1.0" max="250.0">44.3-15*log(f/100)</Part>
@@ -367,6 +364,9 @@
 				</Limit>
 				<Limit param="PSACRF">
 					<Part min="1.0" max="250.0">24.8-20*log(f/100)</Part>
+				</Limit>
+				<Limit param="PROPAGATION_DELAY">
+					<Part min="1.0" max="250.0">534+36/sqrt(f)</Part>
 				</Limit>
 			</Hardware>
 			<Hardware name="Cords and jumpers">
@@ -389,9 +389,6 @@
 				<Limit param="IL">
 					<Part min="1.0" max="250.0">1.687*sqrt(f)+0.0153f+0.18/sqrt(f)+0.00015f^1.5</Part>
 				</Limit>
-				<Limit param="PROPAGATION_DELAY">
-					<Part min="1.0" max="250.0">0.9(534+36/sqrt(f))+3*2.5</Part>
-				</Limit>
 				<Limit param="NEXT">
 					<Max>65.0</Max>
 					<Part min="1.0" max="250.0">-20*log(10^(-(44.3-15*log(f/100))/20)+10^(-(54-20*log(f/100))/20))</Part>
@@ -406,6 +403,9 @@
 				<Limit param="PSACRF">
 					<Part min="1.0" max="250.0">-20*log(10^(-(24.8-20*log(f/100))/20)+3*10^(-(40.1-20*log(f/100))/20))</Part>
 				</Limit>
+				<Limit param="PROPAGATION_DELAY">
+					<Part min="1.0" max="250.0">0.9(534+36/sqrt(f))+3*2.5</Part>
+				</Limit>
 			</Hardware>
 			<Hardware name="Channel">
 				<Limit param="RL">
@@ -415,9 +415,6 @@
 				</Limit>
 				<Limit param="IL">
 					<Part min="1.0" max="250.0">1.02(1.808*sqrt(f)+0.017f+0.2/sqrt(f))+4*0.02*sqrt(f)+0.0003f^1.5</Part>
-				</Limit>
-				<Limit param="PROPAGATION_DELAY">
-					<Part min="1.0" max="250.0">534+36/sqrt(f)+4*2.5</Part>
 				</Limit>
 				<Limit param="NEXT">
 					<Max>65.0</Max>
@@ -440,6 +437,9 @@
 				<Limit param="ELTCTL">
 					<Part min="1.0" max="30.0">30-20*log(f)</Part>
 				</Limit>
+				<Limit param="PROPAGATION_DELAY">
+					<Part min="1.0" max="250.0">534+36/sqrt(f)+4*2.5</Part>
+				</Limit>
 			</Hardware>
 		</Category>
 		<Category name="CAT5e">
@@ -451,9 +451,6 @@
 				<Limit param="IL">
 					<Part min="1.0" max="5.0">0.1</Part>
 					<Part max="100.0">0.04*sqrt(f)</Part>
-				</Limit>
-				<Limit param="PROPAGATION_DELAY">
-					<Part min="1.0" max="100.0">2.5</Part>
 				</Limit>
 				<Limit param="NEXT">
 					<Max>65.0</Max>
@@ -469,6 +466,9 @@
 				<Limit param="PSFEXT">
 					<Part min="1.0" max="100.0">32.1-20*log(f/100)</Part>
 				</Limit>
+				<Limit param="PROPAGATION_DELAY">
+					<Part min="1.0" max="100.0">2.5</Part>
+				</Limit>
 			</Hardware>
 			<Hardware name="Cord Cable">
 				<Limit param="RL">
@@ -478,9 +478,6 @@
 				</Limit>
 				<Limit param="IL">
 					<Part min="1.0" max="100.0">1.2(1.967*sqrt(f)+0.023f+0.05/sqrt(f))</Part>
-				</Limit>
-				<Limit param="PROPAGATION_DELAY">
-					<Part min="1.0" max="100.0">534+36/sqrt(f)</Part>
 				</Limit>
 				<Limit param="NEXT">
 					<Part min="1.0" max="100.0">35.3-15*log(f/100)</Part>
@@ -493,6 +490,9 @@
 				</Limit>
 				<Limit param="PSACRF">
 					<Part min="1.0" max="100.0">20.8-20*log(f/100)</Part>
+				</Limit>
+				<Limit param="PROPAGATION_DELAY">
+					<Part min="1.0" max="100.0">534+36/sqrt(f)</Part>
 				</Limit>
 			</Hardware>
 			<Hardware name="Cords and jumpers">
@@ -513,9 +513,6 @@
 				<Limit param="IL">
 					<Part min="1.0" max="100.0">1.02(1.967*sqrt(f)+0.023f+0.05/sqrt(f))+4*0.04*sqrt(f)</Part>
 				</Limit>
-				<Limit param="PROPAGATION_DELAY">
-					<Part min="1.0" max="100.0">534+36/sqrt(f)+4*2.5</Part>
-				</Limit>
 				<Limit param="NEXT">
 					<Max>60.0</Max>
 					<Part min="1.0" max="100.0">-20*log(10^(-(35.3-15*log(f/100))/20)+10^(-(43-20*log(f/100))/20))</Part>
@@ -530,6 +527,9 @@
 				<Limit param="PSACRF">
 					<Part min="1.0" max="100.0">-20*log(10^(-(20.8-20*log(f/100))/20)+4*10^(-(32.1-20*log(f/100))/20))</Part>
 				</Limit>
+				<Limit param="PROPAGATION_DELAY">
+					<Part min="1.0" max="100.0">534+36/sqrt(f)+4*2.5</Part>
+				</Limit>
 			</Hardware>
 			<Hardware name="Permanent Link">
 				<Limit param="RL">
@@ -538,9 +538,6 @@
 				</Limit>
 				<Limit param="IL">
 					<Part min="1.0" max="100.0">0.9(1.967*sqrt(f)+0.023f+0.05/sqrt(f))+3*0.04*sqrt(f)</Part>
-				</Limit>
-				<Limit param="PROPAGATION_DELAY">
-					<Part min="1.0" max="100.0">0.9(534+36/sqrt(f))+3*2.5</Part>
 				</Limit>
 				<Limit param="NEXT">
 					<Max>60.0</Max>
@@ -556,6 +553,9 @@
 				<Limit param="PSACRF">
 					<Part min="1.0" max="100.0">-20*log(10^(-(20.8-20*log(f/100))/20)+3*10^(-(32.1-20*log(f/100))/20))</Part>
 				</Limit>
+				<Limit param="PROPAGATION_DELAY">
+					<Part min="1.0" max="100.0">0.9(534+36/sqrt(f))+3*2.5</Part>
+				</Limit>
 			</Hardware>
 			<Hardware name="Horizontal Cable">
 				<Limit param="RL">
@@ -565,9 +565,6 @@
 				</Limit>
 				<Limit param="IL">
 					<Part min="1.0" max="100.0">1.967*sqrt(f)+0.023f+0.05/sqrt(f)</Part>
-				</Limit>
-				<Limit param="PROPAGATION_DELAY">
-					<Part min="1.0" max="100.0">534+36/sqrt(f)</Part>
 				</Limit>
 				<Limit param="NEXT">
 					<Part min="1.0" max="100.0">35.3-15*log(f/100)</Part>
@@ -580,6 +577,9 @@
 				</Limit>
 				<Limit param="PSACRF">
 					<Part min="1.0" max="100.0">20.8-20*log(f/100)</Part>
+				</Limit>
+				<Limit param="PROPAGATION_DELAY">
+					<Part min="1.0" max="100.0">534+36/sqrt(f)</Part>
 				</Limit>
 			</Hardware>
 			<Hardware name="Backbone Cable">
@@ -591,9 +591,6 @@
 				<Limit param="IL">
 					<Part min="1.0" max="100.0">1.967*sqrt(f)+0.023f+0.05/sqrt(f)</Part>
 				</Limit>
-				<Limit param="PROPAGATION_DELAY">
-					<Part min="1.0" max="100.0">534+36/sqrt(f)</Part>
-				</Limit>
 				<Limit param="NEXT">
 					<Part min="1.0" max="100.0">35.3-15*log(f/100)</Part>
 				</Limit>
@@ -605,6 +602,9 @@
 				</Limit>
 				<Limit param="PSACRF">
 					<Part min="1.0" max="100.0">20.8-20*log(f/100)</Part>
+				</Limit>
+				<Limit param="PROPAGATION_DELAY">
+					<Part min="1.0" max="100.0">534+36/sqrt(f)</Part>
 				</Limit>
 			</Hardware>
 		</Category>

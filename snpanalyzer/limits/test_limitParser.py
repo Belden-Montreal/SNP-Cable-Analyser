@@ -5,8 +5,8 @@ from snpanalyzer.limits.Limit import Limit
 
 class TestLimitParser(unittest.TestCase):
     def setUp(self):
-        self.parser = LimitParser("C:/Users/rxm09031/Desktop/SNP-Cable-Analyser-master/snpanalyzer/limits/test.xml")
-        file = open("C:/Users/rxm09031/Desktop/SNP-Cable-Analyser-master/snpanalyzer/limits/test.xml", "r")
+        self.parser = LimitParser("snpanalyzer/limits/test.xml")
+        file = open("snpanalyzer/limits/test.xml", "r")
         self.initialFile = file.read()
         file.close()
 
@@ -28,13 +28,13 @@ class TestLimitParser(unittest.TestCase):
         cat.addChild(hdw)
         hdw.standard.limits["RL"] = Limit("RL", ["30"], [1.0, 50.0])
         self.parser.writeToFile(root)
-        file = open("C:/Users/rxm09031/Desktop/SNP-Cable-Analyser-master/snpanalyzer/limits/test.xml", "r")
+        file = open("snpanalyzer/limits/test.xml", "r")
         data = file.read()
         file.close()
         self.assertEqual(self.initialFile, data)
 
     def tearDown(self):
-        file = open("C:/Users/rxm09031/Desktop/SNP-Cable-Analyser-master/snpanalyzer/limits/test.xml", "w")
+        file = open("snpanalyzer/limits/test.xml", "w")
         file.write(self.initialFile)
         file.close()
         pass
