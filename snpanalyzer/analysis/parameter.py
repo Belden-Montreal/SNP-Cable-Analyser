@@ -21,7 +21,9 @@ class ParameterAnalysis(FigureAnalysis):
             series = self._parameter.getDataSeries()
 
         # show the selected series
-        {self.addSerie(serie) for serie in series}
+        for serie in series:
+            print(serie)
+            self.addSerie(serie)
 
         # add the limit if it exists
         if self._parameter.getLimit():

@@ -1,5 +1,7 @@
 from snpanalyzer.parameters.factory import ParameterFactory
 from snpanalyzer.analysis.parameter import ParameterAnalysis
+from snpanalyzer.analysis.case import CaseAnalysis
+
 from snpanalyzer.document.sample import SampleDocumentObject
 
 from skrf import Network
@@ -63,9 +65,12 @@ class Sample(object):
         self._analyses = dict()
         for (ptype, parameter) in self._parameters.items():
             try:
+                if 'Case' in str(type(parameter)):
+                    print("param is Case") 
+                    self._analyses[ptype] = CaseAnalysis(parameter)
                 self._analyses[ptype] = ParameterAnalysis(parameter)
-            except:
-                continue
+            except Exception as e:
+                print(e , "(createAnalyses)")
 
     @staticmethod
     def loadSNP(snp):
@@ -252,18 +257,22 @@ class SampleNode(Node):
 
         widgets["main"] = None
         failParams = list()
+        #print("Sample ", self._dataObject.getName(), " : ", self._dataObject.getParameters().items())
         for ptype, param in self._dataObject.getParameters().items():
+            print(ptype , param)
             try:
                 if param.visible():
                     if ptype.name not in self._paramTabs:
                         self._paramTabs[ptype.name] = ParameterWidget(param.getName(), param,
                                                                       self._dataObject.getAnalysis(ptype))
+                        print("Here")
                         self._paramTabs[ptype.name].setGraphic(self._dataObject.getAnalysis(ptype))
+                        
                     widgets[param.getName()] = self._paramTabs[ptype.name]
                     if not self._paramTabs[ptype.name].hasPassed:
                         failParams.append(ptype.name)
-            except:
-                continue
+            except Exception as e:
+                print(e, "getWidgets Failed")
         if not self._mainTab:
             self._mainTab = MainWidget(self._dataObject, failParams)
         else:

@@ -156,7 +156,7 @@ class SaveManager(object):
                         sample = (project.victims())[powerSum][end]
                         victimBranch = ET.SubElement(projectBranch, "Victim", attrib = {"powerSum" : powerSum, "end": end})
                         ET.SubElement(victimBranch, "name").text = str(sample.getName())
-                        ET.SubElement(victimBranch, "file_name").text = str(snpDir, sample.getName())
+                        ET.SubElement(victimBranch, "file_name").text = str(sample.getName())
                         ET.SubElement(victimBranch, "standard").text = str(sample.getStandard())
                         shutil.copy2(sample.getFileName(), os.path.join(snpDir, sample.getName())) # complete target filename given
 
@@ -177,7 +177,7 @@ class SaveManager(object):
             if project.type == "Embedding":
                 sampleBranch = ET.SubElement(projectBranch, "Plug")
                 print("snpDir" , snpDir)
-                ET.SubElement(sampleBranch, "file_name").text =  str(os.path.join(snpDir, project.plugFileName))
+                ET.SubElement(sampleBranch, "file_name").text =  str(project.plugFileName)
                 print("new Location : ", str(os.path.join(snpDir, project.plugFileName)))
                 #shutil.copy2(project.plugFile, os.path.join(snpDir, project.plug().getName())) # complete target filename given
                 copy_tree(os.path.dirname(project.plugFile), snpDir) # complete target filename given
@@ -187,21 +187,21 @@ class SaveManager(object):
                     sample = project.load()[side]
                     if sample is not None:                    
                         sampleBranch = ET.SubElement(projectBranch, "Load_"+side)
-                        ET.SubElement(sampleBranch, "file_name").text = str(os.path.join(snpDir, sample.getName()))
+                        ET.SubElement(sampleBranch, "file_name").text = str(sample.getName())
                         shutil.copy2(sample.getFileName(), os.path.join(snpDir, sample.getName())) # complete target filename given
 
                 #save open file
                 sampleBranch = ET.SubElement(projectBranch, "Open")
                 sample = project.openSample()
                 if sample is not None:
-                    ET.SubElement(sampleBranch, "file_name").text = str(os.path.join(snpDir, sample.getName()))
+                    ET.SubElement(sampleBranch, "file_name").text = str(sample.getName())
                     shutil.copy2(sample.getFileName(), os.path.join(snpDir, sample.getName())) # complete target filename given
 
                 #save short file
                 sampleBranch = ET.SubElement(projectBranch, "Short")
                 sample = project.shortSample()
                 if sample is not None:
-                    ET.SubElement(sampleBranch, "file_name").text = str(os.path.join(snpDir, sample.getName()))
+                    ET.SubElement(sampleBranch, "file_name").text = str(sample.getName())
                     shutil.copy2(sample.getFileName(), os.path.join(snpDir, sample.getName())) # complete target filename given
 
             if project.type == "Plug":
@@ -215,7 +215,7 @@ class SaveManager(object):
                 sampleBranch = ET.SubElement(projectBranch, "Plug")
                 for sample in samples:
                     shutil.copy2(sample().getFileName(), os.path.join(snpDir, sample().getName())) # complete target filename given
-                    ET.SubElement(sampleBranch, sample.__name__).text = str(os.path.join(snpDir, sample().getName()))
+                    ET.SubElement(sampleBranch, sample.__name__).text = str(sample().getName())
                 ET.SubElement(sampleBranch, "k1").text = str(project.getConstants()[0])
                 ET.SubElement(sampleBranch, "k2").text = str(project.getConstants()[1])
                 ET.SubElement(sampleBranch, "k3").text = str(project.getConstants()[2])

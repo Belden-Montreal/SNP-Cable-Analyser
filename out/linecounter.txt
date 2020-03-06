@@ -1,0 +1,884 @@
+===============================================================================
+EXTENSION NAME : linecounter
+EXTENSION VERSION : 0.2.7
+-------------------------------------------------------------------------------
+count time : 2020-03-06 10:30:10
+count workspace : c:\Users\LXF09011\Desktop\SNP-Cable-Analyser
+total files : 851
+total code lines : 3370557
+total comment lines : 13146
+total blank lines : 3990
+
+    statistics
+   |      extension|     total code|  total comment|    total blank|percent|
+   -------------------------------------------------------------------------
+   |               |              9|             11|              2|0.00027|
+   |            .py|          14486|           1700|           3162|   0.43|
+   |          .spec|             37|              0|              3| 0.0011|
+   |            .md|             12|              2|              6|0.00036|
+   |           .txt|             33|              0|              2|0.00098|
+   |           .pdf|          28112|          11431|            742|   0.83|
+   |           .xml|            684|              0|              0|  0.020|
+   |           .iss|            118|              0|              5| 0.0035|
+   |           .s8p|        2189327|              0|              0|     65|
+   |           .tex|            137|              0|             25| 0.0041|
+   |           .aux|              1|              0|              0|0.000030|
+   |           .log|            399|              0|             32|  0.012|
+   |            .sh|             28|              2|             11|0.00083|
+   |          .s16p|        1131840|              0|              0|     34|
+   |           .qrc|             18|              0|              0|0.00053|
+   |            .ui|           5314|              0|              0|   0.16|
+   |           .svg|              2|              0|              0|0.000059|
+   -------------------------------------------------------------------------
+.gitignore, code is 9, comment is 11, blank is 2.
+123121231.xlsx, it is a binary file.
+123123.xlsx, it is a binary file.
+123Excem.xlsx, it is a binary file.
+__pycache__\main.cpython-36.pyc, it is a binary file.
+alienExcel.xlsx, it is a binary file.
+alienExcel2.xlsx, it is a binary file.
+AlienProjectOutMag.xlsx, it is a binary file.
+BasicProjectOut.xlsx, it is a binary file.
+BasicProjectOutMag.xlsx, it is a binary file.
+doc\ANSI-TIA-1183-1.pdf, code is 5162, comment is 4861, blank is 11.
+doc\TIA-568-C.2.pdf, code is 22950, comment is 6570, blank is 731.
+docA.pdf, it is a binary file.
+docA2.pdf, it is a binary file.
+docAlien.pdf, it is a binary file.
+docDeemb.pdf, it is a binary file.
+document.pdf, it is a binary file.
+documentA.pdf, it is a binary file.
+embeddingNew2\embeddingNew2.xml, code is 1, comment is 0, blank is 0.
+embeddingNew2\snps\1212.xlsx, it is a binary file.
+embeddingNew2\snps\123.xlsx, it is a binary file.
+embeddingNew2\snps\123123132.xlsx, it is a binary file.
+embeddingNew2\snps\13123.xlsx, it is a binary file.
+embeddingNew2\snps\exportDe.xlsx, it is a binary file.
+embeddingNew2\snps\MatingPlugJackForward.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew2\snps\MatingPlugJackOpen.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew2\snps\MatingPlugJackShort.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew2\snps\MatingPlugJacktReverse.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew2\snps\snps\DirectFixOpen.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew2\snps\snps\DirectFixPlugLoad2.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew2\snps\snps\DirectFixPlugOpen.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew2\snps\snps\DirectFixPlugShort.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew2\snps\snps\DirectFixShort.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew2\snps\test11\test11.xml, code is 1, comment is 0, blank is 0.
+embeddingNew2\snps\testPlugSave.xml, code is 1, comment is 0, blank is 0.
+embeddingNew3\snps\1212.xlsx, it is a binary file.
+embeddingNew3\snps\123.xlsx, it is a binary file.
+embeddingNew3\snps\123123132.xlsx, it is a binary file.
+embeddingNew3\snps\13123.xlsx, it is a binary file.
+embeddingNew3\snps\exportDe.xlsx, it is a binary file.
+embeddingNew3\snps\MatingPlugJackForward.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew3\snps\MatingPlugJackOpen.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew3\snps\MatingPlugJackShort.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew3\snps\MatingPlugJacktReverse.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew3\snps\snps\DirectFixOpen.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew3\snps\snps\DirectFixPlugLoad2.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew3\snps\snps\DirectFixPlugOpen.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew3\snps\snps\DirectFixPlugShort.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew3\snps\snps\DirectFixShort.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew3\snps\test11\test11.xml, code is 1, comment is 0, blank is 0.
+embeddingNew3\snps\testPlugSave.xml, code is 1, comment is 0, blank is 0.
+embeddingNew4\snps\1212.xlsx, it is a binary file.
+embeddingNew4\snps\123.xlsx, it is a binary file.
+embeddingNew4\snps\123123132.xlsx, it is a binary file.
+embeddingNew4\snps\13123.xlsx, it is a binary file.
+embeddingNew4\snps\exportDe.xlsx, it is a binary file.
+embeddingNew4\snps\MatingPlugJackForward.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew4\snps\MatingPlugJackOpen.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew4\snps\MatingPlugJackShort.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew4\snps\MatingPlugJacktReverse.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew4\snps\snps\DirectFixOpen.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew4\snps\snps\DirectFixPlugLoad2.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew4\snps\snps\DirectFixPlugOpen.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew4\snps\snps\DirectFixPlugShort.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew4\snps\snps\DirectFixShort.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew4\snps\test11\test11.xml, code is 1, comment is 0, blank is 0.
+embeddingNew4\snps\testPlugSave.xml, code is 1, comment is 0, blank is 0.
+embeddingNew5\embeddingNew5.xml, code is 1, comment is 0, blank is 0.
+embeddingNew5\snps\1212.xlsx, it is a binary file.
+embeddingNew5\snps\123.xlsx, it is a binary file.
+embeddingNew5\snps\123123132.xlsx, it is a binary file.
+embeddingNew5\snps\13123.xlsx, it is a binary file.
+embeddingNew5\snps\exportDe.xlsx, it is a binary file.
+embeddingNew5\snps\MatingPlugJackForward.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew5\snps\MatingPlugJackOpen.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew5\snps\MatingPlugJackShort.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew5\snps\MatingPlugJacktReverse.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew5\snps\snps\DirectFixOpen.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew5\snps\snps\DirectFixPlugLoad2.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew5\snps\snps\DirectFixPlugOpen.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew5\snps\snps\DirectFixPlugShort.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew5\snps\snps\DirectFixShort.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew5\snps\test11\test11.xml, code is 1, comment is 0, blank is 0.
+embeddingNew5\snps\testPlugSave.xml, code is 1, comment is 0, blank is 0.
+embeddingNew\embeddingNew.xml, code is 1, comment is 0, blank is 0.
+embeddingNew\snps\MatingPlugJackForward.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew\snps\MatingPlugJackOpen.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew\snps\MatingPlugJackShort.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew\snps\MatingPlugJacktReverse.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew\snps\snps\DirectFixOpen.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew\snps\snps\DirectFixPlugLoad2.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew\snps\snps\DirectFixPlugOpen.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew\snps\snps\DirectFixPlugShort.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew\snps\snps\DirectFixShort.s8p, code is 16076, comment is 0, blank is 0.
+embeddingNew\snps\test11\test11.xml, code is 1, comment is 0, blank is 0.
+embeddingNew\snps\testPlugSave.xml, code is 1, comment is 0, blank is 0.
+EmbedExcel.xlsx, it is a binary file.
+excel tests\Test1.xlsx, it is a binary file.
+excel tests\Test2.xlsx, it is a binary file.
+excelDeembed.xlsx, it is a binary file.
+limitExcel.xlsx, it is a binary file.
+limits\limits.xml, code is 632, comment is 0, blank is 0.
+main.py, code is 311, comment is 54, blank is 67.
+main.spec, code is 37, comment is 0, blank is 3.
+main_old.py, code is 262, comment is 48, blank is 60.
+MW.py, code is 0, comment is 6, blank is 2.
+output1.xlsx, it is a binary file.
+output2.xlsx, it is a binary file.
+plug1234.xlsx, it is a binary file.
+PlugExcel.xlsx, it is a binary file.
+plugExcl.xlsx, it is a binary file.
+README.md, code is 12, comment is 2, blank is 6.
+rosalie_read_me.txt, code is 9, comment is 0, blank is 2.
+setup\FolderIncludes.txt, code is 16, comment is 0, blank is 0.
+setup\setup.iss, code is 118, comment is 0, blank is 5.
+snpanalyzer\__init__.py, code is 0, comment is 0, blank is 0.
+snpanalyzer\__pycache__\__init__.cpython-36.pyc, it is a binary file.
+snpanalyzer\__pycache__\__init__.cpython-37.pyc, it is a binary file.
+snpanalyzer\__pycache__\calibration.cpython-36.pyc, it is a binary file.
+snpanalyzer\__pycache__\calibration.cpython-37.pyc, it is a binary file.
+snpanalyzer\__pycache__\vna.cpython-36.pyc, it is a binary file.
+snpanalyzer\__pycache__\vna.cpython-37.pyc, it is a binary file.
+snpanalyzer\analysis\__init__.py, code is 0, comment is 0, blank is 0.
+snpanalyzer\analysis\__pycache__\__init__.cpython-36.pyc, it is a binary file.
+snpanalyzer\analysis\__pycache__\__init__.cpython-37.pyc, it is a binary file.
+snpanalyzer\analysis\__pycache__\alien_parameter.cpython-36.pyc, it is a binary file.
+snpanalyzer\analysis\__pycache__\alien_parameter.cpython-37.pyc, it is a binary file.
+snpanalyzer\analysis\__pycache__\analysis.cpython-36.pyc, it is a binary file.
+snpanalyzer\analysis\__pycache__\analysis.cpython-37.pyc, it is a binary file.
+snpanalyzer\analysis\__pycache__\case.cpython-36.pyc, it is a binary file.
+snpanalyzer\analysis\__pycache__\case.cpython-37.pyc, it is a binary file.
+snpanalyzer\analysis\__pycache__\compilation.cpython-36.pyc, it is a binary file.
+snpanalyzer\analysis\__pycache__\compilation.cpython-37.pyc, it is a binary file.
+snpanalyzer\analysis\__pycache__\figure.cpython-36.pyc, it is a binary file.
+snpanalyzer\analysis\__pycache__\figure.cpython-37.pyc, it is a binary file.
+snpanalyzer\analysis\__pycache__\format.cpython-36.pyc, it is a binary file.
+snpanalyzer\analysis\__pycache__\format.cpython-37.pyc, it is a binary file.
+snpanalyzer\analysis\__pycache__\parameter.cpython-36.pyc, it is a binary file.
+snpanalyzer\analysis\__pycache__\parameter.cpython-37.pyc, it is a binary file.
+snpanalyzer\analysis\__pycache__\scale.cpython-36.pyc, it is a binary file.
+snpanalyzer\analysis\__pycache__\scale.cpython-37.pyc, it is a binary file.
+snpanalyzer\analysis\__pycache__\unit.cpython-36.pyc, it is a binary file.
+snpanalyzer\analysis\__pycache__\unit.cpython-37.pyc, it is a binary file.
+snpanalyzer\analysis\alien_parameter.py, code is 57, comment is 4, blank is 13.
+snpanalyzer\analysis\analysis.py, code is 10, comment is 0, blank is 5.
+snpanalyzer\analysis\case.py, code is 108, comment is 20, blank is 31.
+snpanalyzer\analysis\compilation.py, code is 140, comment is 37, blank is 54.
+snpanalyzer\analysis\figure.py, code is 143, comment is 24, blank is 52.
+snpanalyzer\analysis\format.py, code is 42, comment is 0, blank is 8.
+snpanalyzer\analysis\parameter.py, code is 92, comment is 12, blank is 32.
+snpanalyzer\analysis\scale.py, code is 4, comment is 0, blank is 4.
+snpanalyzer\analysis\unit.py, code is 13, comment is 0, blank is 4.
+snpanalyzer\app\__pycache__\node.cpython-36.pyc, it is a binary file.
+snpanalyzer\app\__pycache__\node.cpython-37.pyc, it is a binary file.
+snpanalyzer\app\__pycache__\project_manager.cpython-36.pyc, it is a binary file.
+snpanalyzer\app\__pycache__\project_manager.cpython-37.pyc, it is a binary file.
+snpanalyzer\app\__pycache__\save_manager.cpython-36.pyc, it is a binary file.
+snpanalyzer\app\__pycache__\save_manager.cpython-37.pyc, it is a binary file.
+snpanalyzer\app\__pycache__\tree_model.cpython-36.pyc, it is a binary file.
+snpanalyzer\app\__pycache__\tree_model.cpython-37.pyc, it is a binary file.
+snpanalyzer\app\node.py, code is 35, comment is 2, blank is 8.
+snpanalyzer\app\project_manager.py, code is 44, comment is 0, blank is 12.
+snpanalyzer\app\save_manager.py, code is 169, comment is 33, blank is 37.
+snpanalyzer\app\tree_model.py, code is 11, comment is 0, blank is 2.
+snpanalyzer\calibration.py, code is 180, comment is 25, blank is 47.
+snpanalyzer\config\__pycache__\json.cpython-36.pyc, it is a binary file.
+snpanalyzer\config\__pycache__\json.cpython-37.pyc, it is a binary file.
+snpanalyzer\config\__pycache__\vna.cpython-36.pyc, it is a binary file.
+snpanalyzer\config\__pycache__\vna.cpython-37.pyc, it is a binary file.
+snpanalyzer\config\json.py, code is 16, comment is 2, blank is 5.
+snpanalyzer\config\manager.py, code is 17, comment is 0, blank is 6.
+snpanalyzer\config\vna.py, code is 102, comment is 13, blank is 36.
+snpanalyzer\document\__init__.py, code is 0, comment is 0, blank is 0.
+snpanalyzer\document\__pycache__\__init__.cpython-36.pyc, it is a binary file.
+snpanalyzer\document\__pycache__\__init__.cpython-37.pyc, it is a binary file.
+snpanalyzer\document\__pycache__\case.cpython-36.pyc, it is a binary file.
+snpanalyzer\document\__pycache__\cnext.cpython-36.pyc, it is a binary file.
+snpanalyzer\document\__pycache__\object.cpython-36.pyc, it is a binary file.
+snpanalyzer\document\__pycache__\object.cpython-37.pyc, it is a binary file.
+snpanalyzer\document\__pycache__\parameter.cpython-36.pyc, it is a binary file.
+snpanalyzer\document\__pycache__\parameter.cpython-37.pyc, it is a binary file.
+snpanalyzer\document\__pycache__\project.cpython-36.pyc, it is a binary file.
+snpanalyzer\document\__pycache__\project.cpython-37.pyc, it is a binary file.
+snpanalyzer\document\__pycache__\sample.cpython-36.pyc, it is a binary file.
+snpanalyzer\document\__pycache__\sample.cpython-37.pyc, it is a binary file.
+snpanalyzer\document\case.py, code is 38, comment is 3, blank is 13.
+snpanalyzer\document\cnext.py, code is 37, comment is 3, blank is 12.
+snpanalyzer\document\object.py, code is 73, comment is 13, blank is 29.
+snpanalyzer\document\parameter.py, code is 58, comment is 9, blank is 14.
+snpanalyzer\document\project.py, code is 31, comment is 3, blank is 10.
+snpanalyzer\document\sample.py, code is 31, comment is 1, blank is 6.
+snpanalyzer\export\__init__.py, code is 0, comment is 0, blank is 0.
+snpanalyzer\export\__pycache__\__init__.cpython-36.pyc, it is a binary file.
+snpanalyzer\export\__pycache__\__init__.cpython-37.pyc, it is a binary file.
+snpanalyzer\export\__pycache__\configuration.cpython-36.pyc, it is a binary file.
+snpanalyzer\export\__pycache__\configuration.cpython-37.pyc, it is a binary file.
+snpanalyzer\export\__pycache__\parameter.cpython-36.pyc, it is a binary file.
+snpanalyzer\export\__pycache__\parameter.cpython-37.pyc, it is a binary file.
+snpanalyzer\export\__pycache__\project.cpython-36.pyc, it is a binary file.
+snpanalyzer\export\__pycache__\project.cpython-37.pyc, it is a binary file.
+snpanalyzer\export\__pycache__\sample.cpython-36.pyc, it is a binary file.
+snpanalyzer\export\__pycache__\sample.cpython-37.pyc, it is a binary file.
+snpanalyzer\export\configuration.py, code is 9, comment is 0, blank is 3.
+snpanalyzer\export\parameter.py, code is 76, comment is 5, blank is 25.
+snpanalyzer\export\project.py, code is 51, comment is 1, blank is 13.
+snpanalyzer\export\sample.py, code is 44, comment is 1, blank is 13.
+snpanalyzer\gui\__init__.py, code is 0, comment is 0, blank is 0.
+snpanalyzer\gui\__pycache__\__init__.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\__pycache__\__init__.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\dialog\__init__.py, code is 0, comment is 0, blank is 0.
+snpanalyzer\gui\dialog\__pycache__\__init__.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\dialog\__pycache__\__init__.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\dialog\__pycache__\alien_import_dialog.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\dialog\__pycache__\alien_import_dialog.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\dialog\__pycache__\compilation_configuration.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\dialog\__pycache__\compilation_configuration.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\dialog\__pycache__\connectDialog.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\dialog\__pycache__\EditLimitDialog.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\dialog\__pycache__\EditLimitDialog.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\dialog\__pycache__\embedding_import_dialog.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\dialog\__pycache__\embedding_import_dialog.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\dialog\__pycache__\export_configuration.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\dialog\__pycache__\export_configuration.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\dialog\__pycache__\LimitDialog.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\dialog\__pycache__\LimitDialog.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\dialog\__pycache__\plug_import_dialog.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\dialog\__pycache__\plug_import_dialog.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\dialog\__pycache__\vna_test.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\dialog\__pycache__\vna_test.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\dialog\alien_import_dialog.py, code is 31, comment is 0, blank is 6.
+snpanalyzer\gui\dialog\cable_configuration.py, code is 113, comment is 24, blank is 30.
+snpanalyzer\gui\dialog\compilation_configuration.py, code is 124, comment is 34, blank is 40.
+snpanalyzer\gui\dialog\connectDialog.py, code is 56, comment is 10, blank is 20.
+snpanalyzer\gui\dialog\EditLimitDialog.py, code is 180, comment is 1, blank is 18.
+snpanalyzer\gui\dialog\embedding_import_dialog.py, code is 71, comment is 2, blank is 10.
+snpanalyzer\gui\dialog\export_configuration.py, code is 26, comment is 4, blank is 13.
+snpanalyzer\gui\dialog\LimitDialog.py, code is 52, comment is 0, blank is 12.
+snpanalyzer\gui\dialog\plug_import_dialog.py, code is 60, comment is 0, blank is 9.
+snpanalyzer\gui\dialog\vna_test.py, code is 23, comment is 1, blank is 14.
+snpanalyzer\gui\generate.sh, code is 28, comment is 2, blank is 11.
+snpanalyzer\gui\ressources\__init__.py, code is 0, comment is 0, blank is 0.
+snpanalyzer\gui\ressources\__pycache__\__init__.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\ressources\__pycache__\__init__.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\ressources\__pycache__\icons.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\ressources\__pycache__\icons.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\ressources\__pycache__\icons.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\ressources\__pycache__\icons_rc.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\ressources\__pycache__\icons_rc.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\ressources\__pycache__\icons_rc.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\ressources\icons.py, code is 17, comment is 6, blank is 10.
+snpanalyzer\gui\ressources\icons.qrc, code is 18, comment is 0, blank is 0.
+snpanalyzer\gui\ressources\icons\alien.png, it is a binary file.
+snpanalyzer\gui\ressources\icons\calibrate.png, it is a binary file.
+snpanalyzer\gui\ressources\icons\calibrate_disabled.png, it is a binary file.
+snpanalyzer\gui\ressources\icons\connected.png, it is a binary file.
+snpanalyzer\gui\ressources\icons\deembed.png, it is a binary file.
+snpanalyzer\gui\ressources\icons\disconnected.png, it is a binary file.
+snpanalyzer\gui\ressources\icons\ExportExcel.png, it is a binary file.
+snpanalyzer\gui\ressources\icons\ExportPDF.png, it is a binary file.
+snpanalyzer\gui\ressources\icons\import.png, it is a binary file.
+snpanalyzer\gui\ressources\icons\minus-circle.svg, code is 1, comment is 0, blank is 0.
+snpanalyzer\gui\ressources\icons\new_project.png, it is a binary file.
+snpanalyzer\gui\ressources\icons\plus-circle.svg, code is 1, comment is 0, blank is 0.
+snpanalyzer\gui\ressources\icons\run.png, it is a binary file.
+snpanalyzer\gui\ressources\icons\run_disabled.png, it is a binary file.
+snpanalyzer\gui\ressources\icons_rc.py, code is 17, comment is 6, blank is 10.
+snpanalyzer\gui\ui\__init__.py, code is 0, comment is 0, blank is 0.
+snpanalyzer\gui\ui\__pycache__\__init__.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\__init__.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\alien_import_dialog.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\alien_import_dialog.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\alien_widget_ui.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\alien_widget_ui.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\calSet.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\compilation_configuration.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\compilation_configuration.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\dataFormatDialog.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\dataFormatDialog.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\Edit_Limit_Dialog.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\Edit_Limit_Dialog.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\embed_import_dialog.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\embed_import_dialog.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\embed_widget_ui.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\embed_widget_ui.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\format.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\format.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\main_widget_ui.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\main_widget_ui.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\MW.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\MW.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\new_project_dialog.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\new_project_dialog.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\parameter_widget_ui.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\parameter_widget_ui.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\plug_import_dialog.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\plug_import_dialog.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\plug_widget_ui.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\plug_widget_ui.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\presets.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\presets.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\scale.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\scale.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\Set_calSet.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\Set_Limit_Dialog.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\Set_Limit_Dialog.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\unitinput.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\unitinput.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\vna_configuration.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\vna_test.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\ui\__pycache__\vna_test.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\ui\alien_import_dialog.py, code is 63, comment is 6, blank is 6.
+snpanalyzer\gui\ui\alien_widget_ui.py, code is 162, comment is 7, blank is 6.
+snpanalyzer\gui\ui\alienImportDialog.ui, code is 154, comment is 0, blank is 0.
+snpanalyzer\gui\ui\alienWidget.ui, code is 286, comment is 0, blank is 0.
+snpanalyzer\gui\ui\cable_configuration.py, code is 275, comment is 6, blank is 8.
+snpanalyzer\gui\ui\cable_configuration.ui, code is 511, comment is 0, blank is 0.
+snpanalyzer\gui\ui\cal_set.ui, code is 165, comment is 0, blank is 0.
+snpanalyzer\gui\ui\calSet.py, code is 72, comment is 6, blank is 6.
+snpanalyzer\gui\ui\compilation_configuration.py, code is 152, comment is 6, blank is 8.
+snpanalyzer\gui\ui\compilation_configuration.ui, code is 399, comment is 0, blank is 0.
+snpanalyzer\gui\ui\dataFormatDialog.py, code is 25, comment is 6, blank is 6.
+snpanalyzer\gui\ui\dataFormatDialog.ui, code is 71, comment is 0, blank is 0.
+snpanalyzer\gui\ui\Edit_Limit_Dialog.py, code is 126, comment is 6, blank is 6.
+snpanalyzer\gui\ui\EditLimitGui.ui, code is 229, comment is 0, blank is 0.
+snpanalyzer\gui\ui\embed_import_dialog.py, code is 100, comment is 6, blank is 6.
+snpanalyzer\gui\ui\embed_widget_ui.py, code is 237, comment is 6, blank is 6.
+snpanalyzer\gui\ui\embedImportDialog.ui, code is 212, comment is 0, blank is 0.
+snpanalyzer\gui\ui\embedWidget.ui, code is 406, comment is 0, blank is 0.
+snpanalyzer\gui\ui\export\__init__.py, code is 0, comment is 0, blank is 0.
+snpanalyzer\gui\ui\export\__pycache__\__init__.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\ui\export\__pycache__\__init__.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\ui\export\__pycache__\export.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\ui\export\__pycache__\export.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\ui\export\__pycache__\parameter.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\ui\export\__pycache__\project.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\ui\export\__pycache__\project.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\ui\export\__pycache__\sample.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\ui\export\__pycache__\sample.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\ui\export\export.py, code is 65, comment is 6, blank is 8.
+snpanalyzer\gui\ui\export\export.ui, code is 187, comment is 0, blank is 0.
+snpanalyzer\gui\ui\export\parameter.py, code is 36, comment is 6, blank is 8.
+snpanalyzer\gui\ui\export\parameter.ui, code is 63, comment is 0, blank is 0.
+snpanalyzer\gui\ui\export\project.py, code is 34, comment is 6, blank is 8.
+snpanalyzer\gui\ui\export\project.ui, code is 54, comment is 0, blank is 0.
+snpanalyzer\gui\ui\export\sample.py, code is 35, comment is 6, blank is 8.
+snpanalyzer\gui\ui\export\sample.ui, code is 58, comment is 0, blank is 0.
+snpanalyzer\gui\ui\format.py, code is 40, comment is 14, blank is 8.
+snpanalyzer\gui\ui\format.ui, code is 89, comment is 0, blank is 0.
+snpanalyzer\gui\ui\main_widget_ui.py, code is 72, comment is 6, blank is 7.
+snpanalyzer\gui\ui\MainWidget.ui, code is 127, comment is 0, blank is 0.
+snpanalyzer\gui\ui\MainWindow.ui, code is 505, comment is 0, blank is 0.
+snpanalyzer\gui\ui\MW.py, code is 298, comment is 6, blank is 10.
+snpanalyzer\gui\ui\new_project_dialog.py, code is 38, comment is 6, blank is 6.
+snpanalyzer\gui\ui\NewProjectDialog.ui, code is 103, comment is 0, blank is 0.
+snpanalyzer\gui\ui\parameter.py, code is 0, comment is 6, blank is 2.
+snpanalyzer\gui\ui\parameter_widget_ui.py, code is 257, comment is 12, blank is 24.
+snpanalyzer\gui\ui\ParameterWidget.ui, code is 404, comment is 0, blank is 0.
+snpanalyzer\gui\ui\plug_import_dialog.py, code is 103, comment is 6, blank is 6.
+snpanalyzer\gui\ui\plug_widget_ui.py, code is 185, comment is 6, blank is 6.
+snpanalyzer\gui\ui\plugImportDialog.ui, code is 228, comment is 0, blank is 0.
+snpanalyzer\gui\ui\plugWidget.ui, code is 321, comment is 0, blank is 0.
+snpanalyzer\gui\ui\presets.py, code is 67, comment is 6, blank is 8.
+snpanalyzer\gui\ui\presets.ui, code is 104, comment is 0, blank is 0.
+snpanalyzer\gui\ui\sample.py, code is 0, comment is 6, blank is 2.
+snpanalyzer\gui\ui\scale.py, code is 35, comment is 6, blank is 8.
+snpanalyzer\gui\ui\scale.ui, code is 56, comment is 0, blank is 0.
+snpanalyzer\gui\ui\Set_calSet.py, code is 46, comment is 6, blank is 7.
+snpanalyzer\gui\ui\Set_Limit_Dialog.py, code is 24, comment is 6, blank is 7.
+snpanalyzer\gui\ui\SetLimitGui.ui, code is 91, comment is 0, blank is 0.
+snpanalyzer\gui\ui\unitinput.py, code is 30, comment is 6, blank is 8.
+snpanalyzer\gui\ui\unitinput.ui, code is 49, comment is 0, blank is 0.
+snpanalyzer\gui\ui\vna_addr_dialog.py, code is 26, comment is 6, blank is 6.
+snpanalyzer\gui\ui\vna_addr_dialog.ui, code is 97, comment is 0, blank is 0.
+snpanalyzer\gui\ui\vna_configuration.py, code is 90, comment is 6, blank is 6.
+snpanalyzer\gui\ui\vna_configuration.ui, code is 165, comment is 0, blank is 0.
+snpanalyzer\gui\ui\vna_test.py, code is 73, comment is 6, blank is 10.
+snpanalyzer\gui\ui\vna_test.ui, code is 180, comment is 0, blank is 0.
+snpanalyzer\gui\widget\__init__.py, code is 0, comment is 0, blank is 0.
+snpanalyzer\gui\widget\__pycache__\__init__.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\__init__.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\alien_navbar.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\alien_navbar.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\alien_widget.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\alien_widget.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\canvas.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\canvas.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\case_tab.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\case_tab.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\cnext_tab.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\cnext_tab.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\embed_widget.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\embed_widget.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\format.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\format.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\main_widget.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\main_widget.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\navbar.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\navbar.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\navigation.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\navigation.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\parameter_widget.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\parameter_widget.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\plug_widget.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\plug_widget.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\presets.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\presets.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\scale.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\scale.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\tab_widget.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\tab_widget.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\unitinput.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\unitinput.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\vna_configuration.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\widget\__pycache__\vna_configuration.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\widget\alien_navbar.py, code is 33, comment is 0, blank is 2.
+snpanalyzer\gui\widget\alien_widget.py, code is 194, comment is 2, blank is 28.
+snpanalyzer\gui\widget\canvas.py, code is 7, comment is 0, blank is 4.
+snpanalyzer\gui\widget\case_tab.py, code is 31, comment is 0, blank is 2.
+snpanalyzer\gui\widget\cnext_tab.py, code is 28, comment is 0, blank is 2.
+snpanalyzer\gui\widget\embed_widget.py, code is 217, comment is 0, blank is 26.
+snpanalyzer\gui\widget\export\__init__.py, code is 0, comment is 0, blank is 0.
+snpanalyzer\gui\widget\export\__pycache__\__init__.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\widget\export\__pycache__\__init__.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\widget\export\__pycache__\parameter.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\widget\export\__pycache__\parameter.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\widget\export\__pycache__\project.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\widget\export\__pycache__\project.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\widget\export\__pycache__\sample.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\widget\export\__pycache__\sample.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\widget\export\parameter.py, code is 46, comment is 11, blank is 19.
+snpanalyzer\gui\widget\export\project.py, code is 59, comment is 18, blank is 23.
+snpanalyzer\gui\widget\export\sample.py, code is 54, comment is 16, blank is 22.
+snpanalyzer\gui\widget\format.py, code is 34, comment is 11, blank is 16.
+snpanalyzer\gui\widget\main_widget.py, code is 16, comment is 0, blank is 2.
+snpanalyzer\gui\widget\navbar.py, code is 30, comment is 0, blank is 2.
+snpanalyzer\gui\widget\navigation.py, code is 7, comment is 0, blank is 4.
+snpanalyzer\gui\widget\parameter_widget.py, code is 77, comment is 15, blank is 14.
+snpanalyzer\gui\widget\plug_widget.py, code is 205, comment is 5, blank is 37.
+snpanalyzer\gui\widget\presets.py, code is 10, comment is 0, blank is 5.
+snpanalyzer\gui\widget\scale.py, code is 21, comment is 5, blank is 12.
+snpanalyzer\gui\widget\tab_widget.py, code is 8, comment is 0, blank is 2.
+snpanalyzer\gui\widget\unitinput.py, code is 39, comment is 8, blank is 16.
+snpanalyzer\gui\widget\vna_configuration.py, code is 107, comment is 10, blank is 26.
+snpanalyzer\gui\wizard\__init__.py, code is 0, comment is 0, blank is 0.
+snpanalyzer\gui\wizard\__pycache__\__init__.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\wizard\__pycache__\__init__.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\wizard\__pycache__\calibration.cpython-36.pyc, it is a binary file.
+snpanalyzer\gui\wizard\__pycache__\calibration.cpython-37.pyc, it is a binary file.
+snpanalyzer\gui\wizard\calibration.py, code is 217, comment is 25, blank is 66.
+snpanalyzer\limits\__init__.py, code is 0, comment is 0, blank is 0.
+snpanalyzer\limits\__pycache__\__init__.cpython-36.pyc, it is a binary file.
+snpanalyzer\limits\__pycache__\__init__.cpython-37.pyc, it is a binary file.
+snpanalyzer\limits\__pycache__\Limit.cpython-36.pyc, it is a binary file.
+snpanalyzer\limits\__pycache__\Limit.cpython-37.pyc, it is a binary file.
+snpanalyzer\limits\__pycache__\LimitParser.cpython-36.pyc, it is a binary file.
+snpanalyzer\limits\__pycache__\LimitParser.cpython-37.pyc, it is a binary file.
+snpanalyzer\limits\__pycache__\Standard.cpython-36.pyc, it is a binary file.
+snpanalyzer\limits\__pycache__\Standard.cpython-37.pyc, it is a binary file.
+snpanalyzer\limits\__pycache__\TreeItem.cpython-36.pyc, it is a binary file.
+snpanalyzer\limits\__pycache__\TreeItem.cpython-37.pyc, it is a binary file.
+snpanalyzer\limits\__pycache__\TreeModel.cpython-36.pyc, it is a binary file.
+snpanalyzer\limits\__pycache__\TreeModel.cpython-37.pyc, it is a binary file.
+snpanalyzer\limits\Limit.py, code is 73, comment is 1, blank is 9.
+snpanalyzer\limits\LimitParser.py, code is 72, comment is 0, blank is 6.
+snpanalyzer\limits\limits.txt, code is 8, comment is 0, blank is 0.
+snpanalyzer\limits\Standard.py, code is 15, comment is 0, blank is 3.
+snpanalyzer\limits\test.xml, code is 12, comment is 0, blank is 0.
+snpanalyzer\limits\test_limit.py, code is 43, comment is 0, blank is 14.
+snpanalyzer\limits\test_limitParser.py, code is 38, comment is 0, blank is 5.
+snpanalyzer\limits\TreeItem.py, code is 42, comment is 1, blank is 9.
+snpanalyzer\limits\TreeModel.py, code is 60, comment is 0, blank is 18.
+snpanalyzer\parameters\__init__.py, code is 0, comment is 0, blank is 0.
+snpanalyzer\parameters\__pycache__\__init__.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\__init__.cpython-37.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\acrf.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\acrf.cpython-37.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\axext.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\axext.cpython-37.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\case.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\case.cpython-37.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\cmdmnext.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\cmdmnext.cpython-37.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\cmdmrl.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\cmdmrl.cpython-37.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\cmnext.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\cmnext.cpython-37.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\cmrl.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\cmrl.cpython-37.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\correctednext.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\correctednext.cpython-37.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\dataserie.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\dataserie.cpython-37.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\dfdelay.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\dfdelay.cpython-37.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\dmcmnext.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\dmcmnext.cpython-37.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\dmcmrl.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\dmcmrl.cpython-37.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\dnext.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\dnext.cpython-37.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\eltctl.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\eltctl.cpython-37.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\factory.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\factory.cpython-37.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\fext.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\fext.cpython-37.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\insertionloss.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\insertionloss.cpython-37.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\lcl.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\lcl.cpython-37.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\lctl.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\lctl.cpython-37.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\next.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\next.cpython-37.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\nextdelay.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\nextdelay.cpython-37.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\parameter.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\parameter.cpython-37.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\plugdelay.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\plugdelay.cpython-37.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\propagationdelay.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\propagationdelay.cpython-37.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\psaacrx.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\psaacrx.cpython-37.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\psacrf.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\psacrf.cpython-37.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\psaxext.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\psaxext.cpython-37.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\psfext.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\psfext.cpython-37.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\psnext.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\psnext.cpython-37.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\returnloss.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\returnloss.cpython-37.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\tcl.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\tcl.cpython-37.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\tctl.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\tctl.cpython-37.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\test_parameter.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\type.cpython-36.pyc, it is a binary file.
+snpanalyzer\parameters\__pycache__\type.cpython-37.pyc, it is a binary file.
+snpanalyzer\parameters\acrf.py, code is 57, comment is 14, blank is 20.
+snpanalyzer\parameters\axext.py, code is 59, comment is 6, blank is 20.
+snpanalyzer\parameters\case.py, code is 99, comment is 3, blank is 22.
+snpanalyzer\parameters\case_plot.py, code is 38, comment is 9, blank is 6.
+snpanalyzer\parameters\cmdmnext.py, code is 14, comment is 16, blank is 4.
+snpanalyzer\parameters\cmdmrl.py, code is 14, comment is 11, blank is 4.
+snpanalyzer\parameters\cmnext.py, code is 14, comment is 0, blank is 4.
+snpanalyzer\parameters\cmrl.py, code is 14, comment is 0, blank is 4.
+snpanalyzer\parameters\correctednext.py, code is 44, comment is 4, blank is 15.
+snpanalyzer\parameters\dataserie.py, code is 126, comment is 0, blank is 42.
+snpanalyzer\parameters\dfdelay.py, code is 47, comment is 1, blank is 14.
+snpanalyzer\parameters\dmcmnext.py, code is 14, comment is 0, blank is 4.
+snpanalyzer\parameters\dmcmrl.py, code is 14, comment is 11, blank is 4.
+snpanalyzer\parameters\dnext.py, code is 52, comment is 9, blank is 18.
+snpanalyzer\parameters\eltctl.py, code is 49, comment is 8, blank is 15.
+snpanalyzer\parameters\factory.py, code is 51, comment is 2, blank is 5.
+snpanalyzer\parameters\fext.py, code is 50, comment is 19, blank is 17.
+snpanalyzer\parameters\insertionloss.py, code is 102, comment is 14, blank is 15.
+snpanalyzer\parameters\lcl.py, code is 14, comment is 11, blank is 4.
+snpanalyzer\parameters\lctl.py, code is 14, comment is 10, blank is 4.
+snpanalyzer\parameters\next.py, code is 63, comment is 7, blank is 18.
+snpanalyzer\parameters\nextdelay.py, code is 71, comment is 2, blank is 20.
+snpanalyzer\parameters\parameter.py, code is 228, comment is 1, blank is 54.
+snpanalyzer\parameters\plot.py, code is 70, comment is 9, blank is 12.
+snpanalyzer\parameters\plugdelay.py, code is 88, comment is 2, blank is 22.
+snpanalyzer\parameters\propagationdelay.py, code is 63, comment is 14, blank is 16.
+snpanalyzer\parameters\psaacrx.py, code is 79, comment is 27, blank is 28.
+snpanalyzer\parameters\psacrf.py, code is 58, comment is 15, blank is 19.
+snpanalyzer\parameters\psaxext.py, code is 83, comment is 49, blank is 20.
+snpanalyzer\parameters\psfext.py, code is 57, comment is 18, blank is 21.
+snpanalyzer\parameters\psnext.py, code is 61, comment is 8, blank is 22.
+snpanalyzer\parameters\returnloss.py, code is 36, comment is 14, blank is 11.
+snpanalyzer\parameters\tcl.py, code is 14, comment is 12, blank is 4.
+snpanalyzer\parameters\tctl.py, code is 14, comment is 11, blank is 4.
+snpanalyzer\parameters\test_acrf.py, code is 68, comment is 6, blank is 16.
+snpanalyzer\parameters\test_axext.py, code is 62, comment is 13, blank is 17.
+snpanalyzer\parameters\test_case.py, code is 115, comment is 7, blank is 20.
+snpanalyzer\parameters\test_cmdmnext.py, code is 42, comment is 8, blank is 14.
+snpanalyzer\parameters\test_cmdmrl.py, code is 61, comment is 12, blank is 18.
+snpanalyzer\parameters\test_cmnext.py, code is 62, comment is 12, blank is 18.
+snpanalyzer\parameters\test_cmrl.py, code is 62, comment is 12, blank is 18.
+snpanalyzer\parameters\test_correctednext.py, code is 60, comment is 2, blank is 12.
+snpanalyzer\parameters\test_dataserie.py, code is 146, comment is 0, blank is 36.
+snpanalyzer\parameters\test_dfdelay.py, code is 43, comment is 4, blank is 12.
+snpanalyzer\parameters\test_dmcmnext.py, code is 57, comment is 10, blank is 17.
+snpanalyzer\parameters\test_dmcmrl.py, code is 61, comment is 10, blank is 17.
+snpanalyzer\parameters\test_dnext.py, code is 61, comment is 1, blank is 12.
+snpanalyzer\parameters\test_eltctl.py, code is 34, comment is 4, blank is 12.
+snpanalyzer\parameters\test_factory.py, code is 75, comment is 14, blank is 16.
+snpanalyzer\parameters\test_fext.py, code is 61, comment is 12, blank is 18.
+snpanalyzer\parameters\test_insertionloss.py, code is 118, comment is 24, blank is 32.
+snpanalyzer\parameters\test_lcl.py, code is 55, comment is 10, blank is 16.
+snpanalyzer\parameters\test_lctl.py, code is 39, comment is 6, blank is 13.
+snpanalyzer\parameters\test_next.py, code is 40, comment is 6, blank is 13.
+snpanalyzer\parameters\test_nextdelay.py, code is 65, comment is 7, blank is 18.
+snpanalyzer\parameters\test_parameter.py, code is 103, comment is 12, blank is 21.
+snpanalyzer\parameters\test_plot.py, code is 139, comment is 0, blank is 21.
+snpanalyzer\parameters\test_propagationdelay.py, code is 69, comment is 6, blank is 13.
+snpanalyzer\parameters\test_psaacrx.py, code is 47, comment is 3, blank is 12.
+snpanalyzer\parameters\test_psacrf.py, code is 86, comment is 8, blank is 15.
+snpanalyzer\parameters\test_psaxext.py, code is 82, comment is 4, blank is 15.
+snpanalyzer\parameters\test_psfext.py, code is 70, comment is 6, blank is 15.
+snpanalyzer\parameters\test_psnext.py, code is 139, comment is 10, blank is 26.
+snpanalyzer\parameters\test_returnloss.py, code is 110, comment is 24, blank is 31.
+snpanalyzer\parameters\test_tcl.py, code is 55, comment is 10, blank is 17.
+snpanalyzer\parameters\test_tctl.py, code is 39, comment is 6, blank is 13.
+snpanalyzer\parameters\type.py, code is 51, comment is 0, blank is 1.
+snpanalyzer\project\__init__.py, code is 0, comment is 0, blank is 0.
+snpanalyzer\project\__pycache__\__init__.cpython-36.pyc, it is a binary file.
+snpanalyzer\project\__pycache__\__init__.cpython-37.pyc, it is a binary file.
+snpanalyzer\project\__pycache__\alien.cpython-36.pyc, it is a binary file.
+snpanalyzer\project\__pycache__\alien.cpython-37.pyc, it is a binary file.
+snpanalyzer\project\__pycache__\embedding.cpython-36.pyc, it is a binary file.
+snpanalyzer\project\__pycache__\embedding.cpython-37.pyc, it is a binary file.
+snpanalyzer\project\__pycache__\plug.cpython-36.pyc, it is a binary file.
+snpanalyzer\project\__pycache__\plug.cpython-37.pyc, it is a binary file.
+snpanalyzer\project\__pycache__\project.cpython-36.pyc, it is a binary file.
+snpanalyzer\project\__pycache__\project.cpython-37.pyc, it is a binary file.
+snpanalyzer\project\alien.py, code is 185, comment is 14, blank is 39.
+snpanalyzer\project\cable3.s16p, code is 102740, comment is 0, blank is 0.
+snpanalyzer\project\embedding.py, code is 332, comment is 9, blank is 53.
+snpanalyzer\project\plug.py, code is 243, comment is 59, blank is 52.
+snpanalyzer\project\project.py, code is 176, comment is 54, blank is 56.
+snpanalyzer\project\test_embedding.py, code is 20, comment is 4, blank is 7.
+snpanalyzer\project\test_plug.py, code is 20, comment is 5, blank is 7.
+snpanalyzer\project\test_project.py, code is 17, comment is 13, blank is 9.
+snpanalyzer\sample\__init__.py, code is 0, comment is 0, blank is 0.
+snpanalyzer\sample\__pycache__\__init__.cpython-36.pyc, it is a binary file.
+snpanalyzer\sample\__pycache__\__init__.cpython-37.pyc, it is a binary file.
+snpanalyzer\sample\__pycache__\alien.cpython-36.pyc, it is a binary file.
+snpanalyzer\sample\__pycache__\alien.cpython-37.pyc, it is a binary file.
+snpanalyzer\sample\__pycache__\cable.cpython-36.pyc, it is a binary file.
+snpanalyzer\sample\__pycache__\cable.cpython-37.pyc, it is a binary file.
+snpanalyzer\sample\__pycache__\deembed.cpython-36.pyc, it is a binary file.
+snpanalyzer\sample\__pycache__\deembed.cpython-37.pyc, it is a binary file.
+snpanalyzer\sample\__pycache__\delay.cpython-36.pyc, it is a binary file.
+snpanalyzer\sample\__pycache__\delay.cpython-37.pyc, it is a binary file.
+snpanalyzer\sample\__pycache__\disturber.cpython-36.pyc, it is a binary file.
+snpanalyzer\sample\__pycache__\disturber.cpython-37.pyc, it is a binary file.
+snpanalyzer\sample\__pycache__\plug.cpython-36.pyc, it is a binary file.
+snpanalyzer\sample\__pycache__\plug.cpython-37.pyc, it is a binary file.
+snpanalyzer\sample\__pycache__\plugdelay.cpython-36.pyc, it is a binary file.
+snpanalyzer\sample\__pycache__\plugdelay.cpython-37.pyc, it is a binary file.
+snpanalyzer\sample\__pycache__\port.cpython-36.pyc, it is a binary file.
+snpanalyzer\sample\__pycache__\port.cpython-37.pyc, it is a binary file.
+snpanalyzer\sample\__pycache__\sample.cpython-36.pyc, it is a binary file.
+snpanalyzer\sample\__pycache__\sample.cpython-37.pyc, it is a binary file.
+snpanalyzer\sample\__pycache__\victim.cpython-36.pyc, it is a binary file.
+snpanalyzer\sample\__pycache__\victim.cpython-37.pyc, it is a binary file.
+snpanalyzer\sample\alien.py, code is 23, comment is 6, blank is 9.
+snpanalyzer\sample\cable.py, code is 54, comment is 3, blank is 8.
+snpanalyzer\sample\deembed.py, code is 71, comment is 0, blank is 10.
+snpanalyzer\sample\delay.py, code is 10, comment is 0, blank is 1.
+snpanalyzer\sample\disturber.py, code is 13, comment is 4, blank is 4.
+snpanalyzer\sample\plug.py, code is 34, comment is 2, blank is 7.
+snpanalyzer\sample\plugdelay.py, code is 43, comment is 1, blank is 4.
+snpanalyzer\sample\port.py, code is 227, comment is 24, blank is 79.
+snpanalyzer\sample\sample.py, code is 157, comment is 62, blank is 63.
+snpanalyzer\sample\test_alien.py, code is 4, comment is 0, blank is 1.
+snpanalyzer\sample\test_cable.py, code is 34, comment is 0, blank is 8.
+snpanalyzer\sample\test_deembed.py, code is 28, comment is 0, blank is 4.
+snpanalyzer\sample\test_delay.py, code is 10, comment is 0, blank is 2.
+snpanalyzer\sample\test_disturber.py, code is 18, comment is 0, blank is 6.
+snpanalyzer\sample\test_plug.py, code is 26, comment is 0, blank is 5.
+snpanalyzer\sample\test_plugdelay.py, code is 37, comment is 0, blank is 4.
+snpanalyzer\sample\test_port.py, code is 310, comment is 0, blank is 70.
+snpanalyzer\sample\test_sample.py, code is 38, comment is 5, blank is 11.
+snpanalyzer\sample\test_victim.py, code is 30, comment is 0, blank is 8.
+snpanalyzer\sample\victim.py, code is 89, comment is 5, blank is 18.
+snpanalyzer\template\__init__.py, code is 0, comment is 0, blank is 0.
+snpanalyzer\template\cnext.tex, code is 18, comment is 0, blank is 4.
+snpanalyzer\template\parameter.tex, code is 41, comment is 0, blank is 4.
+snpanalyzer\template\project.tex, code is 28, comment is 0, blank is 1.
+snpanalyzer\template\sample.tex, code is 27, comment is 0, blank is 12.
+snpanalyzer\vna.py, code is 148, comment is 39, blank is 36.
+snps\07-02.xlsx, it is a binary file.
+snps\1.bnap, it is a binary file.
+snps\777.xlsx, it is a binary file.
+snps\7777.xlsx, it is a binary file.
+snps\77777.xlsx, it is a binary file.
+snps\7879.xlsx, it is a binary file.
+snps\alien\AlienEnd1_2redo3 _3.s16p, code is 51540, comment is 0, blank is 0.
+snps\alien\AlienEnd1_2redo3 _4.s16p, code is 51540, comment is 0, blank is 0.
+snps\alien\AlienEnd1_2redo3.s16p, code is 51540, comment is 0, blank is 0.
+snps\alien\AlienEnd1_2redo3_2.s16p, code is 51540, comment is 0, blank is 0.
+snps\alien\alienExcel.xlsx, it is a binary file.
+snps\alien\alienProjectSaved\alienProjectSaved.xml, code is 1, comment is 0, blank is 0.
+snps\alien\alienProjectSaved\snps\AlienEnd1_2redo3 _3.s16p, code is 51540, comment is 0, blank is 0.
+snps\alien\alienProjectSaved\snps\AlienEnd1_2redo3 _4.s16p, code is 51540, comment is 0, blank is 0.
+snps\alien\alienProjectSaved\snps\AlienEnd1_2redo3.s16p, code is 51540, comment is 0, blank is 0.
+snps\alien\alienProjectSaved\snps\AlienEnd1_2redo3_2.s16p, code is 51540, comment is 0, blank is 0.
+snps\alien\alienProjectSaved\snps\Test_ALIEN_VICTIM_REDO_GOOD.s16p, code is 51540, comment is 0, blank is 0.
+snps\alien\Test_ALIEN_VICTIM_REDO_GOOD.s16p, code is 51540, comment is 0, blank is 0.
+snps\alien\testExcel.xlsx, it is a binary file.
+snps\cable\123.xlsx, it is a binary file.
+snps\cable\77777.xlsx, it is a binary file.
+snps\cable\cable1.s16p, code is 102740, comment is 0, blank is 0.
+snps\cable\cable2.s16p, code is 102740, comment is 0, blank is 0.
+snps\cable\cable3.s16p, code is 102740, comment is 0, blank is 0.
+snps\cable\cable4.s16p, code is 102740, comment is 0, blank is 0.
+snps\cable\cable5.s16p, code is 102740, comment is 0, blank is 0.
+snps\deembed\132123.xlsx, it is a binary file.
+snps\deembed\DirectFixOpen.s8p, code is 16076, comment is 0, blank is 0.
+snps\deembed\DirectFixPlug.s8p, code is 16076, comment is 0, blank is 0.
+snps\deembed\DirectFixPlugLoad2.s8p, code is 16076, comment is 0, blank is 0.
+snps\deembed\DirectFixPlugOpen.s8p, code is 16076, comment is 0, blank is 0.
+snps\deembed\DirectFixPlugShort.s8p, code is 16076, comment is 0, blank is 0.
+snps\deembed\DirectFixShort.s8p, code is 16076, comment is 0, blank is 0.
+snps\deembed\MatingPlugJackForward.s8p, code is 16076, comment is 0, blank is 0.
+snps\deembed\MatingPlugJackOpen.s8p, code is 16076, comment is 0, blank is 0.
+snps\deembed\MatingPlugJackShort.s8p, code is 16076, comment is 0, blank is 0.
+snps\deembed\MatingPlugJacktReverse.s8p, code is 16076, comment is 0, blank is 0.
+snps\deembed\plug.bnap, it is a binary file.
+snps\plug\111.xlsx, it is a binary file.
+snps\plug\plug1.s8p, code is 16076, comment is 0, blank is 0.
+snps\plug\plug2.s8p, code is 16076, comment is 0, blank is 0.
+snps\plug\plug3.s8p, code is 16076, comment is 0, blank is 0.
+snps\plug\plug4.s8p, code is 25692, comment is 0, blank is 0.
+snps\plug\plug5.s8p, code is 25692, comment is 0, blank is 0.
+snps\test_1_fev.xlsx, it is a binary file.
+snps\test_21_fev.xlsx, it is a binary file.
+snps\test_31_jav.xlsx, it is a binary file.
+snps\test_31_jav_aliebn.xlsx, it is a binary file.
+snps\testdelay.s8p, code is 16076, comment is 0, blank is 0.
+snps\TestDelay2.s8p, code is 16076, comment is 0, blank is 0.
+snps\TestDelay3.s8p, code is 16076, comment is 0, blank is 0.
+snps\TestDelay4.s8p, code is 16076, comment is 0, blank is 0.
+snps\TestPCLiam3.s8p, code is 32076, comment is 0, blank is 0.
+snps\TestPCLiam4.s8p, code is 16076, comment is 0, blank is 0.
+snps\testSave3\snps\TestDelay4.s8p, code is 16076, comment is 0, blank is 0.
+snps\testSave3\snps\TestPCLiam3.s8p, code is 32076, comment is 0, blank is 0.
+snps\testSave3\snps\TestPCLiam4.s8p, code is 16076, comment is 0, blank is 0.
+snps\testSave3\testSave3.xml, code is 1, comment is 0, blank is 0.
+snps\z\snps\MatingPlugJackForward.s8p, code is 16076, comment is 0, blank is 0.
+snps\z\snps\snps\DirectFixOpen.s8p, code is 16076, comment is 0, blank is 0.
+snps\z\snps\snps\DirectFixPlugLoad2.s8p, code is 16076, comment is 0, blank is 0.
+snps\z\snps\snps\DirectFixPlugOpen.s8p, code is 16076, comment is 0, blank is 0.
+snps\z\snps\snps\DirectFixPlugShort.s8p, code is 16076, comment is 0, blank is 0.
+snps\z\snps\snps\DirectFixShort.s8p, code is 16076, comment is 0, blank is 0.
+snps\z\snps\test11\test11.xml, code is 1, comment is 0, blank is 0.
+snps\z\snps\testPlugSave.xml, code is 1, comment is 0, blank is 0.
+snps\z\z.xml, code is 1, comment is 0, blank is 0.
+tempOPut\456.aux, code is 1, comment is 0, blank is 0.
+tempOPut\456.log, code is 399, comment is 0, blank is 32.
+tempOPut\456.pdf, code is 0, comment is 0, blank is 0.
+tempOPut\456.tex, code is 23, comment is 0, blank is 4.
+test_alien.py, code is 19, comment is 6, blank is 7.
+test_copile_conf.py, code is 152, comment is 6, blank is 8.
+test_excel.py, code is 32, comment is 1, blank is 13.
+test_jan_10_excel_1.xlsx, it is a binary file.
+test_jan_14_excel_1.xlsx, it is a binary file.
+test_jan_24_excel_1.xlsx, it is a binary file.
+test_jan_28_excel_1.xlsx, it is a binary file.
+test_jan_28_excel_1_dembed.xlsx, it is a binary file.
+test_jan_28_excel_1_plug.xlsx, it is a binary file.
+test_limit.py, code is 43, comment is 0, blank is 14.
+test_limitParser.py, code is 7, comment is 28, blank is 4.
+test_widget.py, code is 37, comment is 14, blank is 11.
+testAlien.xlsx, it is a binary file.
+testComm.py, code is 28, comment is 0, blank is 17.
+testCommSave\snps\testComm2.s8p, code is 17707, comment is 0, blank is 0.
+testCommSave\snps\TestComm3.s8p, code is 17707, comment is 0, blank is 0.
+testCommSave\snps\TestComm4.s8p, code is 17707, comment is 0, blank is 0.
+testCommSave\snps\TestComm5_10db.s8p, code is 17707, comment is 0, blank is 0.
+testCommSave\snps\testSegment.s8p, code is 16075, comment is 0, blank is 0.
+testCommSave\testCommSave.xml, code is 1, comment is 0, blank is 0.
+testDeembed2\snps\MatingPlugJackForward.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed2\snps\snps\DirectFixOpen.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed2\snps\snps\DirectFixPlugLoad2.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed2\snps\snps\DirectFixPlugOpen.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed2\snps\snps\DirectFixPlugShort.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed2\snps\snps\DirectFixShort.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed2\snps\test11\test11.xml, code is 1, comment is 0, blank is 0.
+testDeembed2\snps\testPlugSave.xml, code is 1, comment is 0, blank is 0.
+testDeembed2\testDeembed2.xml, code is 1, comment is 0, blank is 0.
+testDeembed3\snps\MatingPlugJackForward.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed3\snps\snps\DirectFixOpen.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed3\snps\snps\DirectFixPlugLoad2.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed3\snps\snps\DirectFixPlugOpen.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed3\snps\snps\DirectFixPlugShort.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed3\snps\snps\DirectFixShort.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed3\snps\test11\test11.xml, code is 1, comment is 0, blank is 0.
+testDeembed3\snps\testPlugSave.xml, code is 1, comment is 0, blank is 0.
+testDeembed3\testDeembed3.xml, code is 1, comment is 0, blank is 0.
+testDeembed4\snps\MatingPlugJackForward.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed4\snps\snps\DirectFixOpen.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed4\snps\snps\DirectFixPlugLoad2.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed4\snps\snps\DirectFixPlugOpen.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed4\snps\snps\DirectFixPlugShort.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed4\snps\snps\DirectFixShort.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed4\snps\test11\test11.xml, code is 1, comment is 0, blank is 0.
+testDeembed4\snps\testPlugSave.xml, code is 1, comment is 0, blank is 0.
+testDeembed4\testDeembed4.xml, code is 1, comment is 0, blank is 0.
+testDeembed6\123.xlsx, it is a binary file.
+testDeembed6\snps\MatingPlugJackForward.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed6\snps\snps\DirectFixOpen.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed6\snps\snps\DirectFixPlugLoad2.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed6\snps\snps\DirectFixPlugOpen.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed6\snps\snps\DirectFixPlugShort.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed6\snps\snps\DirectFixShort.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed6\snps\test11\test11.xml, code is 1, comment is 0, blank is 0.
+testDeembed6\snps\testPlugSave.xml, code is 1, comment is 0, blank is 0.
+testDeembed6\testDeembed6.xml, code is 1, comment is 0, blank is 0.
+testDeembed\snps\DirectFixOpen.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed\snps\DirectFixPlugLoad2.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed\snps\DirectFixPlugOpen.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed\snps\DirectFixPlugShort.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed\snps\DirectFixShort.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed\snps\MatingPlugJackForward.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed\snps\snps\DirectFixOpen.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed\snps\snps\DirectFixPlugLoad2.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed\snps\snps\DirectFixPlugOpen.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed\snps\snps\DirectFixPlugShort.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed\snps\snps\DirectFixShort.s8p, code is 16076, comment is 0, blank is 0.
+testDeembed\snps\test11\test11.xml, code is 1, comment is 0, blank is 0.
+testDeembed\snps\testDeembed.xml, code is 1, comment is 0, blank is 0.
+testDeembed\snps\testPlugSave.xml, code is 1, comment is 0, blank is 0.
+testExcelPlug.xlsx, it is a binary file.
+testNormalExcel.xlsx, it is a binary file.
+testNormalExcelWithLimit.xlsx, it is a binary file.
+testOtherProj\snps\plug4.s8p, code is 25692, comment is 0, blank is 0.
+testOtherProj\testOtherProj.xml, code is 1, comment is 0, blank is 0.
+testPlugSave\snps\DirectFixOpen.s8p, code is 16076, comment is 0, blank is 0.
+testPlugSave\snps\DirectFixPlugLoad2.s8p, code is 16076, comment is 0, blank is 0.
+testPlugSave\snps\DirectFixPlugOpen.s8p, code is 16076, comment is 0, blank is 0.
+testPlugSave\snps\DirectFixPlugShort.s8p, code is 16076, comment is 0, blank is 0.
+testPlugSave\snps\DirectFixShort.s8p, code is 16076, comment is 0, blank is 0.
+testPlugSave\test11\test11.xml, code is 1, comment is 0, blank is 0.
+testPlugSave\testPlugSave.xml, code is 1, comment is 0, blank is 0.
+testSave2\snps\TestDelay2.s8p, code is 16076, comment is 0, blank is 0.
+testSave2\snps\TestDelay3.s8p, code is 16076, comment is 0, blank is 0.
+testSave2\testSave2.xml, code is 1, comment is 0, blank is 0.
+testSaveMultiple2\snps\DirectFixOpen.s8p, code is 16076, comment is 0, blank is 0.
+testSaveMultiple2\snps\DirectFixPlugLoad2.s8p, code is 16076, comment is 0, blank is 0.
+testSaveMultiple2\snps\DirectFixPlugOpen.s8p, code is 16076, comment is 0, blank is 0.
+testSaveMultiple2\snps\DirectFixPlugShort.s8p, code is 16076, comment is 0, blank is 0.
+testSaveMultiple2\snps\DirectFixShort.s8p, code is 16076, comment is 0, blank is 0.
+testSaveMultiple2\snps\testdelay.s8p, code is 16076, comment is 0, blank is 0.
+testSaveMultiple2\testSaveMultiple2.xml, code is 1, comment is 0, blank is 0.
+testSaveMultiple3\snps\testdelay.s8p, code is 16076, comment is 0, blank is 0.
+testSaveMultiple3\snps\TestPCLiam3.s8p, code is 32076, comment is 0, blank is 0.
+testSaveMultiple3\testSaveMultiple3.xml, code is 1, comment is 0, blank is 0.
+testSeg.xlsx, it is a binary file.
+testSeg2.xlsx, it is a binary file.
+testSeg3.xlsx, it is a binary file.
+TestSeg4.xlsx, it is a binary file.
+TestSeg5.xlsx, it is a binary file.
+TestSeg6.xlsx, it is a binary file.
+testSeg7.xlsx, it is a binary file.
+~$output2.xlsx, it is a binary file.
+===============================================================================

@@ -101,6 +101,7 @@ class EmbedWidget(TabWidget, embed_widget_ui.Ui_Form):
                 cases = sample.getParameters()[ParameterType.CASE]
             else:
                 cases = sample.getParameters()[ParameterType.RCASE]
+            print(cases)
             for serie in cases.getDataSeries():
                 if sample.getStandard():
                     limit = sample.getStandard().limits["NEXT"]

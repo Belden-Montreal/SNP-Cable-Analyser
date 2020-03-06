@@ -15,11 +15,14 @@ class ParameterWidget(TabWidget, parameter_widget_ui.Ui_ParameterWidget):
         self.paramLabel.setText(paramName)
         self.paramName = paramName
         self.parameter = parameter
+        print("Setting up Param Tab : ", parameter)
+
         self.hasPassed = True
         worstVal, worstMarg = parameter.getWorstValue(), parameter.getWorstMargin()
         self.marginListWidget.currentItemChanged.connect(lambda current: self.pairSelected(current, valueType.MARGIN))
         self.worstListWidget.currentItemChanged.connect(lambda current: self.pairSelected(current, valueType.VALUE))
         self.setPairsList()
+        
         #self.analysis = analysis
         #self.graphicsView = Canvas(None)#analysis.getFigure())
         #self.verticalLayout.insertWidget(0, self.graphicsView)
@@ -70,13 +73,15 @@ class ParameterWidget(TabWidget, parameter_widget_ui.Ui_ParameterWidget):
             return 
         
     def setGraphic(self, analysis):
-        print("Set Graphic")
+        print("Doing ",analysis._parameter.getName())
+
+        '''print("Set Graphic")
         try:
             self.canvasLayout.itemAt(0).widget().remove()
             self.canvasLayout.itemAt(1).widget().deleteLater()
 
         except Exception as e:
-            print(e)
+            print(e)'''
             
         self.analysis = analysis
         self.graphicsView = Canvas(analysis.getFigure())
@@ -84,8 +89,7 @@ class ParameterWidget(TabWidget, parameter_widget_ui.Ui_ParameterWidget):
         self.navBar = NavigationToolbar(self.graphicsView, self.analysis, self)
         self.canvasLayout.insertWidget(1, self.navBar)
         print("Set Graphic Done")
-
-            
+  
 class PairItem(QtWidgets.QListWidgetItem):
     def __init__(self, text, number, parent = None, type = QtWidgets.QListWidgetItem.Type):
         super(PairItem, self).__init__(text, parent, type)
