@@ -22,7 +22,7 @@ class ParameterAnalysis(FigureAnalysis):
 
         # show the selected series
         for serie in series:
-            print(serie)
+            #print(serie)
             self.addSerie(serie)
 
         # add the limit if it exists

@@ -126,7 +126,19 @@ class VNA(QtCore.QObject):
             print(self.session.query(";*OPC?"))
             #rm.list_resources()
             
-            return (r"Y:/{}.s{}p".format(name, str(int(ports))))
+
+
+            print(":MMEM:TRAN? '{}.s{}p'".format(name, str(int(ports))))
+            snp_raw = self.session.query(":MMEM:TRAN? 'Y:/{}.s{}p'".format(name, str(int(ports))))
+            snp_file = snp_raw[snp_raw.find("!"):]
+            
+            f= open("temp/{}.s{}p".format(name, str(int(ports))),"w+")
+            f.write(snp_file)
+            f.close()
+            print("lenght : ",len(snp_file))
+            
+            
+            return (r"temp/{}.s{}p".format(name, str(int(ports))))
             
         except VisaError as ex:
             print(ex)
