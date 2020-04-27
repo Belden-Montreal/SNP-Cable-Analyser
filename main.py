@@ -5,7 +5,7 @@ import shutil
 import sys
 from time import sleep
 
-import dateutil
+#import dateutil
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QMessageBox
 from snpanalyzer.gui.ui import MW
@@ -109,11 +109,11 @@ class Main:
 
             projType, tab = list(self.activeNode.getWidgets(self._vnaManager).items())[0]
 
-            if projType is "Alien":
+            if projType == "Alien":
                 self.activeNode.getWidgets(self._vnaManager)["Alien"].updateWidget()
-            if projType is "Embedding":
+            if projType == "Embedding":
                 self.activeNode.getWidgets(self._vnaManager)["Embedding"].updateWidget()
-            if projType is "Plug":
+            if projType == "Plug":
                 self.activeNode.getWidgets(self._vnaManager)["Plug"].updateWidget()
         except:
             pass
@@ -370,9 +370,9 @@ class Main:
             self._mainWindow.actionImport_SnP.setDisabled(False)
             try:
                 projType, tab = list(node.getWidgets(self._vnaManager).items())[0]
-                if projType is "Alien":
+                if projType == "Alien":
                     node.getWidgets(self._vnaManager)["Alien"].updateWidget()
-                if projType is "Embedding":
+                if projType == "Embedding":
                     node.getWidgets(self._vnaManager)["Embedding"].updateWidget()
             except:
                 pass

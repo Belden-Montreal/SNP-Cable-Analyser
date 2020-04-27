@@ -67,7 +67,7 @@ class SaveManager(object):
                     else:
                         disturber = True
                     for s in sample:
-                        project.importSamples(fileNames = [os.path.normpath(s["file_name"])],
+                        project.importSamples(fileNames = [os.path.normpath(os.path.join(snpsPath, s["file_name"]))],
                                               end = s["@end"],
                                               param = s["@powerSum"],
                                               disturber=disturber)
@@ -76,11 +76,11 @@ class SaveManager(object):
                 project = Plug(projName)
                 #project.setConstants(k1, k2, k3)
                 print("DFOPEN FILE ", savedProj["Plug"]["dfOpen"])
-                project.importDfOpen(os.path.normpath(savedProj["Plug"]["dfOpen"]))
-                project.importDfShort(os.path.normpath(savedProj["Plug"]["dfShort"]))
-                project.importOpen(os.path.normpath(savedProj["Plug"]["openSample"]))
-                project.importShort(os.path.normpath(savedProj["Plug"]["shortSample"]))
-                project.importLoad(os.path.normpath(savedProj["Plug"]["loadSample"]))
+                project.importDfOpen(os.path.normpath(os.path.join(snpsPath,savedProj["Plug"]["dfOpen"])))
+                project.importDfShort(os.path.normpath(os.path.join(snpsPath,savedProj["Plug"]["dfShort"])))
+                project.importOpen(os.path.normpath(os.path.join(snpsPath,savedProj["Plug"]["openSample"])))
+                project.importShort(os.path.normpath(os.path.join(snpsPath,savedProj["Plug"]["shortSample"])))
+                project.importLoad(os.path.normpath(os.path.join(snpsPath,savedProj["Plug"]["loadSample"])))
                 k1 = savedProj["Plug"]["k1"]
                 k2 = savedProj["Plug"]["k2"]
                 k3 = savedProj["Plug"]["k3"]
@@ -93,24 +93,24 @@ class SaveManager(object):
                 print(savedProj)
                 #load plug file
                 try:
-                    project.importPlug(os.path.normpath(savedProj["Plug"]["file_name"]))
+                    project.importPlug(os.path.normpath(os.path.join(snpsPath,savedProj["Plug"]["file_name"])))
                 except:
                     pass
                 try:
-                    project.importLoad(os.path.normpath(savedProj["Load_Forward"]["file_name"]),side = "Forward")
+                    project.importLoad(os.path.normpath(os.path.join(snpsPath,savedProj["Load_Forward"]["file_name"])),side = "Forward")
                 except Exception as e:
                     print(e)
                 try:
-                    project.importOpen(os.path.normpath(savedProj["Open"]["file_name"]))
+                    project.importOpen(os.path.normpath(os.path.join(snpsPath,savedProj["Open"]["file_name"])))
                 except:
                     pass
                 try:
-                    project.importShort(os.path.normpath(savedProj["Short"]["file_name"]))
+                    project.importShort(os.path.normpath(os.path.join(snpsPath,savedProj["Short"]["file_name"])))
                 except:
                     pass
                 try:
                     print(savedProj["Load_Reverse"])
-                    project.importLoad(os.path.normpath(savedProj["Load_Reverse"]["file_name"]),side = "Reverse")
+                    project.importLoad(os.path.normpath(os.path.join(snpsPath,savedProj["Load_Reverse"]["file_name"])),side = "Reverse")
                 except Exception as e:
                     print(e)
         return project
