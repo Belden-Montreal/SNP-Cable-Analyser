@@ -19,3 +19,6 @@ dist/*
 
 # allow PDF in document directory
 !doc/*.pdf
+
+# VSCode
+.vscode
