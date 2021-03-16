@@ -4,6 +4,7 @@ from os import getcwd, chdir
 from subprocess import call
 from shutil import copyfile
 from pathlib import Path, PureWindowsPath
+#from PyQt5 import QtWidgets, QtCore
 
 
 def normalize(name):
@@ -13,7 +14,7 @@ def normalize(name):
 def latex(name):
     return name.replace('_', '\\_')
 
-class DocumentObject(object):
+class DocumentObject(QtWidgets.QDialog):
     def __init__(self, root, prefix, configuration):
         # save the export configuration
         self._configuration = configuration
@@ -138,8 +139,11 @@ class DocumentObject(object):
 
         # move the file if specified
         document = self.getRoot().joinpath(self.getBasename()+".pdf")
-        if filename is not None:
-            copyfile(document, filename)
+        try:
+            if filename is not None:
+                copyfile(document, filename)
+        except Exception as e:
+            print(e)
 
 
         
