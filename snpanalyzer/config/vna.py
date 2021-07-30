@@ -30,7 +30,7 @@ class VNAConfiguration(JSONConfiguration):
                                     
 
     def setAddress(self, address):
-        self.__address = address2
+        self.__address = address
 
     def getAddress(self):
         """
