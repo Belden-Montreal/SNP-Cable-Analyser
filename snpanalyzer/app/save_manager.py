@@ -57,7 +57,9 @@ class SaveManager(object):
                         standard = sample["standard"].split("|")
                         #print(os.path.normpath(sample["file_name"]))
                         samples = project.importSamples([os.path.normpath(os.path.join(snpsPath, sample["file_name"]))])
-                        project.samplesList[-1].setStandard(root.getChildByName(standard).standard)
+                        print("Standard ", standard[0])
+                        if "None"  not in standard[0]  :
+                            project.samplesList[-1].setStandard(root.getChildByName(standard).standard)
             
             if projType == "Alien":
                 project = Alien(projName)

@@ -4,7 +4,7 @@ from os import getcwd, chdir
 from subprocess import call
 from shutil import copyfile
 from pathlib import Path, PureWindowsPath
-#from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets, QtCore
 
 
 def normalize(name):
