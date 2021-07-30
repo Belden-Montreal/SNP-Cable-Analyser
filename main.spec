@@ -3,12 +3,12 @@
 block_cipher = None
 
 added_files = [
-        ('C:/Users/cedryk/AppData/Local/Programs/Python/Python37/Lib/site-packages/skrf/data/*.s*p', 'skrf/data/'),
-        ('C:/Users/cedryk/Documents/SNP-Cable-Analyser/limits/limits.xml', 'limits/'),
+        ('C:/Users/liama/AppData/Local/Programs/Python/Python39/Lib/site-packages/skrf/data/*.s*p', 'skrf/data/'),
+        ('C:/Users/liama/Documents/Belden_Workspace/SNP-Cable-Analyser/limits/limits.xml', 'limits/'),
 ]
 
 a = Analysis(['main.py'],
-             pathex=['C:\\Users\\cedryk\\Documents\\SNP-Cable-Analyser'],
+             pathex=['C:\\Users\\liama\\Documents\\Belden_Workspace\\SNP-Cable-Analyser'],
              binaries=[],
              datas=added_files,
              hiddenimports=["skrf", "matplotlib.backends.backend_tkagg"],
