@@ -27,9 +27,10 @@ class VNAConfiguration(JSONConfiguration):
         self.__noConfig     = True #When set to true, the program only launches an aquisition,
                                     #but doesnt specify any of the parameters. This allows the user
                                     #to specify more complex parameters from the machine interface
+                                    
 
     def setAddress(self, address):
-        self.__address = address
+        self.__address = address2
 
     def getAddress(self):
         """

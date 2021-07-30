@@ -199,7 +199,7 @@ class FigureAnalysis(Analysis):
         # update the format
         self._format = pformat
 
-        # replace all lines in the figure
+        # replace all lines in the figure2
         for identifier in list(self._lines):
             self._removeLine(identifier)
             self._addLine(identifier)
