@@ -17,6 +17,8 @@ class Sample(SNPManipulations):
         self.rs.__init__(self.snpFile)
         #self.renumber(renumFrom, renumTo)
         #self.portNumbering = toPort
+        self.s2mm()
+
         self.portNumbering = []
         if (fromPort is None and toPort is None):
             for port in range(0, self.num_ports):
@@ -29,7 +31,6 @@ class Sample(SNPManipulations):
                 self.portNumbering = fromPort
                 raise "Error:No Good"
 
-        self.s2mm()
         print("Converted")
         self.port_name = {0:"12", 1:"36", 2:"45", 3:"78"}
 

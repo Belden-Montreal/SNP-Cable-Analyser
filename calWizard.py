@@ -94,7 +94,6 @@ To begin calibration, click Next''')
         print("Intro")
 
         return page
- 
 
     def Open(self):
         page = QtWidgets.QWizardPage()
@@ -108,7 +107,6 @@ Press Next once you've done so''')
         layout = QtWidgets.QVBoxLayout()
         layout.addWidget(self.label)
         layout.addWidget(self.openButton)
-        
 
         page.setLayout(layout)
 

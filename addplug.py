@@ -1,9 +1,11 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
 import sys
 import scipy
-import plugDialog
-import VNA_addr_dialog
-import TestParameters
+
+from UI import plugDialog
+from UI import VNA_addr_dialog
+from UI import TestParameters
+
 from Communication import Communication
 import matplotlib.figure
 import matplotlib.backends.backend_qt5
@@ -13,7 +15,7 @@ from matplotlib.pyplot import cm
 
 import numpy as np
 
-from embedding2 import Embedding
+from embedding import Embedding
 
 
 class AddPlug(QtWidgets.QMainWindow, plugDialog.Ui_Dialog, QtWidgets.QAction, QtWidgets.QFileDialog, QtWidgets.QListView, QtWidgets.QDialog, QtCore.Qt):

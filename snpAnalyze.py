@@ -573,6 +573,7 @@ class SNPManipulations(rf):
         self.se2gmm(p = int(self.num_ports/2))    
         self.mm = self.s #mixed mode
         halfWay = int(self.getNumPorts(self.mm)/2)
+        print("NUM PORTS :", self.getNumPorts(self.mm) )
         self.dd = self.mm[:,:halfWay,:halfWay]  #diff-diff
         self.dc = self.mm[:,:halfWay,halfWay:]  #diff-comm
         self.cd = self.mm[:,halfWay:,:halfWay]  #comm-diff
@@ -633,7 +634,7 @@ if __name__ == "__main__":
 
     vna_out.getRL(vna_out.dd, z=True)
 
-    print("Before ",vna_out.RL_dict["12"][0])
+    '''print("Before ",vna_out.RL_dict["12"][0])
     
     vna_out.renumber([0,2,5,4,3,1,6,7], [0,1,2,3,4,5,6,7])
     vna_out.s2mm()
@@ -645,7 +646,7 @@ if __name__ == "__main__":
         
     vna_out.getRL(vna_out.dd, z=True)
 
-    print("After ",vna_out.RL_dict["12"][0])
+    print("After ",vna_out.RL_dict["12"][0])'''
     #print(vna_out.RL_dict["12"][0].real)
     #print(vna_out.RL_dict["12"][0].imag)
 

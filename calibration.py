@@ -35,15 +35,11 @@ class Calibration(object):
         #print "done step1"
 
         for i in range(1, self.numPorts+1):
-            self.session.write("SENS:CORR:COLL:GUID:CKIT:PORT{} \'Direct_Fixture\'".format(i))
-        #print "done step2"
-            
+            self.session.write("SENS:CORR:COLL:GUID:CKIT:PORT{} \'Direct_Fixture\'".format(i))           
 
         self.session.write("SENS:CORR:COLL:GUID:INIT")
-        #print "done step3"
 
         self.session.write("SENS:CORR:COLL:GUID:THRU:PORT {}".format(pairString))
-        #print "done step4"
 
         self.session.write("SENS:CORR:COLL:GUID:INIT")
         print("initialized")
@@ -57,9 +53,6 @@ class Calibration(object):
     def getInstructions(self):
         self.instructionList = []
         numSteps = self.session.query("sens:corr:coll:guid:steps?")
-        #print "steps aquired"
-
-        #print numSteps + "steps"
         
         for i in range(1, int(numSteps)+1):
             self.instructionList.append(self.session.query("SENS:CORR:COLL:GUID:DESC? {}".format(i)))

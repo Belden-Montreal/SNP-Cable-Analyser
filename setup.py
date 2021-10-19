@@ -5,8 +5,8 @@ os.environ['TK_LIBRARY'] = r'C:\Users\LXF09011\AppData\Local\Programs\Python\Pyt
 additional_mods = ['numpy.core._methods', 'numpy.lib.format', 'matplotlib', "tkinter", "scipy.spatial.ckdtree", "visa", "pyvisa"]
 
 
-setup(name = "Belden SNP Analyzer 2" ,
-      version = "0.1" ,
+setup(name = "Belden SNP Analyzer" ,
+      version = "2" ,
       description = "" ,
       
       options = {'build_exe': {"packages":['pkg_resources._vendor', "skrf", "tkinter","numpy", "scipy", "matplotlib", "visa", "pyvisa"],

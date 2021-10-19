@@ -1,4 +1,4 @@
-from embedding2 import Embedding
+from embedding import Embedding
 import re
 
 class embeddingProject(Embedding):

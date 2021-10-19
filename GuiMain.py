@@ -1,10 +1,17 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
 import sys
 import scipy
-import MW4
-import VNA_addr_dialog
+
+from UI import MainWindow
+from UI import VNA_addr_dialog
+from UI import TestParameters
+from UI import MainWidget
+from UI import alienWidget
+from UI import embedWidget
+
+
 from limits.LimitDialog import LimitDialog
-import TestParameters
+
 from Communication import Communication
 import matplotlib.figure
 import matplotlib.backends.backend_qt5
@@ -12,7 +19,6 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.pyplot import cm
 from ParameterWidget import ParameterWidget
-import MainWidget
 import os
 
 import time
@@ -22,8 +28,7 @@ import random
 import pylab
 from skrf import Network as rf
 
-import alienWidget
-import embedWidget
+
 
 from snpAnalyze import SNPManipulations
 import os
@@ -53,7 +58,7 @@ from tabThread import TabThread
 
 from multiprocessing.dummy import Pool as ThreadPool
 
-class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, QtWidgets.QFileDialog, QtWidgets.QListView, QtWidgets.QDialog, QtCore.Qt):
+class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QAction, QtWidgets.QFileDialog, QtWidgets.QListView, QtWidgets.QDialog, QtCore.Qt):
 
     '''
     This class handles all of the user sent commands from the GUI.   
@@ -103,7 +108,6 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
     def importSnp(self):
         #Whenever the user clicks on the import SNP button, it opens a file dialog
         self.openFileNamesDialog()
-
 
     def addEmbed(self):
         testName, result = QtWidgets.QInputDialog.getText(self, "Add an Embedded Sample",
@@ -1036,7 +1040,6 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
                 #worstValue = sample.getWorstValue(self.activeParameter)
                 #print(worstValue)
 
-                
         else:
             self.plot(None, None)
 
@@ -1146,6 +1149,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MW4.Ui_MainWindow, QtWidgets.QAction, 
 
                     except Exception as e:
                         pass
+
             except Exception as e:
                 print("Cancel")
 
@@ -1177,11 +1181,11 @@ class Addr_Dialog:
                 return 0
             return addr
 
-import Port_Renumber
+from UI import port_renumber
 class Port_Renumbering:
     def getPortNumbering(self, fromPort):
         dialog = QtWidgets.QDialog()
-        pr = Port_Renumber.Ui_Dialog()
+        pr = port_renumber.Ui_Dialog()
         pr.setupUi(dialog)
         result = dialog.exec_()
         _from = None

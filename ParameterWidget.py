@@ -1,5 +1,5 @@
 from PyQt5 import QtWidgets
-import Parameter_Widget
+from UI import ParameterWidget as PW
 class valueType():
     MARGIN = 0
     VALUE = 1
@@ -7,7 +7,7 @@ class valueType():
 class ParameterWidget():
     def __init__(self, param, sample, values):
         self.widget  = QtWidgets.QWidget()
-        self.paramWidget = Parameter_Widget.Ui_ParameterWidget()
+        self.paramWidget = PW.Ui_ParameterWidget()
         self.paramWidget.setupUi(self.widget)
         self.paramWidget.paramLabel.setText(param)
         self.param = param
@@ -29,9 +29,6 @@ class ParameterWidget():
             self.worstValue = None
             self.paramWidget.passLabel.setText("Fail")
             self.hasPassed = False
-
-
-
 
     def setPairsList(self):
         try:

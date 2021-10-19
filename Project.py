@@ -1,7 +1,6 @@
 from Sample import Sample
 from alien import Alien
-
-from embedding2 import Embedding
+from embedding import Embedding
 
 import threading
 from PyQt5 import QtWidgets, QtGui
@@ -28,8 +27,7 @@ class Project: #Put (object) later
 
         threads = []
         num_meas = len(self.measurements)
-    
- 
+     
         for idx, sample in enumerate(samples):
             self.measurements.append(Sample(sample))
             #self.measurements[idx].getParameters()
