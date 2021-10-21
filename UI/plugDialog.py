@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'plugDialog.ui'
+# Form implementation generated from reading ui file 'UI/plugDialog.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
 #

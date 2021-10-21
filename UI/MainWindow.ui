@@ -364,8 +364,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="H:/images.qrc">
-     <normaloff>:/Pictures/Icons/ImportFIle2.png</normaloff>:/Pictures/Icons/ImportFIle2.png</iconset>
+    <iconset resource="../Pictures/images.qrc">
+     <normaloff>:/ImportFIle2.png</normaloff>:/ImportFIle2.png</iconset>
    </property>
    <property name="text">
     <string>Import Snp</string>
@@ -379,8 +379,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="H:/images.qrc">
-     <normaloff>:/Pictures/Icons/newProject.png</normaloff>:/Pictures/Icons/newProject.png</iconset>
+    <iconset resource="../Pictures/images.qrc">
+     <normaloff>:/newProject.png</normaloff>:/newProject.png</iconset>
    </property>
    <property name="text">
     <string>New Project</string>
@@ -431,10 +431,10 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="H:/images.qrc">
-     <normaloff>:/Pictures/Icons/Run.png</normaloff>
-     <disabledoff>:/Pictures/Icons/Run_disabled.png</disabledoff>
-     <disabledon>:/Pictures/Icons/Run_disabled.png</disabledon>:/Pictures/Icons/Run.png</iconset>
+    <iconset resource="../Pictures/images.qrc">
+     <normaloff>:/Run.png</normaloff>
+     <disabledoff>:/Run_disabled.png</disabledoff>
+     <disabledon>:/Run_disabled.png</disabledon>:/Run.png</iconset>
    </property>
    <property name="text">
     <string>Run</string>
@@ -445,10 +445,10 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="H:/images.qrc">
-     <normaloff>:/Pictures/Icons/calibrate.png</normaloff>
-     <disabledoff>:/Pictures/Icons/calibrate_disabled.png</disabledoff>
-     <disabledon>:/Pictures/Icons/calibrate_disabled.png</disabledon>:/Pictures/Icons/calibrate.png</iconset>
+    <iconset resource="../Pictures/images.qrc">
+     <normaloff>:/calibrate.png</normaloff>
+     <disabledoff>:/calibrate_disabled.png</disabledoff>
+     <disabledon>:/calibrate_disabled.png</disabledon>:/calibrate.png</iconset>
    </property>
    <property name="text">
     <string>Calibrate</string>
@@ -456,8 +456,8 @@
   </action>
   <action name="actionAlien">
    <property name="icon">
-    <iconset resource="H:/images.qrc">
-     <normaloff>:/Pictures/Icons/alien.png</normaloff>:/Pictures/Icons/alien.png</iconset>
+    <iconset resource="../Pictures/images.qrc">
+     <normaloff>:/alien.png</normaloff>:/alien.png</iconset>
    </property>
    <property name="text">
     <string>Alien</string>
@@ -468,8 +468,8 @@
   </action>
   <action name="actionDeembed">
    <property name="icon">
-    <iconset resource="H:/images.qrc">
-     <normaloff>:/Pictures/Icons/deembed.png</normaloff>:/Pictures/Icons/deembed.png</iconset>
+    <iconset resource="../Pictures/images.qrc">
+     <normaloff>:/deembed.png</normaloff>:/deembed.png</iconset>
    </property>
    <property name="text">
     <string>Deembed</string>
@@ -487,7 +487,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="H:/images.qrc"/>
+  <include location="../Pictures/images.qrc"/>
  </resources>
  <connections>
   <connection>
