@@ -4,10 +4,11 @@ import scipy
 
 from UI import MainWindow
 from UI import VNA_addr_dialog
-from UI import TestParameters
 from UI import MainWidget
-from UI import alienWidget
-from UI import embedWidget
+
+from widgets.ParameterWidget import ParameterWidget
+from widgets.EmbeddingWidget import EmbeddingWidget
+from widgets.AlienWidget import AlienWidget
 
 
 from limits.LimitDialog import LimitDialog
@@ -18,7 +19,6 @@ import matplotlib.backends.backend_qt5
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.pyplot import cm
-from ParameterWidget import ParameterWidget
 import os
 
 import time
@@ -50,7 +50,6 @@ from calWizard import CalWizard
 
 from decimal import Decimal
 
-import addplug
 
 import matplotlib.ticker
 
@@ -104,6 +103,8 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
             self.Project.importSNP(arguments)
             self.displaySamplesInTable()
             
+        self.comm = Communication()
+
 
     def importSnp(self):
         #Whenever the user clicks on the import SNP button, it opens a file dialog
@@ -163,8 +164,8 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
                 self.setupAlien()
 
             elif self.Project.getSampleByName(self.selected[0]).__retr__() == "Embed":
+                #EmbeddingWidget(self.param_tabs,  sample = self.Project.getSampleByName(self.selected[0]))
                 self.setupEmbed()
-
             else:
                 self.displaySampleParams(self.selected)            
 
@@ -186,7 +187,6 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
 
             elif self.Project.getSampleByName(self.selected[0]).__retr__() == "Embed":
                 self.setupEmbed()
-
             else:
                 self.displaySampleParams(self.selected)
         
@@ -206,511 +206,17 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
                 pass
         self.sampleTable.resizeColumnsToContents()
 
-        
+    
     def setupEmbed(self):
-        print("Embedding Sample Added")
         self.param_tabs.clear()
-
-        self.embeddingTab = QtWidgets.QWidget()
-        self.TPNextPhaseTab = QtWidgets.QWidget()
-
-        self.embedWidget = embedWidget.Ui_Form()
-        #self.param_tabs.addTab(self.TPNextPhaseTab, "TP NEXT phase")        
-
-        self.embedWidget.setupUi(self.embeddingTab)
-
-        self.embedWidget.embedCat6.setChecked(True)
-
-        self.embedWidget.importOpen.clicked.connect(self.importOpen)
-        self.embedWidget.importShort.clicked.connect(self.importShort)
-        self.embedWidget.importLoad.clicked.connect(self.importLoad)
-
-        self.embedWidget.acquireOpen.clicked.connect(self.acquireOpen)
-        self.embedWidget.acquireShort.clicked.connect(self.acquireShort)
-        self.embedWidget.acquireLoad.clicked.connect(self.acquireLoad)
-
-        self.embedWidget.reembedButton.clicked.connect(self.reembed)
-
-        self.embedWidget.addPlug.clicked.connect(self.addPlugDialog)
-
-        
-        self.embedWidget.plugList.currentIndexChanged.connect(self.embedUpdatePlugDNEXT)
-        
-        self.embedWidget.reverseCheckBox.toggled.connect(self.embedUpdateTab)
-       
-        self.embedUpdateTab()
-
-    def embedUpdatePlugDNEXT(self):
-        embeddedSample = self.Project.getSampleByName(self.selected[0])
-
-        plugIndex = self.embedWidget.plugList.currentIndex()
-        plug = embeddedSample.getPlugList()[plugIndex]
-        plugFile = plug + ".xml"
-
-        embeddedSample.getPlugParams(plugFile)
-        print(embeddedSample.plugNextDelay)
-        '''self.embedWidget.dnext12_36.setText(str(embeddedSample.plugNextDelay["12-36"]))
-        self.embedWidget.dnext45_12.setText(str(embeddedSample.plugNextDelay["45-12"]))
-        self.embedWidget.dnext12_78.setText(str(embeddedSample.plugNextDelay["12-78"]))
-        self.embedWidget.dnext45_36.setText(str(embeddedSample.plugNextDelay["45-36"]))
-        self.embedWidget.dnext36_78.setText(str(embeddedSample.plugNextDelay["36-78"]))
-        self.embedWidget.dnext45_78.setText(str(embeddedSample.plugNextDelay["45-78"]))'''
-        
-    def importOpen(self):
-        embeddedSample = self.Project.getSampleByName(self.selected[0])
-        embeddedSample.embeddedOpen = self.embedImportSNP()
-        self.embedUpdateTab()
-
-    def importShort(self):
-        embeddedSample = self.Project.getSampleByName(self.selected[0])
-        embeddedSample.embeddedShort = self.embedImportSNP()
-        self.embedUpdateTab()
-        
-    def importLoad(self):
-        embeddedSample = self.Project.getSampleByName(self.selected[0])
-        embeddedSample.embeddedLoad = self.embedImportSNP()
-        self.embedUpdateTab()
-
-
-    def acquireOpen(self):
-        try:
-            embeddedSample = self.Project.getSampleByName(self.selected[0])
-            embeddedSample.embeddedOpen = self.simpleAquire()
-        except Exception:
-            msg = QtWidgets.QMessageBox()
-            msg.setIcon(QtWidgets.QMessageBox.Information)
-            msg.setText("Please Connect to VNA ")
-            msg.setWindowTitle("Warning")
-            msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
-            msg.setFixedSize(msg.sizeHint())
-            msg.exec_()
-        self.embedUpdateTab()
-
-    def acquireShort(self):
-        try:
-            embeddedSample = self.Project.getSampleByName(self.selected[0])
-            embeddedSample.embeddedShort = self.simpleAquire()
-        except Exception:
-            msg = QtWidgets.QMessageBox()
-            msg.setIcon(QtWidgets.QMessageBox.Information)
-            msg.setText("Please Connect to VNA ")
-            msg.setWindowTitle("Warning")
-            msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
-            msg.setFixedSize(msg.sizeHint())
-            msg.exec_()
-        self.embedUpdateTab()
-        
-    def acquireLoad(self):
-        try:    
-            embeddedSample = self.Project.getSampleByName(self.selected[0])
-            embeddedSample.embeddedLoad = self.simpleAquire()
-            self.embedUpdateTab()
-
-        except Exception:
-            msg = QtWidgets.QMessageBox()
-            msg.setIcon(QtWidgets.QMessageBox.Information)
-            msg.setText("Please Connect to VNA ")
-            msg.setWindowTitle("Warning")
-            msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
-            msg.setFixedSize(msg.sizeHint())
-            msg.exec_()
-        
-    def reembed(self):
-        embeddedSample = self.Project.getSampleByName(self.selected[0])
-        plugIndex = self.embedWidget.plugList.currentIndex()
-        plug = embeddedSample.getPlugList()[plugIndex]
-        plugFile = plug + ".xml"
-
-        embeddedSample.getPlugParams(plugFile)
-
-        embeddedSample.k1 = self.embedWidget.SJ_124578_LineEdit.text()
-        embeddedSample.k2 = self.embedWidget.sJ36LineEdit.text()
-        embeddedSample.k3 = self.embedWidget.thruCalibLineEdit.text()
-
-        print(embeddedSample.k1)
-
-        if self.embedtestType == "Reverse":
-            print(embeddedSample.embeddedOpen)
-            if embeddedSample.embeddedOpen.isspace() or embeddedSample.embeddedShort.isspace() or embeddedSample.embeddedLoad.isspace():
-                msg = QtWidgets.QMessageBox()
-                msg.setIcon(QtWidgets.QMessageBox.Warning)
-                msg.setText("Make sure that you have selected an open, short and load sample")
-                msg.setWindowTitle("Reverse file missing")
-                msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
-                msg.setFixedSize(msg.sizeHint())
-                msg.exec_()                
-            else:
-                embeddedSample.getJackVectorReverse(embeddedSample.embeddedOpen, embeddedSample.embeddedShort, embeddedSample.embeddedLoad)
-                embeddedSample.reembed()
-                self.embedUpdateTab()
-
-        else:
-            if embeddedSample.embeddedLoad.isspace():
-                msg = QtWidgets.QMessageBox()
-                msg.setIcon(QtWidgets.QMessageBox.Warning)
-                msg.setText("Make sure that you have selected a load sample")
-                msg.setWindowTitle("Forward file missing")
-                msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
-                msg.setFixedSize(msg.sizeHint())
-                msg.exec_()
-            else:
-                embeddedSample.getJackVector(embeddedSample.embeddedLoad)
-                embeddedSample.reembed()
-                self.embedUpdateTab()
-       
-
-    def embedImportSNP(self):
-        
-        options = self.Options()
-        options |= self.DontUseNativeDialog
-        file, _ = self.getOpenFileName(self, "QFileDialog.getOpenFileNames()", "","sNp Files (*.s*p)", options=options)
-        #print files
-        if file:
-            return file
-
-    def embedUpdateTab(self):
-        embeddedSample = self.Project.getSampleByName(self.selected[0])
-
-        plugIndex = self.embedWidget.plugList.currentIndex()
-        plug = embeddedSample.getPlugList()[plugIndex]
-        plugFile = plug + ".xml"
-
-        embeddedSample.getPlugParams(plugFile)
-
-        self.embedWidget.openFileName.setText(embeddedSample.embeddedOpen)
-        self.embedWidget.shortFileName.setText(embeddedSample.embeddedShort)
-        self.embedWidget.loadFileName.setText(embeddedSample.embeddedLoad)
-
-        font = QtGui.QFont()
-        font.setPointSize(7)
-        self.embedWidget.openFileName.setFont(font)
-        self.embedWidget.shortFileName.setFont(font)
-        self.embedWidget.loadFileName.setFont(font)
-
-        plugs = embeddedSample.getPlugList()
-        
-        self.embedWidget.plugList.clear()
-
-        self.embedWidget.plugList.addItems(plugs)
-
-        self.param_tabs.clear()
-
-        self.param_tabs.addTab(self.embeddingTab, "Embedding Main")
-
-        embededParams = embeddedSample.getParameters()
-        print(embededParams)
-
-        if bool(embeddedSample.reembeded):
-
-            self.embeded_tab_list = []
-
-            for key in embededParams.keys():
-                self.new_Embededtab = QtWidgets.QWidget()
-                self.embeded_tab_list.append(self.new_Embededtab)
-                self.param_tabs.addTab(self.new_Embededtab, key)
-                
-        if self.embedWidget.reverseCheckBox.isChecked():
-            self.embedtestType = "Reverse"
-            self.embedWidget.importOpen.setEnabled(True)
-            self.embedWidget.acquireOpen.setEnabled(True)
-            self.embedWidget.importShort.setEnabled(True)
-            self.embedWidget.acquireShort.setEnabled(True)
-
-        else:
-            self.embedtestType = "Forward"
-            self.embedWidget.importOpen.setEnabled(False)
-            self.embedWidget.acquireOpen.setEnabled(False)
-            self.embedWidget.importShort.setEnabled(False)
-            self.embedWidget.acquireShort.setEnabled(False)
-
-        self.embedWidget.SJ_124578_LineEdit.setText(str(embeddedSample.k1))
-        self.embedWidget.sJ36LineEdit.setText(str(embeddedSample.k2))
-        self.embedWidget.thruCalibLineEdit.setText(str(embeddedSample.k3))
-
-
-    def embedPlotUpdate(self):
-        tab_index = self.param_tabs.currentIndex()
-        activeParameter = self.param_tabs.tabText(self.tab_index)
-        print(self.activeParameter)
-        sample = self.Project.getSampleByName(self.selected[0])
-        embeddedSample = self.Project.getSampleByName(self.selected[0])
-
-        embededParams = embeddedSample.getParameters()
-
-        if activeParameter != "Embedding Main":
-            self.graphicsView.figure.clear()
-
-            if activeParameter not in embededParams.keys():
-                return
-            
-            ax=self.graphicsView.figure.add_subplot(111)
-             
-            color=iter(cm.rainbow(np.linspace(0,1,len(embededParams[activeParameter]))))
-            for case in embededParams[activeParameter]:
-                c = next(color)
-                reembedingNum = int(case.replace("case", ""))
-                ax.semilogx(sample.freq, sample.reembeded[reembedingNum], label=case, c = c)
-                 
-            ax.legend(loc='upper left', ncol =  2 )
- 
-            #self.figure.tight_layout()
-
-            ax.grid(which="both")
-
-            ax.set_xlabel('Freq (MHz)')
-            ax.set_ylabel('dB')
-            ax.set_title(activeParameter)
-
-                
-            #self.ax.legend()
-            self.graphicsView.draw()
-        else:
-            self.plot(None, None)
-
-    def addPlugDialog(self):
-
-        form = addplug.AddPlug()  # We set the  form to be our ExampleApp (design)
-
-        self.embedPlotUpdate()         
+        self.embeddingWidget = EmbeddingWidget(self.param_tabs,  sample = self.Project.getSampleByName(self.selected[0]), graph=self.graphicsView, comm = self.comm)
+        #self.param_tabs.addTab(self.embeddingWidget.widget, "Embedding Main")
         
     def setupAlien(self):
-        print("Alien Sample Added")
         self.param_tabs.clear()
-
-        self.alienTab = QtWidgets.QWidget()
-
-        self.alienWidget = alienWidget.Ui_Form()
-        self.param_tabs.addTab(self.alienTab, "Alien")
-        self.alienWidget.setupUi(self.alienTab)
-        self.alienUpdateDisturberList()
+        self.alienWidget = AlienWidget(self.param_tabs,  sample = self.Project.getSampleByName(self.selected[0]), graph=self.graphicsView, comm = self.comm)
+        #self.param_tabs.addTab(self.embeddingWidget.widget, "Embedding Main")
         
-        self.alienWidget.alienPSANEXT.setChecked(True)
-        self.alienWidget.alienEnd1.setChecked(True)
-
-        self.alienWidget.alienVictimButton.clicked.connect(self.alienImportVictimSNP)
-        #self.alienWidget.alienDisturberButton.clicked.connect(self.alienAddDisturber)
-        self.alienWidget.alienImportSNP.clicked.connect(self.alienImportSNP)
-        self.alienWidget.alienRun.clicked.connect(self.alienRun)
-        
-        self.alienWidget.alienDisturbers.itemChanged.connect(self.alienPlot) 
-        
-        self.alienWidget.alienPSANEXT.toggled.connect(self.alienRadioChange)
-        self.alienWidget.alienPSAACRF.toggled.connect(self.alienRadioChange)
-        self.alienWidget.alienEnd1.toggled.connect(self.alienRadioChange)
-        self.alienWidget.alienEnd2.toggled.connect(self.alienRadioChange)
-
-        self.alienWidget.alien12.toggled.connect(self.alienPlot)
-        self.alienWidget.alien36.toggled.connect(self.alienPlot)
-        self.alienWidget.alien45.toggled.connect(self.alienPlot)
-        self.alienWidget.alien78.toggled.connect(self.alienPlot)
-        self.alienWidget.alienAvg.toggled.connect(self.alienPlot)
-        self.alienWidget.alienLimitCheck.toggled.connect(self.alienPlot)
-        self.alienWidget.alienAvgLimitCheck.toggled.connect(self.alienPlot)
-
-
-        self.alienUpdateDisturberList()
-        self.alienPlot()
-
-
-    def alienRadioChange(self):
-        self.alienUpdateDisturberList()
-        self.alienPlot()
-        
-    def alienPlot(self):
-
-        alien = self.Project.getSampleByName(self.selected[0])
-
-        disturberList = []
-        limit = None
-        avgLimit = None
-        if alien.standard and len(alien.freq):
-            if self.alienWidget.alienPSANEXT.isChecked():
-                if self.alienWidget.alienLimitCheck.isChecked():
-                    limit = alien.standard.limits["PSANEXT"].evaluateArray({'f': alien.freq}, len(alien.freq), neg=True)
-                if self.alienWidget.alienAvgLimitCheck.isChecked():
-                    avgLimit = alien.standard.limits["AVGPSANEXT"].evaluateArray({'f': alien.freq}, len(alien.freq), neg=True)
-            elif self.alienWidget.alienPSAACRF.isChecked():
-                if self.alienWidget.alienLimitCheck.isChecked():
-                    limit = alien.standard.limits["PSAACRF"].evaluateArray({'f': alien.freq}, len(alien.freq), neg=True)
-                if self.alienWidget.alienAvgLimitCheck.isChecked():
-                    avgLimit = alien.standard.limits["AVGPSAACRF"].evaluateArray({'f': alien.freq}, len(alien.freq), neg=True)
-        for i in range(self.alienWidget.alienDisturbers.count()):
-            dist = self.alienWidget.alienDisturbers.item(i)
-            if dist.checkState():
-                disturberList.append(dist.text())
-            else:
-                print("N")
-        try:
-            if self.alienWidget.alienEnd1.isChecked():
-                end = "end1"
-            elif self.alienWidget.alienEnd2.isChecked():
-                end = "end2"
-            if self.alienWidget.alienPSANEXT.isChecked():
-                testType = "ANEXT"
-                PS = alien.getPSAlien(end, testType, disturberList)
-            elif self.alienWidget.alienPSAACRF.isChecked():
-                testType = "PSAFEXT"
-                alien.getPSAlien(end, "AFEXT", disturberList) #Calculate PSAFEXT
-                PS = alien.getPSAACRX(end, testType)
-            
-            alienPlots = {}
-            
-            if self.alienWidget.alien12.isChecked():
-                alienPlots["12"] = PS["12"]
-            if self.alienWidget.alien36.isChecked():
-                alienPlots["36"] = PS["36"]
-            if self.alienWidget.alien45.isChecked():
-                alienPlots["45"] = PS["45"]
-            if self.alienWidget.alien78.isChecked():
-                alienPlots["78"] = PS["78"]
-            try:
-                self.plot(alien.freq, alienPlots, limit=limit, avgLimit=avgLimit)
-            except:
-                print("No Sample")
-
-        except Exception as e:
-            print("Error")
-      
-    def alienImportVictimSNP(self):
-        
-        options = self.Options()
-        options |= self.DontUseNativeDialog
-        file, _ = self.getOpenFileName(self,"QFileDialog.getOpenFileNames()", "","sNp Files (*.s*p)", options=options)
-        #print files
-        if file:
-            print(file)
-            alien = self.Project.getSampleByName(self.selected[0])
-            alien.addDisturbed(file)
-            self.alienUpdateDisturberList()
-            self.alienPlot()
-
-    """def alienAddDisturber(self):
-        print("Add Disturber")
-        alien = self.Project.getSampleByName(self.selected[0])
-
-        '''dist, okPressed = QtWidgets.QInputDialog.getText(self, "Add disturber","Distuber ID:", QtWidgets.QLineEdit.Normal, "")
-        if okPressed and dist != '':
-            print("Disturber added:", dist)
-        alien.addDisturber(dist)'''
-        options = self.Options()
-        options |= self.DontUseNativeDialog
-        files, _ = self.getOpenFileNames(self,"Select Disturbers", "", "sNp Files (*.s*p)", options=options)
-        #print files
-        if files:
-            print(files)
-            alien = self.Project.getSampleByName(self.selected[0])
-            for file in files:
-                name, extension = splitext(os.path.basename(file))
-                alien.addDisturber(name)
-                
-            self.alienUpdateDisturberList()"""
-
-    def alienUpdateDisturberList(self):
-
-        end = "end1"
-        testType = "ANEXT"
-
-        alien = self.Project.getSampleByName(self.selected[0])
-        self.alienWidget.alienDisturbers.clear()
-
-        #Firstly we must get if End1 or End2 is selected and if PSANEXT or PSAACRF is selected
-
-        if self.alienWidget.alienEnd1.isChecked():
-            end = "end1"
-        elif self.alienWidget.alienEnd2.isChecked():
-            end = "end2"
-            
-        if self.alienWidget.alienPSANEXT.isChecked():
-            testType = "ANEXT"
-        elif self.alienWidget.alienPSAACRF.isChecked():
-            testType = "AFEXT"
-
-        print(end)
-        print(testType)
-
-        for disturber in alien.disturbers[end][testType].keys():
-            item = QtWidgets.QListWidgetItem()
-            item.setText(disturber)
-            try:
-                #print(alien.disturbers[disturber][end].keys())
-
-                alien.disturbers[end][testType][disturber] #See if defined
-            except Exception as e:
-                print("Doesnt Exist")
-            else:
-                item.setFlags(item.flags() | QtCore.Qt.ItemIsUserCheckable)
-                item.setCheckState(QtCore.Qt.Checked)
-            self.alienWidget.alienDisturbers.addItem(item)
-            
-
-    def alienRun(self):
-
-        alien = self.Project.getSampleByName(self.selected[0])
-
-        if self.alienWidget.alienEnd1.isChecked():
-            end = "end1"
-        elif self.alienWidget.alienEnd2.isChecked():
-            end = "end2"
-            
-        if self.alienWidget.alienPSANEXT.isChecked():
-            testType = "ANEXT"
-        elif self.alienWidget.alienPSAACRF.isChecked():
-            testType = "AFEXT"
-        try:
-               
-            f = self.simpleAquire()
-            print("here")
-            import os.path
-            print(f)
-            alien.addDisturberMeasurement(end, testType, f, os.path.basename(f))
-            self.alienUpdateDisturberList()
-            self.alienPlot()
-            
-        except Exception as e:
-            print(e)
-            msg = QtWidgets.QMessageBox()
-            msg.setIcon(QtWidgets.QMessageBox.Information)
-            msg.setText("Please Connect to VNA ")
-            msg.setWindowTitle("Warning")
-            msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
-            msg.setFixedSize(msg.sizeHint())
-            msg.exec_()
-                   
-
-    def alienImportSNP(self):
-        
-        alien = self.Project.getSampleByName(self.selected[0])
-
-        if self.alienWidget.alienEnd1.isChecked():
-            end = "end1"
-        elif self.alienWidget.alienEnd2.isChecked():
-            end = "end2"
-            
-        if self.alienWidget.alienPSANEXT.isChecked():
-            testType = "ANEXT"
-        elif self.alienWidget.alienPSAACRF.isChecked():
-            testType = "AFEXT"
-        try:
-               
-            options = self.Options()
-            options |= self.DontUseNativeDialog
-            files, _ = self.getOpenFileNames(self,"Select ALlien test", "","sNp Files (*.s*p)", options=options)
-
-            import os.path
-            for file in files:
-                alien.addDisturberMeasurement(end, testType, file, os.path.basename(file))
-            self.alienUpdateDisturberList()
-            self.alienPlot()
-            
-        except Exception as e:
-            print(e)
-            msg = QtWidgets.QMessageBox()
-            msg.setIcon(QtWidgets.QMessageBox.Information)
-            msg.setText("Please select disturber to add ")
-            msg.setWindowTitle("Warning")
-            msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
-            msg.setFixedSize(msg.sizeHint())
-            msg.exec_()
             
     def openFileNamesDialog(self):
 
@@ -766,6 +272,9 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
      
             #self.ax.legend()
         self.graphicsView.draw()
+
+
+
 
 
     def setPortNumber(self):
@@ -1024,7 +533,13 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         
         if self.tab_index >= 1:
             if sample.__retr__() == "Embed":
-                self.embedPlotUpdate()
+                tab_index = self.param_tabs.currentIndex()
+                activeParameter = self.param_tabs.tabText(self.tab_index)
+                self.embeddingWidget.embedPlotUpdate(activeParameter)
+
+            elif sample.__retr__() == "Alien":
+                self.alienWidget.alienPlotUpdate()
+
             else:
                 limit = None
                 if sample.standard is not None:
@@ -1056,7 +571,6 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
                 
                 try:
                     print("before")
-                    self.comm = Communication()
                     self.comm.connectToVNA(addr)
                     print("done")
                     connected = True
@@ -1108,52 +622,18 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
 
     def aquire(self):
         try:
-            print(123)
-            testName, numPorts, IF, start_freq, stop_freq, num_points, average, timeout = Test_Params_Dialog().getParams()
             
-            if testName:
-                try:
-                    #comm = Communication(addr)
-                    self.comm.IF = IF
-                    self.comm.min_freq = start_freq
-                    self.comm.max_freq = stop_freq
-                    self.comm.num_points = num_points
-                    self.comm.average = average
+            if file:=self.comm.aquireInterface():
 
-                    self.comm.aquire(testName, numPorts)
-                    print(r"Y:/{}.s{}p".format(testName, numPorts))
-                    self.Project.importSNP([r"Y:/{}.s{}p".format(testName, numPorts)])
-                    self.displaySamplesInTable()
-                except Exception as e:
-                    pass
+                self.Project.importSNP([file])
+                self.displaySamplesInTable()
+
         except Exception as e:
             print(e)
             
 
     def simpleAquire(self):
-        if self.comm.connected :
-            try:
-                testName, numPorts, IF, start_freq, stop_freq, num_points, average, timeout = Test_Params_Dialog().getParams()
-                if testName:
-                    try:
-                        #comm = Communication(addr)
-                        self.comm.IF = IF
-                        self.comm.min_freq = start_freq
-                        self.comm.max_freq = stop_freq
-                        self.comm.num_points = num_points
-                        self.comm.average = average
-                        print("Aquiring Deembeding")
-                        self.comm.aquire(testName, numPorts)
-
-                        return r"Y:/{}.s{}p".format(testName, numPorts)
-
-                    except Exception as e:
-                        pass
-
-            except Exception as e:
-                print("Cancel")
-
-        raise "You Must be connected to VNA"
+        pass
 
     def reject(self):
         pass
@@ -1201,45 +681,7 @@ class Port_Renumbering:
             return _from, _to
         
 
-class Test_Params_Dialog:
-    def getParams(self):
-        
-        comm = Communication()
-        print("Connected")
-        dialog = QtWidgets.QDialog()
-        params_dialog = TestParameters.Ui_TestParameterDialog()
-        params_dialog.setupUi(dialog)
-        print("Current ID: ", comm.test_name)
-        print("NEXT ID: ", comm.getNextID(comm.test_name))
-        params_dialog.testNameLineEdit_2.setText(comm.getNextID(comm.test_name)) 
-        params_dialog.iFBandwidthLineEdit.setText(str(comm.IF))
-        print("Min Freq ", comm.min_freq)
-        params_dialog.startFrequencyLineEdit.setText('%E' % Decimal(comm.min_freq))
-        params_dialog.stopFrequencyLineEdit.setText('%E' % Decimal(comm.max_freq))
-        params_dialog.numberOfPointsLineEdit.setText(str(comm.num_points))
-        params_dialog.numberOfPortsLineEdit.setText(str(comm.port_num))
-        params_dialog.numberOfAverageLineEdit.setText(str(comm.average))
-        params_dialog.timeoutLineEdit.setText('%E' % Decimal(comm.timeout))
 
-        result = dialog.exec_()
-        
-        if not result:
-            return 0
-        if result:
-            try:
-                testName = params_dialog.testNameLineEdit_2.text()
-                IF = int(float(params_dialog.iFBandwidthLineEdit.text()))
-                start_freq = int(float(params_dialog.startFrequencyLineEdit.text()))
-                stop_freq = int(float(params_dialog.stopFrequencyLineEdit.text()))
-                num_points = int(float(params_dialog.numberOfPointsLineEdit.text()))
-                num_ports = int(float(params_dialog.numberOfPortsLineEdit.text()))
-                average = int(float(params_dialog.numberOfAverageLineEdit.text()))
-                timeout = int(float(params_dialog.timeoutLineEdit.text()))
-
-                return testName, num_ports, IF, start_freq, stop_freq, num_points, average, timeout
-            except Exception as e:
-                print("Cancel123")
-                return
 
 
 def main():

@@ -15,8 +15,6 @@ from matplotlib.pyplot import cm
 
 import numpy as np
 
-from embedding import Embedding
-
 
 class AddPlug(QtWidgets.QMainWindow, plugDialog.Ui_Dialog, QtWidgets.QAction, QtWidgets.QFileDialog, QtWidgets.QListView, QtWidgets.QDialog, QtCore.Qt):
 

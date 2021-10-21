@@ -34,6 +34,8 @@ class Sample(SNPManipulations):
         print("Converted")
         self.port_name = {0:"12", 1:"36", 2:"45", 3:"78"}
 
+        print("NAME = ", snpFile)
+
         self.name, self.extension = splitext(os.path.basename(snpFile))
         self.date = time.ctime(os.path.getctime(snpFile))
         #print self.date

@@ -131,7 +131,6 @@ class Project: #Put (object) later
                         curPos += numSignals*2
         workbook.close()
         
-
     @property
     def activeSample(self):
         return [sample.name for sample in self.activeMeasurements]
@@ -140,8 +139,6 @@ class Project: #Put (object) later
     def activeSample(self, samples):
         self.activeMeasurements = [self.getSampleByName(sample) for sample in samples]
         
-
-
 if __name__ == '__main__':  
     proj1 = Project()
 

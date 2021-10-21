@@ -48,7 +48,7 @@ class Embedding(SNPManipulations):
         self.k3 = 20e-12    #Thru calibration
 
         self.reembeded = {}
-
+        self.cat = "6A"
 
     def getOpenDelay(self):
         '''
@@ -299,7 +299,7 @@ class Embedding(SNPManipulations):
     
 
     def setPlugVectors(self, cat):
-
+        self.cat = cat
         if cat == "6A" or cat == "6":
             self.case1  = lambda f: (-(38.1-20*np.log10((f)/100)), np.angle(self.correctedPlugVector["45-36"][list(self.loadSample.freq).index(f)], deg=True))
             self.case2  = lambda f: (-(38.6-20*np.log10((f)/100)), np.angle(self.correctedPlugVector["45-36"][list(self.loadSample.freq).index(f)], deg=True))
@@ -317,36 +317,41 @@ class Embedding(SNPManipulations):
             self.case14 = lambda f: (-(66.0-20*np.log10((f)/100)), np.angle(self.correctedPlugVector["12-78"][list(self.loadSample.freq).index(f)], deg=True)-180)
 
         elif cat == "5":
-            self.case1  = lambda f: (-35.8- 20 * np.log10((f)/100), np.angle(self.correctedPlugVector["45-36"][list(self.loadSample.freq).index(f)], deg=True)) 
-            self.case2  = lambda f:([], [])
-            self.case3  = lambda f:([], [])
-            self.case4  = lambda f: (-39.5- 20 * np.log10((f)/100), np.angle(self.correctedPlugVector["45-36"][list(self.loadSample.freq).index(f)], deg=True)) 
-            self.case5  = lambda f: (-42.0- 20 * np.log10((f)/100), np.angle(self.correctedPlugVector["12-36"][list(self.loadSample.freq).index(f)], deg=True)) 
-            self.case6  = lambda f: (-50.0- 20 * np.log10((f)/100), np.angle(self.correctedPlugVector["12-36"][list(self.loadSample.freq).index(f)], deg=True))
-            self.case7  = lambda f: (-42.0- 20 * np.log10((f)/100), np.angle(self.correctedPlugVector["12-36"][list(self.loadSample.freq).index(f)], deg=True)) 
-            self.case8  = lambda f: (-50.0- 20 * np.log10((f)/100), np.angle(self.correctedPlugVector["36-78"][list(self.loadSample.freq).index(f)], deg=True))
-            self.case9  = lambda f: (-50.0- 20 * np.log10((f)/100), np.angle(self.correctedPlugVector["45-12"][list(self.loadSample.freq).index(f)], deg=True))
-            self.case10 = lambda f:([],[])
+            self.case1  = lambda f: (-(35.8- 20 * np.log10((f)/100)), np.angle(self.correctedPlugVector["45-36"][list(self.loadSample.freq).index(f)], deg=True)) 
+            self.case2  = lambda f:(None, None)
+            self.case3  = lambda f:(None, None)
+            self.case4  = lambda f: (-(39.5- 20 * np.log10((f)/100)), np.angle(self.correctedPlugVector["45-36"][list(self.loadSample.freq).index(f)], deg=True)) 
+            self.case5  = lambda f: (-(42.0- 20 * np.log10((f)/100)), np.angle(self.correctedPlugVector["12-36"][list(self.loadSample.freq).index(f)], deg=True)) 
+            self.case6  = lambda f: (-(50.0- 20 * np.log10((f)/100)), np.angle(self.correctedPlugVector["12-36"][list(self.loadSample.freq).index(f)], deg=True))
+            self.case7  = lambda f: (-(42.0- 20 * np.log10((f)/100)), np.angle(self.correctedPlugVector["12-36"][list(self.loadSample.freq).index(f)], deg=True)) 
+            self.case8  = lambda f: (-(50.0- 20 * np.log10((f)/100)), np.angle(self.correctedPlugVector["36-78"][list(self.loadSample.freq).index(f)], deg=True))
+            self.case9  = lambda f: (-(50.0- 20 * np.log10((f)/100)), np.angle(self.correctedPlugVector["45-12"][list(self.loadSample.freq).index(f)], deg=True))
+            self.case10 = lambda f:(None, None)
             self.case11 = lambda f: (-50.0- 20 * np.log10((f)/100), np.angle(self.correctedPlugVector["45-78"][list(self.loadSample.freq).index(f)], deg=True))
-            self.case12 = lambda f:([], [])
-            self.case13 = lambda f: (-60.0- 20 * np.log10((f)/100), np.angle(self.correctedPlugVector["12-78"][list(self.loadSample.freq).index(f)], deg=True))
-            self.case14 = lambda f:([], [])
+            self.case12 = lambda f:(None, None)
+            self.case13 = lambda f: (-(60.0- 20 * np.log10((f)/100)), np.angle(self.correctedPlugVector["12-78"][list(self.loadSample.freq).index(f)], deg=True))
+            self.case14 = lambda f:(None, None)
 
-    def reembed(self):
+    def reembed(self, case = "6A"):
 
-        self.setPlugVectors("6A")
+        self.setPlugVectors(case)
         self.reembeded = {}
         self.freq = self.loadSample.freq 
 
         for i in range(1,15):
-            #First, we will declare the reembeded array
-            self.reembeded[i] = []
-            
+            #First, we make sure the case is not N/A
             mag_phase = getattr(self, "case" + str(i))
+            if mag_phase(1)[0] is None:
+                continue
+
+            #Then, we  declare the reembeded array
+            self.reembeded[i] = []
+
             for j, f in enumerate(self.loadSample.freq):
                 #Get the coresponding case magnetide and convert it to Complex
                
                 plug_f = mag_phase(f)
+
                 #print("pluf_f = " , plug_f)
 
                 amplitude = 10**(plug_f[0]/20)
@@ -371,10 +376,6 @@ class Embedding(SNPManipulations):
         df  -> Direct Fixture
         pdf -> Plug and Direct Fixture
         '''
-
-
-        
-        
         directFixtureDelay = self.getDirectFixtureDelay(dfOpen, dfShort) #Dictionairy of the delay in seconds on each pair
 
         plugDelay = self.getPlugDelay(pdfOpen, pdfShort) #Dictionairy of the delay in seconds on each pair
@@ -465,13 +466,23 @@ class Embedding(SNPManipulations):
 
     def getParameters(self):
         
-        params = {""
-                  "36-45": ["case1", "case2", "case3", "case4"],
-                  "12-36": ["case5", "case6"],
-                  "36-78": ["case7", "case8"],
-                  "12-45": ["case9", "case10"],
-                  "45-78": ["case11", "case12"],
-                  "12-78": ["case13", "case14"]}
+        if self.cat == "5":
+            params = {""
+                    "36-45": ["case1", "case4"],
+                    "12-36": ["case5", "case6"],
+                    "36-78": ["case7", "case8"],
+                    "12-45": ["case9"],
+                    "45-78": ["case11"],
+                    "12-78": ["case13"]}
+
+        if self.cat == "6" or self.cat == "6A":    
+            params = {""
+                    "36-45": ["case1", "case2", "case3", "case4"],
+                    "12-36": ["case5", "case6"],
+                    "36-78": ["case7", "case8"],
+                    "12-45": ["case9", "case10"],
+                    "45-78": ["case11", "case12"],
+                    "12-78": ["case13", "case14"]}
 
         return params
             

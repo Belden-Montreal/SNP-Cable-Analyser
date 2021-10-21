@@ -138,7 +138,7 @@ class Alien(object):
 
         self.disturbersList = disturbers
         
-        for disturbed_pair in range( numPairs //2):
+        for disturbed_pair in range( numPairs // 2):
             self.PSAlien[self.port_name[disturbed_pair]] = []
 
             for f in range(0, self.rs.num_samples):
