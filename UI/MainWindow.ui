@@ -216,22 +216,6 @@
     <addaction name="actionExit"/>
     <addaction name="separator"/>
    </widget>
-   <widget class="QMenu" name="menuEdit">
-    <property name="title">
-     <string>Edit</string>
-    </property>
-    <addaction name="actionCut"/>
-    <addaction name="actionCopy"/>
-    <addaction name="actionPaste"/>
-    <addaction name="actionDelete"/>
-    <addaction name="separator"/>
-    <addaction name="actionUndo"/>
-    <addaction name="actionRedo"/>
-    <addaction name="separator"/>
-    <addaction name="actionSelect_All"/>
-    <addaction name="separator"/>
-    <addaction name="actionFind"/>
-   </widget>
    <widget class="QMenu" name="menuSettings">
     <property name="title">
      <string>Settings</string>
@@ -240,6 +224,8 @@
     <addaction name="actionConfigure_Reports"/>
     <addaction name="separator"/>
     <addaction name="actionTest"/>
+    <addaction name="separator"/>
+    <addaction name="actionPort_Naming"/>
    </widget>
    <widget class="QMenu" name="menuVNA">
     <property name="title">
@@ -254,7 +240,6 @@
     <addaction name="actionWho_am_I"/>
    </widget>
    <addaction name="menuFile"/>
-   <addaction name="menuEdit"/>
    <addaction name="menuVNA"/>
    <addaction name="menuSettings"/>
   </widget>
@@ -388,6 +373,9 @@
    <property name="toolTip">
     <string>Create New Project</string>
    </property>
+   <property name="statusTip">
+    <string>Create New Project (Erases current)</string>
+   </property>
   </action>
   <action name="actionConnect">
    <property name="text">
@@ -476,6 +464,11 @@
    </property>
    <property name="toolTip">
     <string>Deembed</string>
+   </property>
+  </action>
+  <action name="actionPort_Naming">
+   <property name="text">
+    <string>Port/Pair Naming</string>
    </property>
   </action>
  </widget>
@@ -698,6 +691,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionPort_Naming</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>pairRename()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>447</x>
+     <y>341</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>importSnp()</slot>
@@ -711,5 +720,6 @@
   <slot>whoAmI()</slot>
   <slot>addAlien()</slot>
   <slot>addEmbed()</slot>
+  <slot>pairRename()</slot>
  </slots>
 </ui>

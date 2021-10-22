@@ -1,16 +1,19 @@
+from typing import Set
 from snpAnalyze import SNPManipulations
 import os
 from os.path import splitext
 import time
 import numpy as np
 
+from settings import Settings
+
 class Sample(SNPManipulations):
 
     '''This class handles the SNP samples for the basic test'''
 
-    def __init__(self, snpFile, one_sided = None, standard = None, fromPort = None, toPort = None):
+    def __init__(self, snpFile, one_sided = None, standard = None, fromPort = None, toPort = None, pair_names = None):
 
-
+        self.settings = Settings()
         self.snpFile = snpFile
 
         self.rs = super(Sample, self)
@@ -20,7 +23,7 @@ class Sample(SNPManipulations):
         self.s2mm()
 
         self.portNumbering = []
-        if (fromPort is None and toPort is None):
+        '''if (fromPort is None and toPort is None):
             for port in range(0, self.num_ports):
                 self.portNumbering.append(port)
         else:
@@ -29,7 +32,7 @@ class Sample(SNPManipulations):
                 self.renumber(list(fromPort), list(toPort))
             except Exception:
                 self.portNumbering = fromPort
-                raise "Error:No Good"
+                raise "Error:No Good"'''
 
         print("Converted")
         self.port_name = {0:"12", 1:"36", 2:"45", 3:"78"}
@@ -41,29 +44,36 @@ class Sample(SNPManipulations):
         #print self.date
 
         self.standard = standard
+        self.num_ports_dd = self.getNumPorts(self.dd)
 
         if one_sided != None:
             self.one_sided = one_sided
         
-        elif self.getNumPorts(self.dd) == 4: #Assume that the test is one-sided.
+        elif self.num_ports_dd == 4: #Assume that the test is one-sided.
                                              #This can be changed
             self.one_sided = True
 
-        elif self.getNumPorts(self.dd) == 8: #Assume that test is end to end.
+        elif self.num_ports_dd == 8: #Assume that test is end to end.
             self.one_sided = False
 
         self.port_name = {}
-        self.pair_combo = ["45", "12","36","78"]
+
+        if pair_names is None:
+            self.pair_combo = self.settings.pairNames[:self.num_ports_dd] #["45", "12","36","78"]
+        
+        else:
+            self.pair_combo = pair_names
+
         
         if self.one_sided:
-            for i in range(0, self.getNumPorts(self.dd)):
+            for i in range(0, self.num_ports_dd):
                 self.port_name[i] = self.pair_combo[i]  #{0:"45", 1:"12", 2:"36", 3:"78"}
             self.parameters = ["RL", "NEXT", "Propagation Delay", "PSNEXT", "LCL", "TCL", "CMRL", "CMNEXT", "CMDMNEXT", "CMDMRL", "DMCMNEXT", "DMCMRL"]
         else:
-            for i in range(0, self.getNumPorts(self.dd)//2):
+            for i in range(0, self.num_ports_dd//2):
                 self.port_name[i] = self.pair_combo[i]  #{0:"45", 1:"12", 2:"36", 3:"78"}
-            for i in range((self.getNumPorts(self.dd)//2), self.getNumPorts(self.dd)):
-                self.port_name[i] = "(r)"+self.pair_combo[i-self.getNumPorts(self.dd)//2]  #{4:"(r)12",  :"(r)36", 6:"(r)45", 7:"(r)78", 0:"12", 1:"36", 2:"45", 3:"78"}
+            for i in range((self.num_ports_dd//2), self.num_ports_dd):
+                self.port_name[i] = "(r)"+self.pair_combo[i-self.num_ports_dd//2]  #{4:"(r)12",  :"(r)36", 6:"(r)45", 7:"(r)78", 0:"12", 1:"36", 2:"45", 3:"78"}
             self.parameters = ["RL", "IL", "NEXT", "Propagation Delay", "PSNEXT","FEXT", "PSFEXT", "ACRF", "PSACRF", "LCL", "LCTL", "TCL", "TCTL", "ELTCTL","CMRL", "CMNEXT", "CMDMNEXT", "CMDMRL", "DMCMNEXT", "DMCMRL"]
         
         self.worstValue = {}

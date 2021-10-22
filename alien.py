@@ -95,7 +95,7 @@ class Alien(object):
         
         self.rs = SNPManipulations(snpFile)
         self.rs.oneSided = False
-    
+
         #vna_out.renumber([1,2], [2,1])
         
         self.rs.s2mm()

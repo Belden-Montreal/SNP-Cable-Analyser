@@ -6,6 +6,8 @@ from UI import MainWindow
 from UI import VNA_addr_dialog
 from UI import MainWidget
 
+from dialogs import pairNameDialog
+
 from widgets.ParameterWidget import ParameterWidget
 from widgets.EmbeddingWidget import EmbeddingWidget
 from widgets.AlienWidget import AlienWidget
@@ -28,7 +30,7 @@ import random
 import pylab
 from skrf import Network as rf
 
-
+from settings import Settings
 
 from snpAnalyze import SNPManipulations
 import os
@@ -104,7 +106,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
             self.displaySamplesInTable()
             
         self.comm = Communication()
-
+        self.settings = Settings()
 
     def importSnp(self):
         #Whenever the user clicks on the import SNP button, it opens a file dialog
@@ -274,37 +276,40 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         self.graphicsView.draw()
 
 
+    def pairRename(self):
+        pair_names = self.settings.pairNames
+        num_pairs = self.settings.numPairs
+        try:
+            names = pairNameDialog.PairNameDialog(pair_names, num_pairs).getPairNames()
+            self.settings.pairNames = names
+        except Exception as e:
+            print(e)
 
 
 
-    def setPortNumber(self):
-       sample = self.Project.getSampleByName(self.selected[0])
-       snp = sample.snpFile
-       sided = sample.one_sided
-       standard = sample.standard
-       try:
-           try:
-               portNumbering = str(sample.portNumbering).replace('[', '').replace(']', '')
-               print(portNumbering)
-               fromPort, toPort = Port_Renumbering().getPortNumbering(fromPort = portNumbering)
-               fromPort = np.array(fromPort.split(",")).astype(int)
-               toPort   = np.array(toPort.split(",")).astype(int)
-           except Exception:
-               print("No") 
+    def setPairNumber(self):
+        sample = self.Project.getSampleByName(self.selected[0])
+        snp = sample.snpFile
+        sided = sample.one_sided
+        standard = sample.standard
 
-           print(fromPort)
-           print(toPort)
+        pair_names = sample.port_name
 
-           if fromPort is not None and toPort is not None:
-               sample.__init__(snp, sided, standard, list(fromPort) , list(toPort))
-               sample.getParameters()
-               self.Project.activeSample = self.selected
-               #print self.selected
-               if len(self.selected) == 1:  #Since only one sample can be displayed at a time
-                   self.displaySampleParams(self.selected)
+        try:
 
-       except Exception:
-           self.setPortNumber()
+            names = pairNameDialog.PairNameDialog(pair_names, sample.num_ports_dd).getPairNames()
+            #self.settings.pairNames = names
+
+
+            sample.__init__(snp, sided, standard, pair_names = names)
+            sample.getParameters()
+            self.Project.activeSample = self.selected
+            #print self.selected
+            if len(self.selected) == 1:  #Since only one sample can be displayed at a time
+                self.displaySampleParams(self.selected) 
+
+        except Exception as e:
+            print(e)
 
     def tableContextMenu(self, pos):
         #print self.selected
@@ -317,7 +322,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
 
             if len(self.selected) == 1: 
 
-                setPortNumber = menu.addAction("Renumber Ports")
+                setPairNumber = menu.addAction("Renumber Pairs")
 
             test_type = menu.addMenu("Set Test Type") #Set the sub menu to select the different types of matrixes
             one_sided = test_type.addAction("One Sided")
@@ -382,8 +387,8 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
                 self.setLimit()
             #self.Project.activeMeasurements = selected
 
-            elif action == setPortNumber and len(self.selected) == 1:
-                self.setPortNumber()
+            elif action == setPairNumber and len(self.selected) == 1:
+                self.setPairNumber()
             return 1
 
 
@@ -393,7 +398,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
             setLimit = menu.addAction("Set Limit")
 
             if len(self.selected) == 1:
-                setPortNumber = menu.addAction("Renumber Ports")
+                setPairNumber = menu.addAction("Renumber Pairs")
 
             exportExcel = menu.addAction("Export To Excel")
             delete = menu.addAction("Delete")
@@ -415,8 +420,8 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
             elif action == setLimit:
                 self.setLimit()
 
-            elif action == setPortNumber and len(self.selected) == 1:
-                self.setPortNumber()
+            elif action == setPairNumber and len(self.selected) == 1:
+                self.setPairNumber()
             #self.Project.activeMeasurements = selected
             return 1
 
@@ -648,20 +653,20 @@ class Addr_Dialog:
         dialog = QtWidgets.QDialog()
         addr_dialog = VNA_addr_dialog.Ui_Addr_Dialog()
         addr_dialog.setupUi(dialog)
-        addr_dialog.plainTextEdit.setText(self.comm.VNAAddress)
+        addr_dialog.plainTextEdit.setPlainText(self.comm.VNAAddress)
 
         result = dialog.exec_()
         print("here")
         if not result:
             return 0
         if result:
-            addr =  addr_dialog.plainTextEdit.text()
+            addr =  addr_dialog.plainTextEdit.toPlainText()
             print("sent")
             if len(addr) < 1:
                 return 0
             return addr
 
-from UI import port_renumber
+'''from UI import port_renumber
 class Port_Renumbering:
     def getPortNumbering(self, fromPort):
         dialog = QtWidgets.QDialog()
@@ -678,7 +683,7 @@ class Port_Renumbering:
             print("sent")
             if len(_from) < 1 or len(_to) < 1:
                 return None, None
-            return _from, _to
+            return _from, _to'''
         
 
 

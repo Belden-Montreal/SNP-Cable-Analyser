@@ -44,6 +44,7 @@ class SNPManipulations(rf):
         self.RL_dict = {}
         numPorts = self.getNumPorts(matrix)
         
+        print("Port NAME = ",self.port_name )
         #Establish dicitonairy keys and initialize arrays
         for i in range(0, numPorts):
             self.RL_dict[self.port_name[i]] = []

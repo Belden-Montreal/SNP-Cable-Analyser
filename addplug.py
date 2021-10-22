@@ -7,6 +7,8 @@ from UI import VNA_addr_dialog
 from UI import TestParameters
 
 from Communication import Communication
+from embedding import Embedding
+
 import matplotlib.figure
 import matplotlib.backends.backend_qt5
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -50,6 +52,8 @@ class AddPlug(QtWidgets.QMainWindow, plugDialog.Ui_Dialog, QtWidgets.QAction, Qt
         #self.pdf_short_acquire.clicked.connect(self.pdfShortAcquire)
         self.pdf_load_import.clicked.connect(self.pdfLoadImport)
         #self.pdf_load_acquire.clicked.connect(self.pdfLoadAcquire)
+        
+        self.cancelButton.clicked.connect(self.cancel)
 
         self.addPlug.clicked.connect(self.addNewPlug)
         self.addPlug.setEnabled(False)
@@ -106,16 +110,16 @@ class AddPlug(QtWidgets.QMainWindow, plugDialog.Ui_Dialog, QtWidgets.QAction, Qt
 
             self.addPlug.setEnabled(True)
 
-            if plugName == None:
+            '''if plugName == None:
 
-                self.correctedPlugVectorPhase = {}
+                self.correctedPlugVectorPhase = {}'''
 
 
-                
-                for pair in correctedPlugVector.keys():
-                    self.correctedPlugVectorPhase[pair] = np.angle(correctedPlugVector[pair], deg = True)
-                    
-                self.plot()
+            self.correctedPlugVectorPhase = {}    
+            for pair in correctedPlugVector.keys():
+                self.correctedPlugVectorPhase[pair] = np.angle(correctedPlugVector[pair], deg = True)
+            print("Corrected Plug Vect Phase : ", self.correctedPlugVectorPhase)
+            self.plot()
 
 
     def importSNP(self):
@@ -131,8 +135,8 @@ class AddPlug(QtWidgets.QMainWindow, plugDialog.Ui_Dialog, QtWidgets.QAction, Qt
     def getPhaseLimits(self):
         tpLim = {}
 
-        f100 = list(self.em.freq).index(100)
-        f500 = list(self.em.freq).index(500)
+        f100 = list(self.em.freq.astype(int)).index(100)
+        f500 = list(self.em.freq.astype(int)).index(500)
 
         freq = np.array(self.em.freq[f100:f500]) / 1e6
         tpLim["45-36"] = {}
@@ -186,7 +190,7 @@ class AddPlug(QtWidgets.QMainWindow, plugDialog.Ui_Dialog, QtWidgets.QAction, Qt
 
             ax.set_xlabel('Freq (Hz)')
             ax.set_ylabel('dB')
-
+            self.graphicsView.figure.tight_layout(pad=3.0)
         self.graphicsView.draw()
 
     def addNewPlug(self):
@@ -195,9 +199,8 @@ class AddPlug(QtWidgets.QMainWindow, plugDialog.Ui_Dialog, QtWidgets.QAction, Qt
         try:
 
             self.createPlug(plugName)
-            self.dialog.close()
         except Exception as e:
-            print("file already exists")
+            print(e)
             msg = QtWidgets.QMessageBox()
             msg.setIcon(QtWidgets.QMessageBox.Information)
 
@@ -207,6 +210,10 @@ class AddPlug(QtWidgets.QMainWindow, plugDialog.Ui_Dialog, QtWidgets.QAction, Qt
             msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
                
             retval = msg.exec_()  
+
+    def cancel(self):
+        self.dialog.close()
+
 
 def main():
     app = QtWidgets.Dialog()  # A new instance of QApplication

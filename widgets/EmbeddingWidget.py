@@ -62,12 +62,12 @@ class EmbeddingWidget():
 
         self.embeddedSample.getPlugParams(plugFile)
         print(self.embeddedSample.plugNextDelay)
-        '''self.embedWidget.dnext12_36.setText(str(self.embeddedSample.plugNextDelay["12-36"]))
+        self.embedWidget.dnext12_36.setText(str(self.embeddedSample.plugNextDelay["12-36"]))
         self.embedWidget.dnext45_12.setText(str(self.embeddedSample.plugNextDelay["45-12"]))
         self.embedWidget.dnext12_78.setText(str(self.embeddedSample.plugNextDelay["12-78"]))
         self.embedWidget.dnext45_36.setText(str(self.embeddedSample.plugNextDelay["45-36"]))
         self.embedWidget.dnext36_78.setText(str(self.embeddedSample.plugNextDelay["36-78"]))
-        self.embedWidget.dnext45_78.setText(str(self.embeddedSample.plugNextDelay["45-78"]))'''
+        self.embedWidget.dnext45_78.setText(str(self.embeddedSample.plugNextDelay["45-78"]))
         
     def importOpen(self):
         self.embeddedSample.embeddedOpen = self.embedImportSNP()

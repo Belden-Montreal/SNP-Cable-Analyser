@@ -42,7 +42,7 @@ class Communication(object):
                 print("Write to INI")
                 self.config.write(configfile)
 
-    def connectToVNA(self, VNA_ADDRESS):
+    def connectToVNA(self, VNA_ADDRESS="TCPIP0::10.29.48.46::hislip0::INSTR"):
         try:
             self.VNAAddress = VNA_ADDRESS
             self.rm = visa.ResourceManager()
@@ -205,9 +205,9 @@ class Communication(object):
             self.session.write(":CALC:PAR:SEL 'CH1_S11_1'")
             print(self.session.query(";*OPC?"))
             print("Start")
-            self.session.write(":CALC:DATA:SNP:PORT:SAVE '{}', '{}.s{}p'".format(str([i for i in range(1,portNum+1)])[1:-1], testName, portNum))
+            self.session.write(":CALC:DATA:SNP:PORT:SAVE '{}', 'Y:\\{}.s{}p'".format(str([i for i in range(1,portNum+1)])[1:-1], testName, portNum))
             print(self.session.query(";*OPC?"))
-            snp_data = self.session.query('MMEMory:TRANsfer? "{}.s{}p"'.format(testName, portNum)).encode("utf8")
+            snp_data = self.session.query('MMEMory:TRANsfer? "Y:\\{}.s{}p"'.format(testName, portNum)).encode("utf8")
             dirpath = tempfile.mkdtemp()
             temp_file_name = os.path.join(dirpath, testName + "." + "s{}p".format(portNum))
             temp_file = open(temp_file_name, mode = "wb")
@@ -341,5 +341,6 @@ class Test_Params_Dialog:
 if __name__ == '__main__':
 
     comm = Communication()
-    comm.aquire("123", 8)
+    comm.connectToVNA()
+    comm.aquire("test4Port", 4)
 
