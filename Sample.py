@@ -64,16 +64,16 @@ class Sample(SNPManipulations):
         else:
             self.pair_combo = pair_names
 
-        
+        self.port_name = self.pair_combo
         if self.one_sided:
-            for i in range(0, self.num_ports_dd):
-                self.port_name[i] = self.pair_combo[i]  #{0:"45", 1:"12", 2:"36", 3:"78"}
+            #for i in range(0, self.num_ports_dd):
+                #self.port_name[i] = self.pair_combo[i]  #{0:"45", 1:"12", 2:"36", 3:"78"}
             self.parameters = ["RL", "NEXT", "Propagation Delay", "PSNEXT", "LCL", "TCL", "CMRL", "CMNEXT", "CMDMNEXT", "CMDMRL", "DMCMNEXT", "DMCMRL"]
         else:
-            for i in range(0, self.num_ports_dd//2):
-                self.port_name[i] = self.pair_combo[i]  #{0:"45", 1:"12", 2:"36", 3:"78"}
-            for i in range((self.num_ports_dd//2), self.num_ports_dd):
-                self.port_name[i] = "(r)"+self.pair_combo[i-self.num_ports_dd//2]  #{4:"(r)12",  :"(r)36", 6:"(r)45", 7:"(r)78", 0:"12", 1:"36", 2:"45", 3:"78"}
+            #for i in range(0, self.num_ports_dd//2):
+                #self.port_name[i] = self.pair_combo[i]  #{0:"45", 1:"12", 2:"36", 3:"78"}
+            #for i in range((self.num_ports_dd//2), self.num_ports_dd):
+                #self.port_name[i] = "(r)"+self.pair_combo[i-self.num_ports_dd//2]  #{4:"(r)12",  :"(r)36", 6:"(r)45", 7:"(r)78", 0:"12", 1:"36", 2:"45", 3:"78"}
             self.parameters = ["RL", "IL", "NEXT", "Propagation Delay", "PSNEXT","FEXT", "PSFEXT", "ACRF", "PSACRF", "LCL", "LCTL", "TCL", "TCTL", "ELTCTL","CMRL", "CMNEXT", "CMDMNEXT", "CMDMRL", "DMCMNEXT", "DMCMRL"]
         
         self.worstValue = {}

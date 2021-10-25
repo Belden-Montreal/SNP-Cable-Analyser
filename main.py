@@ -227,6 +227,8 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         files, _ = self.getOpenFileNames(self, "Select SNP(s)", "","sNp Files (*.s*p)", options=options)
         #print files
         print(files)
+
+        #This needs to be in thread  Look into this : https://realpython.com/python-pyqt-qthread/
         self.Project.importSNP(files)
 
         #print(self.rs.RL.items())

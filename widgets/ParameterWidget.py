@@ -1,4 +1,7 @@
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore, Qt
+from PyQt5.QtWidgets import QCheckBox, QLabel, QListWidgetItem, QPushButton
+from widgets.SmartFlowWidget import SmartFlowWidget
+
 from UI import ParameterWidget as PW
 class valueType():
     MARGIN = 0
@@ -29,6 +32,7 @@ class ParameterWidget():
             self.worstValue = None
             self.paramWidget.passLabel.setText("Fail")
             self.hasPassed = False
+        self.setResults()
 
     def setPairsList(self):
         try:
@@ -53,5 +57,23 @@ class ParameterWidget():
             self.paramWidget.worstFreqLabel.setText(self.worstValue[0][pair][1].__str__())
             self.paramWidget.worstLimitLabel.setText(self.worstValue[0][pair][2].__str__())
             self.paramWidget.worstMarginLabel.setText(self.worstValue[0][pair][3].__str__())
+
+
+    def setResults(self):
+
+        flowLayout = SmartFlowWidget()
+
+        for label in getattr(self.sample, self.param):
+
+            chkBoxItem = QListWidgetItem()
+            chkBoxItem.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
+            chkBoxItem.setText(label)
+            chkBoxItem.setCheckState(QtCore.Qt.CheckState.Checked)
+            #checkbox = QCheckBox(label, self.paramWidget.resultsList)
+            #checkbox.setChecked(True)  
+
+            self.paramWidget.resultsList.addItem(chkBoxItem)
+        
+
 
 
