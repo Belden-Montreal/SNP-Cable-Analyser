@@ -8,7 +8,7 @@ class valueType():
     VALUE = 1
 
 class ParameterWidget():
-    def __init__(self, param, sample, values):
+    def __init__(self, param, sample):
         self.widget  = QtWidgets.QWidget()
         self.paramWidget = PW.Ui_ParameterWidget()
         self.paramWidget.setupUi(self.widget)
@@ -18,20 +18,25 @@ class ParameterWidget():
         self.paramWidget.marginListWidget.currentTextChanged.connect(lambda text: self.pairSelected(text, valueType.MARGIN))
         self.paramWidget.worstListWidget.currentTextChanged.connect(lambda text: self.pairSelected(text, valueType.VALUE))
         self.setPairsList()
-        if values[0][0] and values[1]:
-            self.worstValue = values[0]
-            self.worstMargin = values[1]
-            if self.worstValue[1] == "Pass" and self.worstMargin[1] == "Pass":
-                self.paramWidget.passLabel.setText("Pass")
-                self.hasPassed = True
+        self.hasPassed = True
+
+        if self.sample.standard is not None:
+            print("PARAM WIDGET PARAM : ", self.sample.worstValue)
+            values = [self.sample.worstValue[param], self.sample.worstMargin[param]]
+            if values[0][0] and values[1]:
+                self.worstValue = values[0]
+                self.worstMargin = values[1]
+                if self.worstValue[1] == "Pass" and self.worstMargin[1] == "Pass":
+                    self.paramWidget.passLabel.setText("Pass")
+                    self.hasPassed = True
+                else:
+                    self.paramWidget.passLabel.setText("Fail")
+                    self.hasPassed = False
             else:
+                self.worstMargin = None
+                self.worstValue = None
                 self.paramWidget.passLabel.setText("Fail")
                 self.hasPassed = False
-        else:
-            self.worstMargin = None
-            self.worstValue = None
-            self.paramWidget.passLabel.setText("Fail")
-            self.hasPassed = False
         self.setResults()
 
     def setPairsList(self):
@@ -44,7 +49,8 @@ class ParameterWidget():
             return
 
     def pairSelected(self, pair, listIndex):
-        self.setLabels(listIndex, pair)
+        if self.sample.standard is not None:
+            self.setLabels(listIndex, pair)
 
     def setLabels(self, listIndex, pair):
         if self.worstMargin and listIndex == valueType.MARGIN: #Worst margin

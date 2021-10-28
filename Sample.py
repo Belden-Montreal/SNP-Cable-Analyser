@@ -78,7 +78,7 @@ class Sample(SNPManipulations):
         
         self.worstValue = {}
         self.worstMargin = {}
-    
+
         #print self.port_name
         #vna_out.write_touchstone("testout_mm", form="ri")
         #print self.RL["RL_11"][0]
@@ -249,6 +249,9 @@ class Sample(SNPManipulations):
         self.standard = standard
         self.worstMargin = {}
         self.worstValue = {}
+        for parameter in self.parameters:
+            self.getWorstMargin(parameter.replace(" ",""))
+            self.getWorstValue(parameter.replace(" ",""))
 
 if __name__ == "__main__":
     

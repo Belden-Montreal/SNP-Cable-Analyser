@@ -59,6 +59,8 @@ from tabThread import TabThread
 
 from multiprocessing.dummy import Pool as ThreadPool
 
+from genericworker import GenericWorker
+
 class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QAction, QtWidgets.QFileDialog, QtWidgets.QListView, QtWidgets.QDialog, QtCore.Qt):
 
     '''
@@ -108,9 +110,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         self.comm = Communication()
         self.settings = Settings()
 
-    def importSnp(self):
-        #Whenever the user clicks on the import SNP button, it opens a file dialog
-        self.openFileNamesDialog()
+
 
     def addEmbed(self):
         testName, result = QtWidgets.QInputDialog.getText(self, "Add an Embedded Sample",
@@ -197,6 +197,8 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
 
             
     def displaySamplesInTable(self):
+        print("Finished TREAD !")
+
         measurementCount = len(self.Project.measurements)
         self.sampleTable.setRowCount(measurementCount)
         for i in range(0, measurementCount):
@@ -219,8 +221,9 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         self.alienWidget = AlienWidget(self.param_tabs,  sample = self.Project.getSampleByName(self.selected[0]), graph=self.graphicsView, comm = self.comm)
         #self.param_tabs.addTab(self.embeddingWidget.widget, "Embedding Main")
         
-            
-    def openFileNamesDialog(self):
+
+    def importSnp(self):
+        #Whenever the user clicks on the import SNP button, it opens a file dialog
 
         options = self.Options()
         options |= self.DontUseNativeDialog
@@ -229,12 +232,44 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         print(files)
 
         #This needs to be in thread  Look into this : https://realpython.com/python-pyqt-qthread/
-        self.Project.importSNP(files)
+
+        for file in files:
+            my_thread = QtCore.QThread(parent = self)
+            my_thread.started.connect(self.startImport)
+
+            my_thread.start()
+
+            # This causes my_worker.run() to eventually execute in my_thread:
+            my_worker = GenericWorker(self.Project.importSNP, samples = file)
+            my_worker.moveToThread(my_thread)
+
+            my_worker.finished.connect(self.displaySamplesInTable)
+
+            #self.my_worker.start.connect(self.my_worker.run)
+            my_worker.start.emit()
+            
+
+
+        '''self.threadPool.append(my_thread)
+        self.my_worker = my_worker
+
+
+        self.importSNPTask = self.Project.importSNP(samples = files)
+        self.importSNPTask.notifyFinished.connect(self.displaySamplesInTable)
+        self.importSNPTask.started.connect(self.startImport)
+        self.importSNPTask.start.emit()'''
+
+
+        #self.Project.importSNP(files)
 
         #print(self.rs.RL.items())
         #self.plot(self.rs.NEXT) USE THIS !!!!!!!
 
-        self.displaySamplesInTable()
+        #self.displaySamplesInTable()
+
+    def startImport(self):
+        print("START IMPORT THREAD : ", int(QtCore.QThread.currentThreadId()))
+
 
     def plot(self, x=None, param_dict=None, limit = None, unit = "Mhz", avgLimit = None):
 
@@ -437,7 +472,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         if action == selectAll:
             self.sampleTable.selectAll()
         elif action == addSNP:
-            self.openFileNamesDialog()
+            self.importSnp()
         elif action == addAlien:
             self.addAlien()
         elif action == addEmbed:
@@ -468,12 +503,12 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
 
         self.tab_list = []
         self.tab_list.append(self.mainTab)
-        values = self.calculateErrors(pool=os.cpu_count())
+        #values = self.calculateErrors(pool=os.cpu_count())
         allPass = True
         failedParams = []
         for param in self.sample.parameters:
 
-            self.new_tab = ParameterWidget(param.replace(" ", ''), self.sample, values[param.replace(" ","")])
+            self.new_tab = ParameterWidget(param.replace(" ", ''), self.sample) #, values[param.replace(" ","")])
             self.tab_list.append(self.new_tab.widget)
             self.param_tabs.addTab(self.new_tab.widget, param)
             allPass = allPass and self.new_tab.hasPassed
@@ -493,7 +528,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
                 index = 0
         self.param_tabs.setCurrentIndex(index)
 
-    def calculateErrors(self, multithreading=False, pool=0):
+    '''def calculateErrors(self, multithreading=False, pool=0):
         values = {}
         self.progressBar.setValue(0)
         if multithreading:
@@ -525,7 +560,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         self.progressLock.acquire()
         self.progressBar.setValue(self.progressBar.value()+100/len(self.sample.parameters))
         self.progressLock.release()
-        return value
+        return value'''
 
     def tabChange(self):
         #This function is called whenever a parameter 
@@ -686,7 +721,7 @@ class Port_Renumbering:
             if len(_from) < 1 or len(_to) < 1:
                 return None, None
             return _from, _to'''
-        
+
 
 
 

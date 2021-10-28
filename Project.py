@@ -4,47 +4,70 @@ from embedding import Embedding
 
 import threading
 from PyQt5 import QtWidgets, QtGui
+from PyQt5 import QtCore
+from PyQt5.QtCore import pyqtSlot, pyqtSignal
 import time
 
 import xlsxwriter
 import os
 import subprocess
 
+from genericworker import GenericWorker
 
-class Project: #Put (object) later
+class Project(QtCore.QThread): #Put (object) later
 
     def __init__(self):
- 
+         
+        super(self.__class__, self).__init__()
+
         self.measurements = [] #array of sample objects
         self.activeMeasurements = []
-    
+        
+        self.threadPool = []
+
     def importSNP(self, samples):
-
-        if len(samples) == 0:
-            return -1
-            
+        
         start_time = time.time()
-
         threads = []
         num_meas = len(self.measurements)
-     
-        for idx, sample in enumerate(samples):
-            self.measurements.append(Sample(sample))
-            #self.measurements[idx].getParameters()
-            
-            t = threading.Thread(target=self.measurements[num_meas+idx].getParameters())
-            threads.append(t)
-            t.start()
-            print("starting")
-            
-        for t in threads:
-            print("done")
-            t.join()
+        #for idx, sample in enumerate(samples):
+        s = Sample( snpFile = samples )
+        s.getParameters()
+        self.measurements.append(s)
+        '''my_thread = QtCore.QThread(self)
+            my_thread.start()
+            my_thread.wait()
+            my_worker = GenericWorker(self.startSNPImport, snpFile = sample)
+            my_worker.moveToThread(my_thread)
+            my_worker.finished.connect(self.finishSNPImport)
+
+            #self.my_worker.start.connect(self.my_worker)
+            my_worker.start.emit()
+            self.threadPool.append(my_thread)
+        for t in self.threadPool:
+            if not t.isRunning():
+                # get results from thread
+                t.handled = True
+        my_threads = [t for t in my_threads if not t.handled]
+        '''
+
+
+
+
 
         #print self.measurements
         #print("--- %s seconds ---" % (time.time() - start_time))        
-
         #TODO: Add selected samples
+
+    def startSNPImport(self, snpFile):
+        print("startSNPImport : ", int(QtCore.QThread.currentThreadId()))
+        s =  Sample(snpFile)
+        self.measurements.append(s)
+
+    def finishSNPImport(self):
+        print("finishSNPImport : ", int(QtCore.QThread.currentThreadId()))
+
+
 
     def delete(self, samples):
         for sample in samples:
