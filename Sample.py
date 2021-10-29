@@ -7,6 +7,11 @@ import numpy as np
 
 from settings import Settings
 
+from genericworker import GenericWorker
+from PyQt5 import QtCore     
+from pathos.pools import ProcessPool
+from multiprocessing import cpu_count
+
 class Sample(SNPManipulations):
 
     '''This class handles the SNP samples for the basic test'''
@@ -79,17 +84,11 @@ class Sample(SNPManipulations):
         self.worstValue = {}
         self.worstMargin = {}
 
-        #print self.port_name
-        #vna_out.write_touchstone("testout_mm", form="ri")
-        #print self.RL["RL_11"][0]
-
-    '''@limit.setter
-    def setLimit(self, ):
-        self.limit = Limit()'''
+        # self.getParameters()
         
 
-    def getParameters(self, z=False):
-
+    def getParameters(self):
+        z=False
         self.RL = self.getRL(self.dd, z)
         self.IL = self.getIL(self.dd, z )
         self.NEXT = self.getNEXT(self.dd, z)
@@ -117,6 +116,7 @@ class Sample(SNPManipulations):
         self.DMCMRL      = self.getRL(self.dc, z)
         #print self.RL.keys()
 
+        
         #real and complex values
         self.RLZ = self.getRL(self.dd)
         self.ILZ = self.getIL(self.dd)
@@ -249,9 +249,25 @@ class Sample(SNPManipulations):
         self.standard = standard
         self.worstMargin = {}
         self.worstValue = {}
-        for parameter in self.parameters:
-            self.getWorstMargin(parameter.replace(" ",""))
-            self.getWorstValue(parameter.replace(" ",""))
+
+
+
+        with ProcessPool(cpu_count()) as p:
+            r1 = p.amap(self.getWorstMargin, [parameter.replace(" ", "") for parameter in self.parameters])
+            r2 = p.amap(self.getWorstValue, [parameter.replace(" ", "") for parameter in self.parameters])
+            r1.get()
+            r2.get()
+            while not r1.ready() and not r2.ready():
+                print("Calculating r1 and r2")
+            #marginWorker.start()
+            #valueWorker.start()
+
+    def ret_function(self):
+        pass
+        #marginWorker.finished.connect(self.displaySamplesInTable)
+
+
+
 
 if __name__ == "__main__":
     

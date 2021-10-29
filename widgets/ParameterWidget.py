@@ -21,7 +21,7 @@ class ParameterWidget():
         self.hasPassed = True
 
         if self.sample.standard is not None:
-            print("PARAM WIDGET PARAM : ", self.sample.worstValue)
+            #print("PARAM WIDGET PARAM : ", self.sample.worstValue)
             values = [self.sample.worstValue[param], self.sample.worstMargin[param]]
             if values[0][0] and values[1]:
                 self.worstValue = values[0]

@@ -12,9 +12,11 @@ import xlsxwriter
 import os
 import subprocess
 
-from genericworker import GenericWorker
 
-class Project(QtCore.QThread): #Put (object) later
+from pathos.pools import ProcessPool
+from multiprocessing import cpu_count
+
+class Project(): #Put (object) later
 
     def __init__(self):
          
@@ -25,15 +27,21 @@ class Project(QtCore.QThread): #Put (object) later
         
         self.threadPool = []
 
-    def importSNP(self, samples):
+    def importSNP(self, files):
         
         start_time = time.time()
         threads = []
         num_meas = len(self.measurements)
         #for idx, sample in enumerate(samples):
-        s = Sample( snpFile = samples )
-        s.getParameters()
-        self.measurements.append(s)
+
+        with ProcessPool(cpu_count()) as p:
+            samples = p.map(self.addSample, files)
+        
+            for s in samples:
+                self.measurements.append(s)
+
+        return
+
         '''my_thread = QtCore.QThread(self)
             my_thread.start()
             my_thread.wait()
@@ -59,16 +67,11 @@ class Project(QtCore.QThread): #Put (object) later
         #print("--- %s seconds ---" % (time.time() - start_time))        
         #TODO: Add selected samples
 
-    def startSNPImport(self, snpFile):
-        print("startSNPImport : ", int(QtCore.QThread.currentThreadId()))
-        s =  Sample(snpFile)
-        self.measurements.append(s)
-
-    def finishSNPImport(self):
-        print("finishSNPImport : ", int(QtCore.QThread.currentThreadId()))
-
-
-
+    def addSample(self, file):
+        s = Sample(file)
+        s.getParameters()
+        return s
+        
     def delete(self, samples):
         for sample in samples:
             sample = self.getSampleByName(sample)
@@ -168,7 +171,7 @@ if __name__ == '__main__':
     proj1.importSNP([r"snps\TestPCLiam3.s8p", r"snps\TestPCLiam4.s8p"])
 
     print(proj1.getSampleByName(u"TestPCLiam3"))
-    proj1.generateExcel("test1.xlsx", ["TestPCLiam3","TestPCLiam4"])
+    #proj1.generateExcel("test1.xlsx", ["TestPCLiam3","TestPCLiam4"])
 
 
     

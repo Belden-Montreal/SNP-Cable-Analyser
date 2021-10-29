@@ -110,7 +110,8 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         self.comm = Communication()
         self.settings = Settings()
 
-
+        self.threadpool = QtCore.QThreadPool()
+        self.poolMutex = QtCore.QMutex()
 
     def addEmbed(self):
         testName, result = QtWidgets.QInputDialog.getText(self, "Add an Embedded Sample",
@@ -156,9 +157,18 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
                             if not (str(symbol) == 'f'):
                                 ret = QtWidgets.QInputDialog.getDouble(self, "Enter the parameter value", "Please enter the value for the parameter "+ str(symbol) +" : ")
                                 limit.setParamValue(symbol, ret[0])
+            
             for sample in self.selected:
-                self.Project.getSampleByName(sample).setStandard(item)
-                for i in range(0, len(self.Project.measurements)):
+
+                worker = GenericWorker(self.Project.getSampleByName(sample).setStandard , standard=item)
+                worker.signals.finished.connect(self.displaySamplesInTable)
+
+                self.threadpool.start(worker)
+
+
+            
+
+        '''        for i in range(0, len(self.Project.measurements)):
                     if self.sampleTable.item(i,0).text() == sample:
                         self.sampleTable.setItem(i, 2, QtWidgets.QTableWidgetItem(item.name))
             self.sampleTable.resizeColumnsToContents()
@@ -169,7 +179,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
                 #EmbeddingWidget(self.param_tabs,  sample = self.Project.getSampleByName(self.selected[0]))
                 self.setupEmbed()
             else:
-                self.displaySampleParams(self.selected)            
+                self.displaySampleParams(self.selected)     '''       
 
     def setActiveSample(self):
         self.plot(None, None)
@@ -204,11 +214,9 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         for i in range(0, measurementCount):
             self.sampleTable.setItem(i, 0, QtWidgets.QTableWidgetItem(self.Project.measurements[i].name))
             self.sampleTable.setItem(i, 1, QtWidgets.QTableWidgetItem(self.Project.measurements[i].date))
-            try:
-                self.sampleTable.setItem(i, 2, QtWidgets.QTableWidgetItem(self.Project.measurements[i].standard))
-            except:
-                pass
-        self.sampleTable.resizeColumnsToContents()
+            if self.Project.measurements[i].standard is not None:
+                self.sampleTable.setItem(i, 2, QtWidgets.QTableWidgetItem(self.Project.measurements[i].standard.name))
+        #self.sampleTable.resizeColumnsToContents()
 
     
     def setupEmbed(self):
@@ -233,21 +241,14 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
 
         #This needs to be in thread  Look into this : https://realpython.com/python-pyqt-qthread/
 
-        for file in files:
-            my_thread = QtCore.QThread(parent = self)
-            my_thread.started.connect(self.startImport)
+        #for file in files:
+        worker = GenericWorker(function= self.Project.importSNP, files = files)
+        worker.signals.finished.connect(self.displaySamplesInTable)
 
-            my_thread.start()
+        self.threadpool.start(worker)
 
-            # This causes my_worker.run() to eventually execute in my_thread:
-            my_worker = GenericWorker(self.Project.importSNP, samples = file)
-            my_worker.moveToThread(my_thread)
 
-            my_worker.finished.connect(self.displaySamplesInTable)
-
-            #self.my_worker.start.connect(self.my_worker.run)
-            my_worker.start.emit()
-            
+        #self.my_worker.start.connect(self.my_worker.run)
 
 
         '''self.threadPool.append(my_thread)
@@ -528,39 +529,6 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
                 index = 0
         self.param_tabs.setCurrentIndex(index)
 
-    '''def calculateErrors(self, multithreading=False, pool=0):
-        values = {}
-        self.progressBar.setValue(0)
-        if multithreading:
-            threads = []
-            for i, param in enumerate(self.sample.parameters):
-                thread = TabThread(i, self.sample, param.replace(" ",""))
-                threads.append(thread)
-                thread.start()
-
-            for i, thread in enumerate(threads):
-                values[thread.param] = thread.join()
-                self.progressBar.setValue(100*i/len(threads))
-        elif pool:
-            pool = ThreadPool(processes=pool)
-            results = pool.map(self.poolCalculate, self.sample.parameters)
-            self.progressBar.setValue(100)
-            for i, param in enumerate(self.sample.parameters):
-                values[param.replace(" ","")] = results[i]
-        else:
-            for i, parameter in enumerate(self.sample.parameters):
-                param = parameter.replace(" ","")
-                values[param] = (self.sample.getWorstValue(param), self.sample.getWorstMargin(param))
-                self.progressBar.setValue(100*(i+1)/len(self.sample.parameters))
-        return values
-
-    progressLock = threading.Lock()
-    def poolCalculate(self, param):
-        value = (self.sample.getWorstValue(param.replace(" ","")), self.sample.getWorstMargin(param.replace(" ","")))
-        self.progressLock.acquire()
-        self.progressBar.setValue(self.progressBar.value()+100/len(self.sample.parameters))
-        self.progressLock.release()
-        return value'''
 
     def tabChange(self):
         #This function is called whenever a parameter 
@@ -746,7 +714,7 @@ def main():
 
     print("Starting")
     print(sys.argv)
-    sys._excepthook = sys.excepthook
+    '''sys._excepthook = sys.excepthook
     def exception_hook(exctype, value, traceback):
         print(exctype, value, traceback)
         sys._excepthook(exctype, value, traceback)
@@ -754,7 +722,9 @@ def main():
     sys.excepthook = exception_hook
     #splash.finish(form)
 
-    sys.exit(app.exec_())
+    sys.exit(app.exec_())'''
+    app.exec_()
+    app.deleteLater()        
 
 
 if __name__ == '__main__':  # if we're running file directly and not importing it
