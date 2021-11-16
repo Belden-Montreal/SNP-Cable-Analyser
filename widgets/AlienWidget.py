@@ -1,6 +1,6 @@
 from UI import alienWidget as AW
 from PyQt5 import QtWidgets, QtGui, QtCore
-from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem, QFileDialog, QCheckBox
+from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem, QFileDialog, QCheckBox, QListWidgetItem
 import matplotlib
 
 from matplotlib.pyplot import cm
@@ -43,13 +43,13 @@ class AlienWidget():
         self.alienWidget.alienEnd1.toggled.connect(self.alienRadioChange)
         self.alienWidget.alienEnd2.toggled.connect(self.alienRadioChange)
 
-        self.alienWidget.alien12.toggled.connect(self.alienPlotUpdate)
+        '''self.alienWidget.alien12.toggled.connect(self.alienPlotUpdate)
         self.alienWidget.alien36.toggled.connect(self.alienPlotUpdate)
         self.alienWidget.alien45.toggled.connect(self.alienPlotUpdate)
         self.alienWidget.alien78.toggled.connect(self.alienPlotUpdate)
         self.alienWidget.alienAvg.toggled.connect(self.alienPlotUpdate)
         self.alienWidget.alienLimitCheck.toggled.connect(self.alienPlotUpdate)
-        self.alienWidget.alienAvgLimitCheck.toggled.connect(self.alienPlotUpdate)
+        self.alienWidget.alienAvgLimitCheck.toggled.connect(self.alienPlotUpdate)'''
 
         self.alienUpdateDisturberList()
         self.alienPlotUpdate()
@@ -58,6 +58,25 @@ class AlienWidget():
     def alienRadioChange(self):
         self.alienUpdateDisturberList()
         self.alienPlotUpdate()
+
+    def setPlots(self):
+
+
+        for l in self.alienSample.vic_port_names:
+            print("Alien Label : " ,l)
+            chkBoxItem = QListWidgetItem()
+            chkBoxItem.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
+            chkBoxItem.setText(l)
+            chkBoxItem.setCheckState(QtCore.Qt.CheckState.Checked)
+            #checkbox = QCheckBox(label, self.paramWidget.resultsList)
+            #checkbox.setChecked(True)  
+
+            self.alienWidget.plotList.addItem(chkBoxItem)
+        
+
+
+
+
         
     def alienPlotUpdate(self):
 
@@ -98,26 +117,16 @@ class AlienWidget():
             
             alienPlots = {}
             
-            try:
-                if self.alienWidget.alien12.isChecked():
-                    alienPlots["12"] = PS["12"]
-            except:
-                pass
-            try:
-                if self.alienWidget.alien36.isChecked():
-                    alienPlots["36"] = PS["36"]
-            except:
-                pass
-            try:
-                if self.alienWidget.alien45.isChecked():
-                    alienPlots["45"] = PS["45"]
-            except:
-                pass
-            try:
-                if self.alienWidget.alien78.isChecked():
-                    alienPlots["78"] = PS["78"]
-            except:
-                pass
+
+
+
+            lst = self.alienWidget.plotList
+            for x in range(lst.count()):
+                item = lst.item(x)
+                pair = item.text()
+                if item.checkState() == QtCore.Qt.Checked:
+                    alienPlots[pair] = PS[pair]
+ 
             try:
                 self.plot(alien.freq, alienPlots, limit=limit, avgLimit=avgLimit, title = testType + ',' + end)
             except Exception as e:
@@ -138,6 +147,8 @@ class AlienWidget():
             alien.addDisturbed(file)
             self.alienUpdateDisturberList()
             self.alienPlotUpdate()
+
+        self.setPlots()
 
     """def alienAddDisturber(self):
         print("Add Disturber")

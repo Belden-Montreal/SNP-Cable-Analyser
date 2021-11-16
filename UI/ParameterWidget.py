@@ -234,7 +234,7 @@ class Ui_ParameterWidget(object):
     def retranslateUi(self, ParameterWidget):
         _translate = QtCore.QCoreApplication.translate
         ParameterWidget.setWindowTitle(_translate("ParameterWidget", "ParameterWidget"))
-        self.groupBox_5.setTitle(_translate("ParameterWidget", "Results"))
+        self.groupBox_5.setTitle(_translate("ParameterWidget", "Plots"))
         self.paramLabel.setText(_translate("ParameterWidget", "paramLabel"))
         self.label_10.setText(_translate("ParameterWidget", "-"))
         self.passLabel.setText(_translate("ParameterWidget", "passLabel"))

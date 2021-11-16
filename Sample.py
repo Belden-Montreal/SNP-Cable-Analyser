@@ -271,7 +271,7 @@ class Sample(SNPManipulations):
 
 if __name__ == "__main__":
     
-    samp = Sample('fci.s4p')
+    samp = Sample('Y:\DataConnect_6A_FW.s4p')
     
     samp.extractParameters(samp.dd)
 

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>896</width>
-    <height>797</height>
+    <height>724</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -157,18 +157,11 @@
       </widget>
       <widget class="QWidget" name="verticalLayoutWidget_2">
        <layout class="QVBoxLayout" name="verticalLayout_8">
+        <property name="sizeConstraint">
+         <enum>QLayout::SetMinAndMaxSize</enum>
+        </property>
         <item>
-         <widget class="QPlainTextEdit" name="consoleOut">
-          <property name="baseSize">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-         </widget>
+         <widget class="QWidget" name="console_widget" native="true"/>
         </item>
        </layout>
       </widget>
@@ -257,6 +250,7 @@
     <addaction name="actionTest"/>
     <addaction name="separator"/>
     <addaction name="actionPort_Naming"/>
+    <addaction name="actionPort_Pair_Naming_Alien"/>
    </widget>
    <widget class="QMenu" name="menuVNA">
     <property name="title">
@@ -502,6 +496,11 @@
     <string>Port/Pair Naming</string>
    </property>
   </action>
+  <action name="actionPort_Pair_Naming_Alien">
+   <property name="text">
+    <string>Port/Pair Naming (Alien)</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -738,6 +737,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionPort_Pair_Naming_Alien</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>pairRenameAlien()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>447</x>
+     <y>361</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>importSnp()</slot>
@@ -752,5 +767,6 @@
   <slot>addAlien()</slot>
   <slot>addEmbed()</slot>
   <slot>pairRename()</slot>
+  <slot>pairRenameAlien()</slot>
  </slots>
 </ui>

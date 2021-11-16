@@ -7,10 +7,12 @@ from UI import VNA_addr_dialog
 from UI import MainWidget
 
 from dialogs import pairNameDialog
+from print2console import EmittingStream
 
 from widgets.ParameterWidget import ParameterWidget
 from widgets.EmbeddingWidget import EmbeddingWidget
 from widgets.AlienWidget import AlienWidget
+from widgets.ConsoleWidget import ConsoleWidget
 
 
 from limits.LimitDialog import LimitDialog
@@ -112,6 +114,9 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
 
         self.threadpool = QtCore.QThreadPool()
         self.poolMutex = QtCore.QMutex()
+
+
+        self.setupConsole()
 
     def addEmbed(self):
         testName, result = QtWidgets.QInputDialog.getText(self, "Add an Embedded Sample",
@@ -323,6 +328,14 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         except Exception as e:
             print(e)
 
+    def pairRenameAlien(self):
+        pair_names = self.settings.pairNamesAlien
+        num_pairs = self.settings.numPairs
+        try:
+            names = pairNameDialog.PairNameDialog(pair_names, num_pairs).getPairNames()
+            self.settings.pairNamesAlien = names
+        except Exception as e:
+            print(e)
 
 
     def setPairNumber(self):
@@ -548,6 +561,12 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
                 self.embeddingWidget.embedPlotUpdate(activeParameter)
 
             elif sample.__retr__() == "Alien":
+                try: 
+                    self.alienWidget
+                except AttributeError: 
+                    self.alienWidget = None
+                if self.alienWidget is None:
+                    self.setupAlien()
                 self.alienWidget.alienPlotUpdate()
 
             else:
@@ -651,6 +670,14 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
     def calibrate(self):
         print("CALIBRATE")
         self.comm.calibrate()
+
+    def setupConsole(self):
+        self.consoleWidget = ConsoleWidget(parent = self.console_widget)
+        sys.stdout = EmittingStream(textWritten=self.consoleWidget.writeToConsole)  # test
+    
+    def __del__(self):  # test
+        # Restore sys.stdout
+        sys.stdout = sys.__stdout__
 
 class Addr_Dialog:
     def getAddr(self):

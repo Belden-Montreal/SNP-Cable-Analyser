@@ -2,20 +2,22 @@ from snpAnalyze import SNPManipulations
 import os
 from os.path import splitext
 import time
-
+from settings import  Settings
 
 import numpy as np
 
 import re 
 class Alien(object):
 
-    def __init__(self, testName):
+    def __init__(self, testName, portNames = None):
+
+        self.settings = Settings()
 
         self.name = testName
         self.date = time.strftime("%a, %d %b %Y %X +0000", time.gmtime())
         self.limit = None
         
-        self.numPairs = 8
+        #self.numPairs = 8
         self.pair_combo = []
         #for i in self.numPairs:
             #self.PSANEXT[]
@@ -25,19 +27,13 @@ class Alien(object):
 
         #self.port_name = {0:"12", 1:"36", 2:"45", 3:"78",4:"12", 5:"36", 6:"45", 7:"78"}
 
-        self.port_name = {}
+        self.port_name = portNames
         self.pair_combo = ["45", "12","36","78"]
         
         self.standard = None
         self.freq = []
-        for i in range(0, self.numPairs//2):
-            self.port_name[i] = self.pair_combo[i]  #{0:"12", 1:"36", 2:"45", 3:"78"}
-            print("loop 1", i)
-        for i in range(self.numPairs//2, self.numPairs):
-            self.port_name[i] =  "(d)"+self.pair_combo[i-self.numPairs]  #{4:"(r)12",  :"(r)36", 6:"(r)45", 7:"(r)78", 0:"12", 1:"36", 2:"45", 3:"78"}
-            print("loop 2", i)
 
-        print(self.port_name)
+
 
         self.disturbersList = []
 
@@ -65,13 +61,20 @@ class Alien(object):
         #vna_out.renumber([1,2], [2,1])
 
         self.rs.s2mm()
+        self.numPairs = self.rs.getNumPorts(self.rs.dd) 
+
+        if self.port_name is None:
+            self.port_name = self.settings.pairNamesAlien[:self.numPairs] #["45", "12","36","78"]
+        else:
+            self.port_name = self.port_name[:self.numPairs]
+        self.vic_port_names = self.port_name[:self.numPairs//2]  #The victim pair names are the first half of the list 
+        self.dist_port_names = self.port_name[self.numPairs//2:]  #The victim pair names are the first half of the list 
 
         self.rs.port_name = self.port_name
-        
         self.distrubedIL = self.rs.getIL(self.rs.dd , z = False)
+
         
     def addDisturberMeasurement(self, end, testType, snpFile, name = ""):
-
         '''
         This function accepts as parameters the following:
             -end : the end of the cable 
@@ -89,13 +92,14 @@ class Alien(object):
  
 
     def getAlien(self, snpFile):
+        
         '''
         To get the ANEXT, we will get the FEXT and the IL from the snp file and we'll combine the 2 dicts.
         '''
         
         self.rs = SNPManipulations(snpFile)
         self.rs.oneSided = False
-
+    
         #vna_out.renumber([1,2], [2,1])
         
         self.rs.s2mm()
@@ -113,12 +117,13 @@ class Alien(object):
 
         ILKeys = list(IL.keys())
 
-        print ("IL Keys : ", ILKeys)
-
+        print ("IL Keys a: ", ILKeys)
+        print("port names  = ", self.port_name)
         for key in ILKeys:
-            IL[re.sub('[(d)]', '', key) + "-(d)" + key] = IL[key]
+            i = self.port_name.index(key)
+            IL[self.port_name[i+self.numPairs//2] + '-' + key] = IL[key]
             del IL[key]
-        print ("IL Keys : ", IL.keys())
+        print ("IL Keys b: ", IL.keys())
 
         #print({**FEXT, **IL}.keys())
 
@@ -138,19 +143,19 @@ class Alien(object):
 
         self.disturbersList = disturbers
         
-        for disturbed_pair in range( numPairs // 2):
-            self.PSAlien[self.port_name[disturbed_pair]] = []
+        for disturbed_pair in range( numPairs //2 ):
 
+            self.PSAlien[self.vic_port_names[disturbed_pair]] = []
             for f in range(0, self.rs.num_samples):
+                
                 outterSum = 0
                 for disturber in disturbers:
 
                     innerSum = 0
-                    for disturbing_pair in range(numPairs//2, numPairs):
-                        ALIEN = self.disturbers[end][Test][disturber][self.port_name[disturbed_pair] + '-' + self.port_name[disturbing_pair]][f]
+                    for disturbing_pair in range(numPairs//2,):
 
-                        if f == 0:
-                            print(str(disturbed_pair) + '-' + str(disturbing_pair), ALIEN)
+                        ALIEN = self.disturbers[end][Test][disturber][self.dist_port_names[disturbing_pair] + '-' +  self.vic_port_names[disturbed_pair]][f]
+
                         #inner = 10**(ANEXT_k_i_j/10)
                         
                         '''if f == 0 and  disturbed_pair == numPairs - 1:
@@ -163,8 +168,8 @@ class Alien(object):
                     if f == 0 and disturbed_pair == 0:
                         print("inner", innerSum)
                 PSK = 10*np.log10(outterSum)
-                self.PSAlien[self.port_name[disturbed_pair]].append(PSK)
-                
+                self.PSAlien[self.vic_port_names[disturbed_pair]].append(PSK)
+
         return self.PSAlien
                 
     def getPSAACRX(self, end, Test):
@@ -193,6 +198,10 @@ class Alien(object):
         self.standard = standard
         self.worstMargin = {}
         self.worstValue = {}
+
+
+    #def portRename(self, portNames):
+
 
     def __retr__(self):
         return "Alien"

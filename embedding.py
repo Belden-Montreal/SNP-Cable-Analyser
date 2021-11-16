@@ -50,6 +50,8 @@ class Embedding(SNPManipulations):
         self.reembeded = {}
         self.cat = "6A"
 
+        self.standard = None
+
     def getOpenDelay(self):
         '''
         Using aquired S8P for an open sample, this function returns the progation delay

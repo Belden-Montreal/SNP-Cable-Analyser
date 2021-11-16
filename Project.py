@@ -13,6 +13,7 @@ import os
 import subprocess
 
 
+
 from pathos.pools import ProcessPool
 from multiprocessing import cpu_count
 
@@ -28,7 +29,7 @@ class Project(): #Put (object) later
         self.threadPool = []
 
     def importSNP(self, files):
-        
+        print("Startings ImportSNP")
         start_time = time.time()
         threads = []
         num_meas = len(self.measurements)
@@ -38,7 +39,8 @@ class Project(): #Put (object) later
             samples = p.map(self.addSample, files)
         
             for s in samples:
-                self.measurements.append(s)
+                if s is not None:
+                    self.measurements.append(s)
 
         return
 
@@ -68,9 +70,13 @@ class Project(): #Put (object) later
         #TODO: Add selected samples
 
     def addSample(self, file):
-        s = Sample(file)
-        s.getParameters()
-        return s
+        try:
+            s = Sample(file)
+            s.getParameters()
+        
+            return s
+        except Exception as e:
+            return None
         
     def delete(self, samples):
         for sample in samples:
