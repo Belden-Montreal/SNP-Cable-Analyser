@@ -51,6 +51,11 @@ class AlienWidget():
         self.alienWidget.alienLimitCheck.toggled.connect(self.alienPlotUpdate)
         self.alienWidget.alienAvgLimitCheck.toggled.connect(self.alienPlotUpdate)'''
 
+
+        try: 
+            self.setPlots()
+        except:
+            pass
         self.alienUpdateDisturberList()
         self.alienPlotUpdate()
 
@@ -60,10 +65,11 @@ class AlienWidget():
         self.alienPlotUpdate()
 
     def setPlots(self):
-
+        while(self.alienWidget.plotList.count() > 0):
+            self.alienWidget.plotList.takeItem(0)
+        
 
         for l in self.alienSample.vic_port_names:
-            print("Alien Label : " ,l)
             chkBoxItem = QListWidgetItem()
             chkBoxItem.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
             chkBoxItem.setText(l)
@@ -73,9 +79,6 @@ class AlienWidget():
 
             self.alienWidget.plotList.addItem(chkBoxItem)
         
-
-
-
 
         
     def alienPlotUpdate(self):
@@ -88,20 +91,19 @@ class AlienWidget():
         if alien.standard and len(alien.freq):
             if self.alienWidget.alienPSANEXT.isChecked():
                 if self.alienWidget.alienLimitCheck.isChecked():
-                    limit = alien.standard.limits["PSANEXT"].evaluateArray({'f': alien.freq}, len(alien.freq), neg=True)
+                    limit = alien.standard.limits["PSANEXT"].getArray()#evaluateArray({'f': alien.freq}, len(alien.freq), neg=True)
                 if self.alienWidget.alienAvgLimitCheck.isChecked():
-                    avgLimit = alien.standard.limits["AVGPSANEXT"].evaluateArray({'f': alien.freq}, len(alien.freq), neg=True)
+                    avgLimit = alien.standard.limits["AVGPSANEXT"].getArray()#.evaluateArray({'f': alien.freq}, len(alien.freq), neg=True)
             elif self.alienWidget.alienPSAACRF.isChecked():
                 if self.alienWidget.alienLimitCheck.isChecked():
-                    limit = alien.standard.limits["PSAACRF"].evaluateArray({'f': alien.freq}, len(alien.freq), neg=True)
+                    limit = alien.standard.limits["PSAACRF"].getArray()#.evaluateArray({'f': alien.freq}, len(alien.freq), neg=True)
                 if self.alienWidget.alienAvgLimitCheck.isChecked():
-                    avgLimit = alien.standard.limits["AVGPSAACRF"].evaluateArray({'f': alien.freq}, len(alien.freq), neg=True)
+                    avgLimit = alien.standard.limits["AVGPSAACRF"].getArray()#.evaluateArray({'f': alien.freq}, len(alien.freq), neg=True)
         for i in range(self.alienWidget.alienDisturbers.count()):
             dist = self.alienWidget.alienDisturbers.item(i)
             if dist.checkState():
                 disturberList.append(dist.text())
-            else:
-                print("N")
+
         try:
             if self.alienWidget.alienEnd1.isChecked():
                 end = "end1"
@@ -130,10 +132,12 @@ class AlienWidget():
             try:
                 self.plot(alien.freq, alienPlots, limit=limit, avgLimit=avgLimit, title = testType + ',' + end)
             except Exception as e:
-                print("Alien Plot Error :", e)
+                #print("Alien Plot Error :", e)
+                pass
 
         except Exception as e:
-            print("ALIEN ERROR : " ,e)
+            #print("ALIEN ERROR : " ,e)
+            pass
       
     def alienImportVictimSNP(self):
         
@@ -142,7 +146,7 @@ class AlienWidget():
         file, _ = QFileDialog.getOpenFileName(None, "QFileDialog.getOpenFileNames()", "","sNp Files (*.s*p)", options=options)
         #print files
         if file:
-            print(file)
+            #print(file)
             alien = self.alienSample
             alien.addDisturbed(file)
             self.alienUpdateDisturberList()
@@ -191,9 +195,6 @@ class AlienWidget():
         elif self.alienWidget.alienPSAACRF.isChecked():
             testType = "AFEXT"
 
-        print(end)
-        print(testType)
-
         for disturber in alien.disturbers[end][testType].keys():
             item = QtWidgets.QListWidgetItem()
             item.setText(disturber)
@@ -202,7 +203,7 @@ class AlienWidget():
 
                 alien.disturbers[end][testType][disturber] #See if defined
             except Exception as e:
-                print("Doesnt Exist")
+                pass
             else:
                 item.setFlags(item.flags() | QtCore.Qt.ItemIsUserCheckable)
                 item.setCheckState(QtCore.Qt.Checked)
@@ -225,15 +226,13 @@ class AlienWidget():
         try:
                
             f = self.comm.aquireInterface()
-            print("here")
+
             import os.path
-            print(f)
             alien.addDisturberMeasurement(end, testType, f, os.path.basename(f))
             self.alienUpdateDisturberList()
             self.alienPlotUpdate()
             
         except Exception as e:
-            print(e)
             msg = QtWidgets.QMessageBox()
             msg.setIcon(QtWidgets.QMessageBox.Information)
             msg.setText("Please Connect to VNA ")
@@ -263,13 +262,13 @@ class AlienWidget():
 
             #import os.path
             for file in files:
-                print(file, os.path.basename(file))
+                #print(file, os.path.basename(file))
                 alien.addDisturberMeasurement(end, testType, file, os.path.basename(file))
             self.alienUpdateDisturberList()
             self.alienPlotUpdate()
             
         except Exception as e:
-            print("alien import snp : ", e)
+            #print("alien import snp : ", e)
             msg = QtWidgets.QMessageBox()
             msg.setIcon(QtWidgets.QMessageBox.Information)
             msg.setText("Please select disturber to add ")

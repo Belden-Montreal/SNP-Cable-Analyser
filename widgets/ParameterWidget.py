@@ -22,21 +22,24 @@ class ParameterWidget():
 
         if self.sample.standard is not None:
             #print("PARAM WIDGET PARAM : ", self.sample.worstValue)
-            values = [self.sample.worstValue[param], self.sample.worstMargin[param]]
-            if values[0][0] and values[1]:
-                self.worstValue = values[0]
-                self.worstMargin = values[1]
-                if self.worstValue[1] == "Pass" and self.worstMargin[1] == "Pass":
-                    self.paramWidget.passLabel.setText("Pass")
-                    self.hasPassed = True
-                else:
-                    self.paramWidget.passLabel.setText("Fail")
-                    self.hasPassed = False
-            else:
+            try:
+                values = [self.sample.worstValue[param], self.sample.worstMargin[param]]
+                if values[0][0] and values[1]:
+                    self.worstValue = values[0]
+                    self.worstMargin = values[1]
+                    if self.worstValue[1] == "Pass" and self.worstMargin[1] == "Pass":
+                        self.paramWidget.passLabel.setText("Pass")
+                        self.hasPassed = True
+                    else:
+                        self.paramWidget.passLabel.setText("Fail")
+                        self.hasPassed = False
+            except:
                 self.worstMargin = None
                 self.worstValue = None
                 self.paramWidget.passLabel.setText("Fail")
                 self.hasPassed = False
+
+                #print("NO WORST VALUE",self.sample.worstValue )
         self.setResults()
 
     def setPairsList(self):

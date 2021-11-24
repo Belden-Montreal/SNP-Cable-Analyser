@@ -32,12 +32,9 @@ class Alien(object):
         self.freq = []
         for i in range(0, self.numPairs//2):
             self.port_name[i] = self.pair_combo[i]  #{0:"12", 1:"36", 2:"45", 3:"78"}
-            print("loop 1", i)
         for i in range(self.numPairs//2, self.numPairs):
             self.port_name[i] =  "(d)"+self.pair_combo[i-self.numPairs]  #{4:"(r)12",  :"(r)36", 6:"(r)45", 7:"(r)78", 0:"12", 1:"36", 2:"45", 3:"78"}
-            print("loop 2", i)
 
-        print(self.port_name)
 
         self.disturbersList = []
 
@@ -107,22 +104,16 @@ class Alien(object):
         PSFEXT = self.rs.getPSFEXT(self.rs.dd)
         IL = self.rs.getIL(self.rs.dd, z=False)
 
-        print(FEXT.keys())
        
         #we must modify the IL dictionnary keys from 12 - > 12-12
 
         ILKeys = list(IL.keys())
 
-        print ("IL Keys : ", ILKeys)
 
         for key in ILKeys:
             IL[re.sub('[(d)]', '', key) + "-(d)" + key] = IL[key]
             del IL[key]
-        print ("IL Keys : ", IL.keys())
 
-        #print({**FEXT, **IL}.keys())
-
-        #return FEXT
         return {**FEXT, **IL}
     
 
@@ -149,8 +140,8 @@ class Alien(object):
                     for disturbing_pair in range(numPairs//2, numPairs):
                         ALIEN = self.disturbers[end][Test][disturber][self.port_name[disturbed_pair] + '-' + self.port_name[disturbing_pair]][f]
 
-                        if f == 0:
-                            print(str(disturbed_pair) + '-' + str(disturbing_pair), ALIEN)
+                        '''if f == 0:
+                            print(str(disturbed_pair) + '-' + str(disturbing_pair), ALIEN)'''
                         #inner = 10**(ANEXT_k_i_j/10)
                         
                         '''if f == 0 and  disturbed_pair == numPairs - 1:
@@ -160,8 +151,8 @@ class Alien(object):
 
                         innerSum += 10**(ALIEN/10)
                     outterSum += innerSum
-                    if f == 0 and disturbed_pair == 0:
-                        print("inner", innerSum)
+                    '''if f == 0 and disturbed_pair == 0:
+                        print("inner", innerSum)'''
                 PSK = 10*np.log10(outterSum)
                 self.PSAlien[self.port_name[disturbed_pair]].append(PSK)
                 
@@ -184,8 +175,8 @@ class Alien(object):
             for f in range(0, self.rs.num_samples):
                 PS = self.PSAlien
                 PSAACRX[self.port_name[disturbed_pair]].append(PS[self.port_name[disturbed_pair]][f] - self.distrubedIL[self.port_name[disturbed_pair]][f]) 
-                if f == 0:
-                    print("disturbed pair: ", self.port_name[disturbed_pair], self.distrubedIL[self.port_name[disturbed_pair]][f])
+                '''if f == 0:
+                    print("disturbed pair: ", self.port_name[disturbed_pair], self.distrubedIL[self.port_name[disturbed_pair]][f])'''
 
         return PSAACRX
 

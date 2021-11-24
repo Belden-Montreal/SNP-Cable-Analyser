@@ -11,7 +11,7 @@ from genericworker import GenericWorker
 from PyQt5 import QtCore     
 from pathos.pools import ProcessPool
 from multiprocessing import cpu_count
-
+import time
 class Sample(SNPManipulations):
 
     '''This class handles the SNP samples for the basic test'''
@@ -159,7 +159,7 @@ class Sample(SNPManipulations):
         limit = None
         if self.standard:
             if parameter in self.standard.limits:
-                limit = self.standard.limits[parameter].evaluateDict({"f": self.freq} , len(self.freq), neg=not(parameter=="PropagationDelay"))
+                limit = self.standard.limits[parameter].getDict() #.evaluateDict({"f": self.freq} , len(self.freq), neg=not(parameter=="PropagationDelay"))
             for pair in pairs:
                 value = ''
                 freq = ''
@@ -192,7 +192,8 @@ class Sample(SNPManipulations):
         limit = None
         if self.standard:
             if parameter in self.standard.limits:
-                limit = self.standard.limits[parameter].evaluateDict({"f": self.freq} , len(self.freq), neg=not(parameter=="PropagationDelay"))
+
+                limit = self.standard.limits[parameter].getDict() #.evaluateDict({"f": self.freq} , len(self.freq), neg=not(parameter=="PropagationDelay"))
             for pair in pairs:
                 validMin = False
                 value = np.array(param[pair])
@@ -245,22 +246,37 @@ class Sample(SNPManipulations):
             i+=1
         return margins, freq, values
 
+    def evaluateLimit(self, param):
+        print("Evaulating : ", param)
+        #self.standard.limits[param].None
+
+        self.standard.limits[param].evaluateArray({"f": self.freq} , len(self.freq), neg=not(param=="PropagationDelay"))
+        self.standard.limits[param].evaluateDict({"f": self.freq} , len(self.freq), neg=not(param=="PropagationDelay"))
+        #print("ERROR: Limit Not evaluated", param)
+            
+
+
     def setStandard(self, standard):
         self.standard = standard
         self.worstMargin = {}
         self.worstValue = {}
 
+       # with ProcessPool(cpu_count()) as p:
+        for parameter in self.parameters:
+            try:
+                self.evaluateLimit(parameter.replace(" ", "") )
+                
+
+                self.getWorstMargin(parameter.replace(" ", ""))
+                self.getWorstValue(parameter.replace(" ", ""))
+
+            except Exception as e:
+                print("ERROR: Limit Not evaluated", parameter)
+
+            
+        print("FINISHED SETTING STANDARD")
 
 
-        with ProcessPool(cpu_count()) as p:
-            r1 = p.amap(self.getWorstMargin, [parameter.replace(" ", "") for parameter in self.parameters])
-            r2 = p.amap(self.getWorstValue, [parameter.replace(" ", "") for parameter in self.parameters])
-            r1.get()
-            r2.get()
-            while not r1.ready() and not r2.ready():
-                print("Calculating r1 and r2")
-            #marginWorker.start()
-            #valueWorker.start()
 
     def ret_function(self):
         pass

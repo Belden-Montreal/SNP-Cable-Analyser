@@ -34,6 +34,8 @@ class Alien(object):
         self.freq = []
 
 
+        self.disturbedSNP = None 
+        self.distrubedIL = None
 
         self.disturbersList = []
 
@@ -43,18 +45,33 @@ class Alien(object):
 
         self.disturbers["end1"]["ANEXT"]   = {}
         self.disturbers["end1"]["AFEXT"]   = {}
-        self.disturbers["end1"]["PSANEXT"] = {}
+        '''self.disturbers["end1"]["PSANEXT"] = {}
         self.disturbers["end1"]["PSAFEXT"] = {}
-        self.disturbers["end1"]["PSAACRF"] = {}
+        self.disturbers["end1"]["PSAACRF"] = {}'''
         
         self.disturbers["end2"]["ANEXT"]   = {}
         self.disturbers["end2"]["AFEXT"]   = {}
-        self.disturbers["end2"]["PSANEXT"] = {}
+        '''self.disturbers["end2"]["PSANEXT"] = {}
         self.disturbers["end2"]["PSAFEXT"] = {}
-        self.disturbers["end2"]["PSAACRF"] = {}
+        self.disturbers["end2"]["PSAACRF"] = {}'''
+
+        self.disturbersSNP = {}
             
 
+
+    def port_rename(self, port_name):
+        self.port_name = port_name
+        if self.disturbedSNP:
+            self.addDisturbed(self.disturbedSNP)
+        for end in self.disturbers.keys():
+            for testType in self.disturbers[end].keys():
+                for name in self.disturbers[end][testType]:
+                    self.addDisturberMeasurement(end, testType, self.disturbersSNP[name], name = name)
+
+
+
     def addDisturbed(self, snpFile):
+        self.disturbedSNP = snpFile
         self.rs = SNPManipulations(snpFile)
         self.rs.oneSided = False
     
@@ -72,7 +89,7 @@ class Alien(object):
 
         self.rs.port_name = self.port_name
         self.distrubedIL = self.rs.getIL(self.rs.dd , z = False)
-
+        print("Added Victim : ", snpFile)
         
     def addDisturberMeasurement(self, end, testType, snpFile, name = ""):
         '''
@@ -83,12 +100,13 @@ class Alien(object):
                    If the name arleady exists, then the disturbers measurements will be overwritten, or a measurement will be added to it.
             Once a measured value has been added, this function will procede to call the desired functions (getANEXT, getPSANEXT, getAveragePSANEXT).    
         '''
-
+        self.disturbersSNP[name] = snpFile
         alien = self.getAlien(snpFile)   #Wether its ANEXT or AFEXT, the method to extract from the SNP is the same. 
 
         self.disturbers[end][testType][name] = alien
 
-        print(self.disturbers[end][testType][name].keys())
+        #print(self.disturbers[end][testType][name].keys())
+        print("Added disturber : ", end, testType, snpFile)
  
 
     def getAlien(self, snpFile):
@@ -111,23 +129,17 @@ class Alien(object):
         PSFEXT = self.rs.getPSFEXT(self.rs.dd)
         IL = self.rs.getIL(self.rs.dd, z=False)
 
-        print(FEXT.keys())
        
         #we must modify the IL dictionnary keys from 12 - > 12-12
 
         ILKeys = list(IL.keys())
 
-        print ("IL Keys a: ", ILKeys)
-        print("port names  = ", self.port_name)
+
         for key in ILKeys:
             i = self.port_name.index(key)
             IL[self.port_name[i+self.numPairs//2] + '-' + key] = IL[key]
             del IL[key]
-        print ("IL Keys b: ", IL.keys())
 
-        #print({**FEXT, **IL}.keys())
-
-        #return FEXT
         return {**FEXT, **IL}
     
 
@@ -165,8 +177,8 @@ class Alien(object):
 
                         innerSum += 10**(ALIEN/10)
                     outterSum += innerSum
-                    if f == 0 and disturbed_pair == 0:
-                        print("inner", innerSum)
+                    '''if f == 0 and disturbed_pair == 0:
+                        print("inner", innerSum)'''
                 PSK = 10*np.log10(outterSum)
                 self.PSAlien[self.vic_port_names[disturbed_pair]].append(PSK)
 
@@ -189,8 +201,8 @@ class Alien(object):
             for f in range(0, self.rs.num_samples):
                 PS = self.PSAlien
                 PSAACRX[self.port_name[disturbed_pair]].append(PS[self.port_name[disturbed_pair]][f] - self.distrubedIL[self.port_name[disturbed_pair]][f]) 
-                if f == 0:
-                    print("disturbed pair: ", self.port_name[disturbed_pair], self.distrubedIL[self.port_name[disturbed_pair]][f])
+                '''if f == 0:
+                    print("disturbed pair: ", self.port_name[disturbed_pair], self.distrubedIL[self.port_name[disturbed_pair]][f])'''
 
         return PSAACRX
 

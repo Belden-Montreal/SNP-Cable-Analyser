@@ -221,7 +221,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
             self.sampleTable.setItem(i, 1, QtWidgets.QTableWidgetItem(self.Project.measurements[i].date))
             if self.Project.measurements[i].standard is not None:
                 self.sampleTable.setItem(i, 2, QtWidgets.QTableWidgetItem(self.Project.measurements[i].standard.name))
-        #self.sampleTable.resizeColumnsToContents()
+        self.setActiveSample()
 
     
     def setupEmbed(self):
@@ -338,8 +338,28 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
             print(e)
 
 
+    def setPairNumberAlien(self):
+        sample = self.Project.getSampleByName(self.selected[0])
+
+        pair_names = sample.port_name
+        num_pairs = sample.numPairs
+        try:
+            names = pairNameDialog.PairNameDialog(pair_names, num_pairs).getPairNames()
+            #self.settings.pairNamesAlien = names
+            sample.port_rename(names)
+            if len(self.selected) == 1:  #Since only one sample can be displayed at a time
+                self.setupAlien() 
+
+        except Exception as e:
+            print(e)
+
+
+
     def setPairNumber(self):
         sample = self.Project.getSampleByName(self.selected[0])
+        if sample.__retr__() == "Alien":
+            self.setPairNumberAlien()
+            return
         snp = sample.snpFile
         sided = sample.one_sided
         standard = sample.standard
@@ -574,9 +594,9 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
                 if sample.standard is not None:
                     if self.activeParameter.replace(" ","") in sample.standard.limits:
                         if self.activeParameter == "Propagation Delay":
-                            limit = sample.standard.limits[self.activeParameter.replace(" ","")].evaluateArray({"f": sample.freq} , len(sample.freq), neg=False)
+                            limit = sample.standard.limits[self.activeParameter.replace(" ","")].getArray()
                         else:
-                            limit = sample.standard.limits[self.activeParameter.replace(" ","")].evaluateArray({"f": sample.freq} , len(sample.freq), neg=True)
+                            limit = sample.standard.limits[self.activeParameter.replace(" ","")].getArray()
                     #print(sample.freq)
                 self.plot(self.sample.freq, getattr(self.sample, self.activeParameter.replace(" ", "")), limit = limit , unit = sample.freq_unit)
                 #print(self.sample.frequency.unit)
