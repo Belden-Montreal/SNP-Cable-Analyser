@@ -199,10 +199,10 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         
         if len(self.selected) == 1:  #Since only one sample can be displayed at a time
 
-            if self.Project.getSampleByName(self.selected[0]).__retr__() == "Alien":
+            if self.Project.getSampleByName(self.selected[0]).__repr__() == "Alien":
                 self.setupAlien()
 
-            elif self.Project.getSampleByName(self.selected[0]).__retr__() == "Embed":
+            elif self.Project.getSampleByName(self.selected[0]).__repr__() == "Embed":
                 self.setupEmbed()
             else:
                 self.displaySampleParams(self.selected)
@@ -357,7 +357,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
 
     def setPairNumber(self):
         sample = self.Project.getSampleByName(self.selected[0])
-        if sample.__retr__() == "Alien":
+        if sample.__repr__() == "Alien":
             self.setPairNumberAlien()
             return
         snp = sample.snpFile
@@ -385,7 +385,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
     def tableContextMenu(self, pos):
         #print self.selected
 
-        if len(self.selected) > 0 and all("SNP" in  self.Project.getSampleByName(sample).__retr__()  for sample in self.selected):
+        if len(self.selected) > 0 and all("SNP" in  self.Project.getSampleByName(sample).__repr__()  for sample in self.selected):
             #Start by getting info on the sample. (If they're all the same type or not)
 
             menu = QtWidgets.QMenu()
@@ -463,7 +463,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
             return 1
 
 
-        elif len(self.selected) > 0 and not all("SNP" in  self.Project.getSampleByName(sample).__retr__()  for sample in self.selected):
+        elif len(self.selected) > 0 and not all("SNP" in  self.Project.getSampleByName(sample).__repr__()  for sample in self.selected):
 
             menu = QtWidgets.QMenu()
             setLimit = menu.addAction("Set Limit")
@@ -575,12 +575,12 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         #print index
         
         if self.tab_index >= 1:
-            if sample.__retr__() == "Embed":
+            if sample.__repr__() == "Embed":
                 tab_index = self.param_tabs.currentIndex()
                 activeParameter = self.param_tabs.tabText(self.tab_index)
                 self.embeddingWidget.embedPlotUpdate(activeParameter)
 
-            elif sample.__retr__() == "Alien":
+            elif sample.__repr__() == "Alien":
                 try: 
                     self.alienWidget
                 except AttributeError: 

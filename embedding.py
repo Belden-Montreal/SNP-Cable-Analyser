@@ -489,7 +489,7 @@ class Embedding(SNPManipulations):
         return params
             
 
-    def __retr__(self):
+    def __repr__(self):
         return "Embed"
         
     @property

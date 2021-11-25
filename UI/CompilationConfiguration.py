@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(680, 300)
+        Dialog.resize(700, 300)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(Dialog)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.verticalLayout = QtWidgets.QVBoxLayout()
@@ -59,6 +59,11 @@ class Ui_Dialog(object):
         self.pushButton.setObjectName("pushButton")
         self.verticalLayout_6.addWidget(self.pushButton)
         self.verticalLayout_4.addLayout(self.verticalLayout_6)
+        self.line = QtWidgets.QFrame(self.groupBox_4)
+        self.line.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line.setObjectName("line")
+        self.verticalLayout_4.addWidget(self.line)
         self.verticalLayout_3 = QtWidgets.QVBoxLayout()
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.radioButton_2 = QtWidgets.QRadioButton(self.groupBox_4)
@@ -89,7 +94,7 @@ class Ui_Dialog(object):
         self.paramGroupBox.setTitle(_translate("Dialog", "Parameters"))
         self.seriesGroupBox.setTitle(_translate("Dialog", "Series"))
         self.label.setText(_translate("Dialog", "TextLabel"))
-        self.pushButton.setText(_translate("Dialog", "PushButton"))
+        self.pushButton.setText(_translate("Dialog", "Select Output File "))
         self.radioButton_2.setText(_translate("Dialog", "Real/Imag"))
         self.radioButton.setText(_translate("Dialog", "Mag/Phase"))
 

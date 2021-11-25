@@ -12,7 +12,7 @@ import xlsxwriter
 import os
 import subprocess
 
-
+import reportbuilder
 
 from pathos.pools import ProcessPool
 from multiprocessing import cpu_count
@@ -124,7 +124,7 @@ class Project(): #Put (object) later
             worksheet.write('B1', sample.name)
 
 
-            if(sample.__retr__() == "SNP"):
+            if(sample.__repr__() == "SNP"):
 
                 cell_format = workbook.add_format({'align': 'center',
                                                    'valign': 'vcenter'})
@@ -170,16 +170,44 @@ class Project(): #Put (object) later
     @activeSample.setter
     def activeSample(self, samples):
         self.activeMeasurements = [self.getSampleByName(sample) for sample in samples]
-        
+
+    def generateReport(self):
+        rb = reportbuilder.ReportBuilder(samples=self.measurements)
+        rb.displayUI()
+        rb.generateExcel()
+        return
 if __name__ == '__main__':  
-    proj1 = Project()
 
-    proj1.importSNP([r"snps\TestPCLiam3.s8p", r"snps\TestPCLiam4.s8p"])
-
-    print(proj1.getSampleByName(u"TestPCLiam3"))
     #proj1.generateExcel("test1.xlsx", ["TestPCLiam3","TestPCLiam4"])
 
 
     
     
+    import sys
+
+
+
+
+def main():
+
+    app = QtWidgets.QApplication(sys.argv)
+
+    proj1 = Project()
+
+    proj1.importSNP([r"snps\TestPCLiam3.s8p", r"snps\TestPCLiam4.s8p"])
+
+    print(proj1.getSampleByName(u"TestPCLiam3"))
+    proj1.generateReport()
+
+    sys.exit(app.exec_())
+
+if __name__ == '__main__':
+    main()
+
     
+
+
+
+          
+          
+

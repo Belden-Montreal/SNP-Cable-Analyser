@@ -43,7 +43,7 @@ class Sample(SNPManipulations):
         self.port_name = {0:"12", 1:"36", 2:"45", 3:"78"}
 
         print("NAME = ", snpFile)
-
+        
         self.name, self.extension = splitext(os.path.basename(snpFile))
         self.date = time.ctime(os.path.getctime(snpFile))
         #print self.date
@@ -220,7 +220,7 @@ class Sample(SNPManipulations):
         return worst, PassFail
 
 
-    def __retr__(self):
+    def __repr__(self):
         return "SNP"
     
 
@@ -282,14 +282,28 @@ class Sample(SNPManipulations):
         pass
         #marginWorker.finished.connect(self.displaySamplesInTable)
 
+    def getParam(self, paramName, z=False):
+        #This functions returns the dictionairy accosiated to a parameter.
+        #For example getParam("RL") --> {"12" : [...],
+        #                                "36" : [...]}
+        try:
+            if paramName == "Propagation Delay":
+                paramName = "PropagationDelay"
+            if z:
+                paramName += "Z"
+            return getattr(self, paramName)
+        except:
+            return None
+
 
 
 
 if __name__ == "__main__":
     
-    samp = Sample('Y:\DataConnect_6A_FW.s4p')
+    samp = Sample(r"snps\TestPCLiam3.s8p")
     
-    samp.extractParameters(samp.dd)
+    samp.getParameters()
 
-    #print samp.RL["RL_11"][0]
+    print(samp.RLZ["12"][0])
+
 

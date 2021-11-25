@@ -185,7 +185,7 @@ class Alien(object):
         self.worstMargin = {}
         self.worstValue = {}
 
-    def __retr__(self):
+    def __repr__(self):
         return "Alien"
         
 
@@ -209,4 +209,4 @@ if __name__ == "__main__":
     print(PSAACRN["45"][0])      
     print(PSAACRN["78"][0])
 
-    print(a.__retr__())
+    print(a.__repr__())
