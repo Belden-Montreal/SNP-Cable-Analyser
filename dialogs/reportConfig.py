@@ -36,18 +36,39 @@ class ReportConfig:
             s = QtWidgets.QTreeWidgetItem(tree) 
             s.setText(0, sample.name)
             s.setFlags(s.flags() | Qt.ItemIsTristate | Qt.ItemIsUserCheckable)
-            s.setCheckState(0, Qt.Checked)
+            if sample.selected:
+                s.setCheckState(0, Qt.Checked)
 
             s.setData(0, Qt.UserRole, sample)   #Set the tree node data to QT Node
             params = PreOrderIter(sample, maxlevel=2)
             next(params) #skip sample
             for param in params:
                 p = QtWidgets.QTreeWidgetItem(s)
-                p.setFlags(p.flags() | Qt.ItemIsUserCheckable)
+                p.setFlags(p.flags()| Qt.ItemIsTristate  | Qt.ItemIsUserCheckable)
                 p.setText(0, param.name)
-                p.setCheckState(0, Qt.Checked)
-                p.setData(0, Qt.UserRole, param)   #Set the tree node data to QT Node
 
+                if param.selected:
+                    p.setCheckState(0, Qt.Checked)
+                if param.hasComplex:
+                    if param.complex:
+                        p.setText(1, "Re/Im")
+                    else:
+                        p.setText(1, "Mag")
+
+
+                    p.setData(1, Qt.UserRole, param)   #Set the tree node data to QT Node
+
+                p.setData(0, Qt.UserRole, param)   #Set the tree node data to QT Node
+                
+                series = PreOrderIter(param, maxlevel=2)
+                next(series) #skip param
+                for ser in series:
+                    l = QtWidgets.QTreeWidgetItem(p)
+                    l.setFlags(l.flags() | Qt.ItemIsUserCheckable)
+                    l.setText(0, ser.name)
+                    if ser.selected:
+                        l.setCheckState(0, Qt.Checked)
+                    l.setData(0, Qt.UserRole, ser)   #Set the tree node data to QT Node
             
         tree.itemClicked.connect(self.updateConfig)   
         tree.itemChanged.connect(self.updateConfig)            
@@ -55,20 +76,35 @@ class ReportConfig:
         tree.show()
          
     def getNewConfig(self):
+        print("NEW CONFIG !")
         self.dialog.close()
         return self.config
 
 
     def updateConfig(self, item, column):
-        #print(item.text(column), column)
+        print(item.text(column), column, type(column))
+        tree    = self.configDialog.dataTree
         #print(item.data(0, Qt.UserRole) )
         try:
             node = item.data(column, Qt.UserRole) 
             node.selected = True
+
             if item.checkState(0) == Qt.Unchecked:
                 node.selected = False
+            if column == 1:
+                tree.blockSignals( True )
+                node.complex ^= 1
+                if node.complex:
+                    item.setText(1,"Re/Im")
+                else:
+                    item.setText(1,"Mag")
+                tree.blockSignals( False )
+
+            print("complex : ", node.complex)
+
+        
             
-            print(node.name, node.selected)
+            #print(node.name, node.selected)
         except:
             pass
     

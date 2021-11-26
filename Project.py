@@ -171,7 +171,7 @@ class Project(): #Put (object) later
     def activeSample(self, samples):
         self.activeMeasurements = [self.getSampleByName(sample) for sample in samples]
 
-    def generateReport(self):
+    def generateReport(self, samples):
         rb = reportbuilder.ReportBuilder(samples=self.measurements)
         rb.displayUI()
         rb.generateExcel()

@@ -116,7 +116,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         self.poolMutex = QtCore.QMutex()
 
 
-        self.setupConsole()
+        #self.setupConsole()
 
     def addEmbed(self):
         testName, result = QtWidgets.QInputDialog.getText(self, "Add an Embedded Sample",
@@ -448,8 +448,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
 
             elif action == exportExcel:
                 print(self.selected)
-                file, _ = self.getSaveFileName(self,"Export Excel Repport", "","Excel File (*.xlsx)")
-                self.Project.generateExcel(file , self.selected, True)
+                self.generateExcel()
 
             elif action == delete:
                 self.deleteSample()
@@ -482,8 +481,8 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
 
             if action == exportExcel:
                 print(self.selected)
-                file, _ = self.getSaveFileName(self,"Export Excel Repport", "","Excel File (*.xlsx)")
-                self.Project.generateExcel(file , self.selected, True)
+                self.generateExcel()
+
 
             elif action == delete:
                 self.deleteSample()
@@ -511,6 +510,14 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
             self.addAlien()
         elif action == addEmbed:
             self.addEmbed()
+
+    def generateExcel(self):
+        #file, _ = self.getSaveFileName(self,"Export Excel Repport", "","Excel File (*.xlsx)")
+        if len(self.selected) == 0:
+            samples = self.Project.measurements
+        else:
+            samples = self.selected
+        self.Project.generateReport(samples)
 
     def displaySampleParams(self, sample):
 

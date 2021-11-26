@@ -18,10 +18,12 @@ class ReportBuilder():
                 params = sample.parameters
                 for param in params:
                     print(param)
-                    p = Node(name = param, nodeType = "parameter", parameter = sample.getParam(param), selected = True, parent = s)
-                    series = p.parameter.keys()
-                    if sample.standard is not None and param in sample.standard.limits:
-                        series.append("Limit")
+                
+                    p = Node(name = param, nodeType = "parameter", parameter = sample.getParam(param), selected = True, parent = s, hasComplex = sample.hasComplex(param), complex=False)
+                    series = list(p.parameter.keys())
+
+                    if sample.standard is not None and sample.standard.limits[param.replace(" ", "")].resultsList is not None:
+                        series.insert(0, "Limit")
                     for line in series:
                         l = Node(name = line, nodeType = "series", series = line, selected = True, parent = p)
 
@@ -30,11 +32,11 @@ class ReportBuilder():
 
     def displayUI(self):
         gui = reportConfig.ReportConfig(self.configTree)
-        gui.displayTree()
+        #gui.displayTree()
         self.configTree = gui.getNewConfig()
 
     def generateExcel(self):
-        samples = search.findall(self.configTree,  filter_=lambda node: node.selected is True, maxlevel=2)
+        samples = search.findall_by_attr(self.configTree, True, name = "selected", maxlevel=2)
         samples = samples[1:] #Skip root
         for s in samples:
 
@@ -42,20 +44,44 @@ class ReportBuilder():
             if s.sampleType == "SNP":
                 col = pd.MultiIndex.from_arrays([[],[],[]])  #sub headers  :  Parameter ->Pair ->Real/Imag
                 df = pd.DataFrame(columns=col)
-
-                df['','',"Freq"] = s.sample.freq
-                params = search.findall(s,  filter_=lambda node: node.selected is True, maxlevel=2)
+                freq_title = f"Freq ({s.sample.freq_unit})"
+                df['','', freq_title] = s.sample.freq
+                params = search.findall_by_attr(s, True, name = "selected", maxlevel=2)
                 params = params[1:] #Skip root
                 for p in params:
                     param_name = p.name
-                    series = search.findall(p,  filter_=lambda node: node.selected is True, maxlevel=2)
+                    series = search.findall_by_attr(p , True, name = "selected", maxlevel=2)
                     series = series[1:] #Skip root
                     for line in series:
                         line_name = line.name  #pair
-                        df[param_name, line_name, "Re"] = np.real(s.sample.getParam(param_name, z=True)[line_name])
-                        df[param_name, line_name, "Im"] = np.imag(s.sample.getParam(param_name,z=True)[line_name])
+                        if p.complex:
+                            if line_name == "Limit":
+                                pass
 
+                            else:
+                                df[param_name, line_name, "Re"] = np.real(s.sample.getParam(param_name, z=True)[line_name])
+                                df[param_name, line_name, "Im"] = np.imag(s.sample.getParam(param_name,z=True)[line_name])
+                        else:
+                            if param_name == "Propagation Delay":
+                                if line_name == "Limit":
+                                    lim = s.sample.standard.limits['PropagationDelay'].getArray()
+                                    idx, val = zip(*lim)
+                                    df[param_name, line_name, "ns"] = val
+                                else:
+                                    df[param_name, line_name, "ns"] = s.sample.getParam(param_name, z=False)[line_name]
+                            else:
+                                if line_name == "Limit":
+                                    try:
+                                        lim = s.sample.standard.limits[param_name].getArray()
+                                        idx, val = zip(*lim)
+                                        df[param_name, line_name, "db"] = val
+                                    except:
+                                        print("FAIL on LIMIT : ", param_name)
+                                else:
+                                    df[param_name, line_name, "db"] = s.sample.getParam(param_name, z=False)[line_name]
 
-        print(df)
+        with pd.ExcelWriter('outputExcelTest.xlsx') as writer:  
+            df.to_excel(writer, sheet_name='Sheet_name_1')
+        #print(df)
 
 

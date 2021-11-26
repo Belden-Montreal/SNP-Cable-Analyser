@@ -115,25 +115,24 @@ class Sample(SNPManipulations):
         self.DMCMNEXT    = self.getNEXT(self.dc, z)
         self.DMCMRL      = self.getRL(self.dc, z)
         #print self.RL.keys()
-
         
         #real and complex values
         self.RLZ = self.getRL(self.dd)
         self.ILZ = self.getIL(self.dd)
         self.NEXTZ = self.getNEXT(self.dd)
-        self.PropagationDelayZ = self.getPropagationDelay()
+        #self.PropagationDelayZ = self.getPropagationDelay()
 
         self.FEXTZ = self.getFEXT(self.dd)
-        self.PSNEXTZ = self.getPSNEXT(self.dd)
-        self.PSFEXTZ = self.getPSFEXT(self.dd)
-        self.ACRFZ = self.getACRF(self.dd)
-        self.PSACRFZ = self.getPSACRF(self.dd)
+        #self.PSNEXTZ = self.getPSNEXT(self.dd)
+        #self.PSFEXTZ = self.getPSFEXT(self.dd)
+        #self.ACRFZ = self.getACRF(self.dd)
+        #self.PSACRFZ = self.getPSACRF(self.dd)
 
         self.LCLZ = self.getRL(self.dc)
         self.LCTLZ = self.getIL(self.dc)
         self.TCLZ = self.getRL(self.cd)
         self.TCTLZ = self.getIL(self.cd)
-        self.ELTCTLZ = self.getELTCTL()
+        #self.ELTCTLZ = self.getELTCTL()   
 
         self.CMRLZ =  self.getRL(self.cc) #commun mode Return Loss
         self.CMNEXTZ =  self.getNEXT(self.cc) #commun mode NEXT
@@ -294,6 +293,11 @@ class Sample(SNPManipulations):
             return getattr(self, paramName)
         except:
             return None
+        
+    def hasComplex(self, paramName):
+        if paramName == "Propagation Delay":
+            paramName = "PropagationDelay"
+        return hasattr(self,paramName + "Z")
 
 
 

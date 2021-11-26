@@ -3,6 +3,7 @@ from sympy import N, log, E
 from sympy import Symbol
 import math
 from multiprocessing.dummy import Pool as ThreadPool
+import numpy as np
 class Limit:
 
     def __init__(self, parameter, clauses=[""], bounds=[-math.inf, math.inf], maxValue=math.inf):
@@ -82,7 +83,12 @@ class Limit:
                     valsDict[param] = vals[param][i]
                 if self.bounds[0] <= vals['f'][i] and vals['f'][i] <= self.bounds[-1]:
                     self.resultsDict[vals['f'][i]] = self.evaluate(valsDict)
-                    self.resultsList.append((vals['f'][i], self.resultsDict[vals['f'][i]]))
+                else:                    
+                    self.resultsDict[vals['f'][i]] = np.NaN
+
+                self.resultsList.append((vals['f'][i], self.resultsDict[vals['f'][i]]))
+
+
             # valsList = [] #MULTITHREADING
             # for i in range(0,nb):
             #     valsDict = {}

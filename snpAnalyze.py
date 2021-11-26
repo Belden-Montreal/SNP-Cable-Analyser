@@ -519,15 +519,56 @@ class SNPManipulations(rf):
         
         return self.DELAY_dict
 
+    def complex2MagPhase(self, zIn, deg =True):
+        '''
+        Convert Complex number to dB and Phase 
+        
+        Parameters : zIn : Complex input (np.array[Re, Im])
+
+        Returns: list of Tuples (dB, Phase)       
+        '''
+        if type(zIn) == dict:
+            output = {}
+            for (key, val) in zIn:
+                db = self.complex2db(zIn, deg)
+                ph = self.complex2phase(zIn, deg)
+                output[key] = list(zip(db, ph))
+            return output
+
+        db = self.complex2db(zIn, deg)
+        ph = self.complex2phase(zIn, deg)
+        return list(zip(db, ph))
+
+    def magPhase2Complex(self, In, deg =True):
+        '''
+        Convert dB and Phase to complex
+        
+        Parameters : In : Mag/Phase input (np.array[Mag, Phase])
+
+        Returns: list of Complex numbers a+bj    
+        '''
+        if type(In) == dict:
+            output = {}
+            for (key, val) in zIn:
+                db = self.complex2db(zIn, deg)
+                ph = self.complex2phase(zIn, deg)
+                output[key] = list(zip(db, ph))
+            return output
+            
+        db = self.complex2db(zIn, deg)
+        ph = self.complex2phase(zIn, deg)
+        return list(zip(db, ph))
+
+
 
 
     def complex2db(self, zIn, deg=True):
         '''
-        Convert Complex number to dB and phase
+        Convert Complex number to dB 
         
         Parameters : zIn : Complex input (np.array[Re, Im])
 
-        Returns: Tuple of dB and Phase (db, Phase)       
+        Returns: dB       
         '''
         
         try:
@@ -537,11 +578,11 @@ class SNPManipulations(rf):
 
     def complex2phase(self, zIn, deg=True):
         '''
-        Convert Complex number to dB and phase
+        Convert Complex number  phase
         
         Parameters : zIn : Complex input (np.array[Re, Im])
 
-        Returns: Tuple of dB and Phase (db, Phase)       
+        Returns:  Phase       
         '''
         
         try:
