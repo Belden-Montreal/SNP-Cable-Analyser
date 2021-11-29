@@ -204,7 +204,8 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
 
             elif self.Project.getSampleByName(self.selected[0]).__repr__() == "Embed":
                 self.setupEmbed()
-            else:
+
+            elif self.Project.getSampleByName(self.selected[0]).__repr__() == "SNP":
                 self.displaySampleParams(self.selected)
         
         elif len(self.selected) > 1 or len(self.selected) < 1:
@@ -544,12 +545,17 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
 
         self.tab_list = []
         self.tab_list.append(self.mainTab)
+
+        self.paramWidgetList = []
+        self.paramWidgetList.append(None)
+
         #values = self.calculateErrors(pool=os.cpu_count())
         allPass = True
         failedParams = []
         for param in self.sample.parameters:
 
-            self.new_tab = ParameterWidget(param.replace(" ", ''), self.sample) #, values[param.replace(" ","")])
+            self.new_tab = ParameterWidget(param.replace(" ", ''), self.sample , graph = self.graphicsView) #, values[param.replace(" ","")])
+            self.paramWidgetList.append(self.new_tab)
             self.tab_list.append(self.new_tab.widget)
             self.param_tabs.addTab(self.new_tab.widget, param)
             allPass = allPass and self.new_tab.hasPassed
@@ -597,15 +603,9 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
                 self.alienWidget.alienPlotUpdate()
 
             else:
-                limit = None
-                if sample.standard is not None:
-                    if self.activeParameter.replace(" ","") in sample.standard.limits:
-                        if self.activeParameter == "Propagation Delay":
-                            limit = sample.standard.limits[self.activeParameter.replace(" ","")].getArray()
-                        else:
-                            limit = sample.standard.limits[self.activeParameter.replace(" ","")].getArray()
-                    #print(sample.freq)
-                self.plot(self.sample.freq, getattr(self.sample, self.activeParameter.replace(" ", "")), limit = limit , unit = sample.freq_unit)
+                currentParamWidget = self.paramWidgetList[self.tab_index]
+                currentParamWidget.plotUpdate(sample, self.activeParameter)
+            
                 #print(self.sample.frequency.unit)
 
                 #worstValue = sample.getWorstValue(self.activeParameter)

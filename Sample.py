@@ -224,10 +224,18 @@ class Sample(SNPManipulations):
     
 
     def advancedMin(self , vals):
-        return min(vals), list(vals).index(min(vals))
+        print(type(vals))
+        vals = np.array(vals)
+        m = np.nanmin(vals)
+        l = list(vals).index(np.nanmin(vals))
+        return m,l
+        #return min(vals), list(vals).index(min(vals))
 
     def advancedMax(self , vals):
-        return max(vals), list(vals).index(max(vals))
+        m = np.nanmax(vals)
+        l = list(vals).index(np.nanmax(vals))
+        return m,l
+        #return max(vals), list(vals).index(max(vals))
 
     def getMargins(self, measurements, limit, parameter):
         margins = []
@@ -249,8 +257,9 @@ class Sample(SNPManipulations):
         print("Evaulating : ", param)
         #self.standard.limits[param].None
 
-        self.standard.limits[param].evaluateArray({"f": self.freq} , len(self.freq), neg=not(param=="PropagationDelay"))
-        self.standard.limits[param].evaluateDict({"f": self.freq} , len(self.freq), neg=not(param=="PropagationDelay"))
+        #self.standard.limits[param].evaluateArray({"f": self.freq} , len(self.freq), neg=not(param=="PropagationDelay"))
+        #self.standard.limits[param].evaluateDict({"f": self.freq} , len(self.freq), neg=not(param=="PropagationDelay"))
+        self.standard.limits[param].evaluateLimit({"f": self.freq} , len(self.freq), neg=not(param=="PropagationDelay"))
         #print("ERROR: Limit Not evaluated", param)
             
 
@@ -262,15 +271,15 @@ class Sample(SNPManipulations):
 
        # with ProcessPool(cpu_count()) as p:
         for parameter in self.parameters:
-            try:
-                self.evaluateLimit(parameter.replace(" ", "") )
-                
+            #try:
+            self.evaluateLimit(parameter.replace(" ", "") )
+                    
 
-                self.getWorstMargin(parameter.replace(" ", ""))
-                self.getWorstValue(parameter.replace(" ", ""))
+            self.getWorstMargin(parameter.replace(" ", ""))
+            self.getWorstValue(parameter.replace(" ", ""))
 
-            except Exception as e:
-                print("ERROR: Limit Not evaluated", parameter)
+            #except Exception as e:
+            #    print("ERROR: Limit Not evaluated", parameter, e)
 
             
         print("FINISHED SETTING STANDARD")

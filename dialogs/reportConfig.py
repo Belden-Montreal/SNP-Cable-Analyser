@@ -1,7 +1,7 @@
 #from settings import Settings
 
 from UI import CompilationConfiguration_2 as CC
-
+import os
 
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QLineEdit, QMessageBox, QTableWidgetItem, QFileDialog, QCheckBox
@@ -21,12 +21,14 @@ class ReportConfig:
         self.configDialog = CC.Ui_ConfigDialog()
         self.configDialog.setupUi(self.dialog)
         
-        self.configDialog.selectFileButton.clicked.connect(self.showState)
+        self.configDialog.selectFileButton.clicked.connect(self.getOutputFile)
         self.configDialog.accept.clicked.connect(self.getNewConfig)
         self.configDialog.reject.clicked.connect(self.cancel)
+        self.outputFile = None
 
         self.displayTree()
         self.dialog.exec_()
+
 
     def displayTree(self):
         tree    = self.configDialog.dataTree
@@ -76,9 +78,20 @@ class ReportConfig:
         tree.show()
          
     def getNewConfig(self):
-        print("NEW CONFIG !")
-        self.dialog.close()
-        return self.config
+
+        if self.outputFile is not None:
+            print("NEW CONFIG !")
+
+            self.dialog.close()
+            return self.outputFile, self.config
+
+        msg = QtWidgets.QMessageBox()
+        msg.setIcon(QtWidgets.QMessageBox.Critical)
+        msg.setText("Please select an output file")
+        msg.setWindowTitle("Excel Report Error")
+        msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        msg.setFixedSize(msg.sizeHint())
+        msg.exec_()
 
 
     def updateConfig(self, item, column):
@@ -109,9 +122,14 @@ class ReportConfig:
             pass
     
     
-    def showState(self):
-        print("HERE")
-        print(self.config.children)
+    def getOutputFile(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog        
+        self.outputFile, _ = QFileDialog.getSaveFileName(None, "Export Excel Report", "","Excel File (*.xlsx)")
+        #print files
+        #print(self.outputFile
+        self.configDialog.fileLabel.setText(os.path.basename(self.outputFile[:75] + (self.outputFile[75:] and '... .xlsx')))
+        return self.outputFile
 
     def cancel(self):
         self.dialog.close()

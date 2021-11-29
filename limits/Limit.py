@@ -43,23 +43,33 @@ class Limit:
                     print(e)
         return 0
 
-    def evaluateDict(self, vals, nb, neg=False):
+    '''def evaluateDict(self, vals, nb, neg=False):
         if not len(self.functions):
             return
         #if not self.resultsDict:
         self.evaluatePoints(vals, nb)        
         if neg:
-            return {x: -self.resultsDict[x] for x in self.resultsDict.keys()}
+            self.resultsDict = {x: -self.resultsDict[x] for x in self.resultsDict.keys()}
         return self.resultsDict
 
     def evaluateArray(self, vals, nb, neg=False):
+        print("EVAL , Negative : ", neg)
         if not len(self.functions):
             return
         #if not self.resultsList:
         self.evaluatePoints(vals, nb)
         if neg:
-            return [(x,-y) for x,y in self.resultsList]
-        return self.resultsList
+            self.resultsList =  [(x,-y) for x,y in self.resultsList]
+        return self.resultsList'''
+
+    def evaluateLimit(self, vals, nb, neg=False):
+        if not len(self.functions):
+            return
+        self.evaluatePoints(vals, nb)
+        if neg:
+            self.resultsList =  [(x,-y) for x,y in self.resultsList]
+            self.resultsDict = {x: -self.resultsDict[x] for x in self.resultsDict.keys()}
+        #return self.resultsList     
 
     def getArray(self):
         if self.resultsList:

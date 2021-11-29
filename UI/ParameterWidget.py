@@ -52,14 +52,6 @@ class Ui_ParameterWidget(object):
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_9.addItem(spacerItem)
         self.verticalLayout.addLayout(self.horizontalLayout_9)
-        self.horizontalLayout_10 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_10.setObjectName("horizontalLayout_10")
-        self.resultsList = QtWidgets.QListWidget(self.groupBox_5)
-        self.resultsList.setObjectName("resultsList")
-        self.horizontalLayout_10.addWidget(self.resultsList)
-        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_10.addItem(spacerItem1)
-        self.verticalLayout.addLayout(self.horizontalLayout_10)
         self.horizontalLayout_12.addLayout(self.verticalLayout)
         self.horizontalLayout_2.addWidget(self.groupBox_5)
         self.groupBox = QtWidgets.QGroupBox(ParameterWidget)
@@ -234,7 +226,7 @@ class Ui_ParameterWidget(object):
     def retranslateUi(self, ParameterWidget):
         _translate = QtCore.QCoreApplication.translate
         ParameterWidget.setWindowTitle(_translate("ParameterWidget", "ParameterWidget"))
-        self.groupBox_5.setTitle(_translate("ParameterWidget", "Plots"))
+        self.groupBox_5.setTitle(_translate("ParameterWidget", "Results"))
         self.paramLabel.setText(_translate("ParameterWidget", "paramLabel"))
         self.label_10.setText(_translate("ParameterWidget", "-"))
         self.passLabel.setText(_translate("ParameterWidget", "passLabel"))
