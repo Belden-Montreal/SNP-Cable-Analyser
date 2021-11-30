@@ -146,11 +146,17 @@ class ParameterWidget():
             # picking on the legend line
             #print(zip(leg.get_lines(), lines))
             self.lined = dict()
-            for legline, origline in zip(leg.get_lines(), lines):
-                print(legline, origline[0])
-                legline.set_picker(7)  # 5 pts tolerance
-                self.lined[legline] = origline[0]
+            self.line_text_dict = dict()
 
+            for legline, legtext, origline in zip(leg.get_lines(), leg.get_texts(), lines):
+                print(legline, origline[0])
+                legline.set_picker(5)  # 5 pts tolerance
+                legtext.set_picker(6)  # 5 pts tolerance
+
+                self.lined[legline] = origline[0]
+                self.lined[legtext] = origline[0]
+                self.line_text_dict[legline] = legtext
+                self.line_text_dict[legtext] = legline
      
             #self.ax.legend()
         self.graphicsView.draw()
@@ -166,7 +172,10 @@ class ParameterWidget():
         # have been toggled
         if vis:
             legline.set_alpha(1.0)
+            self.line_text_dict[legline].set_alpha(1.0)
+
         else:
-            legline.set_alpha(0.4)
+            legline.set_alpha(0.2)
+            self.line_text_dict[legline].set_alpha(0.2)
         self.graphicsView.draw()
 

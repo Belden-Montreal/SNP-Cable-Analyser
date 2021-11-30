@@ -385,132 +385,135 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
 
     def tableContextMenu(self, pos):
         #print self.selected
+        try:
+            if len(self.selected) > 0 and all("SNP" in  self.Project.getSampleByName(sample).__repr__()  for sample in self.selected):
+                #Start by getting info on the sample. (If they're all the same type or not)
 
-        if len(self.selected) > 0 and all("SNP" in  self.Project.getSampleByName(sample).__repr__()  for sample in self.selected):
-            #Start by getting info on the sample. (If they're all the same type or not)
+                menu = QtWidgets.QMenu()
+                setLimit = menu.addAction("Set Limit")
+
+                if len(self.selected) == 1: 
+
+                    setPairNumber = menu.addAction("Renumber Pairs")
+
+                test_type = menu.addMenu("Set Test Type") #Set the sub menu to select the different types of matrixes
+                one_sided = test_type.addAction("One Sided")
+                end_end = test_type.addAction("End to End")
+                one_sided.setCheckable(True)
+                end_end.setCheckable(True)
+                exportExcel = menu.addAction("Export To Excel")
+                delete = menu.addAction("Delete")
+
+                #get test type for samples. If theyre all one sided, all
+                #end-end or all different.
+                #To start get the test type of the first sample
+                _one_sided = self.Project.getSampleByName(self.selected[0]).one_sided
+                print(_one_sided)
+                for sample in self.selected:
+                    if _one_sided !=  self.Project.getSampleByName(sample).one_sided:
+                        _one_sided = None
+                        break
+
+                if _one_sided == True:
+                    one_sided.setChecked(True)
+                    end_end.setChecked(False)
+                    
+                elif _one_sided == False:
+                    one_sided.setChecked(False)
+                    end_end.setChecked(True)
+                else:
+                    one_sided.setChecked(False)
+                    end_end.setChecked(False)
+
+                action = menu.exec_(QtGui.QCursor.pos())
+
+                if action == one_sided:
+                    for sample in self.selected:
+                        self.Project.getSampleByName(sample).reCalc(one_sided = True)
+                        self.Project.activeSample = self.selected
+                    #print self.selected
+                    if len(self.selected) == 1:  #Since only one sample can be displayed at a time
+                        self.displaySampleParams(self.selected)
+
+                    elif len(self.selected) > 1:
+                        self.displaySampleParams(None)
+                elif action == end_end:
+                    for sample in self.selected:
+                        self.Project.getSampleByName(sample).reCalc(one_sided = False)
+
+                    if len(self.selected) == 1:  #Since only one sample can be displayed at a time
+                        self.displaySampleParams(self.selected)
+
+                    elif len(self.selected) > 1:
+                        self.displaySampleParams(None)
+
+                elif action == exportExcel:
+                    print(self.selected)
+                    self.generateExcel()
+
+                elif action == delete:
+                    self.deleteSample()
+
+                elif action == setLimit:
+                    self.setLimit()
+                #self.Project.activeMeasurements = selected
+
+                elif action == setPairNumber and len(self.selected) == 1:
+                    self.setPairNumber()
+                return 1
+
+
+            elif len(self.selected) > 0 and not all("SNP" in  self.Project.getSampleByName(sample).__repr__()  for sample in self.selected):
+
+                menu = QtWidgets.QMenu()
+                setLimit = menu.addAction("Set Limit")
+
+                if len(self.selected) == 1:
+                    setPairNumber = menu.addAction("Renumber Pairs")
+
+                exportExcel = menu.addAction("Export To Excel")
+                delete = menu.addAction("Delete")
+
+                #get test type for samples. If theyre all one sided, all
+                #end-end or all different.
+                #To start get the test type of the first sample
+
+                action = menu.exec_(QtGui.QCursor.pos())
+
+                if action == exportExcel:
+                    print(self.selected)
+                    self.generateExcel()
+
+
+                elif action == delete:
+                    self.deleteSample()
+
+                elif action == setLimit:
+                    self.setLimit()
+
+                elif action == setPairNumber and len(self.selected) == 1:
+                    self.setPairNumber()
+                #self.Project.activeMeasurements = selected
+                return 1
 
             menu = QtWidgets.QMenu()
-            setLimit = menu.addAction("Set Limit")
+            addSNP = menu.addAction("Add Sample")
+            addAlien = menu.addAction("Add Alien Sample")
+            addEmbed = menu.addAction("Add Emdedding Sample")
 
-            if len(self.selected) == 1: 
-
-                setPairNumber = menu.addAction("Renumber Pairs")
-
-            test_type = menu.addMenu("Set Test Type") #Set the sub menu to select the different types of matrixes
-            one_sided = test_type.addAction("One Sided")
-            end_end = test_type.addAction("End to End")
-            one_sided.setCheckable(True)
-            end_end.setCheckable(True)
-            exportExcel = menu.addAction("Export To Excel")
-            delete = menu.addAction("Delete")
-
-            #get test type for samples. If theyre all one sided, all
-            #end-end or all different.
-            #To start get the test type of the first sample
-            _one_sided = self.Project.getSampleByName(self.selected[0]).one_sided
-            print(_one_sided)
-            for sample in self.selected:
-                if _one_sided !=  self.Project.getSampleByName(sample).one_sided:
-                    _one_sided = None
-                    break
-
-            if _one_sided == True:
-                one_sided.setChecked(True)
-                end_end.setChecked(False)
-                
-            elif _one_sided == False:
-                one_sided.setChecked(False)
-                end_end.setChecked(True)
-            else:
-                one_sided.setChecked(False)
-                end_end.setChecked(False)
-
+            selectAll = menu.addAction("Select All")
             action = menu.exec_(QtGui.QCursor.pos())
+            if action == selectAll:
+                self.sampleTable.selectAll()
+            elif action == addSNP:
+                self.importSnp()
+            elif action == addAlien:
+                self.addAlien()
+            elif action == addEmbed:
+                self.addEmbed()
 
-            if action == one_sided:
-                for sample in self.selected:
-                    self.Project.getSampleByName(sample).reCalc(one_sided = True)
-                    self.Project.activeSample = self.selected
-                #print self.selected
-                if len(self.selected) == 1:  #Since only one sample can be displayed at a time
-                    self.displaySampleParams(self.selected)
-
-                elif len(self.selected) > 1:
-                    self.displaySampleParams(None)
-            elif action == end_end:
-                for sample in self.selected:
-                    self.Project.getSampleByName(sample).reCalc(one_sided = False)
-
-                if len(self.selected) == 1:  #Since only one sample can be displayed at a time
-                    self.displaySampleParams(self.selected)
-
-                elif len(self.selected) > 1:
-                    self.displaySampleParams(None)
-
-            elif action == exportExcel:
-                print(self.selected)
-                self.generateExcel()
-
-            elif action == delete:
-                self.deleteSample()
-
-            elif action == setLimit:
-                self.setLimit()
-            #self.Project.activeMeasurements = selected
-
-            elif action == setPairNumber and len(self.selected) == 1:
-                self.setPairNumber()
-            return 1
-
-
-        elif len(self.selected) > 0 and not all("SNP" in  self.Project.getSampleByName(sample).__repr__()  for sample in self.selected):
-
-            menu = QtWidgets.QMenu()
-            setLimit = menu.addAction("Set Limit")
-
-            if len(self.selected) == 1:
-                setPairNumber = menu.addAction("Renumber Pairs")
-
-            exportExcel = menu.addAction("Export To Excel")
-            delete = menu.addAction("Delete")
-
-            #get test type for samples. If theyre all one sided, all
-            #end-end or all different.
-            #To start get the test type of the first sample
-
-            action = menu.exec_(QtGui.QCursor.pos())
-
-            if action == exportExcel:
-                print(self.selected)
-                self.generateExcel()
-
-
-            elif action == delete:
-                self.deleteSample()
-
-            elif action == setLimit:
-                self.setLimit()
-
-            elif action == setPairNumber and len(self.selected) == 1:
-                self.setPairNumber()
-            #self.Project.activeMeasurements = selected
-            return 1
-
-        menu = QtWidgets.QMenu()
-        addSNP = menu.addAction("Add Sample")
-        addAlien = menu.addAction("Add Alien Sample")
-        addEmbed = menu.addAction("Add Emdedding Sample")
-
-        selectAll = menu.addAction("Select All")
-        action = menu.exec_(QtGui.QCursor.pos())
-        if action == selectAll:
-            self.sampleTable.selectAll()
-        elif action == addSNP:
-            self.importSnp()
-        elif action == addAlien:
-            self.addAlien()
-        elif action == addEmbed:
-            self.addEmbed()
+        except Exception as e:
+            print(e)
 
     def generateExcel(self):
         #file, _ = self.getSaveFileName(self,"Export Excel Repport", "","Excel File (*.xlsx)")

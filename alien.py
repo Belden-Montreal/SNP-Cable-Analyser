@@ -40,20 +40,31 @@ class Alien(object):
         self.disturbersList = []
 
         self.disturbers = {}
+        self.PSAlien = {}
+        self.PSAACRX = {}
+
         self.disturbers["end1"] = {}
         self.disturbers["end2"] = {}
+        self.PSAlien["end1"] = {}
+        self.PSAlien["end2"] = {}
+        self.PSAACRX["end1"] = {}
+        self.PSAACRX["end1"] = {}
+
 
         self.disturbers["end1"]["ANEXT"]   = {}
         self.disturbers["end1"]["AFEXT"]   = {}
-        '''self.disturbers["end1"]["PSANEXT"] = {}
-        self.disturbers["end1"]["PSAFEXT"] = {}
-        self.disturbers["end1"]["PSAACRF"] = {}'''
+        self.PSAlien["end1"]["ANEXT"] = {}
+        self.PSAlien["end1"]["AFEXT"] = {}
+        self.PSAACRX["end1"]["ANEXT"] = {}
+        self.PSAACRX["end1"]["AFEXT"] = {}
         
         self.disturbers["end2"]["ANEXT"]   = {}
         self.disturbers["end2"]["AFEXT"]   = {}
-        '''self.disturbers["end2"]["PSANEXT"] = {}
-        self.disturbers["end2"]["PSAFEXT"] = {}
-        self.disturbers["end2"]["PSAACRF"] = {}'''
+        self.PSAlien["end2"]["ANEXT"] = {}
+        self.PSAlien["end2"]["AFEXT"] = {}
+        self.PSAACRX["end1"]["ANEXT"] = {}
+        self.PSAACRX["end1"]["AFEXT"] = {}
+        
 
         self.disturbersSNP = {}
             
@@ -89,6 +100,8 @@ class Alien(object):
 
         self.rs.port_name = self.port_name
         self.distrubedIL = self.rs.getIL(self.rs.dd , z = False)
+        self.freq = self.rs.freq
+
         print("Added Victim : ", snpFile)
         
     def addDisturberMeasurement(self, end, testType, snpFile, name = ""):
@@ -146,18 +159,17 @@ class Alien(object):
     def getPSAlien(self, end, Test, disturbers):
         
         #print (self.disturbers["dist_1"][end]["ANEXT"].keys())
-        numDisturbers = len(self.disturbers.keys())
+        numDisturbers = len(disturbers)
         numPairs = self.numPairs
 
         #activeDisturbers = self.disturbers
         #disturbers = activeDisturbers.keys()
-        self.PSAlien = {}
 
         self.disturbersList = disturbers
-        
-        for disturbed_pair in range( numPairs //2 ):
+        avg = 0
+        for disturbed_pair in range( numPairs // 2 ):
 
-            self.PSAlien[self.vic_port_names[disturbed_pair]] = []
+            self.PSAlien[end][Test][self.vic_port_names[disturbed_pair]] = np.array([])
             for f in range(0, self.rs.num_samples):
                 
                 outterSum = 0
@@ -180,31 +192,34 @@ class Alien(object):
                     '''if f == 0 and disturbed_pair == 0:
                         print("inner", innerSum)'''
                 PSK = 10*np.log10(outterSum)
-                self.PSAlien[self.vic_port_names[disturbed_pair]].append(PSK)
-
-        return self.PSAlien
+                self.PSAlien[end][Test][self.vic_port_names[disturbed_pair]] = np.append(self.PSAlien[end][Test][self.vic_port_names[disturbed_pair]], PSK)
+            avg += self.PSAlien[end][Test][self.vic_port_names[disturbed_pair]]    
+        
+        self.PSAlien[end][Test]['avg'] = avg /(numPairs // 2)
+        return self.PSAlien[end][Test], self.PSAlien[end][Test]['avg'] 
                 
     def getPSAACRX(self, end, Test):
 
         '''Gets either PSAACRF or PSAACRN'''
         
-        numDisturbers = len(self.disturbers.keys())
         numPairs = self.numPairs
 
-        activeDisturbers = self.disturbers
-        disturbers = activeDisturbers.keys()
-
         PSAACRX = {}
-        
+
+        AvgPSAACRX = 0
         for disturbed_pair in range(numPairs // 2):
-            PSAACRX[self.port_name[disturbed_pair]] = []
+            PSAACRX[self.port_name[disturbed_pair]] = np.array([])
             for f in range(0, self.rs.num_samples):
-                PS = self.PSAlien
-                PSAACRX[self.port_name[disturbed_pair]].append(PS[self.port_name[disturbed_pair]][f] - self.distrubedIL[self.port_name[disturbed_pair]][f]) 
+                PS = self.PSAlien[end][Test]
+                PSAACRX[self.port_name[disturbed_pair]] = np.append(PSAACRX[self.port_name[disturbed_pair]], PS[self.port_name[disturbed_pair]][f] - self.distrubedIL[self.port_name[disturbed_pair]][f]) 
                 '''if f == 0:
                     print("disturbed pair: ", self.port_name[disturbed_pair], self.distrubedIL[self.port_name[disturbed_pair]][f])'''
+            
+            AvgPSAACRX += PSAACRX[self.port_name[disturbed_pair]]
 
-        return PSAACRX
+        PSAACRX['avg']  = AvgPSAACRX /(numPairs // 2)
+        self.PSAACRX[end][Test] = PSAACRX
+        return PSAACRX, PSAACRX['avg']
 
     def setStandard(self, standard):
         self.standard = standard
@@ -226,17 +241,19 @@ if __name__ == "__main__":
     dist_1 = "snps/ALIEN TEST/AlienEnd1_2redo3.s16p"
     vic_IL = "snps/ALIEN TEST/Test_ALIEN_VICTIM_REDO_GOOD.s16p"
     a = Alien("Test")
-    a.addDisturber("dist_1")
-    a.addDisturberMeasurement("end1", "ANEXT", dist_1, "dist_1")
+    #a.addDisturber("dist_1")
     a.addDisturbed(vic_IL)
 
-    PSANEXT = a.getPSAlien("end1", "ANEXT")
-    PSAACRN = a.getPSAACRX("end1", "PSANEXT")
+    a.addDisturberMeasurement("end1", "ANEXT", dist_1, "dist_1")
+
+    PSANEXT, avg = a.getPSAlien("end1", "ANEXT", a.disturbers["end1"]["ANEXT"])
+    #PSAACRN, avg = a.getPSAACRX("end1", "ANEXT")
                                                            
-    print(PSAACRN.keys())
-    print(PSAACRN["12"][0])      
-    print(PSAACRN["36"][0])      
-    print(PSAACRN["45"][0])      
-    print(PSAACRN["78"][0])
+    #print(PSAACRN)
+    print(PSANEXT["12"][0])      
+    print(PSANEXT["36"][0])      
+    print(PSANEXT["45"][0])      
+    print(PSANEXT["78"][0])
+    print(PSANEXT["avg"][0])
 
     print(a.__repr__())

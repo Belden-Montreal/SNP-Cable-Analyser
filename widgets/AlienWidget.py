@@ -1,6 +1,9 @@
 from UI import alienWidget as AW
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem, QFileDialog, QCheckBox, QListWidgetItem
+from PyQt5.Qt import Qt
+
+
 import matplotlib
 
 from matplotlib.pyplot import cm
@@ -19,6 +22,15 @@ class AlienWidget():
         
         self.graphicsView = graph
 
+        self.curPlot = None
+        self.disturberList = dict()
+        self.disturberList['end1'] = dict()
+        self.disturberList['end2'] = dict()
+        self.disturberList['end1']["ANEXT"] = []
+        self.disturberList['end1']["AFEXT"] = []
+        self.disturberList['end2']["ANEXT"] = []
+        self.disturberList['end2']["AFEXT"] = []
+
         self.parentTab.clear()
 
         self.alienTab = QtWidgets.QWidget()
@@ -26,9 +38,8 @@ class AlienWidget():
         self.alienWidget = AW.Ui_Form()
         self.parentTab.addTab(self.alienTab, "Alien")
         self.alienWidget.setupUi(self.alienTab)
-        self.alienUpdateDisturberList()
         
-        self.alienWidget.alienPSANEXT.setChecked(True)
+        self.alienWidget.alienNear.setChecked(True)
         self.alienWidget.alienEnd1.setChecked(True)
 
         self.alienWidget.alienVictimButton.clicked.connect(self.alienImportVictimSNP)
@@ -36,10 +47,10 @@ class AlienWidget():
         self.alienWidget.alienImportSNP.clicked.connect(self.alienImportSNP)
         self.alienWidget.alienRun.clicked.connect(self.alienRun)
         
-        self.alienWidget.alienDisturbers.itemChanged.connect(self.alienPlotUpdate) 
-        
-        self.alienWidget.alienPSANEXT.toggled.connect(self.alienRadioChange)
-        self.alienWidget.alienPSAACRF.toggled.connect(self.alienRadioChange)
+        self.alienWidget.alienDisturbers.itemChanged.connect(self.updateSelectedDisturbers) 
+        self.alienWidget.plotList.itemPressed.connect(self.setSelectedPlot)
+        self.alienWidget.alienNear.toggled.connect(self.alienRadioChange)
+        self.alienWidget.alienFar.toggled.connect(self.alienRadioChange)
         self.alienWidget.alienEnd1.toggled.connect(self.alienRadioChange)
         self.alienWidget.alienEnd2.toggled.connect(self.alienRadioChange)
 
@@ -51,36 +62,89 @@ class AlienWidget():
         self.alienWidget.alienLimitCheck.toggled.connect(self.alienPlotUpdate)
         self.alienWidget.alienAvgLimitCheck.toggled.connect(self.alienPlotUpdate)'''
 
-
+        #self.alienUpdateDisturberList()
+        
+        self.selectedPlot = None
+        self.plotTitle = None
+        self.alienRadioChange()
         try: 
-            self.setPlots()
+            self.updatePlotsList()
         except:
             pass
-        self.alienUpdateDisturberList()
+        #self.alienUpdateDisturberList()
         self.alienPlotUpdate()
+
+    
 
 
     def alienRadioChange(self):
+
+        if self.alienWidget.alienEnd1.isChecked():
+            self.end = "end1"
+        elif self.alienWidget.alienEnd2.isChecked():
+            self.end = "end2"
+            
+        if self.alienWidget.alienNear.isChecked():
+            self.testType = "ANEXT"
+        elif self.alienWidget.alienFar.isChecked():
+            self.testType = "AFEXT"
+
+
         self.alienUpdateDisturberList()
+        self.updatePlotsList()
         self.alienPlotUpdate()
 
-    def setPlots(self):
-        while(self.alienWidget.plotList.count() > 0):
+    def updatePlotsList(self):
+        while self.alienWidget.plotList.count() > 0:
             self.alienWidget.plotList.takeItem(0)
         
+        if self.testType == "ANEXT":
+            testType = "near-end"
+            aarcType = "ACRN"
+        if self.testType == "AFEXT":
+            testType = "far-end"
+            aarcType = "ACRF"
 
-        for l in self.alienSample.vic_port_names:
-            chkBoxItem = QListWidgetItem()
-            chkBoxItem.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
-            chkBoxItem.setText(l)
-            chkBoxItem.setCheckState(QtCore.Qt.CheckState.Checked)
-            #checkbox = QCheckBox(label, self.paramWidget.resultsList)
-            #checkbox.setChecked(True)  
+        if self.alienSample.disturbedSNP is not None:
+            vicItem = QListWidgetItem()
+            vicItem.setText("Victim - IL")
+            vicItem.setData(Qt.UserRole, "Victim")
+            self.alienWidget.plotList.addItem(vicItem)
 
-            self.alienWidget.plotList.addItem(chkBoxItem)
+        if len(self.alienSample.PSAlien[self.end][self.testType]) :
+            PSItem = QListWidgetItem()
+            PSItem.setText(f"Power sum alien {testType} crosstalk (PS{self.testType}) ")
+            PSItem.setData(Qt.UserRole, (self.end, self.testType, "PSAlien"))
+            self.alienWidget.plotList.addItem(PSItem)
+
+        if len(self.alienSample.PSAACRX[self.end][self.testType]):
+            PSItem = QListWidgetItem()
+            PSItem.setText(f"Power sum attenuation  to alien crosstalk ratio, {testType} (PSA{aarcType}) ")
+            PSItem.setData(Qt.UserRole, (self.end, self.testType, "PSAACRX"))
+            self.alienWidget.plotList.addItem(PSItem)
+
         
 
+            #self.alienWidget.plotList.addItem(chkBoxItem)
         
+    def updateSelectedDisturbers(self):
+        alien = self.alienSample
+
+        for i in range(self.alienWidget.alienDisturbers.count()):
+            dist = self.alienWidget.alienDisturbers.item(i)
+            if dist.checkState():
+                self.disturberList[self.end][self.testType].append(dist.text())
+            else:
+                if dist.text() in self.disturberList[self.end][self.testType]:
+                    self.disturberList[self.end][self.testType].remove(dist.text())
+
+        
+        #if len(disturberList):
+        alien.getPSAlien(self.end, self.testType, self.disturberList[self.end][self.testType]) #Calculate PSAFEXT
+        alien.getPSAACRX(self.end, self.testType)
+        self.alienPlotUpdate()
+
+
     def alienPlotUpdate(self):
 
         alien = self.alienSample
@@ -89,55 +153,24 @@ class AlienWidget():
         limit = None
         avgLimit = None
         if alien.standard and len(alien.freq):
-            if self.alienWidget.alienPSANEXT.isChecked():
+            if self.alienWidget.alienNear.isChecked():
                 if self.alienWidget.alienLimitCheck.isChecked():
                     limit = alien.standard.limits["PSANEXT"].getArray()#evaluateArray({'f': alien.freq}, len(alien.freq), neg=True)
                 if self.alienWidget.alienAvgLimitCheck.isChecked():
                     avgLimit = alien.standard.limits["AVGPSANEXT"].getArray()#.evaluateArray({'f': alien.freq}, len(alien.freq), neg=True)
-            elif self.alienWidget.alienPSAACRF.isChecked():
+            elif self.alienWidget.alienFar.isChecked():
                 if self.alienWidget.alienLimitCheck.isChecked():
                     limit = alien.standard.limits["PSAACRF"].getArray()#.evaluateArray({'f': alien.freq}, len(alien.freq), neg=True)
                 if self.alienWidget.alienAvgLimitCheck.isChecked():
                     avgLimit = alien.standard.limits["AVGPSAACRF"].getArray()#.evaluateArray({'f': alien.freq}, len(alien.freq), neg=True)
-        for i in range(self.alienWidget.alienDisturbers.count()):
-            dist = self.alienWidget.alienDisturbers.item(i)
-            if dist.checkState():
-                disturberList.append(dist.text())
-
-        try:
-            if self.alienWidget.alienEnd1.isChecked():
-                end = "end1"
-            elif self.alienWidget.alienEnd2.isChecked():
-                end = "end2"
-            if self.alienWidget.alienPSANEXT.isChecked():
-                testType = "ANEXT"
-                PS = alien.getPSAlien(end, testType, disturberList)
-            elif self.alienWidget.alienPSAACRF.isChecked():
-                testType = "PSAFEXT"
-                alien.getPSAlien(end, "AFEXT", disturberList) #Calculate PSAFEXT
-                PS = alien.getPSAACRX(end, testType)
-            
-            alienPlots = {}
-            
 
 
-
-            lst = self.alienWidget.plotList
-            for x in range(lst.count()):
-                item = lst.item(x)
-                pair = item.text()
-                if item.checkState() == QtCore.Qt.Checked:
-                    alienPlots[pair] = PS[pair]
- 
-            try:
-                self.plot(alien.freq, alienPlots, limit=limit, avgLimit=avgLimit, title = testType + ',' + end)
-            except Exception as e:
-                #print("Alien Plot Error :", e)
-                pass
-
-        except Exception as e:
-            #print("ALIEN ERROR : " ,e)
-            pass
+        #print(self.selectedPlot)
+        if self.selectedPlot is not None:
+            #print("Ploting")
+            self.plot(alien.freq, self.selectedPlot, limit=limit, avgLimit=avgLimit, title = self.plotTitle)
+        else:
+            print("No selected plot")
       
     def alienImportVictimSNP(self):
         
@@ -150,9 +183,9 @@ class AlienWidget():
             alien = self.alienSample
             alien.addDisturbed(file)
             self.alienUpdateDisturberList()
-            self.alienPlotUpdate()
+            #self.alienPlotUpdate()
 
-        self.setPlots()
+        self.updatePlotsList()
 
     """def alienAddDisturber(self):
         print("Add Disturber")
@@ -177,23 +210,14 @@ class AlienWidget():
 
     def alienUpdateDisturberList(self):
 
-        end = "end1"
-        testType = "ANEXT"
 
         alien = self.alienSample
         self.alienWidget.alienDisturbers.clear()
+        end = self.end
+        testType = self.testType
 
         #Firstly we must get if End1 or End2 is selected and if PSANEXT or PSAACRF is selected
 
-        if self.alienWidget.alienEnd1.isChecked():
-            end = "end1"
-        elif self.alienWidget.alienEnd2.isChecked():
-            end = "end2"
-            
-        if self.alienWidget.alienPSANEXT.isChecked():
-            testType = "ANEXT"
-        elif self.alienWidget.alienPSAACRF.isChecked():
-            testType = "AFEXT"
 
         for disturber in alien.disturbers[end][testType].keys():
             item = QtWidgets.QListWidgetItem()
@@ -206,8 +230,12 @@ class AlienWidget():
                 pass
             else:
                 item.setFlags(item.flags() | QtCore.Qt.ItemIsUserCheckable)
-                item.setCheckState(QtCore.Qt.Checked)
+                if disturber in self.disturberList[self.end][self.testType]:
+                    item.setCheckState(QtCore.Qt.Checked)
+                else:
+                    item.setCheckState(QtCore.Qt.Unchecked)
             self.alienWidget.alienDisturbers.addItem(item)
+
             
 
     def alienRun(self):
@@ -219,9 +247,9 @@ class AlienWidget():
         elif self.alienWidget.alienEnd2.isChecked():
             end = "end2"
             
-        if self.alienWidget.alienPSANEXT.isChecked():
+        if self.alienWidget.alienNear.isChecked():
             testType = "ANEXT"
-        elif self.alienWidget.alienPSAACRF.isChecked():
+        elif self.alienWidget.alienFar.isChecked():
             testType = "AFEXT"
         try:
                
@@ -246,36 +274,36 @@ class AlienWidget():
         
         alien = self.alienSample
 
-        if self.alienWidget.alienEnd1.isChecked():
-            end = "end1"
-        elif self.alienWidget.alienEnd2.isChecked():
-            end = "end2"
-            
-        if self.alienWidget.alienPSANEXT.isChecked():
-            testType = "ANEXT"
-        elif self.alienWidget.alienPSAACRF.isChecked():
-            testType = "AFEXT"
-        try:
-            options = QFileDialog.Options()
-            options |= QFileDialog.DontUseNativeDialog
-            files, _ = QFileDialog.getOpenFileNames(None, "QFileDialog.getOpenFileNames()", "","sNp Files (*.s*p)", options=options)
+        end = self.end
+        testType = self.testType
 
-            #import os.path
-            for file in files:
-                #print(file, os.path.basename(file))
-                alien.addDisturberMeasurement(end, testType, file, os.path.basename(file))
-            self.alienUpdateDisturberList()
-            self.alienPlotUpdate()
+        #try:
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        files, _ = QFileDialog.getOpenFileNames(None, "QFileDialog.getOpenFileNames()", "","sNp Files (*.s*p)", options=options)
+
+        #import os.path
+        for file in files:
+            #print(file, os.path.basename(file))
+            alien.addDisturberMeasurement(end, testType, file, os.path.basename(file))
+            self.disturberList[self.end][self.testType].append(os.path.basename(file))
+        
+        self.alienUpdateDisturberList()
+        self.updateSelectedDisturbers()
+
+        self.updatePlotsList()
+
+        self.alienPlotUpdate()
             
-        except Exception as e:
-            #print("alien import snp : ", e)
+        '''except Exception as e:
+            print("alien import snp : ", e)
             msg = QtWidgets.QMessageBox()
             msg.setIcon(QtWidgets.QMessageBox.Information)
             msg.setText("Please select disturber to add ")
             msg.setWindowTitle("Warning")
             msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
             msg.setFixedSize(msg.sizeHint())
-            msg.exec_()
+            msg.exec_()'''
 
 
     def plot(self, x=None, param_dict=None, limit = None, unit = "Mhz", avgLimit = None, title=None):
@@ -316,3 +344,23 @@ class AlienWidget():
      
             #self.ax.legend()
         self.graphicsView.draw()
+
+    def setSelectedPlot(self, item):
+        self.plotTitle = ""
+        print(item.data(Qt.UserRole))
+        if item.data(Qt.UserRole) == "Victim":
+            self.selectedPlot = self.alienSample.distrubedIL
+            #print(self.selectedPlot)
+            self.plotTitle = "Victim - IL"
+        else:
+            end, testType, PS = item.data(Qt.UserRole)
+            if PS == "PSAlien":
+                self.selectedPlot = self.alienSample.PSAlien[end][testType]
+
+            if PS == "PSAACRX":
+                self.selectedPlot = self.alienSample.PSAACRX[end][testType]
+                 
+            self.plotTile = PS + ", " + end
+
+
+        self.alienPlotUpdate()

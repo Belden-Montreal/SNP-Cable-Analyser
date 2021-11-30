@@ -27,18 +27,36 @@
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout_4">
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_3"/>
+             <layout class="QHBoxLayout" name="horizontalLayout_3">
+              <item>
+               <widget class="QPushButton" name="pushButton">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Aquire Victim</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
             <item>
              <layout class="QVBoxLayout" name="verticalLayout">
               <item>
                <widget class="QPushButton" name="alienVictimButton">
                 <property name="text">
-                 <string>Victim SNP</string>
+                 <string>Import Victim</string>
                 </property>
                </widget>
               </item>
              </layout>
+            </item>
+            <item>
+             <widget class="QLabel" name="vicFileLabel">
+              <property name="text">
+               <string>No File Selected</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>
@@ -50,7 +68,7 @@
          <item>
           <widget class="QGroupBox" name="alienPlots">
            <property name="title">
-            <string>Plots</string>
+            <string>Plots (Select to display)</string>
            </property>
            <layout class="QGridLayout" name="gridLayout">
             <item row="0" column="0">
@@ -92,16 +110,16 @@
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_9">
               <item>
-               <widget class="QRadioButton" name="alienPSANEXT">
+               <widget class="QRadioButton" name="alienNear">
                 <property name="text">
-                 <string>PSANEXT</string>
+                 <string>Near-End</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QRadioButton" name="alienPSAACRF">
+               <widget class="QRadioButton" name="alienFar">
                 <property name="text">
-                 <string>PSAACRF</string>
+                 <string>Far-End</string>
                 </property>
                </widget>
               </item>
@@ -138,14 +156,14 @@
            <item>
             <widget class="QPushButton" name="alienRun">
              <property name="text">
-              <string>Run Alien </string>
+              <string>Aquire Disturber</string>
              </property>
             </widget>
            </item>
            <item>
             <widget class="QPushButton" name="alienImportSNP">
              <property name="text">
-              <string>Import Alien SNP</string>
+              <string>Import Disturber</string>
              </property>
             </widget>
            </item>

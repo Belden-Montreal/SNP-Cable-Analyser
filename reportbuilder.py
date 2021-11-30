@@ -45,8 +45,10 @@ class ReportBuilder():
 
     def displayUI(self):
         gui = reportConfig.ReportConfig(self.configTree)
+        res = gui.dialog.exec_()
         #gui.displayTree()
-        self.outputFile , self.configTree = gui.getNewConfig()
+        if res:
+            self.outputFile , self.configTree = gui.getNewConfig()
 
     def generateExcel(self):
         samples = search.findall_by_attr(self.configTree, True, name = "selected", maxlevel=2)
@@ -102,8 +104,9 @@ class ReportBuilder():
                                 else:
                                     df[param_name, line_name, "db"] = s.sample.getParam(param_name, z=False)[line_name]
 
-        with pd.ExcelWriter(self.outputFile ) as writer:  
-            df.to_excel(writer, sheet_name='Sheet_name_1')
-        #print(df)
-
+        try:
+            with pd.ExcelWriter(self.outputFile ) as writer:  
+                df.to_excel(writer, sheet_name='Sheet_name_1')
+        except Exception as e:
+            print(e)
 

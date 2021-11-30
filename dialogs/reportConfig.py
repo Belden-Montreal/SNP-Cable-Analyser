@@ -22,12 +22,12 @@ class ReportConfig:
         self.configDialog.setupUi(self.dialog)
         
         self.configDialog.selectFileButton.clicked.connect(self.getOutputFile)
-        self.configDialog.accept.clicked.connect(self.getNewConfig)
+        self.configDialog.accept.clicked.connect(self.accept)
         self.configDialog.reject.clicked.connect(self.cancel)
         self.outputFile = None
 
         self.displayTree()
-        self.dialog.exec_()
+        
 
 
     def displayTree(self):
@@ -79,19 +79,11 @@ class ReportConfig:
          
     def getNewConfig(self):
 
-        if self.outputFile is not None:
-            print("NEW CONFIG !")
+        return self.outputFile, self.config
 
-            self.dialog.close()
-            return self.outputFile, self.config
 
-        msg = QtWidgets.QMessageBox()
-        msg.setIcon(QtWidgets.QMessageBox.Critical)
-        msg.setText("Please select an output file")
-        msg.setWindowTitle("Excel Report Error")
-        msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
-        msg.setFixedSize(msg.sizeHint())
-        msg.exec_()
+    
+
 
 
     def updateConfig(self, item, column):
@@ -133,3 +125,19 @@ class ReportConfig:
 
     def cancel(self):
         self.dialog.close()
+        return 0
+
+
+    def accept(self):
+        if self.outputFile is not None:
+            self.dialog.close()
+            return 1
+
+
+        msg = QtWidgets.QMessageBox()
+        msg.setIcon(QtWidgets.QMessageBox.Critical)
+        msg.setText("Please select an output file")
+        msg.setWindowTitle("Excel Report Error")
+        msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        msg.setFixedSize(msg.sizeHint())
+        msg.exec_()
