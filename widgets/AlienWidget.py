@@ -23,13 +23,8 @@ class AlienWidget():
         self.graphicsView = graph
 
         self.curPlot = None
-        self.disturberList = dict()
-        self.disturberList['end1'] = dict()
-        self.disturberList['end2'] = dict()
-        self.disturberList['end1']["ANEXT"] = []
-        self.disturberList['end1']["AFEXT"] = []
-        self.disturberList['end2']["ANEXT"] = []
-        self.disturberList['end2']["AFEXT"] = []
+        self.disturberList = sample.disturberList
+
 
         self.parentTab.clear()
 
@@ -64,14 +59,14 @@ class AlienWidget():
 
         #self.alienUpdateDisturberList()
         
-        self.selectedPlot = None
+        self.selectedPlot = (None, None, None)
         self.plotTitle = None
         self.alienRadioChange()
         try: 
             self.updatePlotsList()
         except:
             pass
-        #self.alienUpdateDisturberList()
+        self.alienUpdateDisturberList()
         self.alienPlotUpdate()
 
     
@@ -92,7 +87,7 @@ class AlienWidget():
 
         self.alienUpdateDisturberList()
         self.updatePlotsList()
-        self.alienPlotUpdate()
+        #self.alienPlotUpdate()
 
     def updatePlotsList(self):
         while self.alienWidget.plotList.count() > 0:
@@ -133,7 +128,8 @@ class AlienWidget():
         for i in range(self.alienWidget.alienDisturbers.count()):
             dist = self.alienWidget.alienDisturbers.item(i)
             if dist.checkState():
-                self.disturberList[self.end][self.testType].append(dist.text())
+                if dist.text() not in self.disturberList[self.end][self.testType]:
+                    self.disturberList[self.end][self.testType].append(dist.text())
             else:
                 if dist.text() in self.disturberList[self.end][self.testType]:
                     self.disturberList[self.end][self.testType].remove(dist.text())
@@ -148,27 +144,55 @@ class AlienWidget():
     def alienPlotUpdate(self):
 
         alien = self.alienSample
+        end, testType, PS = self.selectedPlot
 
         disturberList = []
-        limit = None
-        avgLimit = None
-        if alien.standard and len(alien.freq):
-            if self.alienWidget.alienNear.isChecked():
-                if self.alienWidget.alienLimitCheck.isChecked():
-                    limit = alien.standard.limits["PSANEXT"].getArray()#evaluateArray({'f': alien.freq}, len(alien.freq), neg=True)
-                if self.alienWidget.alienAvgLimitCheck.isChecked():
-                    avgLimit = alien.standard.limits["AVGPSANEXT"].getArray()#.evaluateArray({'f': alien.freq}, len(alien.freq), neg=True)
-            elif self.alienWidget.alienFar.isChecked():
-                if self.alienWidget.alienLimitCheck.isChecked():
-                    limit = alien.standard.limits["PSAACRF"].getArray()#.evaluateArray({'f': alien.freq}, len(alien.freq), neg=True)
-                if self.alienWidget.alienAvgLimitCheck.isChecked():
-                    avgLimit = alien.standard.limits["AVGPSAACRF"].getArray()#.evaluateArray({'f': alien.freq}, len(alien.freq), neg=True)
 
 
         #print(self.selectedPlot)
         if self.selectedPlot is not None:
+            limit = None
+            avgLimit = None
+
             #print("Ploting")
-            self.plot(alien.freq, self.selectedPlot, limit=limit, avgLimit=avgLimit, title = self.plotTitle)
+            if PS == "Victim":
+                if alien.standard and len(alien.freq):
+                    try:
+                        limit = alien.standard.limits["IL"].getArray()#evaluateArray({'f': alien.freq}, len(alien.freq), neg=True)
+                    except KeyError:
+                        pass
+                self.plot(alien.freq,  self.alienSample.disturbedIL , limit=limit, avgLimit=avgLimit, title = self.plotTitle)
+            else:
+                if PS == "PSAlien":
+                    if alien.standard and len(alien.freq):
+                        try:
+                            limit = alien.standard.limits["PS" + testType].getArray()#evaluateArray({'f': alien.freq}, len(alien.freq), neg=True)
+                        except KeyError:
+                            pass
+                        try:
+                            avgLimit = alien.standard.limits["AVG"+testType].getArray()#.evaluateArray({'f': alien.freq}, len(alien.freq), neg=True)
+                        except KeyError:
+                            pass
+                    self.plot(alien.freq, self.alienSample.PSAlien[end][testType], limit=limit, avgLimit=avgLimit, title = self.plotTitle)
+                elif PS == "PSAACRX":
+                    if alien.standard and len(alien.freq):
+                        try:
+                            if testType == "ANEXT":
+                                limit = alien.standard.limits["PSAACRN"].getArray()#evaluateArray({'f': alien.freq}, len(alien.freq), neg=True)
+                            elif testType == "AFEXT":
+                                limit = alien.standard.limits["PSAACRF"].getArray()#evaluateArray({'f': alien.freq}, len(alien.freq), neg=True)
+                        except KeyError:
+                            pass
+                        
+                        try:
+                            if testType == "ANEXT":
+                                avglimit = alien.standard.limits["AVGPSAACRN"].getArray()#evaluateArray({'f': alien.freq}, len(alien.freq), neg=True)
+                            elif testType == "AFEXT":
+                                avglimit = alien.standard.limits["AVGPSAACRF"].getArray()#evaluateArray({'f': alien.freq}, len(alien.freq), neg=True)                        except KeyError:
+                            pass
+                        except KeyError:
+                            pass
+                    self.plot(alien.freq, self.alienSample.PSAACRX[end][testType], limit=limit, avgLimit=avgLimit, title = self.plotTitle)
         else:
             print("No selected plot")
       
@@ -293,7 +317,7 @@ class AlienWidget():
 
         self.updatePlotsList()
 
-        self.alienPlotUpdate()
+        #self.alienPlotUpdate()
             
         '''except Exception as e:
             print("alien import snp : ", e)
@@ -349,18 +373,20 @@ class AlienWidget():
         self.plotTitle = ""
         print(item.data(Qt.UserRole))
         if item.data(Qt.UserRole) == "Victim":
-            self.selectedPlot = self.alienSample.distrubedIL
+            self.selectedPlot = (None, None, "Victim") #self.alienSample.disturbedIL
             #print(self.selectedPlot)
             self.plotTitle = "Victim - IL"
         else:
             end, testType, PS = item.data(Qt.UserRole)
-            if PS == "PSAlien":
-                self.selectedPlot = self.alienSample.PSAlien[end][testType]
+            #if PS == "PSAlien":                
+            #    print("selectedPlot is PSAlien")
+            self.selectedPlot = ( end, testType, PS) #self.alienSample.PSAlien[end][testType]
 
-            if PS == "PSAACRX":
-                self.selectedPlot = self.alienSample.PSAACRX[end][testType]
+            #if PS == "PSAACRX":
+            #print("selectedPlot is PSAACRX")
+            #self.selectedPlot = self.alienSample.PSAACRX[end][testType]
                  
-            self.plotTile = PS + ", " + end
+            self.plotTitle = PS + ", " + end
 
 
         self.alienPlotUpdate()

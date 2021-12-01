@@ -224,7 +224,7 @@ class Sample(SNPManipulations):
     
 
     def advancedMin(self , vals):
-        print(type(vals))
+        #print(type(vals))
         vals = np.array(vals)
         m = np.nanmin(vals)
         l = list(vals).index(np.nanmin(vals))

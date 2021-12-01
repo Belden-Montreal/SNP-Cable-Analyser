@@ -124,14 +124,14 @@ class ReportConfig:
         return self.outputFile
 
     def cancel(self):
-        self.dialog.close()
-        return 0
+        self.dialog.reject()
+        return 
 
 
     def accept(self):
         if self.outputFile is not None:
-            self.dialog.close()
-            return 1
+            self.dialog.accept()
+            return 
 
 
         msg = QtWidgets.QMessageBox()

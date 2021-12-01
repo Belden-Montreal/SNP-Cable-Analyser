@@ -583,7 +583,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         #This function is called whenever a parameter 
         self.tab_index = self.param_tabs.currentIndex()
         self.activeParameter = self.param_tabs.tabText(self.tab_index)
-        print(self.activeParameter)
+        print("Active Parameter = ", self.activeParameter)
         if self.selected:
             sample = self.Project.getSampleByName(self.selected[0])
         else:

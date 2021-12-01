@@ -32,10 +32,10 @@ class Alien(object):
         
         self.standard = None
         self.freq = []
-
+        self.freq_unit = None
 
         self.disturbedSNP = None 
-        self.distrubedIL = None
+        self.disturbedIL = None
 
         self.disturbersList = []
 
@@ -48,7 +48,7 @@ class Alien(object):
         self.PSAlien["end1"] = {}
         self.PSAlien["end2"] = {}
         self.PSAACRX["end1"] = {}
-        self.PSAACRX["end1"] = {}
+        self.PSAACRX["end2"] = {}
 
 
         self.disturbers["end1"]["ANEXT"]   = {}
@@ -62,12 +62,22 @@ class Alien(object):
         self.disturbers["end2"]["AFEXT"]   = {}
         self.PSAlien["end2"]["ANEXT"] = {}
         self.PSAlien["end2"]["AFEXT"] = {}
-        self.PSAACRX["end1"]["ANEXT"] = {}
-        self.PSAACRX["end1"]["AFEXT"] = {}
+        self.PSAACRX["end2"]["ANEXT"] = {}
+        self.PSAACRX["end2"]["AFEXT"] = {}
         
 
         self.disturbersSNP = {}
-            
+
+        self.disturberList = dict()
+        self.disturberList['end1'] = dict()
+        self.disturberList['end2'] = dict()
+        self.disturberList['end1']["ANEXT"] = []
+        self.disturberList['end1']["AFEXT"] = []
+        self.disturberList['end2']["ANEXT"] = []
+        self.disturberList['end2']["AFEXT"] = []
+
+        
+        self.parameters = ["PSANEXT", "PSAFEXT", "PSAACRF", "PSAACRN", "AVGPSANEXT", "AVGPSAFEXT", "AVGPSAACRF", "AVGPSAACRN", "IL"]
 
 
     def port_rename(self, port_name):
@@ -85,7 +95,7 @@ class Alien(object):
         self.disturbedSNP = snpFile
         self.rs = SNPManipulations(snpFile)
         self.rs.oneSided = False
-    
+        self.freq_unit = self.rs.freq_unit
         #vna_out.renumber([1,2], [2,1])
 
         self.rs.s2mm()
@@ -99,7 +109,7 @@ class Alien(object):
         self.dist_port_names = self.port_name[self.numPairs//2:]  #The victim pair names are the first half of the list 
 
         self.rs.port_name = self.port_name
-        self.distrubedIL = self.rs.getIL(self.rs.dd , z = False)
+        self.disturbedIL = self.rs.getIL(self.rs.dd , z = False)
         self.freq = self.rs.freq
 
         print("Added Victim : ", snpFile)
@@ -130,7 +140,7 @@ class Alien(object):
         
         self.rs = SNPManipulations(snpFile)
         self.rs.oneSided = False
-    
+        self.freq_unit = self.rs.freq_unit
         #vna_out.renumber([1,2], [2,1])
         
         self.rs.s2mm()
@@ -157,7 +167,7 @@ class Alien(object):
     
 
     def getPSAlien(self, end, Test, disturbers):
-        
+        print(disturbers)
         #print (self.disturbers["dist_1"][end]["ANEXT"].keys())
         numDisturbers = len(disturbers)
         numPairs = self.numPairs
@@ -174,7 +184,7 @@ class Alien(object):
                 
                 outterSum = 0
                 for disturber in disturbers:
-
+                    #print(disturber)
                     innerSum = 0
                     for disturbing_pair in range(numPairs//2,):
 
@@ -211,21 +221,48 @@ class Alien(object):
             PSAACRX[self.port_name[disturbed_pair]] = np.array([])
             for f in range(0, self.rs.num_samples):
                 PS = self.PSAlien[end][Test]
-                PSAACRX[self.port_name[disturbed_pair]] = np.append(PSAACRX[self.port_name[disturbed_pair]], PS[self.port_name[disturbed_pair]][f] - self.distrubedIL[self.port_name[disturbed_pair]][f]) 
+                PSAACRX[self.port_name[disturbed_pair]] = np.append(PSAACRX[self.port_name[disturbed_pair]], PS[self.port_name[disturbed_pair]][f] - self.disturbedIL[self.port_name[disturbed_pair]][f]) 
                 '''if f == 0:
-                    print("disturbed pair: ", self.port_name[disturbed_pair], self.distrubedIL[self.port_name[disturbed_pair]][f])'''
+                    print("disturbed pair: ", self.port_name[disturbed_pair], self.disturbedIL[self.port_name[disturbed_pair]][f])'''
             
             AvgPSAACRX += PSAACRX[self.port_name[disturbed_pair]]
 
         PSAACRX['avg']  = AvgPSAACRX /(numPairs // 2)
         self.PSAACRX[end][Test] = PSAACRX
-        return PSAACRX, PSAACRX['avg']
+        return self.PSAACRX[end][Test], self.PSAACRX[end][Test]['avg']
 
     def setStandard(self, standard):
         self.standard = standard
         self.worstMargin = {}
         self.worstValue = {}
+        for parameter in self.parameters:
+            self.evaluateLimit(parameter )
 
+    def evaluateLimit(self, param):
+        print("Evaulating : ", param)
+        #self.standard.limits[param].None
+
+        #self.standard.limits[param].evaluateArray({"f": self.freq} , len(self.freq), neg=not(param=="PropagationDelay"))
+        #self.standard.limits[param].evaluateDict({"f": self.freq} , len(self.freq), neg=not(param=="PropagationDelay"))
+        try:
+            self.standard.limits[param].evaluateLimit({"f": self.freq} , len(self.freq), neg=not(param=="PropagationDelay"))
+        except KeyError as e:
+            pass
+        #print("ERROR: Limit Not evaluated", param)
+
+
+    def getParameters(self):
+        parameters = dict()
+        parameters["Victim - IL"]    =  (self.disturbedIL,              self.standard.limits.get("IL")      if self.standard is not None else None, None)
+        parameters["PSANEXT - end1"] = (self.PSAlien['end1']['ANEXT'], self.standard.limits.get("PSANEXT") if self.standard is not None else None, self.standard.limits.get("AVGPSANEXT") if self.standard is not None else None)
+        parameters["PSAACRN - end1"] = (self.PSAACRX['end1']['ANEXT'], self.standard.limits.get("PSAACRN") if self.standard is not None else None, self.standard.limits.get("AVGPSAACRN") if self.standard is not None else None)
+        parameters["PSAFEXT - end1"] = (self.PSAlien['end1']['AFEXT'], self.standard.limits.get("PSAFEXT") if self.standard is not None else None, self.standard.limits.get("AVGPSAFEXT") if self.standard is not None else None)
+        parameters["PSAACRF - end1"] = (self.PSAACRX['end1']['AFEXT'], self.standard.limits.get("PSAACRF") if self.standard is not None else None, self.standard.limits.get("AVGPSAACRF") if self.standard is not None else None)
+        parameters["PSANEXT - end2"] = (self.PSAlien['end2']['ANEXT'], self.standard.limits.get("PSANEXT") if self.standard is not None else None, self.standard.limits.get("AVGPSANEXT") if self.standard is not None else None)
+        parameters["PSAACRN - end2"] = (self.PSAACRX['end2']['ANEXT'], self.standard.limits.get("PSAACRN") if self.standard is not None else None, self.standard.limits.get("AVGPSAACRN") if self.standard is not None else None)
+        parameters["PSAFEXT - end2"] = (self.PSAlien['end2']['AFEXT'], self.standard.limits.get("PSAFEXT") if self.standard is not None else None, self.standard.limits.get("AVGPSAFEXT") if self.standard is not None else None)
+        parameters["PSAACRF - end2"] = (self.PSAACRX['end2']['AFEXT'], self.standard.limits.get("PSAACRF") if self.standard is not None else None, self.standard.limits.get("AVGPSAACRF") if self.standard is not None else None)
+        return parameters
 
     #def portRename(self, portNames):
 

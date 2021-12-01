@@ -65,7 +65,7 @@ class Alien(object):
 
         self.rs.port_name = self.port_name
         
-        self.distrubedIL = self.rs.getIL(self.rs.dd , z = False)
+        self.disturbedIL = self.rs.getIL(self.rs.dd , z = False)
         
     def addDisturberMeasurement(self, end, testType, snpFile, name = ""):
 
@@ -174,9 +174,9 @@ class Alien(object):
             PSAACRX[self.port_name[disturbed_pair]] = []
             for f in range(0, self.rs.num_samples):
                 PS = self.PSAlien
-                PSAACRX[self.port_name[disturbed_pair]].append(PS[self.port_name[disturbed_pair]][f] - self.distrubedIL[self.port_name[disturbed_pair]][f]) 
+                PSAACRX[self.port_name[disturbed_pair]].append(PS[self.port_name[disturbed_pair]][f] - self.disturbedIL[self.port_name[disturbed_pair]][f]) 
                 '''if f == 0:
-                    print("disturbed pair: ", self.port_name[disturbed_pair], self.distrubedIL[self.port_name[disturbed_pair]][f])'''
+                    print("disturbed pair: ", self.port_name[disturbed_pair], self.disturbedIL[self.port_name[disturbed_pair]][f])'''
 
         return PSAACRX
 
