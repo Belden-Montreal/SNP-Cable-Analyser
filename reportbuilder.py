@@ -111,6 +111,7 @@ class ReportBuilder():
                                         #df[param_name, line_name, "db"] = val
                                     except Exception as e:
                                         print("FAIL on LIMIT : ", param_name, e)
+                                        print(val)
                                 else:
                                     df[param_name, line_name, "db"] = s.sample.getParam(param_name, z=False)[line_name]
                 try:

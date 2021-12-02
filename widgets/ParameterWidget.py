@@ -149,7 +149,7 @@ class ParameterWidget():
             self.line_text_dict = dict()
 
             for legline, legtext, origline in zip(leg.get_lines(), leg.get_texts(), lines):
-                print(legline, origline[0])
+                #print(legline, origline[0])
                 legline.set_picker(5)  # 5 pts tolerance
                 legtext.set_picker(6)  # 5 pts tolerance
 

@@ -1,8 +1,10 @@
-import pylab
+#import pylab
 from skrf import Network as rf
+import numba
 
 import numpy as np
 from scipy.misc import derivative
+from functools import cache
 class SNPManipulations(rf):
 
     def __init__(self, snpFile):
@@ -549,19 +551,18 @@ class SNPManipulations(rf):
         '''
         if type(In) == dict:
             output = {}
-            for (key, val) in zIn:
-                db = self.complex2db(zIn, deg)
-                ph = self.complex2phase(zIn, deg)
+            for (key, val) in In:
+                db = self.complex2db(In, deg)
+                ph = self.complex2phase(In, deg)
                 output[key] = list(zip(db, ph))
             return output
             
-        db = self.complex2db(zIn, deg)
-        ph = self.complex2phase(zIn, deg)
+        db = self.complex2db(In, deg)
+        ph = self.complex2phase(In, deg)
         return list(zip(db, ph))
 
 
-
-
+    #@numba.jit(parallel=True)
     def complex2db(self, zIn, deg=True):
         '''
         Convert Complex number to dB 

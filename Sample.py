@@ -9,7 +9,7 @@ from settings import Settings
 
 from genericworker import GenericWorker
 from PyQt5 import QtCore     
-from pathos.pools import ProcessPool
+#from pathos.pools import ProcessPool
 from multiprocessing import cpu_count
 import time
 class Sample(SNPManipulations):
@@ -83,9 +83,11 @@ class Sample(SNPManipulations):
         
         self.worstValue = {}
         self.worstMargin = {}
+        
 
         # self.getParameters()
-        
+    limitmutex = QtCore.QMutex()
+    parammutex = QtCore.QMutex()
 
     def getParameters(self):
         z=False
@@ -270,13 +272,18 @@ class Sample(SNPManipulations):
         self.worstValue = {}
 
        # with ProcessPool(cpu_count()) as p:
+
         for parameter in self.parameters:
             #try:
+            self.limitmutex.lock()
+
             self.evaluateLimit(parameter.replace(" ", "") )
                     
 
             self.getWorstMargin(parameter.replace(" ", ""))
             self.getWorstValue(parameter.replace(" ", ""))
+            
+            self.limitmutex.unlock()
 
             #except Exception as e:
             #    print("ERROR: Limit Not evaluated", parameter, e)

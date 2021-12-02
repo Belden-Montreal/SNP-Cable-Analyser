@@ -115,8 +115,8 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         self.threadpool = QtCore.QThreadPool()
         self.poolMutex = QtCore.QMutex()
 
-
-        #self.setupConsole()
+        # Comment out this line to get messanges to appear in terminal instead of in app. 
+        self.setupConsole()
 
     def addEmbed(self):
         testName, result = QtWidgets.QInputDialog.getText(self, "Add an Embedded Sample",
@@ -213,6 +213,8 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
 
             
     def displaySamplesInTable(self):
+        #self.blockSignals( False )
+
         print("Finished TREAD !")
 
         measurementCount = len(self.Project.measurements)
@@ -248,6 +250,8 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         #This needs to be in thread  Look into this : https://realpython.com/python-pyqt-qthread/
 
         #for file in files:
+        #self.blockSignals( True )
+
         worker = GenericWorker(function= self.Project.importSNP, files = files)
         worker.signals.finished.connect(self.displaySamplesInTable)
 
@@ -555,15 +559,19 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         #values = self.calculateErrors(pool=os.cpu_count())
         allPass = True
         failedParams = []
+        self.blockSignals(True)
+
         for param in self.sample.parameters:
 
             self.new_tab = ParameterWidget(param.replace(" ", ''), self.sample , graph = self.graphicsView) #, values[param.replace(" ","")])
             self.paramWidgetList.append(self.new_tab)
             self.tab_list.append(self.new_tab.widget)
             self.param_tabs.addTab(self.new_tab.widget, param)
+
             allPass = allPass and self.new_tab.hasPassed
             if not self.new_tab.hasPassed:
                 failedParams.append(param)
+
         if allPass:
             self.mainTabWidget.passLabel.setText("Pass")
         else:
@@ -576,12 +584,14 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
                 break
             else:
                 index = 0
+        self.blockSignals(False)
+
         self.param_tabs.setCurrentIndex(index)
+        self.tabChange(index)
 
-
-    def tabChange(self):
+    def tabChange(self, index):
         #This function is called whenever a parameter 
-        self.tab_index = self.param_tabs.currentIndex()
+        self.tab_index = index #self.param_tabs.currentIndex()
         self.activeParameter = self.param_tabs.tabText(self.tab_index)
         print("Active Parameter = ", self.activeParameter)
         if self.selected:

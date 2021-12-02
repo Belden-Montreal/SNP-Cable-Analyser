@@ -3,6 +3,7 @@ from sympy import N, log, E
 from sympy import Symbol
 import math
 from multiprocessing.dummy import Pool as ThreadPool
+
 import numpy as np
 class Limit:
 
@@ -14,7 +15,6 @@ class Limit:
         self.bounds = bounds
         self.resultsDict = None
         self.resultsList = None
-
     def __str__(self):
         return self.clauses[0]
 
@@ -63,12 +63,15 @@ class Limit:
         return self.resultsList'''
 
     def evaluateLimit(self, vals, nb, neg=False):
+
         if not len(self.functions):
             return
         self.evaluatePoints(vals, nb)
         if neg:
             self.resultsList =  [(x,-y) for x,y in self.resultsList]
             self.resultsDict = {x: -self.resultsDict[x] for x in self.resultsDict.keys()}
+
+
         #return self.resultsList     
 
     def getArray(self):

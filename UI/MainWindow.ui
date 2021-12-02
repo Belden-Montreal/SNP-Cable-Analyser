@@ -47,7 +47,7 @@
       <property name="childrenCollapsible">
        <bool>false</bool>
       </property>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
          <widget class="QSplitter" name="splitter_2">
@@ -168,8 +168,6 @@
      </widget>
     </item>
    </layout>
-   <zorder>splitter_3</zorder>
-   <zorder>horizontalLayoutWidget</zorder>
   </widget>
   <widget class="QToolBar" name="toolBar2">
    <property name="windowTitle">
@@ -707,7 +705,7 @@
   </connection>
   <connection>
    <sender>param_tabs</sender>
-   <signal>currentChanged(int)</signal>
+   <signal>tabBarClicked(int)</signal>
    <receiver>MainWindow</receiver>
    <slot>tabChange()</slot>
    <hints>

@@ -43,6 +43,8 @@ class Embedding(SNPManipulations):
 
         #self.workbook = xlsxwriter.Workbook(self.testName + ".xlsx")
 
+        # TIA-568.2-D-2018.pdf  --> p.216 --> (C.6.5.11.3.2)  --> #6
+        #Delay_round_trip_plug_jack
         self.k1 = 5e-12     #Pair Shorting jack 12, 45, 78
         self.k2 = 14e-12    #Pair Shorting jack 36
         self.k3 = 20e-12    #Thru calibration
@@ -302,7 +304,7 @@ class Embedding(SNPManipulations):
 
     def setPlugVectors(self, cat):
         self.cat = cat
-        if cat == "6A" or cat == "6":
+        if cat == "6A" or cat == "6" or cat == "8":
             self.case1  = lambda f: (-(38.1-20*np.log10((f)/100)), np.angle(self.correctedPlugVector["45-36"][list(self.loadSample.freq).index(f)], deg=True))
             self.case2  = lambda f: (-(38.6-20*np.log10((f)/100)), np.angle(self.correctedPlugVector["45-36"][list(self.loadSample.freq).index(f)], deg=True))
             self.case3  = lambda f: (-(39.0 -20*np.log10((f)/100)), np.angle(self.correctedPlugVector["45-36"][list(self.loadSample.freq).index(f)], deg=True))
@@ -477,7 +479,7 @@ class Embedding(SNPManipulations):
                     "45-78": ["case11"],
                     "12-78": ["case13"]}
 
-        if self.cat == "6" or self.cat == "6A":    
+        if self.cat == "6" or self.cat == "6A" or self.cat == "8":    
             params = {""
                     "36-45": ["case1", "case2", "case3", "case4"],
                     "12-36": ["case5", "case6"],
