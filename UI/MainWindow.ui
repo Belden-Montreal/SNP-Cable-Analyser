@@ -262,9 +262,16 @@
     <addaction name="separator"/>
     <addaction name="actionWho_am_I"/>
    </widget>
+   <widget class="QMenu" name="menuWindow">
+    <property name="title">
+     <string>Window</string>
+    </property>
+    <addaction name="actionShow_Log"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuVNA"/>
    <addaction name="menuSettings"/>
+   <addaction name="menuWindow"/>
   </widget>
   <action name="actionImport_SnP">
    <property name="text">
@@ -497,6 +504,11 @@
   <action name="actionPort_Pair_Naming_Alien">
    <property name="text">
     <string>Port/Pair Naming (Alien)</string>
+   </property>
+  </action>
+  <action name="actionShow_Log">
+   <property name="text">
+    <string>Show Log</string>
    </property>
   </action>
  </widget>

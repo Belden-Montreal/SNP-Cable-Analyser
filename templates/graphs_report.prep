@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?> 
+<!DOCTYPE document SYSTEM "rml.dtd"> 
+
+<document filename="testOut.pdf"> 
+
+{{script}}
+
+# short name for  formatting function.
+from reportPackages.rlextra.radxml.html_cleaner import cleanInline as i
+from reportPackages.rlextra.radxml.html_cleaner import cleanBlocks as b
+
+#the current date
+import datetime
+today = datetime.date.today()
+
+
+{{endscript}}
+
+
+<template pageSize="(595, 842)" leftMargin="50" rightMargin="50"  showBoundary="0">
+   
+    <!--<pageTemplate id="blank">
+        <frame id="first" x1="1in" y1="1in" width="6.27in" height="9.69in"/>
+    </pageTemplate> -->
+
+
+    <pageTemplate id="param">
+        <pageGraphics>
+            <image file="{{RML_DIR}}/belden_logo.png" x="50" y="712" width = "100"  preserveAspectRatio="1"/>
+        </pageGraphics>
+        <frame id="body" x1="50" y1="50" width="495" height="712"/>
+    </pageTemplate>
+
+</template>
+
+<stylesheet>
+
+    <paraStyle name="h1"
+    fontSize="27"
+    leading="17"
+    spaceBefore = "14"
+    />
+
+    <paraStyle name="h2"
+    fontSize="15"
+    leading="17"
+    spaceBefore = "15"
+    />
+
+    <paraStyle name="page_title"
+    fontSize="14.5"
+    alignment = "CENTRE"
+    />
+
+    <paraStyle name="param_data"
+    fontSize="11"
+    alignment = "LEFT"
+    />
+
+    <paraStyle name="table_line_header"
+    fontSize="12"
+    leading="10"
+    spaceBefore = "12"
+    textColor="green" 
+    />
+
+    <paraStyle name="table_freq_val"
+    fontSize="7.5"
+    leading="14"
+    spaceBefore = "4"
+    textColor="green" 
+    />
+
+    <paraStyle name="table_line_val"
+    fontSize="7.5"
+    leading="14"
+    spaceBefore = "4"
+    textColor="green" 
+    />
+
+
+</stylesheet>
+
+<story>  
+
+
+   {{ for sample in samples}}
+        {{if sample.type == "SNP" : }}
+            {{ for param in sample.params}}
+
+                <setNextTemplate name="param" />  
+                <nextFrame/>  
+
+                <para style="page_title"> {{param.name}} </para>  
+                <para style="param_data">Sample : {{sample.name}}</para>  
+
+                <blockTable align="LEFT">
+                    <tr>
+                        <td>Freq ({{sample.freq_unit}})</td>
+                        {{ for line in param.lines}}
+                            <td>{{line.name}}</td>
+                        {{endfor}}
+
+                    </tr>
+                    
+                </blockTable>
+
+
+
+            {{endfor}}
+        {{endif}}
+    {{endfor }}
+
+  
+</story>  
+</document>

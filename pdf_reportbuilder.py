@@ -7,7 +7,20 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QLineEdit, QMessageBox, QTableWidgetItem, QFileDialog, QCheckBox
 from PyQt5.Qt import Qt
 
-class ReportBuilder():
+
+import os, base64, preppy
+from xml.sax.saxutils import escape, unescape
+from reportPackages.rlextra.radxml.xmlutils import TagWrapper
+from reportPackages.rlextra.radxml.html_cleaner import cleanInline
+from reportPackages.rlextra.rml2pdf import rml2pdf
+import trml2pdf
+
+import pyRXPU
+#required for python 2.7 & >=3.3
+from reportPackages.reportlab.lib.utils import getBytesIO, isUnicode, asUnicode, asNative, asBytes, unicodeT
+
+
+class PDFReportBuilder():
 
     def __init__(self, samples):
 
@@ -34,7 +47,7 @@ class ReportBuilder():
                     for line in series:
                         l = Node(name = line, nodeType = "series", series = line, selected = True, parent = p)
 
-            if s.sampleType == "Alien":
+            '''if s.sampleType == "Alien":
                 for name, (parameter, limit, avglimit) in sample.getParameters().items():
                     if len(parameter):
                         p = Node(name = name, nodeType = "parameter", parameter = parameter, selected = True, parent = s, hasComplex = False, complex=False)
@@ -45,7 +58,7 @@ class ReportBuilder():
                         series = list(p.parameter.keys())
                         for line in series:
                             l = Node(name = line, nodeType = "series", series = p.parameter[line], selected = True, parent = p) 
-                    
+            '''
 
 
         
@@ -59,36 +72,51 @@ class ReportBuilder():
         if res == QtWidgets.QDialog().Accepted:
             self.outputFile , self.configTree = gui.getNewConfig()
 
-    def generateExcel(self):
-        writer = pd.ExcelWriter(self.outputFile) 
+    def generatePDF(self):
+
+        class SampleData:
+            pass
+
         samples = search.findall_by_attr(self.configTree, True, name = "selected", maxlevel=2)
         samples = samples[1:] #Skip root
+
+        sample_list = []
         for s in samples:
-
-
+            class ParamData:
+                pass
             if s.sampleType == "SNP":
-                col = pd.MultiIndex.from_arrays([[],[],[]])  #sub headers  :  Parameter ->Pair ->Real/Imag
-                df = pd.DataFrame(columns=col, index = s.sample.freq)
+
                 freq_title = f"Freq({s.sample.freq_unit})"
-                new_freq=df.index.set_names(freq_title)
-                df.index=new_freq
-                #df['','', freq_title] = s.sample.freq
-                #df.set_index([('', '', freq_title)], inplace=True)
+                sd = SampleData()
+                sd.type = "SNP"
+                sd.name = s.sample.name
+                sd.freq =  s.sample.freq
+                sd.freq_unit = s.sample.freq_unit
                 params = search.findall_by_attr(s, True, name = "selected", maxlevel=2)
                 params = params[1:] #Skip root
+                param_list = []
                 for p in params:
+
+                    pd = ParamData()
                     param_name = p.name
+                    pd.name = param_name 
+
                     series = search.findall_by_attr(p , True, name = "selected", maxlevel=2)
                     series = series[1:] #Skip root
+
+                    series_list = []
+                    class LineData:
+                        pass
                     for line in series:
+                        ld = LineData()
                         line_name = line.name  #pair
+                        ld.name = line_name
                         if p.complex:
                             if line_name == "Limit":
                                 pass
 
                             else:
-                                df[param_name, line_name, "Re"] = np.real(s.sample.getParam(param_name, z=True)[line_name])
-                                df[param_name, line_name, "Im"] = np.imag(s.sample.getParam(param_name,z=True)[line_name])
+                                pass
                         else:
                             if param_name == "Propagation Delay":
                                 if line_name == "Limit":
@@ -96,9 +124,9 @@ class ReportBuilder():
                                     #df[param_name, line_name, "ns"] = np.NaN
                                     idx, val = zip(*lim)
                                     #for idx, val in lim.items() :  # i in enumerate(idx):
-                                    df[param_name, line_name, "ns"] = val
+                                    
                                 else:
-                                    df[param_name, line_name, "ns"] = s.sample.getParam(param_name, z=False)[line_name]
+                                    pass
                             else:
                                 if line_name == "Limit":
                                     try:
@@ -107,58 +135,43 @@ class ReportBuilder():
                                         idx, val = zip(*lim)
                                         #for idx, val in lim.items() :  # i in enumerate(idx):
                                         #print(idx, val)
-                                        df[param_name, line_name, "db"] = val
                                         #df[param_name, line_name, "db"] = val
                                     except Exception as e:
                                         print("FAIL on LIMIT : ", param_name, e)
                                         print(val)
                                 else:
-                                    df[param_name, line_name, "db"] = s.sample.getParam(param_name, z=False)[line_name]
+                                    pass
+                        series_list.append(ld)
+                    pd.lines = series_list
+                    param_list.append(pd)
+                sd.params = param_list
+                sample_list.append(sd)
                 try:
                     print("sample name : ", s.sample.name)
-                    df.to_excel(writer, sheet_name=s.sample.name)
                 except Exception as e:
                     print(e)
 
-            if s.sampleType == "Alien":
-
-                params = search.findall_by_attr(s, True, name = "selected", maxlevel=2)
-                params = params[1:] #Skip root
-                for p in params:
-
-                    col = pd.MultiIndex.from_arrays([[],[],[]])  #sub headers  :  Parameter ->Pair ->Real/Imag
-                    df = pd.DataFrame(columns=col, index = s.sample.freq)
-                    freq_title = f"Freq({s.sample.freq_unit})"
-                    new_freq=df.index.set_names(freq_title)
-                    df.index=new_freq
-
-                    param_name = p.name
-                    series = search.findall_by_attr(p , True, name = "selected", maxlevel=2)
-                    series = series[1:] #Skip root
-                    for line in series:
-                        line_name = line.name  #pair
-                        if line_name == "Limit" or line_name == "Avg Limit":
-                            try:
-                                lim = line.series.getArray()
-                                #df[param_name, line_name, "db"] = np.NaN
-                                idx, val = zip(*lim)
-                                #for idx, val in lim.items() :  # i in enumerate(idx):
-                                #print(idx, val)
-                                df[param_name, line_name, "db"] = val
-                                #df[param_name, line_name, "db"] = val
-                            except Exception as e:
-                                print("FAIL on LIMIT : ", param_name, e)
-                        else:
-                            df[param_name, line_name, "db"] = line.series
-                    try:
-                        print("sample name : ", s.sample.name)
-                        df.to_excel(writer, sheet_name=s.sample.name + " - " + param_name)
-                    except Exception as e:
-                        print(e)
+        template = "graphs_report.prep"
+        RML_DIR = "templates"
+        DATA_DIR = os.path.join(RML_DIR, "data")
+        output = "testOut.pdf"
+        templateName = os.path.join(RML_DIR, template)
+        template = preppy.getModule(templateName)
+        namespace = {
+            'samples': sample_list,
+            'RML_DIR': RML_DIR,
+            'IMG_DIR': 'img'
+            }
+        rml = template.getOutput(namespace)
+        open(os.path.join(DATA_DIR,'latest.rml'), 'w').write(rml)
+        #print(rml)
+        buf = getBytesIO()
+        print(rml2pdf.go(asBytes(rml), outputFileName=output))
+        #buf = trml2pdf.parseString(asBytes(rml))
 
 
 
-        writer.save()
+
 
 
 

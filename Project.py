@@ -12,7 +12,8 @@ import xlsxwriter
 import os
 import subprocess
 
-import reportbuilder
+import excel_reportbuilder
+import pdf_reportbuilder
 
 from pathos.pools import ProcessPool
 from multiprocessing import cpu_count
@@ -172,35 +173,36 @@ class Project(): #Put (object) later
         self.activeMeasurements = [self.getSampleByName(sample) for sample in samples]
 
     def generateReport(self, samples):
-        rb = reportbuilder.ReportBuilder(samples=self.measurements)
+        rb = excel_reportbuilder.ExcelReportBuilder(samples=self.measurements)
         rb.displayUI()
         rb.generateExcel()
         return
-if __name__ == '__main__':  
-
-    #proj1.generateExcel("test1.xlsx", ["TestPCLiam3","TestPCLiam4"])
+    
+    def generatePDFReport(self):
+        rb = pdf_reportbuilder.PDFReportBuilder(samples=self.measurements)
+        #rb.displayUI()
+        rb.generatePDF()
+        return
 
 
     
     
-    import sys
-
-
-
+import sys
 
 def main():
+    
 
     app = QtWidgets.QApplication(sys.argv)
 
     proj1 = Project()
 
-    proj1.importSNP([r"snps\TestPCLiam3.s8p", r"snps\TestPCLiam4.s8p"])
+    proj1.importSNP([r"snps\TestPCLiam3.s8p"])
 
-    print(proj1.getSampleByName(u"TestPCLiam3"))
-    proj1.generateReport()
+    #print(proj1.getSampleByName(u"TestPCLiam3"))
+    proj1.generatePDFReport()
 
-    sys.exit(app.exec_())
-
+    app.exec_()
+    app.deleteLater()     
 if __name__ == '__main__':
     main()
 

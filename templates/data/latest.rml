@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?> 
+<!DOCTYPE document SYSTEM "rml.dtd"> 
+
+<document filename="testOut.pdf"> 
+
+
+
+
+<template pageSize="(595, 842)" leftMargin="50" rightMargin="50"  showBoundary="0">
+   
+    <!--<pageTemplate id="blank">
+        <frame id="first" x1="1in" y1="1in" width="6.27in" height="9.69in"/>
+    </pageTemplate> -->
+
+
+    <pageTemplate id="param">
+        <pageGraphics>
+            <image file="templates/belden_logo.png" x="50" y="712" width = "100"  preserveAspectRatio="1"/>
+        </pageGraphics>
+        <frame id="body" x1="50" y1="50" width="495" height="712"/>
+    </pageTemplate>
+
+</template>
+
+<stylesheet>
+
+    <paraStyle name="h1"
+    fontSize="27"
+    leading="17"
+    spaceBefore = "14"
+    />
+
+    <paraStyle name="h2"
+    fontSize="15"
+    leading="17"
+    spaceBefore = "15"
+    />
+
+    <paraStyle name="page_title"
+    fontSize="14.5"
+    alignment = "CENTRE"
+    />
+
+    <paraStyle name="param_data"
+    fontSize="11"
+    alignment = "LEFT"
+    />
+
+    <paraStyle name="table_line_header"
+    fontSize="12"
+    leading="10"
+    spaceBefore = "12"
+    textColor="green" 
+    />
+
+    <paraStyle name="table_freq_val"
+    fontSize="7.5"
+    leading="14"
+    spaceBefore = "4"
+    textColor="green" 
+    />
+
+    <paraStyle name="table_line_val"
+    fontSize="7.5"
+    leading="14"
+    spaceBefore = "4"
+    textColor="green" 
+    />
+
+
+</stylesheet>
+
+<story>  
+
+
+   
+        
+            
+
+                <setNextTemplate name="param" />  
+                <nextFrame/>  
+
+                <para style="page_title"> RL </para>  
+                <para style="param_data">Sample : TestPCLiam3</para>  
+
+                <blockTable align="LEFT">
+                    <tr>
+                        <td>Freq (MHz)</td>
+                        
+                            <td>12</td>
+                        
+                            <td>36</td>
+                        
+                            <td>45</td>
+                        
+                            <td>78</td>
+                        
+
+                    </tr>
+                    
+                </blockTable>
+
+
+
+            
+
+                <setNextTemplate name="param" />  
+                <nextFrame/>  
+
+                <para style="page_title"> NEXT </para>  
+                <para style="param_data">Sample : TestPCLiam3</para>  
+
+                <blockTable align="LEFT">
+                    <tr>
+                        <td>Freq (MHz)</td>
+                        
+                            <td>12-36</td>
+                        
+                            <td>12-45</td>
+                        
+                            <td>12-78</td>
+                        
+                            <td>36-45</td>
+                        
+                            <td>36-78</td>
+                        
+                            <td>45-78</td>
+                        
+
+                    </tr>
+                    
+                </blockTable>
+
+
+
+            
+
+                <setNextTemplate name="param" />  
+                <nextFrame/>  
+
+                <para style="page_title"> Propagation Delay </para>  
+                <para style="param_data">Sample : TestPCLiam3</para>  
+
+                <blockTable align="LEFT">
+                    <tr>
+                        <td>Freq (MHz)</td>
+                        
+                            <td>12</td>
+                        
+                            <td>36</td>
+                        
+                            <td>45</td>
+                        
+                            <td>78</td>
+                        
+
+                    </tr>
+                    
+                </blockTable>
+
+
+
+            
+
+                <setNextTemplate name="param" />  
+                <nextFrame/>  
+
+                <para style="page_title"> PSNEXT </para>  
+                <para style="param_data">Sample : TestPCLiam3</para>  
+
+                <blockTable align="LEFT">
+                    <tr>
+                        <td>Freq (MHz)</td>
+                        
+                            <td>12</td>
+                        
+                            <td>36</td>
+                        
+                            <td>45</td>
+                        
+                            <td>78</td>
+                        
+
+                    </tr>
+                    
+                </blockTable>
+
+
+
+            
+
+                <setNextTemplate name="param" />  
+                <nextFrame/>  
+
+                <para style="page_title"> LCL </para>  
+                <para style="param_data">Sample : TestPCLiam3</para>  
+
+                <blockTable align="LEFT">
+                    <tr>
+                        <td>Freq (MHz)</td>
+                        
+                            <td>12</td>
+                        
+                            <td>36</td>
+                        
+                            <td>45</td>
+                        
+                            <td>78</td>
+                        
+
+                    </tr>
+                    
+                </blockTable>
+
+
+
+            
+
+                <setNextTemplate name="param" />  
+                <nextFrame/>  
+
+                <para style="page_title"> TCL </para>  
+                <para style="param_data">Sample : TestPCLiam3</para>  
+
+                <blockTable align="LEFT">
+                    <tr>
+                        <td>Freq (MHz)</td>
+                        
+                            <td>12</td>
+                        
+                            <td>36</td>
+                        
+                            <td>45</td>
+                        
+                            <td>78</td>
+                        
+
+                    </tr>
+                    
+                </blockTable>
+
+
+
+            
+
+                <setNextTemplate name="param" />  
+                <nextFrame/>  
+
+                <para style="page_title"> CMRL </para>  
+                <para style="param_data">Sample : TestPCLiam3</para>  
+
+                <blockTable align="LEFT">
+                    <tr>
+                        <td>Freq (MHz)</td>
+                        
+                            <td>12</td>
+                        
+                            <td>36</td>
+                        
+                            <td>45</td>
+                        
+                            <td>78</td>
+                        
+
+                    </tr>
+                    
+                </blockTable>
+
+
+
+            
+
+                <setNextTemplate name="param" />  
+                <nextFrame/>  
+
+                <para style="page_title"> CMNEXT </para>  
+                <para style="param_data">Sample : TestPCLiam3</para>  
+
+                <blockTable align="LEFT">
+                    <tr>
+                        <td>Freq (MHz)</td>
+                        
+                            <td>12-36</td>
+                        
+                            <td>12-45</td>
+                        
+                            <td>12-78</td>
+                        
+                            <td>36-45</td>
+                        
+                            <td>36-78</td>
+                        
+                            <td>45-78</td>
+                        
+
+                    </tr>
+                    
+                </blockTable>
+
+
+
+            
+
+                <setNextTemplate name="param" />  
+                <nextFrame/>  
+
+                <para style="page_title"> CMDMNEXT </para>  
+                <para style="param_data">Sample : TestPCLiam3</para>  
+
+                <blockTable align="LEFT">
+                    <tr>
+                        <td>Freq (MHz)</td>
+                        
+                            <td>12-36</td>
+                        
+                            <td>12-45</td>
+                        
+                            <td>12-78</td>
+                        
+                            <td>36-45</td>
+                        
+                            <td>36-78</td>
+                        
+                            <td>45-78</td>
+                        
+
+                    </tr>
+                    
+                </blockTable>
+
+
+
+            
+
+                <setNextTemplate name="param" />  
+                <nextFrame/>  
+
+                <para style="page_title"> CMDMRL </para>  
+                <para style="param_data">Sample : TestPCLiam3</para>  
+
+                <blockTable align="LEFT">
+                    <tr>
+                        <td>Freq (MHz)</td>
+                        
+                            <td>12</td>
+                        
+                            <td>36</td>
+                        
+                            <td>45</td>
+                        
+                            <td>78</td>
+                        
+
+                    </tr>
+                    
+                </blockTable>
+
+
+
+            
+
+                <setNextTemplate name="param" />  
+                <nextFrame/>  
+
+                <para style="page_title"> DMCMNEXT </para>  
+                <para style="param_data">Sample : TestPCLiam3</para>  
+
+                <blockTable align="LEFT">
+                    <tr>
+                        <td>Freq (MHz)</td>
+                        
+                            <td>12-36</td>
+                        
+                            <td>12-45</td>
+                        
+                            <td>12-78</td>
+                        
+                            <td>36-45</td>
+                        
+                            <td>36-78</td>
+                        
+                            <td>45-78</td>
+                        
+
+                    </tr>
+                    
+                </blockTable>
+
+
+
+            
+
+                <setNextTemplate name="param" />  
+                <nextFrame/>  
+
+                <para style="page_title"> DMCMRL </para>  
+                <para style="param_data">Sample : TestPCLiam3</para>  
+
+                <blockTable align="LEFT">
+                    <tr>
+                        <td>Freq (MHz)</td>
+                        
+                            <td>12</td>
+                        
+                            <td>36</td>
+                        
+                            <td>45</td>
+                        
+                            <td>78</td>
+                        
+
+                    </tr>
+                    
+                </blockTable>
+
+
+
+            
+        
+    
+
+  
+</story>  
+</document>
