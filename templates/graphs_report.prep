@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?> 
 <!DOCTYPE document SYSTEM "rml.dtd"> 
 
-<document filename="testOut.pdf"> 
+<document filename= "{{filename}}"> 
 
 {{script}}
 
@@ -18,17 +18,12 @@ today = datetime.date.today()
 
 
 <template pageSize="(595, 842)" leftMargin="50" rightMargin="50"  showBoundary="0">
-   
-    <!--<pageTemplate id="blank">
-        <frame id="first" x1="1in" y1="1in" width="6.27in" height="9.69in"/>
-    </pageTemplate> -->
-
 
     <pageTemplate id="param">
         <pageGraphics>
             <image file="{{RML_DIR}}/belden_logo.png" x="50" y="712" width = "100"  preserveAspectRatio="1"/>
         </pageGraphics>
-        <frame id="body" x1="50" y1="50" width="495" height="712"/>
+        <frame id="body" x1="50" y1="50" width="495" height="712"/> 
     </pageTemplate>
 
 </template>
@@ -50,33 +45,23 @@ today = datetime.date.today()
     <paraStyle name="page_title"
     fontSize="14.5"
     alignment = "CENTRE"
+    leading="17"
+    spaceBefore = "14"
     />
 
     <paraStyle name="param_data"
     fontSize="11"
     alignment = "LEFT"
+    leading="17"
+    spaceBefore = "17"
     />
 
-    <paraStyle name="table_line_header"
-    fontSize="12"
-    leading="10"
-    spaceBefore = "12"
-    textColor="green" 
-    />
+    <blockTableStyle id="extraData">
+        <blockSpan start="0, -1" stop="1, -1"/>
+        <blockSpan start="0, -2" stop="1, -2"/>
 
-    <paraStyle name="table_freq_val"
-    fontSize="7.5"
-    leading="14"
-    spaceBefore = "4"
-    textColor="green" 
-    />
+    </blockTableStyle>
 
-    <paraStyle name="table_line_val"
-    fontSize="7.5"
-    leading="14"
-    spaceBefore = "4"
-    textColor="green" 
-    />
 
 
 </stylesheet>
@@ -87,26 +72,63 @@ today = datetime.date.today()
    {{ for sample in samples}}
         {{if sample.type == "SNP" : }}
             {{ for param in sample.params}}
-
-                <setNextTemplate name="param" />  
-                <nextFrame/>  
+               
 
                 <para style="page_title"> {{param.name}} </para>  
-                <para style="param_data">Sample : {{sample.name}}</para>  
+                {{if param.standard is not None}}
+                <para style="param_data">{{param.pass_fail}}</para>  
+                {{endif}}
 
-                <blockTable align="LEFT">
+                <para style="param_data">Sample : {{sample.name}}</para>  
+                {{if param.standard is not None}}
+                <para style="param_data">Standard : {{param.standard}}</para>  
+                {{endif}}
+                {{if param.standard is not None}}
+                <blockTable align="CENTER" style = "extraData">
+                {{else}}
+                <blockTable align="CENTER">
+                {{endif}}
                     <tr>
                         <td>Freq ({{sample.freq_unit}})</td>
                         {{ for line in param.lines}}
                             <td>{{line.name}}</td>
                         {{endfor}}
-
                     </tr>
                     
+                    {{ for i in range(len(param.testPoints['freq'])) }}
+                    <tr>
+                        {{ for key, val in param.testPoints.items() }}
+                            <td  > {{val[i]}} </td>
+                        {{endfor}}
+                    </tr>
+                    {{endfor}}
+
+                    {{if param.standard is not None}}
+
+
+                    <tr>
+                        <td> Worst distance from limit</td>
+                       <td></td>
+                        {{ for key, (f, v) in param.worst_margin.items() }}
+                            <td  > {{v}} </td>
+                        {{endfor}}
+                    </tr> 
+
+                    <tr>
+                        <td>@Freq</td>
+                       <td></td>
+                        {{ for key, (f, v) in param.worst_margin.items() }}
+                            <td  > {{f}} </td>
+                        {{endfor}}
+                        
+                    </tr> 
+                    {{endif}}
+
+
+            
                 </blockTable>
 
-
-
+            <nextFrame/>
             {{endfor}}
         {{endif}}
     {{endfor }}

@@ -52,7 +52,7 @@ class ExcelReportBuilder():
         return configTree
 
     def displayUI(self):
-        gui = reportConfig.ReportConfig(self.configTree)
+        gui = reportConfig.ReportConfig(self.configTree, "excel")
         res = gui.dialog.exec_()
         print("REs = ", res)
         #gui.displayTree()

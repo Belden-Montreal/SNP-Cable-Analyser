@@ -406,6 +406,8 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
                 one_sided.setCheckable(True)
                 end_end.setCheckable(True)
                 exportExcel = menu.addAction("Export To Excel")
+                exportPDF = menu.addAction("Export To PDF")
+
                 delete = menu.addAction("Delete")
 
                 #get test type for samples. If theyre all one sided, all
@@ -455,6 +457,10 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
                     print(self.selected)
                     self.generateExcel()
 
+                elif action == exportPDF:
+                    print(self.selected)
+                    self.generatePDF()
+
                 elif action == delete:
                     self.deleteSample()
 
@@ -476,6 +482,8 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
                     setPairNumber = menu.addAction("Renumber Pairs")
 
                 exportExcel = menu.addAction("Export To Excel")
+                exportPDF = menu.addAction("Export To PDF")
+
                 delete = menu.addAction("Delete")
 
                 #get test type for samples. If theyre all one sided, all
@@ -488,6 +496,9 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
                     print(self.selected)
                     self.generateExcel()
 
+                elif action == exportPDF:
+                    print(self.selected)
+                    self.generatePDF()
 
                 elif action == delete:
                     self.deleteSample()
@@ -524,8 +535,17 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         if len(self.selected) == 0:
             samples = self.Project.measurements
         else:
-            samples = self.selected
-        self.Project.generateReport(samples)
+            samples = self.Project.getSampleByName(self.selected)
+            print(samples)
+        self.Project.generateExcelReport(samples)
+
+    def generatePDF(self):
+        #file, _ = self.getSaveFileName(self,"Export Excel Repport", "","Excel File (*.xlsx)")
+        if len(self.selected) == 0:
+            samples = self.Project.measurements
+        else:
+            samples = self.Project.getSampleByName(self.selected)
+        self.Project.generatePDFReport(samples)
 
     def displaySampleParams(self, sample):
 

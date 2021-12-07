@@ -112,7 +112,22 @@ class Project(): #Put (object) later
         pass
 
     def getSampleByName(self, name):
-        return next((sample for sample in self.measurements if sample.name==name),None)
+        ret = []
+        names = name
+        if type(name) is not list:
+            names = [name]
+        for name in names:
+            for sample in self.measurements:
+               if sample.name==name:
+                   ret.append(sample)
+
+        if len(ret) == 0:
+            return None
+        if len(ret) == 1:
+            return ret[0]
+        return ret
+        #return next((sample for sample in self.measurements if sample.name==name),None)
+
 
     def generateExcel(self, outputName, samples, z = False):
         workbook = xlsxwriter.Workbook(outputName)
@@ -172,15 +187,15 @@ class Project(): #Put (object) later
     def activeSample(self, samples):
         self.activeMeasurements = [self.getSampleByName(sample) for sample in samples]
 
-    def generateReport(self, samples):
-        rb = excel_reportbuilder.ExcelReportBuilder(samples=self.measurements)
+    def generateExcelReport(self, samples):
+        rb = excel_reportbuilder.ExcelReportBuilder(samples=self.activeMeasurements) # self.measurements)
         rb.displayUI()
         rb.generateExcel()
         return
     
-    def generatePDFReport(self):
-        rb = pdf_reportbuilder.PDFReportBuilder(samples=self.measurements)
-        #rb.displayUI()
+    def generatePDFReport(self, samples):
+        rb = pdf_reportbuilder.PDFReportBuilder(samples= self.activeMeasurements ) #self.measurements)
+        rb.displayUI()
         rb.generatePDF()
         return
 

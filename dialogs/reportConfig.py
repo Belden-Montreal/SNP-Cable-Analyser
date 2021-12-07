@@ -13,7 +13,7 @@ import sys
 
 class ReportConfig:
 
-    def __init__(self, configTree):
+    def __init__(self, configTree, type):
         
         self.config = configTree
 
@@ -25,7 +25,7 @@ class ReportConfig:
         self.configDialog.accept.clicked.connect(self.accept)
         self.configDialog.reject.clicked.connect(self.cancel)
         self.outputFile = None
-
+        self.type = type
         self.displayTree()
         
 
@@ -116,11 +116,14 @@ class ReportConfig:
     
     def getOutputFile(self):
         options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog        
-        self.outputFile, _ = QFileDialog.getSaveFileName(None, "Export Excel Report", "","Excel File (*.xlsx)")
-        #print files
-        #print(self.outputFile
-        self.configDialog.fileLabel.setText(os.path.basename(self.outputFile[:75] + (self.outputFile[75:] and '... .xlsx')))
+        options |= QFileDialog.DontUseNativeDialog    
+        if self.type == "pdf":    
+            self.outputFile, _ = QFileDialog.getSaveFileName(None, "Export PDF Report", "","PDF File (*.pdf)")
+            self.configDialog.fileLabel.setText(os.path.basename(self.outputFile[:75] + (self.outputFile[75:] and '... .pdf')))
+
+        if self.type == "excel":    
+            self.outputFile, _ = QFileDialog.getSaveFileName(None, "Export Excel Report", "","Excel File (*.xlsx)")
+            self.configDialog.fileLabel.setText(os.path.basename(self.outputFile[:75] + (self.outputFile[75:] and '... .xlsx')))
         return self.outputFile
 
     def cancel(self):
