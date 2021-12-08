@@ -1,346 +1,238 @@
-import visa
 import pyvisa
 from calWizard import CalWizard
 
-import configparser
+from PyQt5.QtWidgets import QMessageBox
+from config.vna import VNAConfiguration
+from PyQt5 import QtWidgets, QtCore
+import visa
+import time
 
-import re
-import os
+from visa import Error as VisaError
+from pyvisa import ResourceManager
 import tempfile
-
-class Communication(object):
+import os
+class Communication(QtCore.QObject):
+    connection = QtCore.pyqtSignal()
 
     def __init__(self):
+        super(QtCore.QObject, self).__init__()
+        self._connected = False
+        self._config = VNAConfiguration()
+        self._manager = None
+        #self._session = None
+        self.session = None
+        self._sortedCset = list()
+        self.useMachineSettings = False
+        self._date=list()
 
-        #rm = pyvisa.highlevel.ResourceManager()
-        #print(rm.list_resources())
 
+    def connect(self, address = None):
+        #self._manager = ResourceManager()
 
-        self.vna_settings_file = 'VNA_SETTINGS.ini'
+        if address == None:
+            address = self._config.getAddress()
 
-        open(self.vna_settings_file, 'a').close()
-
-        self.config = configparser.ConfigParser()
-        self.config.read_file(open(self.vna_settings_file))
-        if os.stat(self.vna_settings_file).st_size == 0:
-
-            self.config['comm_settings'] = {}
-            self.VNAAddress = "TCPIP0::10.29.48.46::hislip0::INSTR"
-            self.IF = 300
-            self.min_freq = 10e5
-            self.max_freq = 1e9
-            self.num_points = 1000
-            self.timeout = 500000
-            self.ip_address = None
-            self.visa_address = None
-            self.average = 1
-            self.test_name = " "
-
-            self.connected = False
-
-            with open(self.vna_settings_file, 'w') as configfile:
-                print("Write to INI")
-                self.config.write(configfile)
-
-    def connectToVNA(self, VNA_ADDRESS="TCPIP0::10.29.48.46::hislip0::INSTR"):
         try:
-            self.VNAAddress = VNA_ADDRESS
+            #self._session = self._manager.open_resource(self._config.getAddress())
             self.rm = visa.ResourceManager()
-            self.session = self.rm.open_resource(self.VNAAddress)
-            with open(self.vna_settings_file, 'w') as configfile:
-                print("Write to INI")
-                self.config.write(configfile)
-            self.connected = True
-        except Exception as e:
-            print(e)
+            self.session = self.rm.open_resource(address)
 
-	 
-    @property
-    def VNAAddress(self):
-        try:
-            return self.config['comm_settings']['vna_addr']
-        except Exception as e:
-            return ''
-        
-    @VNAAddress.setter
-    def VNAAddress(self, addr):
-        print("Trying to write VNA addr")
-        self.config['comm_settings']['vna_addr'] = addr 
-        print("Got here")
+            print(self._config.getAddress())
+            self.connection.emit()
+            self._connected = True
 
-    @property
-    def max_freq(self):
-        try:
-            return int(float(self.config['comm_settings']['max_freq']))
-        except Exception as e:
-            return ''
+            self._config.setAddress(address)
 
-    @max_freq.setter
-    def max_freq(self, max_freq):
-        self.config['comm_settings']['max_freq'] = str(max_freq)
-    
-    @property
-    def min_freq(self):
-        try:
-            return int(float(self.config['comm_settings']['min_freq']))
-        except Exception as e:
-            return ''
+            print("Connecting")
 
-    @min_freq.setter
-    def min_freq(self, min_freq):
-        self.config['comm_settings']['min_freq'] = str(min_freq)
-        
-    @property
-    def average(self):
-        try:
-            return int(float(self.config['comm_settings']['average']))
-        except Exception as e:
-            return ''
 
-    @average.setter
-    def average(self, avg):
-        self.config['comm_settings']['average'] = str(avg) 
-        
-    @property
-    def IF(self):
-        try:
-            return int(float(self.config['comm_settings']['if']))
         except Exception as e:
-            return ''
+            self._connected = False
+
+            '''dialog = QtWidgets.QErrorMessage()
+            dialog.showMessage("Error : {}".format(e))
+            dialog.exec_()
+            print(e)'''
+
+
+    def disconnect(self):
+        try:
+            self.session.close()
+            self.session = None
+            self.rm.close()
+            self.rm = None
+            self._connected = False
+            self.connection.emit()
+        except Exception as e:
+            dialog = QtWidgets.QErrorMessage()
+            dialog.showMessage("Error : {}".format(e))
+            dialog.exec_()
+
+    def acquire(self, name = None, ports = None, config = None):
+        if config is not None:
+            timeOut = self._config.getTimeout()
+            bw = config.getBandwidth()
+            minFreq = config.getMinimumFrequency()
+            print("testing with min freq at ", minFreq)
+            maxFreq = config.getMaximumFrequency()
+            res = config.getResolution()
+            average = config.getAverage()
+            noConfig = config.getNoConfig()
+        if self.rm is None:
+            return
+        try:
+            self.session.timeout = timeOut
+            print("timeout:", self._config.getTimeout())
             
-    @IF.setter
-    def IF(self, IF):
-        print(IF)
-        self.config['comm_settings']['if'] = str(IF)
-        
-    @property
-    def num_points(self):
-        try:
-            return int(float(self.config['comm_settings']['num_points']))
-        except Exception as e:
-            return ''
-        
-    @num_points.setter 
-    def num_points(self, num_points):
-        self.config['comm_settings']['num_points'] = str(num_points)
-        
-    @property
-    def ip_address(self):
-        return self._ip
+            if noConfig == False:
+                self.session.write("SENS:BWID " + str(bw))
+                print(self.session.query(";*OPC?"))
 
-    @num_points.setter
-    def ip_address(self, ip):
-        self._ip = ip
+                print("set frequence:")
+                self.session.write("SENS:FREQ:STAR " + str(minFreq))
+                print("min freq setted at "+ str(minFreq))
+                self.session.write("SENS:FREQ:STOP " + str(maxFreq))
+                print("max freq setted at "+str(maxFreq))
 
-    @property
-    def port_num(self):
-        try:
-            return int(self.config['comm_settings']['port_num'])
-        except Exception as e:
-            return ''
-        
-    @port_num.setter
-    def port_num(self, port_num):
-        
-        self.config['comm_settings']['port_num'] = str(port_num) 
+                print("set average:")
+                self.session.write("SENS:SWE:TYPE LIN")
+                self.session.write("SENS:SWE:POIN " + str(res))
+                print("resolution setted at" + str(res))
+                self.session.write(":SENS:AVER:CLE")
+                self.session.write(":ABOR")
+                self.session.write("SENS:AVER:COUN {}".format(str(average)))
+                print("average setted at "+str(average))
 
-        
-    @property
-    def test_name(self):
-        return self.config['comm_settings']['test_name'] 
-
-    @test_name.setter
-    def test_name(self, test_name):
-        self.config['comm_settings']['test_name'] = str(test_name) 
-
-    @property
-    def timeout(self):
-        try:
-            return int(float(self.config['comm_settings']['timeout']))
-        except Exception as e:
-            return ''
-        
-    @timeout.setter
-    def timeout(self, timeout):
-        self.config['comm_settings']['timeout'] = str(timeout) 
-        
-    def getSNP(self):
-        pass
-
-    def calibrate(self):
-        self.wizard = CalWizard(self)
-        self.wizard.show()
-
-    def whoAmI(self):
-        return(self.session.query('*IDN?'))
-
-    def aquire(self, testName, portNum):
-        try:
-            self.test_name = testName
-            self.port_num = portNum
-            print("Here")
-            self.session.timeout = self.timeout
-
-            self.session.write("SENS:BWID " + str(self.IF))
-            print("set if")
-            self.session.write("SENS:FREQ:STAR " + str(self.min_freq))
-            print("set min f")
-
-            self.session.write("SENS:FREQ:STOP " + str(self.max_freq))
-            print("set max f")
-            print("set avg")
-            self.session.write("SENS:SWE:TYPE LIN")
-            self.session.write("SENS:SWE:POIN " + str(self.num_points))
-            print("ok")
-            self.session.write(":SENS:AVER:CLE")
-            self.session.write(":ABOR")
-            self.session.write("SENS:AVER:COUN {}".format(str(self.average)))
+            print(":INIT1:CONT ON")
             self.session.write(":INIT1:CONT ON")
-            self.session.write(":TRIG:SOUR immediate")
-            self.session.write("SENS:SWE:GRO:COUN 4") # "+str(self.average))
-            print("ok")
+            print(self.session.query(";*OPC?"))
 
+            print(":TRIG:SOUR immediate")
+            self.session.write(":TRIG:SOUR immediate")
+            print(self.session.query(";*OPC?"))
+
+            print("SENS:SWE:GRO:COUN 4")
+            self.session.write("SENS:SWE:GRO:COUN 4") # "+str(self.average))
+            print(self.session.query(";*OPC?"))
+
+            print("SENS:SWE:MODE GRO;*OPC?")
             self.session.write("SENS:SWE:MODE GRO;*OPC?")
-            
+            print(self.session.query(";*OPC?"))
+
+            print(":CALC:PAR:SEL 'CH1_S11_1'")
             self.session.write(":CALC:PAR:SEL 'CH1_S11_1'")
             print(self.session.query(";*OPC?"))
-            print("Start")
-            self.session.write(":CALC:DATA:SNP:PORT:SAVE '{}', 'Y:\\{}.s{}p'".format(str([i for i in range(1,portNum+1)])[1:-1], testName, portNum))
+
+            print(":CALC:DATA:SNP:PORT:SAVE '{}', '{}.s{}p'")
+            self.session.write(":CALC:DATA:SNP:PORT:SAVE '{}', '{}.s{}p'".format(str([i for i in range(1,int(ports)+1)])[1:-1], "Y:\\"+name, str(int(ports)) ))
             print(self.session.query(";*OPC?"))
-            snp_data = self.session.query('MMEMory:TRANsfer? "Y:\\{}.s{}p"'.format(testName, portNum)).encode("utf8")
+            #rm.list_resources()
+            
+
+
+            snp_data = self.session.query('MMEMory:TRANsfer? "Y:\\{}.s{}p"'.format(name, ports)).encode("utf8")
             dirpath = tempfile.mkdtemp()
-            temp_file_name = os.path.join(dirpath, testName + "." + "s{}p".format(portNum))
+            temp_file_name = os.path.join(dirpath, name + "." + "s{}p".format(ports))
             temp_file = open(temp_file_name, mode = "wb")
 
             temp_file.write(snp_data)
             #temp_file.seek(0)
             #temp_file.close()
 
-            #rm.list_resources()
-            with open(self.vna_settings_file, 'w') as configfile:
-                self.config.write(configfile)
+
 
             return temp_file_name
             
         except visa.Error as ex:
             print(ex)
 
+    
+        '''self._session.timeout = self._config.getTimeout()
+        print(self._config.getTimeout())
+        self._session.write("SENS:BWID "      + str(config.getBandwidth()))
+        print("SENS:BWID "      + str(config.getBandwidth()))
+        self._session.write("SENS:FREQ:STAR " + str(config.getMinimumFrequency()))
+        print("SENS:FREQ:STAR " + str(config.getMinimumFrequency()))
+        self._session.write("SENS:FREQ:STOP " + str(config.getMaximumFrequency()))
+        print("SENS:FREQ:STOP " + str(config.getMaximumFrequency()))
+        self._session.write("SENS:SWE:TYPE LIN")
+        print("SENS:SWE:TYPE LIN")
+        self._session.write("SENS:SWE:POIN "  + str(config.getResolution()))
+        print("SENS:SWE:POIN "  + str(config.getResolution()))
+        self._session.write(":SENS:AVER:CLE")
+        print(":SENS:AVER:CLE")
+        self._session.write(":ABOR")
+        print("ABOR")
+        self._session.write("SENS:AVER:COUN " + str(config.getAverage()))
+        print("SENS:AVER:COUN " + str(config.getAverage()))
+        self._session.write(":INIT1:CONT ON")
+        self._session.write(":TRIG:SOUR immediate")
+        self._session.write("SENS:SWE:GRO:COUN 4")
+        self._session.write("SENS:SWE:MODE GRO;*OPC?")
+        self._session.write(":CALC:PAR:SEL 'CH1_S11_1'")
+        print(self._session.query(";*OPC?"))
 
-    def getLastVNAAddress(self):
-        return self.config['comm_settings']['vna_addr']
+        print(":CALC:PAR:SEL 'CH1_S11_1")
+        self._session.write(":CALC:DATA:SNP:PORT:SAVE '{}', '{}.s{}p'".format(
+            str([i for i in range(1,int(ports)+1)])[1:-1], "Y:\\"+name, ports))
+        return'''
 
-    def getAcqParams(self):
-        params = {'testID'  : self.getNextID(self.testName), 
-                  'max_freq': self.max_freq,
-                  'min_freq': self.min_freq,
-                  'average' : self.average,
-                  'IF'      : self.IF,
-                  'self'    : self.num_points}
+    def calibrate(self):
+        wizard = CalWizard(self)
+        wizard.exec()
+        print("Showing")
 
-    def getNextID(self, ID):
+    def calibrateNew(self):
+        wizard = CalWizard(self)
+        return wizard.exec()
+        print("Showing")
 
-        #We will first apply a regular expression to find the last integer in a string.
-        #If there is an integer, we increment it. Otherwise we will simply append a 2 to the end the test ID.
-        #Ex.: cableTest --> cableTest2
-        #Ex.: caleTest2 --> cableTest3
-        
-        currentID = ID
-        if currentID.isspace() or len(currentID) < 1 or not currentID:
-            print("No CID")
-            return "1"
-        
-        reg = re.compile('\d+$')
+    def calSet(self):
+        cset = self.session.query("CSET:CAT?")
+        cset=cset.replace('"','')
+        cset=cset.replace("\n","")
+        listCset= cset.split(",")
+        CsetDate=list()
+        for cal in listCset:
+            date=self.session.query("CSET:DATE? '{}'".format(cal))
+            for x in range(1,10):
+                date=date.replace("+{},".format(x),"+0{},".format(x))
+                date=date.replace("+{}\n".format(x),"+0{}\n".format(x))
+            date=date.replace("+","")
+            date=date.replace(",","-")
+            date = date.replace("\n","")
+            CsetDate.append("["+date+"] | "+cal)
+            self._date.append(date)
+            self._date.sort(reverse=True)
 
-        idCount = reg.findall(currentID) #This will return the integer at the end of the testID ... if any.
-        
-        if idCount :
-            idCount = idCount[0]
-            IDNoCount = currentID[0: -len(idCount)]
-            nextIDCount = str(int(idCount) + 1)
+        CsetDate.sort(reverse=True)
+        for i in CsetDate:
+            temp= i.split("] | ")
+            self._sortedCset.append(temp[1])
+        return CsetDate
 
-            return IDNoCount + nextIDCount
-        
-        return currentID + '2'  #If there is no integer at the end of the string, simply append a '2'
+    def setCal(self,i):
+        print(self._sortedCset[i])
+       # self.session.write("SENS1:CORR:CSET:DEAC")
+        self.session.write("SENS:CORR:CSET:ACT '{}',1".format(str(self._sortedCset[i])))
 
-    def aquireInterface(self):
-        if self.connected :
-            try:
-                testName, numPorts, IF, start_freq, stop_freq, num_points, average, timeout = Test_Params_Dialog().getParams()
-                if testName:
-                    try:
-                        #comm = Communication(addr)
-                        self.IF = IF
-                        self.min_freq = start_freq
-                        self.max_freq = stop_freq
-                        self.num_points = num_points
-                        self.average = average
-                        print("Aquiring Deembeding")
-                        return self.aquire(testName, numPorts)
+    def getDate(self):
+        return self._date
 
-                    except Exception as e:
-                        return None
+    def whoAmI(self):
+        start =float(self.session.query("SENS:FREQ:STAR?"))
+        end = float(self.session.query("SENS:FREQ:STOP?"))
+        type= str(self.session.query("SENS:SWE:TYPE?"))
+        res =float(self.session.query("SENS:SWE:POIN?"))
+        avg =float(self.session.query("SENS:AVER:COUN?"))
+        bwd= float(self.session.query("SENS:BWID?"))
+        msgBox = QMessageBox()
+        msgBox.setIcon(QMessageBox.Information)
+        msgBox.setText("\n"+str(self.session.query('*IDN?')))
+        msgBox.setInformativeText("CalSet:"+self.session.query('SENS:CORR:CSET:ACT? NAME'))
+        msgBox.setDetailedText("Start at: {}\nEnd at: {}\nType: {}Resolution:{}\nAverage: {}\nBandwidth: {}".format(start,end,type,res,avg,bwd))
+        msgBox.setWindowTitle("Who am I?")
+        msgBox.exec()
 
-            except Exception as e:
-                print("Cancel")
-
-        raise "You Must be connected to VNA"
-
-    def close(self):
-        self.session.close()
-        self.rm.close()
-        self.connected = False
-
-
-
-
-from decimal import Decimal
-from UI import TestParameters
-from PyQt5 import QtWidgets, QtGui, QtCore
-
-class Test_Params_Dialog:
-    def getParams(self):
-        
-        comm = Communication()
-        print("Connected")
-        dialog = QtWidgets.QDialog()
-        params_dialog = TestParameters.Ui_TestParameterDialog()
-        params_dialog.setupUi(dialog)
-        print("Current ID: ", comm.test_name)
-        print("NEXT ID: ", comm.getNextID(comm.test_name))
-        params_dialog.testNameLineEdit_2.setText(comm.getNextID(comm.test_name)) 
-        params_dialog.iFBandwidthLineEdit.setText(str(comm.IF))
-        print("Min Freq ", comm.min_freq)
-        params_dialog.startFrequencyLineEdit.setText('%E' % Decimal(comm.min_freq))
-        params_dialog.stopFrequencyLineEdit.setText('%E' % Decimal(comm.max_freq))
-        params_dialog.numberOfPointsLineEdit.setText(str(comm.num_points))
-        params_dialog.numberOfPortsLineEdit.setText(str(comm.port_num))
-        params_dialog.numberOfAverageLineEdit.setText(str(comm.average))
-        params_dialog.timeoutLineEdit.setText('%E' % Decimal(comm.timeout))
-
-        result = dialog.exec_()
-        
-        if not result:
-            return 0
-        if result:
-            try:
-                testName = params_dialog.testNameLineEdit_2.text()
-                IF = int(float(params_dialog.iFBandwidthLineEdit.text()))
-                start_freq = int(float(params_dialog.startFrequencyLineEdit.text()))
-                stop_freq = int(float(params_dialog.stopFrequencyLineEdit.text()))
-                num_points = int(float(params_dialog.numberOfPointsLineEdit.text()))
-                num_ports = int(float(params_dialog.numberOfPortsLineEdit.text()))
-                average = int(float(params_dialog.numberOfAverageLineEdit.text()))
-                timeout = int(float(params_dialog.timeoutLineEdit.text()))
-
-                return testName, num_ports, IF, start_freq, stop_freq, num_points, average, timeout
-            except Exception as e:
-                print("Cancel123")
-                return
-
- 
-if __name__ == '__main__':
-
-    comm = Communication()
-    comm.connectToVNA()
-    comm.aquire("test4Port", 4)
-
+    def connected(self):
+        return self._connected

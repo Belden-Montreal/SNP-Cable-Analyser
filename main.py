@@ -9,6 +9,9 @@ from UI import VNA_addr_dialog
 from UI import MainWidget
 
 from dialogs import pairNameDialog
+from dialogs.connectDialog import ConnectDialog
+from dialogs.vna_test import VNATestDialog
+
 from print2console import EmittingStream
 
 from widgets.ParameterWidget import ParameterWidget
@@ -653,64 +656,55 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         self.mainTabWidget.limitLabel.setText(self.sample.standard.__str__())
 
     def connect(self):
-        connected = False
-        while connected is False:
-            addr = Addr_Dialog().getAddr()
-            if addr:
-                
-                try:
-                    print("before")
-                    self.comm.connectToVNA(addr)
-                    print("done")
-                    connected = True
-                    self.actionWho_am_I.setEnabled(True)
-                    self.actionMeasure.setEnabled(True)
-                    self.actionCalibrate.setEnabled(True)
-                    self.actionCalibrate_2.setEnabled(True)
 
-                    self.actionDisconnect.setEnabled(True)
-                    self.actionRun.setEnabled(True)
-                    self.actionConnect.setEnabled(False)
+        connectDialog =  ConnectDialog(self.comm)
+        res=connectDialog.showDialog()  
 
-                    self.connected = True
+        if res and self.comm._connected:
+            if connectDialog.calib is False:
+                self.comm.setCal(connectDialog.newDial.typeBox.currentIndex())
+            self.actionWho_am_I.setEnabled(True)
+            self.actionCalibrate.setEnabled(True)
+            self.actionCalibrate_2.setEnabled(True)
+            self.actionDisconnect.setEnabled(True)
+            self.actionConnect.setEnabled(False)
+            
+            self.actionMeasure.setEnabled(True)
+            self.actionRun.setEnabled(True)
 
-                except Exception as e:
-                    print("Error: ",e)
-            else:
-                break
+
 
     def disconnect(self):
-        connected = True
-        while connected is True:
-            try:
-                print("before")
-                self.comm.close()
-                print("done")
-                connected = False
-                self.actionWho_am_I.setEnabled(False)
-                self.actionMeasure.setEnabled(False)
-                self.actionCalibrate.setEnabled(False)
-                self.actionCalibrate_2.setEnabled(False)
+        self.comm.disconnect()
+        self.actionMeasure.setEnabled(False)
+        self.actionWho_am_I.setEnabled(False)
+        self.actionCalibrate.setEnabled(False)
+        self.actionCalibrate_2.setEnabled(False)
+        self.actionDisconnect.setEnabled(False)
+        self.actionRun.setEnabled(False)
+        self.actionConnect.setEnabled(True)
 
-                self.actionDisconnect.setEnabled(False)
-                self.actionRun.setEnabled(False)
-                self.actionConnect.setEnabled(True)
-
-                self.connected = False
-            except Exception as e:
-                print(e)
 
     def whoAmI(self):
-        msg = QtWidgets.QMessageBox()
-        msg.setIcon(QtWidgets.QMessageBox.Information)
-        msg.setText(self.comm.whoAmI())
-        msg.setWindowTitle("VNA Info")
-        msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
-        msg.setFixedSize(msg.sizeHint())
-        msg.exec_()
+        self.comm.whoAmI()
 
     def aquire(self):
+
         try:
+            vnaDialog = VNATestDialog()
+            res = vnaDialog.exec_()
+            if res:
+                name = vnaDialog.getSampleName()
+                ports = vnaDialog.getPorts()
+                sample_file = self.comm.acquire(name, ports, vnaDialog.getVNACOnfiguration())
+                print(sample_file)
+                self.Project.importSNP([sample_file])
+                self.displaySamplesInTable()
+        except Exception as e:
+            print(e)
+
+
+        '''try:
             
             if file:=self.comm.aquireInterface():
 
@@ -718,7 +712,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
                 self.displaySamplesInTable()
 
         except Exception as e:
-            print(e)
+            print(e)'''
             
 
     def simpleAquire(self):

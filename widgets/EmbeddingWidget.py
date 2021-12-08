@@ -85,6 +85,10 @@ class EmbeddingWidget():
 
 
     def acquireOpen(self):
+
+
+
+        
         try:
             self.embeddedSample.embeddedOpen = self.comm.aquireInterface()
         except Exception as e:
