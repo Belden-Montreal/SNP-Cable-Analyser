@@ -1,4 +1,6 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5.Qt import Qt
+
 import sys
 import scipy
 
@@ -165,33 +167,18 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
             
             for sample in self.selected:
 
-                worker = GenericWorker(self.Project.getSampleByName(sample).setStandard , standard=item)
+                worker = GenericWorker(sample.setStandard , standard=item)
                 worker.signals.finished.connect(self.displaySamplesInTable)
 
                 self.threadpool.start(worker)
 
-
-            
-
-        '''        for i in range(0, len(self.Project.measurements)):
-                    if self.sampleTable.item(i,0).text() == sample:
-                        self.sampleTable.setItem(i, 2, QtWidgets.QTableWidgetItem(item.name))
-            self.sampleTable.resizeColumnsToContents()
-            if self.Project.getSampleByName(self.selected[0]).__retr__() == "Alien":
-                self.setupAlien()
-
-            elif self.Project.getSampleByName(self.selected[0]).__retr__() == "Embed":
-                #EmbeddingWidget(self.param_tabs,  sample = self.Project.getSampleByName(self.selected[0]))
-                self.setupEmbed()
-            else:
-                self.displaySampleParams(self.selected)     '''       
 
     def setActiveSample(self):
         self.plot(None, None)
 
         self.selected = []
         for i in self.sampleTable.selectionModel().selectedRows():
-            self.selected.append(self.sampleTable.item(i.row(),0).text())
+            self.selected.append(self.sampleTable.item(i.row(),0).data(Qt.UserRole))
         #print self.selected
         if len(self.selected) >= 1:
             self.Project.activeSample = self.selected
@@ -199,13 +186,13 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         
         if len(self.selected) == 1:  #Since only one sample can be displayed at a time
 
-            if self.Project.getSampleByName(self.selected[0]).__repr__() == "Alien":
+            if self.selected[0].__repr__() == "Alien":
                 self.setupAlien()
 
-            elif self.Project.getSampleByName(self.selected[0]).__repr__() == "Embed":
+            elif self.selected[0].__repr__() == "Embed":
                 self.setupEmbed()
 
-            elif self.Project.getSampleByName(self.selected[0]).__repr__() == "SNP":
+            elif self.selected[0].__repr__() == "SNP":
                 self.displaySampleParams(self.selected)
         
         elif len(self.selected) > 1 or len(self.selected) < 1:
@@ -220,21 +207,31 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         measurementCount = len(self.Project.measurements)
         self.sampleTable.setRowCount(measurementCount)
         for i in range(0, measurementCount):
+
+            #Column 1 (name)
             self.sampleTable.setItem(i, 0, QtWidgets.QTableWidgetItem(self.Project.measurements[i].name))
+            self.sampleTable.item(i, 0).setData(Qt.UserRole, self.Project.measurements[i])
+            
+            #Column 2 (date)
             self.sampleTable.setItem(i, 1, QtWidgets.QTableWidgetItem(self.Project.measurements[i].date))
+            self.sampleTable.item(i, 1).setData(Qt.UserRole, self.Project.measurements[i])
+
+            #Column 3 (standard)
             if self.Project.measurements[i].standard is not None:
                 self.sampleTable.setItem(i, 2, QtWidgets.QTableWidgetItem(self.Project.measurements[i].standard.name))
+                self.sampleTable.item(i, 2).setData(Qt.UserRole, self.Project.measurements[i])
+
         self.setActiveSample()
 
     
     def setupEmbed(self):
         self.param_tabs.clear()
-        self.embeddingWidget = EmbeddingWidget(self.param_tabs,  sample = self.Project.getSampleByName(self.selected[0]), graph=self.graphicsView, comm = self.comm)
+        self.embeddingWidget = EmbeddingWidget(self.param_tabs,  sample = self.selected[0], graph=self.graphicsView, comm = self.comm)
         #self.param_tabs.addTab(self.embeddingWidget.widget, "Embedding Main")
         
     def setupAlien(self):
         self.param_tabs.clear()
-        self.alienWidget = AlienWidget(self.param_tabs,  sample = self.Project.getSampleByName(self.selected[0]), graph=self.graphicsView, comm = self.comm)
+        self.alienWidget = AlienWidget(self.param_tabs,  sample = self.selected[0], graph=self.graphicsView, comm = self.comm)
         #self.param_tabs.addTab(self.embeddingWidget.widget, "Embedding Main")
         
 
@@ -344,7 +341,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
 
 
     def setPairNumberAlien(self):
-        sample = self.Project.getSampleByName(self.selected[0])
+        sample = self.selected[0]
 
         pair_names = sample.port_name
         num_pairs = sample.numPairs
@@ -361,7 +358,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
 
 
     def setPairNumber(self):
-        sample = self.Project.getSampleByName(self.selected[0])
+        sample = self.selected[0]
         if sample.__repr__() == "Alien":
             self.setPairNumberAlien()
             return
@@ -390,7 +387,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
     def tableContextMenu(self, pos):
         #print self.selected
         try:
-            if len(self.selected) > 0 and all("SNP" in  self.Project.getSampleByName(sample).__repr__()  for sample in self.selected):
+            if len(self.selected) > 0 and all("SNP" in  sample.__repr__()  for sample in self.selected):
                 #Start by getting info on the sample. (If they're all the same type or not)
 
                 menu = QtWidgets.QMenu()
@@ -413,10 +410,10 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
                 #get test type for samples. If theyre all one sided, all
                 #end-end or all different.
                 #To start get the test type of the first sample
-                _one_sided = self.Project.getSampleByName(self.selected[0]).one_sided
+                _one_sided = self.selected[0].one_sided
                 print(_one_sided)
                 for sample in self.selected:
-                    if _one_sided !=  self.Project.getSampleByName(sample).one_sided:
+                    if _one_sided !=  sample.one_sided:
                         _one_sided = None
                         break
 
@@ -435,7 +432,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
 
                 if action == one_sided:
                     for sample in self.selected:
-                        self.Project.getSampleByName(sample).reCalc(one_sided = True)
+                        sample.reCalc(one_sided = True)
                         self.Project.activeSample = self.selected
                     #print self.selected
                     if len(self.selected) == 1:  #Since only one sample can be displayed at a time
@@ -445,7 +442,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
                         self.displaySampleParams(None)
                 elif action == end_end:
                     for sample in self.selected:
-                        self.Project.getSampleByName(sample).reCalc(one_sided = False)
+                        sample.reCalc(one_sided = False)
 
                     if len(self.selected) == 1:  #Since only one sample can be displayed at a time
                         self.displaySampleParams(self.selected)
@@ -473,7 +470,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
                 return 1
 
 
-            elif len(self.selected) > 0 and not all("SNP" in  self.Project.getSampleByName(sample).__repr__()  for sample in self.selected):
+            elif len(self.selected) > 0 and not all("SNP" in  sample.__repr__()  for sample in self.selected):
 
                 menu = QtWidgets.QMenu()
                 setLimit = menu.addAction("Set Limit")
@@ -535,7 +532,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         if len(self.selected) == 0:
             samples = self.Project.measurements
         else:
-            samples = self.Project.getSampleByName(self.selected)
+            samples = self.selected
             print(samples)
         self.Project.generateExcelReport(samples)
 
@@ -544,7 +541,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         if len(self.selected) == 0:
             samples = self.Project.measurements
         else:
-            samples = self.Project.getSampleByName(self.selected)
+            samples = self.selected
         self.Project.generatePDFReport(samples)
 
     def displaySampleParams(self, sample):
@@ -558,7 +555,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         self.param_tabs.clear()
 
         #print sample
-        self.sample = self.Project.getSampleByName(sample[0])
+        self.sample = sample[0]
         #print self.sample
 
         #Create a tab widget containing a main tab and all the parameters
@@ -615,7 +612,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         self.activeParameter = self.param_tabs.tabText(self.tab_index)
         print("Active Parameter = ", self.activeParameter)
         if self.selected:
-            sample = self.Project.getSampleByName(self.selected[0])
+            sample = self.selected[0]
         else:
             return
         #print index

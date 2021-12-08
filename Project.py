@@ -81,9 +81,8 @@ class Project(): #Put (object) later
         
     def delete(self, samples):
         for sample in samples:
-            sample = self.getSampleByName(sample)
 
-            print("Sample Name:" , sample)
+            print("Sample Name:" , sample.name)
             for idx, measurement in enumerate(self.measurements):
                 if measurement is sample:
                     print(idx)
@@ -181,11 +180,11 @@ class Project(): #Put (object) later
         
     @property
     def activeSample(self):
-        return [sample.name for sample in self.activeMeasurements]
+        return self.activeMeasurements
     
     @activeSample.setter
     def activeSample(self, samples):
-        self.activeMeasurements = [self.getSampleByName(sample) for sample in samples]
+        self.activeMeasurements = samples
 
     def generateExcelReport(self, samples):
         rb = excel_reportbuilder.ExcelReportBuilder(samples=self.activeMeasurements) # self.measurements)
