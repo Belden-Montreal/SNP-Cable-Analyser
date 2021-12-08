@@ -203,23 +203,24 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         #self.blockSignals( False )
 
         print("Finished TREAD !")
+        self.blockSignals(False)
 
         measurementCount = len(self.Project.measurements)
         self.sampleTable.setRowCount(measurementCount)
-        for i in range(0, measurementCount):
+        for i, measurement in enumerate(self.Project.measurements):
 
             #Column 1 (name)
-            self.sampleTable.setItem(i, 0, QtWidgets.QTableWidgetItem(self.Project.measurements[i].name))
-            self.sampleTable.item(i, 0).setData(Qt.UserRole, self.Project.measurements[i])
+            self.sampleTable.setItem(i, 0, QtWidgets.QTableWidgetItem(measurement.name))
+            self.sampleTable.item(i, 0).setData(Qt.UserRole, measurement)
             
             #Column 2 (date)
-            self.sampleTable.setItem(i, 1, QtWidgets.QTableWidgetItem(self.Project.measurements[i].date))
-            self.sampleTable.item(i, 1).setData(Qt.UserRole, self.Project.measurements[i])
+            self.sampleTable.setItem(i, 1, QtWidgets.QTableWidgetItem(measurement.date))
+            self.sampleTable.item(i, 1).setData(Qt.UserRole, measurement)
 
             #Column 3 (standard)
-            if self.Project.measurements[i].standard is not None:
-                self.sampleTable.setItem(i, 2, QtWidgets.QTableWidgetItem(self.Project.measurements[i].standard.name))
-                self.sampleTable.item(i, 2).setData(Qt.UserRole, self.Project.measurements[i])
+            if measurement.standard is not None:
+                self.sampleTable.setItem(i, 2, QtWidgets.QTableWidgetItem(measurement.standard.name))
+                self.sampleTable.item(i, 2).setData(Qt.UserRole, measurement)
 
         self.setActiveSample()
 
@@ -248,6 +249,8 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
 
         #for file in files:
         #self.blockSignals( True )
+
+        self.blockSignals(True)
 
         worker = GenericWorker(function= self.Project.importSNP, files = files)
         worker.signals.finished.connect(self.displaySamplesInTable)

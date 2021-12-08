@@ -77,12 +77,13 @@ class Project(): #Put (object) later
         
             return s
         except Exception as e:
+            print(f"Import Error. {file} not added to project")
             return None
         
     def delete(self, samples):
         for sample in samples:
 
-            print("Sample Name:" , sample.name)
+            #print("Sample Name:" , sample.name)
             for idx, measurement in enumerate(self.measurements):
                 if measurement is sample:
                     print(idx)

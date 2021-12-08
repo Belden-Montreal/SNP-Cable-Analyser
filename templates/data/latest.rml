@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?> 
 <!DOCTYPE document SYSTEM "rml.dtd"> 
 
-<document filename= "test9.pdf"> 
+<document filename= "tesPDF.pdf"> 
 
 
 
@@ -65,12 +65,12 @@
 
                 <para style="page_title"> RL </para>  
                 
-                <para style="param_data">Pass</para>  
+                <para style="param_data">Fail</para>  
                 
 
-                <para style="param_data">Sample : MatingPlugJacktReverse</para>  
+                <para style="param_data">Sample : MatingPlugJackForward</para>  
                 
-                <para style="param_data">Standard : Tia|CAT6A|Horizontal cable</para>  
+                <para style="param_data">Standard : Tia|CAT6A|Connecting Hardware</para>  
                 
                 
                 <blockTable align="CENTER" style = "extraData">
@@ -95,15 +95,15 @@
                         
                             <td  > 1 </td>
                         
-                            <td  > -20.0 </td>
+                            <td  > -30.0 </td>
                         
-                            <td  > -26.677 </td>
+                            <td  > -26.679 </td>
                         
-                            <td  > -26.245 </td>
+                            <td  > -26.237 </td>
                         
-                            <td  > -25.784 </td>
+                            <td  > -25.776 </td>
                         
-                            <td  > -25.938 </td>
+                            <td  > -25.952 </td>
                         
                     </tr>
                     
@@ -111,15 +111,15 @@
                         
                             <td  > 2 </td>
                         
-                            <td  > -21.5 </td>
+                            <td  > -30.0 </td>
                         
-                            <td  > -48.087 </td>
+                            <td  > -48.246 </td>
                         
-                            <td  > -47.655 </td>
+                            <td  > -47.882 </td>
                         
-                            <td  > -46.242 </td>
+                            <td  > -46.222 </td>
                         
-                            <td  > -48.307 </td>
+                            <td  > -48.676 </td>
                         
                     </tr>
                     
@@ -127,15 +127,15 @@
                         
                             <td  > 3 </td>
                         
-                            <td  > -22.39 </td>
+                            <td  > -30.0 </td>
                         
-                            <td  > -53.02 </td>
+                            <td  > -53.539 </td>
                         
-                            <td  > -52.69 </td>
+                            <td  > -53.639 </td>
                         
-                            <td  > -49.788 </td>
+                            <td  > -49.787 </td>
                         
-                            <td  > -54.842 </td>
+                            <td  > -56.215 </td>
                         
                     </tr>
                     
@@ -143,15 +143,15 @@
                         
                             <td  > 5 </td>
                         
-                            <td  > -23.5 </td>
+                            <td  > -30.0 </td>
                         
-                            <td  > -53.703 </td>
+                            <td  > -54.403 </td>
                         
-                            <td  > -53.202 </td>
+                            <td  > -54.497 </td>
                         
-                            <td  > -48.929 </td>
+                            <td  > -48.985 </td>
                         
-                            <td  > -56.368 </td>
+                            <td  > -58.687 </td>
                         
                     </tr>
                     
@@ -159,15 +159,15 @@
                         
                             <td  > 8 </td>
                         
-                            <td  > -24.52 </td>
+                            <td  > -30.0 </td>
                         
-                            <td  > -52.299 </td>
+                            <td  > -52.81 </td>
                         
-                            <td  > -51.402 </td>
+                            <td  > -52.336 </td>
                         
-                            <td  > -46.005 </td>
+                            <td  > -46.075 </td>
                         
-                            <td  > -54.901 </td>
+                            <td  > -57.378 </td>
                         
                     </tr>
                     
@@ -175,15 +175,15 @@
                         
                             <td  > 14 </td>
                         
-                            <td  > -24.98 </td>
+                            <td  > -30.0 </td>
                         
-                            <td  > -48.739 </td>
+                            <td  > -49.009 </td>
                         
-                            <td  > -48.03 </td>
+                            <td  > -48.723 </td>
                         
-                            <td  > -42.146 </td>
+                            <td  > -42.211 </td>
                         
-                            <td  > -51.294 </td>
+                            <td  > -53.193 </td>
                         
                     </tr>
                     
@@ -191,15 +191,15 @@
                         
                             <td  > 23 </td>
                         
-                            <td  > -24.58 </td>
+                            <td  > -30.0 </td>
                         
-                            <td  > -46.53 </td>
+                            <td  > -46.523 </td>
                         
-                            <td  > -45.622 </td>
+                            <td  > -46.065 </td>
                         
-                            <td  > -38.76 </td>
+                            <td  > -38.813 </td>
                         
-                            <td  > -49.114 </td>
+                            <td  > -50.783 </td>
                         
                     </tr>
                     
@@ -207,15 +207,15 @@
                         
                             <td  > 38 </td>
                         
-                            <td  > -23.05 </td>
+                            <td  > -30.0 </td>
                         
-                            <td  > -44.258 </td>
+                            <td  > -43.785 </td>
                         
-                            <td  > -43.141 </td>
+                            <td  > -43.259 </td>
                         
-                            <td  > -35.261 </td>
+                            <td  > -35.299 </td>
                         
-                            <td  > -46.811 </td>
+                            <td  > -47.864 </td>
                         
                     </tr>
                     
@@ -223,15 +223,15 @@
                         
                             <td  > 63 </td>
                         
-                            <td  > -21.52 </td>
+                            <td  > -30.0 </td>
                         
-                            <td  > -41.977 </td>
+                            <td  > -40.634 </td>
                         
-                            <td  > -40.617 </td>
+                            <td  > -40.278 </td>
                         
-                            <td  > -31.693 </td>
+                            <td  > -31.725 </td>
                         
-                            <td  > -44.276 </td>
+                            <td  > -44.074 </td>
                         
                     </tr>
                     
@@ -239,15 +239,15 @@
                         
                             <td  > 106 </td>
                         
-                            <td  > -19.94 </td>
+                            <td  > -27.5 </td>
                         
-                            <td  > -40.023 </td>
+                            <td  > -36.82 </td>
                         
-                            <td  > -38.035 </td>
+                            <td  > -36.859 </td>
                         
-                            <td  > -28.112 </td>
+                            <td  > -28.161 </td>
                         
-                            <td  > -41.241 </td>
+                            <td  > -39.004 </td>
                         
                     </tr>
                     
@@ -255,15 +255,15 @@
                         
                             <td  > 178 </td>
                         
-                            <td  > -18.36 </td>
+                            <td  > -23.02 </td>
                         
-                            <td  > -37.819 </td>
+                            <td  > -31.569 </td>
                         
-                            <td  > -35.569 </td>
+                            <td  > -32.82 </td>
                         
-                            <td  > -25.074 </td>
+                            <td  > -25.271 </td>
                         
-                            <td  > -36.859 </td>
+                            <td  > -32.722 </td>
                         
                     </tr>
                     
@@ -271,15 +271,15 @@
                         
                             <td  > 298 </td>
                         
-                            <td  > -16.78 </td>
+                            <td  > -18.52 </td>
                         
-                            <td  > -29.28 </td>
+                            <td  > -23.992 </td>
                         
-                            <td  > -31.391 </td>
+                            <td  > -27.033 </td>
                         
-                            <td  > -23.557 </td>
+                            <td  > -24.732 </td>
                         
-                            <td  > -29.179 </td>
+                            <td  > -25.404 </td>
                         
                     </tr>
                     
@@ -287,15 +287,15 @@
                         
                             <td  > 500 </td>
                         
-                            <td  > -15.21 </td>
+                            <td  > -14.02 </td>
                         
-                            <td  > -17.97 </td>
+                            <td  > -15.555 </td>
                         
-                            <td  > -23.089 </td>
+                            <td  > -19.794 </td>
                         
-                            <td  > -24.048 </td>
+                            <td  > -48.944 </td>
                         
-                            <td  > -19.889 </td>
+                            <td  > -18.132 </td>
                         
                     </tr>
                     
@@ -307,13 +307,13 @@
                         <td> Worst distance from limit</td>
                        <td></td>
                         
-                            <td  > 2.756 </td>
+                            <td  > 3.321 </td>
                         
-                            <td  > 6.245 </td>
+                            <td  > 3.763 </td>
                         
-                            <td  > 5.784 </td>
+                            <td  > 4.224 </td>
                         
-                            <td  > 4.674 </td>
+                            <td  > 4.048 </td>
                         
                     </tr> 
 
@@ -321,13 +321,13 @@
                         <td>@Freq</td>
                        <td></td>
                         
-                            <td  > 500.0 </td>
-                        
                             <td  > 1.0 </td>
                         
                             <td  > 1.0 </td>
                         
-                            <td  > 500.0 </td>
+                            <td  > 1.0 </td>
+                        
+                            <td  > 1.0 </td>
                         
                         
                     </tr> 
@@ -346,9 +346,9 @@
                 <para style="param_data">Fail</para>  
                 
 
-                <para style="param_data">Sample : MatingPlugJacktReverse</para>  
+                <para style="param_data">Sample : MatingPlugJackForward</para>  
                 
-                <para style="param_data">Standard : Tia|CAT6A|Horizontal cable</para>  
+                <para style="param_data">Standard : Tia|CAT6A|Connecting Hardware</para>  
                 
                 
                 <blockTable align="CENTER" style = "extraData">
@@ -379,17 +379,17 @@
                         
                             <td  > -inf </td>
                         
-                            <td  > -98.49 </td>
+                            <td  > -98.534 </td>
                         
-                            <td  > -78.758 </td>
+                            <td  > -78.597 </td>
                         
-                            <td  > -67.844 </td>
+                            <td  > -67.785 </td>
                         
-                            <td  > -87.21 </td>
+                            <td  > -86.967 </td>
                         
-                            <td  > -70.071 </td>
+                            <td  > -70.093 </td>
                         
-                            <td  > -83.404 </td>
+                            <td  > -83.616 </td>
                         
                     </tr>
                     
@@ -399,17 +399,17 @@
                         
                             <td  > -inf </td>
                         
-                            <td  > -99.181 </td>
+                            <td  > -98.338 </td>
                         
-                            <td  > -93.876 </td>
+                            <td  > -95.891 </td>
                         
-                            <td  > -115.618 </td>
+                            <td  > -126.205 </td>
                         
-                            <td  > -92.784 </td>
+                            <td  > -93.348 </td>
                         
-                            <td  > -107.459 </td>
+                            <td  > -104.481 </td>
                         
-                            <td  > -106.554 </td>
+                            <td  > -106.507 </td>
                         
                     </tr>
                     
@@ -419,17 +419,17 @@
                         
                             <td  > -inf </td>
                         
-                            <td  > -96.334 </td>
+                            <td  > -94.149 </td>
                         
-                            <td  > -90.28 </td>
+                            <td  > -92.901 </td>
                         
-                            <td  > -111.761 </td>
+                            <td  > -116.757 </td>
                         
-                            <td  > -86.873 </td>
+                            <td  > -86.844 </td>
                         
-                            <td  > -99.053 </td>
+                            <td  > -98.016 </td>
                         
-                            <td  > -98.029 </td>
+                            <td  > -99.731 </td>
                         
                     </tr>
                     
@@ -437,19 +437,19 @@
                         
                             <td  > 5 </td>
                         
-                            <td  > -63.8 </td>
+                            <td  > -inf </td>
                         
-                            <td  > -91.557 </td>
+                            <td  > -90.686 </td>
                         
-                            <td  > -86.143 </td>
+                            <td  > -87.293 </td>
                         
-                            <td  > -102.618 </td>
+                            <td  > -113.883 </td>
                         
-                            <td  > -84.744 </td>
+                            <td  > -85.348 </td>
                         
-                            <td  > -99.927 </td>
+                            <td  > -102.404 </td>
                         
-                            <td  > -97.111 </td>
+                            <td  > -100.773 </td>
                         
                     </tr>
                     
@@ -457,19 +457,19 @@
                         
                             <td  > 8 </td>
                         
-                            <td  > -60.75 </td>
+                            <td  > -inf </td>
                         
-                            <td  > -88.021 </td>
+                            <td  > -87.298 </td>
                         
-                            <td  > -84.767 </td>
+                            <td  > -84.663 </td>
                         
-                            <td  > -101.62 </td>
+                            <td  > -109.78 </td>
                         
-                            <td  > -78.452 </td>
+                            <td  > -79.306 </td>
                         
-                            <td  > -90.922 </td>
+                            <td  > -90.759 </td>
                         
-                            <td  > -91.523 </td>
+                            <td  > -90.9 </td>
                         
                     </tr>
                     
@@ -477,19 +477,19 @@
                         
                             <td  > 14 </td>
                         
-                            <td  > -57.12 </td>
+                            <td  > -inf </td>
                         
-                            <td  > -80.98 </td>
+                            <td  > -80.096 </td>
                         
-                            <td  > -79.282 </td>
+                            <td  > -77.862 </td>
                         
-                            <td  > -96.359 </td>
+                            <td  > -102.216 </td>
                         
-                            <td  > -77.014 </td>
+                            <td  > -77.664 </td>
                         
-                            <td  > -90.335 </td>
+                            <td  > -91.518 </td>
                         
-                            <td  > -96.783 </td>
+                            <td  > -94.972 </td>
                         
                     </tr>
                     
@@ -497,19 +497,19 @@
                         
                             <td  > 23 </td>
                         
-                            <td  > -53.88 </td>
+                            <td  > -inf </td>
                         
-                            <td  > -76.799 </td>
+                            <td  > -75.968 </td>
                         
-                            <td  > -74.925 </td>
+                            <td  > -72.718 </td>
                         
-                            <td  > -91.02 </td>
+                            <td  > -97.455 </td>
                         
-                            <td  > -72.739 </td>
+                            <td  > -73.036 </td>
                         
-                            <td  > -86.102 </td>
+                            <td  > -88.312 </td>
                         
-                            <td  > -89.572 </td>
+                            <td  > -88.023 </td>
                         
                     </tr>
                     
@@ -517,19 +517,19 @@
                         
                             <td  > 38 </td>
                         
-                            <td  > -50.62 </td>
+                            <td  > -62.4 </td>
                         
-                            <td  > -72.418 </td>
+                            <td  > -71.959 </td>
                         
-                            <td  > -70.172 </td>
+                            <td  > -67.456 </td>
                         
-                            <td  > -86.608 </td>
+                            <td  > -96.034 </td>
                         
-                            <td  > -68.266 </td>
+                            <td  > -68.519 </td>
                         
-                            <td  > -82.856 </td>
+                            <td  > -84.037 </td>
                         
-                            <td  > -82.786 </td>
+                            <td  > -82.122 </td>
                         
                     </tr>
                     
@@ -537,19 +537,19 @@
                         
                             <td  > 63 </td>
                         
-                            <td  > -47.3 </td>
+                            <td  > -58.03 </td>
                         
-                            <td  > -68.103 </td>
+                            <td  > -67.628 </td>
                         
-                            <td  > -65.029 </td>
+                            <td  > -62.074 </td>
                         
-                            <td  > -82.102 </td>
+                            <td  > -90.732 </td>
                         
-                            <td  > -63.707 </td>
+                            <td  > -63.78 </td>
                         
-                            <td  > -78.283 </td>
+                            <td  > -79.456 </td>
                         
-                            <td  > -75.307 </td>
+                            <td  > -74.611 </td>
                         
                     </tr>
                     
@@ -557,19 +557,19 @@
                         
                             <td  > 106 </td>
                         
-                            <td  > -43.94 </td>
+                            <td  > -53.5 </td>
                         
-                            <td  > -63.835 </td>
+                            <td  > -63.458 </td>
                         
-                            <td  > -60.318 </td>
+                            <td  > -56.863 </td>
                         
-                            <td  > -78.392 </td>
+                            <td  > -85.014 </td>
                         
-                            <td  > -58.817 </td>
+                            <td  > -58.619 </td>
                         
-                            <td  > -74.722 </td>
+                            <td  > -76.065 </td>
                         
-                            <td  > -67.012 </td>
+                            <td  > -66.539 </td>
                         
                     </tr>
                     
@@ -577,19 +577,19 @@
                         
                             <td  > 178 </td>
                         
-                            <td  > -40.56 </td>
+                            <td  > -49.0 </td>
                         
-                            <td  > -59.581 </td>
+                            <td  > -59.505 </td>
                         
-                            <td  > -56.61 </td>
+                            <td  > -52.049 </td>
                         
-                            <td  > -76.288 </td>
+                            <td  > -78.38 </td>
                         
-                            <td  > -53.385 </td>
+                            <td  > -52.902 </td>
                         
-                            <td  > -72.079 </td>
+                            <td  > -73.402 </td>
                         
-                            <td  > -58.872 </td>
+                            <td  > -58.063 </td>
                         
                     </tr>
                     
@@ -597,19 +597,19 @@
                         
                             <td  > 298 </td>
                         
-                            <td  > -37.2 </td>
+                            <td  > -42.97 </td>
                         
-                            <td  > -55.266 </td>
+                            <td  > -56.512 </td>
                         
-                            <td  > -56.497 </td>
+                            <td  > -47.827 </td>
                         
-                            <td  > -65.056 </td>
+                            <td  > -68.551 </td>
                         
-                            <td  > -47.393 </td>
+                            <td  > -46.544 </td>
                         
-                            <td  > -78.325 </td>
+                            <td  > -69.896 </td>
                         
-                            <td  > -51.224 </td>
+                            <td  > -49.508 </td>
                         
                     </tr>
                     
@@ -617,19 +617,19 @@
                         
                             <td  > 500 </td>
                         
-                            <td  > -33.8 </td>
+                            <td  > -33.97 </td>
                         
-                            <td  > -49.126 </td>
+                            <td  > -53.825 </td>
                         
-                            <td  > -49.003 </td>
+                            <td  > -41.939 </td>
                         
-                            <td  > -51.372 </td>
+                            <td  > -56.085 </td>
                         
-                            <td  > -41.572 </td>
+                            <td  > -40.116 </td>
                         
-                            <td  > -58.455 </td>
+                            <td  > -57.094 </td>
                         
-                            <td  > -44.793 </td>
+                            <td  > -40.981 </td>
                         
                     </tr>
                     
@@ -641,17 +641,17 @@
                         <td> Worst distance from limit</td>
                        <td></td>
                         
-                            <td  > 15.304 </td>
+                            <td  > 8.996 </td>
                         
-                            <td  > 4.458 </td>
+                            <td  > 3.039 </td>
                         
-                            <td  > 6.456 </td>
+                            <td  > 7.215 </td>
                         
-                            <td  > 7.756 </td>
+                            <td  > 2.751 </td>
                         
-                            <td  > 4.229 </td>
+                            <td  > 4.907 </td>
                         
-                            <td  > 9.104 </td>
+                            <td  > 5.968 </td>
                         
                     </tr> 
 
@@ -659,2527 +659,20 @@
                         <td>@Freq</td>
                        <td></td>
                         
-                            <td  > 499.501 </td>
+                            <td  > 11.989 </td>
+                        
+                            <td  > 181.319 </td>
                         
                             <td  > 1.0 </td>
                         
-                            <td  > 1.0 </td>
-                        
-                            <td  > 500.0 </td>
+                            <td  > 249.751 </td>
                         
                             <td  > 1.0 </td>
-                        
-                            <td  > 1.0 </td>
-                        
-                        
-                    </tr> 
-                    
-
-
-            
-                </blockTable>
-
-            <nextFrame/>
-            
-               
-
-                <para style="page_title"> Propagation Delay </para>  
-                
-                <para style="param_data">Pass</para>  
-                
-
-                <para style="param_data">Sample : MatingPlugJacktReverse</para>  
-                
-                <para style="param_data">Standard : Tia|CAT6A|Horizontal cable</para>  
-                
-                
-                <blockTable align="CENTER" style = "extraData">
-                
-                    <tr>
-                        <td>Freq (MHz)</td>
-                        
-                            <td>Limit</td>
-                        
-                            <td>12</td>
-                        
-                            <td>36</td>
-                        
-                            <td>45</td>
-                        
-                            <td>78</td>
-                        
-                    </tr>
-                    
-                    
-                    <tr>
-                        
-                            <td  > 1 </td>
-                        
-                            <td  > inf </td>
-                        
-                            <td  > 0.084 </td>
-                        
-                            <td  > 0.076 </td>
-                        
-                            <td  > 0.051 </td>
-                        
-                            <td  > 0.051 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 2 </td>
-                        
-                            <td  > inf </td>
-                        
-                            <td  > 0.122 </td>
-                        
-                            <td  > 0.096 </td>
-                        
-                            <td  > 0.058 </td>
-                        
-                            <td  > 0.113 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 3 </td>
-                        
-                            <td  > inf </td>
-                        
-                            <td  > 0.045 </td>
-                        
-                            <td  > 0.039 </td>
-                        
-                            <td  > 0.009 </td>
-                        
-                            <td  > 0.052 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 5 </td>
-                        
-                            <td  > inf </td>
-                        
-                            <td  > 0.01 </td>
-                        
-                            <td  > 0.01 </td>
-                        
-                            <td  > 0.003 </td>
-                        
-                            <td  > 0.021 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 8 </td>
-                        
-                            <td  > inf </td>
-                        
-                            <td  > 0.01 </td>
-                        
-                            <td  > 0.01 </td>
-                        
-                            <td  > 0.003 </td>
-                        
-                            <td  > 0.021 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 14 </td>
-                        
-                            <td  > inf </td>
-                        
-                            <td  > 0.001 </td>
-                        
-                            <td  > 0.001 </td>
-                        
-                            <td  > 0.0 </td>
-                        
-                            <td  > 0.002 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 23 </td>
-                        
-                            <td  > inf </td>
-                        
-                            <td  > 0.001 </td>
-                        
-                            <td  > 0.001 </td>
-                        
-                            <td  > 0.0 </td>
-                        
-                            <td  > 0.002 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 38 </td>
-                        
-                            <td  > inf </td>
-                        
-                            <td  > 0.001 </td>
-                        
-                            <td  > 0.001 </td>
-                        
-                            <td  > 0.001 </td>
-                        
-                            <td  > 0.002 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 63 </td>
-                        
-                            <td  > inf </td>
-                        
-                            <td  > 0.001 </td>
-                        
-                            <td  > 0.001 </td>
-                        
-                            <td  > 0.001 </td>
-                        
-                            <td  > 0.002 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 106 </td>
-                        
-                            <td  > inf </td>
-                        
-                            <td  > 0.002 </td>
-                        
-                            <td  > 0.001 </td>
-                        
-                            <td  > 0.001 </td>
-                        
-                            <td  > 0.002 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 178 </td>
-                        
-                            <td  > inf </td>
-                        
-                            <td  > 0.003 </td>
-                        
-                            <td  > 0.002 </td>
-                        
-                            <td  > 0.001 </td>
-                        
-                            <td  > 0.002 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 298 </td>
-                        
-                            <td  > inf </td>
-                        
-                            <td  > 0.002 </td>
-                        
-                            <td  > 0.002 </td>
-                        
-                            <td  > 0.001 </td>
-                        
-                            <td  > 0.001 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 500 </td>
-                        
-                            <td  > inf </td>
-                        
-                            <td  > 0.001 </td>
-                        
-                            <td  > 0.001 </td>
-                        
-                            <td  > 0.002 </td>
-                        
-                            <td  > 0.001 </td>
-                        
-                    </tr>
-                    
-
-                    
-
-
-                    <tr>
-                        <td> Worst distance from limit</td>
-                       <td></td>
-                        
-                            <td  > 535.609 </td>
-                        
-                            <td  > 535.609 </td>
-                        
-                            <td  > 535.608 </td>
-                        
-                            <td  > 535.609 </td>
-                        
-                    </tr> 
-
-                    <tr>
-                        <td>@Freq</td>
-                       <td></td>
-                        
-                            <td  > 500.0 </td>
-                        
-                            <td  > 500.0 </td>
-                        
-                            <td  > 500.0 </td>
-                        
-                            <td  > 500.0 </td>
-                        
-                        
-                    </tr> 
-                    
-
-
-            
-                </blockTable>
-
-            <nextFrame/>
-            
-               
-
-                <para style="page_title"> PSNEXT </para>  
-                
-                <para style="param_data">Fail</para>  
-                
-
-                <para style="param_data">Sample : MatingPlugJacktReverse</para>  
-                
-                <para style="param_data">Standard : Tia|CAT6A|Horizontal cable</para>  
-                
-                
-                <blockTable align="CENTER" style = "extraData">
-                
-                    <tr>
-                        <td>Freq (MHz)</td>
-                        
-                            <td>Limit</td>
-                        
-                            <td>12</td>
-                        
-                            <td>36</td>
-                        
-                            <td>45</td>
-                        
-                            <td>78</td>
-                        
-                    </tr>
-                    
-                    
-                    <tr>
-                        
-                            <td  > 1 </td>
-                        
-                            <td  > -inf </td>
-                        
-                            <td  > -67.502 </td>
-                        
-                            <td  > -69.982 </td>
-                        
-                            <td  > -77.038 </td>
-                        
-                            <td  > -65.731 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 2 </td>
-                        
-                            <td  > -inf </td>
-                        
-                            <td  > -92.732 </td>
-                        
-                            <td  > -91.768 </td>
-                        
-                            <td  > -90.184 </td>
-                        
-                            <td  > -103.685 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 3 </td>
-                        
-                            <td  > -65.1 </td>
-                        
-                            <td  > -89.293 </td>
-                        
-                            <td  > -86.177 </td>
-                        
-                            <td  > -85.018 </td>
-                        
-                            <td  > -95.399 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 5 </td>
-                        
-                            <td  > -61.8 </td>
-                        
-                            <td  > -84.97 </td>
-                        
-                            <td  > -83.814 </td>
-                        
-                            <td  > -82.233 </td>
-                        
-                            <td  > -94.548 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 8 </td>
-                        
-                            <td  > -58.75 </td>
-                        
-                            <td  > -83.026 </td>
-                        
-                            <td  > -77.781 </td>
-                        
-                            <td  > -77.37 </td>
-                        
-                            <td  > -88.008 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 14 </td>
-                        
-                            <td  > -55.12 </td>
-                        
-                            <td  > -76.988 </td>
-                        
-                            <td  > -75.407 </td>
-                        
-                            <td  > -74.963 </td>
-                        
-                            <td  > -88.643 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 23 </td>
-                        
-                            <td  > -51.88 </td>
-                        
-                            <td  > -72.687 </td>
-                        
-                            <td  > -71.159 </td>
-                        
-                            <td  > -70.63 </td>
-                        
-                            <td  > -83.617 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 38 </td>
-                        
-                            <td  > -48.62 </td>
-                        
-                            <td  > -68.08 </td>
-                        
-                            <td  > -66.746 </td>
-                        
-                            <td  > -66.012 </td>
-                        
-                            <td  > -78.986 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 63 </td>
-                        
-                            <td  > -45.3 </td>
-                        
-                            <td  > -63.232 </td>
-                        
-                            <td  > -62.251 </td>
-                        
-                            <td  > -61.138 </td>
-                        
-                            <td  > -72.969 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 106 </td>
-                        
-                            <td  > -41.94 </td>
-                        
-                            <td  > -58.673 </td>
-                        
-                            <td  > -57.544 </td>
-                        
-                            <td  > -56.124 </td>
-                        
-                            <td  > -66.07 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 178 </td>
-                        
-                            <td  > -38.56 </td>
-                        
-                            <td  > -54.805 </td>
-                        
-                            <td  > -52.403 </td>
-                        
-                            <td  > -50.933 </td>
-                        
-                            <td  > -58.595 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 298 </td>
-                        
-                            <td  > -35.2 </td>
-                        
-                            <td  > -52.575 </td>
-                        
-                            <td  > -46.734 </td>
-                        
-                            <td  > -45.527 </td>
-                        
-                            <td  > -51.04 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 500 </td>
-                        
-                            <td  > -31.81 </td>
-                        
-                            <td  > -44.935 </td>
-                        
-                            <td  > -40.794 </td>
-                        
-                            <td  > -39.379 </td>
-                        
-                            <td  > -43.779 </td>
-                        
-                    </tr>
-                    
-
-                    
-
-
-                    <tr>
-                        <td> Worst distance from limit</td>
-                       <td></td>
-                        
-                            <td  > 4.798 </td>
-                        
-                            <td  > 2.318 </td>
-                        
-                            <td  > 4.738 </td>
-                        
-                            <td  > 6.569 </td>
-                        
-                    </tr> 
-
-                    <tr>
-                        <td>@Freq</td>
-                       <td></td>
-                        
-                            <td  > 1.0 </td>
-                        
-                            <td  > 1.0 </td>
-                        
-                            <td  > 1.0 </td>
-                        
-                            <td  > 1.0 </td>
-                        
-                        
-                    </tr> 
-                    
-
-
-            
-                </blockTable>
-
-            <nextFrame/>
-            
-               
-
-                <para style="page_title"> LCL </para>  
-                
-
-                <para style="param_data">Sample : MatingPlugJacktReverse</para>  
-                
-                
-                <blockTable align="CENTER">
-                
-                    <tr>
-                        <td>Freq (MHz)</td>
-                        
-                            <td>12</td>
-                        
-                            <td>36</td>
-                        
-                            <td>45</td>
-                        
-                            <td>78</td>
-                        
-                    </tr>
-                    
-                    
-                    <tr>
-                        
-                            <td  > 1 </td>
-                        
-                            <td  > -60.012 </td>
-                        
-                            <td  > -71.843 </td>
-                        
-                            <td  > -52.695 </td>
-                        
-                            <td  > -70.064 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 2 </td>
-                        
-                            <td  > -70.964 </td>
-                        
-                            <td  > -75.439 </td>
-                        
-                            <td  > -63.897 </td>
-                        
-                            <td  > -79.382 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 3 </td>
-                        
-                            <td  > -72.49 </td>
-                        
-                            <td  > -82.263 </td>
-                        
-                            <td  > -67.349 </td>
-                        
-                            <td  > -73.648 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 5 </td>
-                        
-                            <td  > -75.42 </td>
-                        
-                            <td  > -71.036 </td>
-                        
-                            <td  > -64.827 </td>
-                        
-                            <td  > -76.185 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 8 </td>
-                        
-                            <td  > -71.955 </td>
-                        
-                            <td  > -52.789 </td>
-                        
-                            <td  > -53.185 </td>
-                        
-                            <td  > -65.243 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 14 </td>
-                        
-                            <td  > -77.49 </td>
-                        
-                            <td  > -60.185 </td>
-                        
-                            <td  > -72.998 </td>
-                        
-                            <td  > -59.47 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 23 </td>
-                        
-                            <td  > -72.318 </td>
-                        
-                            <td  > -55.578 </td>
-                        
-                            <td  > -69.154 </td>
-                        
-                            <td  > -54.995 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 38 </td>
-                        
-                            <td  > -67.559 </td>
-                        
-                            <td  > -51.39 </td>
-                        
-                            <td  > -64.406 </td>
-                        
-                            <td  > -50.693 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 63 </td>
-                        
-                            <td  > -65.425 </td>
-                        
-                            <td  > -47.308 </td>
-                        
-                            <td  > -60.837 </td>
-                        
-                            <td  > -46.641 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 106 </td>
-                        
-                            <td  > -54.964 </td>
-                        
-                            <td  > -43.622 </td>
-                        
-                            <td  > -58.567 </td>
-                        
-                            <td  > -42.13 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 178 </td>
-                        
-                            <td  > -46.044 </td>
-                        
-                            <td  > -39.681 </td>
-                        
-                            <td  > -52.874 </td>
-                        
-                            <td  > -37.569 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 298 </td>
-                        
-                            <td  > -36.846 </td>
-                        
-                            <td  > -37.13 </td>
-                        
-                            <td  > -43.992 </td>
-                        
-                            <td  > -33.198 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 500 </td>
-                        
-                            <td  > -32.134 </td>
-                        
-                            <td  > -37.166 </td>
-                        
-                            <td  > -38.705 </td>
-                        
-                            <td  > -28.634 </td>
-                        
-                    </tr>
-                    
-
-                    
-
-
-            
-                </blockTable>
-
-            <nextFrame/>
-            
-               
-
-                <para style="page_title"> TCL </para>  
-                
-                <para style="param_data">Fail</para>  
-                
-
-                <para style="param_data">Sample : MatingPlugJacktReverse</para>  
-                
-                <para style="param_data">Standard : Tia|CAT6A|Horizontal cable</para>  
-                
-                
-                <blockTable align="CENTER" style = "extraData">
-                
-                    <tr>
-                        <td>Freq (MHz)</td>
-                        
-                            <td>Limit</td>
-                        
-                            <td>12</td>
-                        
-                            <td>36</td>
-                        
-                            <td>45</td>
-                        
-                            <td>78</td>
-                        
-                    </tr>
-                    
-                    
-                    <tr>
-                        
-                            <td  > 1 </td>
-                        
-                            <td  > -40.0 </td>
-                        
-                            <td  > -61.541 </td>
-                        
-                            <td  > -68.253 </td>
-                        
-                            <td  > -51.269 </td>
-                        
-                            <td  > -65.196 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 2 </td>
-                        
-                            <td  > -40.0 </td>
-                        
-                            <td  > -76.304 </td>
-                        
-                            <td  > -71.185 </td>
-                        
-                            <td  > -65.79 </td>
-                        
-                            <td  > -66.661 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 3 </td>
-                        
-                            <td  > -40.0 </td>
-                        
-                            <td  > -79.601 </td>
-                        
-                            <td  > -66.308 </td>
-                        
-                            <td  > -70.227 </td>
-                        
-                            <td  > -62.513 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 5 </td>
-                        
-                            <td  > -40.0 </td>
-                        
-                            <td  > -75.798 </td>
-                        
-                            <td  > -61.839 </td>
-                        
-                            <td  > -66.269 </td>
-                        
-                            <td  > -59.203 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 8 </td>
-                        
-                            <td  > -40.0 </td>
-                        
-                            <td  > -63.565 </td>
-                        
-                            <td  > -55.779 </td>
-                        
-                            <td  > -57.607 </td>
-                        
-                            <td  > -54.024 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 14 </td>
-                        
-                            <td  > -38.53 </td>
-                        
-                            <td  > -79.481 </td>
-                        
-                            <td  > -62.078 </td>
-                        
-                            <td  > -81.361 </td>
-                        
-                            <td  > -60.497 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 23 </td>
-                        
-                            <td  > -36.38 </td>
-                        
-                            <td  > -73.287 </td>
-                        
-                            <td  > -57.845 </td>
-                        
-                            <td  > -72.091 </td>
-                        
-                            <td  > -55.702 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 38 </td>
-                        
-                            <td  > -34.22 </td>
-                        
-                            <td  > -69.098 </td>
-                        
-                            <td  > -52.567 </td>
-                        
-                            <td  > -67.164 </td>
-                        
-                            <td  > -51.096 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 63 </td>
-                        
-                            <td  > -32.0 </td>
-                        
-                            <td  > -61.803 </td>
-                        
-                            <td  > -49.037 </td>
-                        
-                            <td  > -64.123 </td>
-                        
-                            <td  > -47.219 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 106 </td>
-                        
-                            <td  > -29.75 </td>
-                        
-                            <td  > -54.835 </td>
-                        
-                            <td  > -43.182 </td>
-                        
-                            <td  > -57.21 </td>
-                        
-                            <td  > -41.901 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 178 </td>
-                        
-                            <td  > -27.5 </td>
-                        
-                            <td  > -45.981 </td>
-                        
-                            <td  > -39.569 </td>
-                        
-                            <td  > -52.858 </td>
-                        
-                            <td  > -37.503 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 298 </td>
-                        
-                            <td  > -25.25 </td>
-                        
-                            <td  > -36.839 </td>
-                        
-                            <td  > -37.006 </td>
-                        
-                            <td  > -43.94 </td>
-                        
-                            <td  > -33.139 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 500 </td>
-                        
-                            <td  > -23.02 </td>
-                        
-                            <td  > -32.128 </td>
-                        
-                            <td  > -37.056 </td>
-                        
-                            <td  > -38.456 </td>
-                        
-                            <td  > -28.572 </td>
-                        
-                    </tr>
-                    
-
-                    
-
-
-                    <tr>
-                        <td> Worst distance from limit</td>
-                       <td></td>
-                        
-                            <td  > 2.009 </td>
-                        
-                            <td  > 6.002 </td>
-                        
-                            <td  > 7.212 </td>
-                        
-                            <td  > 3.112 </td>
-                        
-                    </tr> 
-
-                    <tr>
-                        <td>@Freq</td>
-                       <td></td>
-                        
-                            <td  > 9.991 </td>
-                        
-                            <td  > 9.991 </td>
-                        
-                            <td  > 9.991 </td>
                         
                             <td  > 9.991 </td>
                         
                         
                     </tr> 
-                    
-
-
-            
-                </blockTable>
-
-            <nextFrame/>
-            
-               
-
-                <para style="page_title"> CMRL </para>  
-                
-
-                <para style="param_data">Sample : MatingPlugJacktReverse</para>  
-                
-                
-                <blockTable align="CENTER">
-                
-                    <tr>
-                        <td>Freq (MHz)</td>
-                        
-                            <td>12</td>
-                        
-                            <td>36</td>
-                        
-                            <td>45</td>
-                        
-                            <td>78</td>
-                        
-                    </tr>
-                    
-                    
-                    <tr>
-                        
-                            <td  > 1 </td>
-                        
-                            <td  > -5.993 </td>
-                        
-                            <td  > -6.004 </td>
-                        
-                            <td  > -5.998 </td>
-                        
-                            <td  > -6.008 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 2 </td>
-                        
-                            <td  > -6.002 </td>
-                        
-                            <td  > -6.0 </td>
-                        
-                            <td  > -5.999 </td>
-                        
-                            <td  > -6.007 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 3 </td>
-                        
-                            <td  > -5.995 </td>
-                        
-                            <td  > -5.993 </td>
-                        
-                            <td  > -6.003 </td>
-                        
-                            <td  > -6.003 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 5 </td>
-                        
-                            <td  > -5.971 </td>
-                        
-                            <td  > -5.971 </td>
-                        
-                            <td  > -5.983 </td>
-                        
-                            <td  > -5.975 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 8 </td>
-                        
-                            <td  > -5.824 </td>
-                        
-                            <td  > -5.815 </td>
-                        
-                            <td  > -5.753 </td>
-                        
-                            <td  > -5.821 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 14 </td>
-                        
-                            <td  > -5.982 </td>
-                        
-                            <td  > -5.965 </td>
-                        
-                            <td  > -5.991 </td>
-                        
-                            <td  > -5.973 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 23 </td>
-                        
-                            <td  > -5.939 </td>
-                        
-                            <td  > -5.9 </td>
-                        
-                            <td  > -5.963 </td>
-                        
-                            <td  > -5.914 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 38 </td>
-                        
-                            <td  > -5.891 </td>
-                        
-                            <td  > -5.793 </td>
-                        
-                            <td  > -5.942 </td>
-                        
-                            <td  > -5.819 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 63 </td>
-                        
-                            <td  > -5.785 </td>
-                        
-                            <td  > -5.547 </td>
-                        
-                            <td  > -5.913 </td>
-                        
-                            <td  > -5.599 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 106 </td>
-                        
-                            <td  > -5.585 </td>
-                        
-                            <td  > -5.033 </td>
-                        
-                            <td  > -5.916 </td>
-                        
-                            <td  > -5.133 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 178 </td>
-                        
-                            <td  > -5.417 </td>
-                        
-                            <td  > -4.271 </td>
-                        
-                            <td  > -6.256 </td>
-                        
-                            <td  > -4.423 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 298 </td>
-                        
-                            <td  > -5.681 </td>
-                        
-                            <td  > -3.758 </td>
-                        
-                            <td  > -7.377 </td>
-                        
-                            <td  > -3.96 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 500 </td>
-                        
-                            <td  > -3.72 </td>
-                        
-                            <td  > -5.35 </td>
-                        
-                            <td  > -3.251 </td>
-                        
-                            <td  > -6.186 </td>
-                        
-                    </tr>
-                    
-
-                    
-
-
-            
-                </blockTable>
-
-            <nextFrame/>
-            
-               
-
-                <para style="page_title"> CMNEXT </para>  
-                
-
-                <para style="param_data">Sample : MatingPlugJacktReverse</para>  
-                
-                
-                <blockTable align="CENTER">
-                
-                    <tr>
-                        <td>Freq (MHz)</td>
-                        
-                            <td>12-36</td>
-                        
-                            <td>12-45</td>
-                        
-                            <td>12-78</td>
-                        
-                            <td>36-45</td>
-                        
-                            <td>36-78</td>
-                        
-                            <td>45-78</td>
-                        
-                    </tr>
-                    
-                    
-                    <tr>
-                        
-                            <td  > 1 </td>
-                        
-                            <td  > -15.828 </td>
-                        
-                            <td  > -15.811 </td>
-                        
-                            <td  > -15.768 </td>
-                        
-                            <td  > -15.849 </td>
-                        
-                            <td  > -15.805 </td>
-                        
-                            <td  > -15.852 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 2 </td>
-                        
-                            <td  > -15.577 </td>
-                        
-                            <td  > -15.577 </td>
-                        
-                            <td  > -15.571 </td>
-                        
-                            <td  > -15.576 </td>
-                        
-                            <td  > -15.574 </td>
-                        
-                            <td  > -15.564 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 3 </td>
-                        
-                            <td  > -15.563 </td>
-                        
-                            <td  > -15.563 </td>
-                        
-                            <td  > -15.559 </td>
-                        
-                            <td  > -15.566 </td>
-                        
-                            <td  > -15.563 </td>
-                        
-                            <td  > -15.565 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 5 </td>
-                        
-                            <td  > -15.534 </td>
-                        
-                            <td  > -15.526 </td>
-                        
-                            <td  > -15.525 </td>
-                        
-                            <td  > -15.532 </td>
-                        
-                            <td  > -15.533 </td>
-                        
-                            <td  > -15.531 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 8 </td>
-                        
-                            <td  > -15.352 </td>
-                        
-                            <td  > -15.315 </td>
-                        
-                            <td  > -15.32 </td>
-                        
-                            <td  > -15.327 </td>
-                        
-                            <td  > -15.323 </td>
-                        
-                            <td  > -15.266 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 14 </td>
-                        
-                            <td  > -15.587 </td>
-                        
-                            <td  > -15.565 </td>
-                        
-                            <td  > -15.573 </td>
-                        
-                            <td  > -15.581 </td>
-                        
-                            <td  > -15.596 </td>
-                        
-                            <td  > -15.578 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 23 </td>
-                        
-                            <td  > -15.59 </td>
-                        
-                            <td  > -15.539 </td>
-                        
-                            <td  > -15.564 </td>
-                        
-                            <td  > -15.568 </td>
-                        
-                            <td  > -15.61 </td>
-                        
-                            <td  > -15.57 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 38 </td>
-                        
-                            <td  > -15.651 </td>
-                        
-                            <td  > -15.518 </td>
-                        
-                            <td  > -15.597 </td>
-                        
-                            <td  > -15.582 </td>
-                        
-                            <td  > -15.702 </td>
-                        
-                            <td  > -15.595 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 63 </td>
-                        
-                            <td  > -15.812 </td>
-                        
-                            <td  > -15.455 </td>
-                        
-                            <td  > -15.686 </td>
-                        
-                            <td  > -15.613 </td>
-                        
-                            <td  > -15.944 </td>
-                        
-                            <td  > -15.657 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 106 </td>
-                        
-                            <td  > -16.256 </td>
-                        
-                            <td  > -15.217 </td>
-                        
-                            <td  > -15.927 </td>
-                        
-                            <td  > -15.658 </td>
-                        
-                            <td  > -16.599 </td>
-                        
-                            <td  > -15.802 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 178 </td>
-                        
-                            <td  > -17.381 </td>
-                        
-                            <td  > -14.249 </td>
-                        
-                            <td  > -16.488 </td>
-                        
-                            <td  > -15.574 </td>
-                        
-                            <td  > -18.174 </td>
-                        
-                            <td  > -16.042 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 298 </td>
-                        
-                            <td  > -20.153 </td>
-                        
-                            <td  > -11.414 </td>
-                        
-                            <td  > -17.232 </td>
-                        
-                            <td  > -14.669 </td>
-                        
-                            <td  > -22.315 </td>
-                        
-                            <td  > -16.078 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 500 </td>
-                        
-                            <td  > -19.632 </td>
-                        
-                            <td  > -11.421 </td>
-                        
-                            <td  > -16.455 </td>
-                        
-                            <td  > -16.186 </td>
-                        
-                            <td  > -28.284 </td>
-                        
-                            <td  > -17.316 </td>
-                        
-                    </tr>
-                    
-
-                    
-
-
-            
-                </blockTable>
-
-            <nextFrame/>
-            
-               
-
-                <para style="page_title"> CMDMNEXT </para>  
-                
-
-                <para style="param_data">Sample : MatingPlugJacktReverse</para>  
-                
-                
-                <blockTable align="CENTER">
-                
-                    <tr>
-                        <td>Freq (MHz)</td>
-                        
-                            <td>12-36</td>
-                        
-                            <td>12-45</td>
-                        
-                            <td>12-78</td>
-                        
-                            <td>36-45</td>
-                        
-                            <td>36-78</td>
-                        
-                            <td>45-78</td>
-                        
-                    </tr>
-                    
-                    
-                    <tr>
-                        
-                            <td  > 1 </td>
-                        
-                            <td  > -76.558 </td>
-                        
-                            <td  > -76.144 </td>
-                        
-                            <td  > -67.448 </td>
-                        
-                            <td  > -71.193 </td>
-                        
-                            <td  > -79.054 </td>
-                        
-                            <td  > -85.294 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 2 </td>
-                        
-                            <td  > -83.452 </td>
-                        
-                            <td  > -77.569 </td>
-                        
-                            <td  > -76.817 </td>
-                        
-                            <td  > -70.465 </td>
-                        
-                            <td  > -83.116 </td>
-                        
-                            <td  > -81.623 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 3 </td>
-                        
-                            <td  > -82.281 </td>
-                        
-                            <td  > -83.842 </td>
-                        
-                            <td  > -72.163 </td>
-                        
-                            <td  > -69.8 </td>
-                        
-                            <td  > -87.264 </td>
-                        
-                            <td  > -82.349 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 5 </td>
-                        
-                            <td  > -77.872 </td>
-                        
-                            <td  > -79.707 </td>
-                        
-                            <td  > -68.345 </td>
-                        
-                            <td  > -65.374 </td>
-                        
-                            <td  > -87.438 </td>
-                        
-                            <td  > -80.244 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 8 </td>
-                        
-                            <td  > -71.956 </td>
-                        
-                            <td  > -70.061 </td>
-                        
-                            <td  > -63.35 </td>
-                        
-                            <td  > -59.949 </td>
-                        
-                            <td  > -83.295 </td>
-                        
-                            <td  > -77.37 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 14 </td>
-                        
-                            <td  > -62.48 </td>
-                        
-                            <td  > -91.835 </td>
-                        
-                            <td  > -66.89 </td>
-                        
-                            <td  > -58.027 </td>
-                        
-                            <td  > -63.346 </td>
-                        
-                            <td  > -60.874 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 23 </td>
-                        
-                            <td  > -58.068 </td>
-                        
-                            <td  > -97.598 </td>
-                        
-                            <td  > -62.317 </td>
-                        
-                            <td  > -53.591 </td>
-                        
-                            <td  > -59.332 </td>
-                        
-                            <td  > -56.745 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 38 </td>
-                        
-                            <td  > -53.93 </td>
-                        
-                            <td  > -96.155 </td>
-                        
-                            <td  > -57.833 </td>
-                        
-                            <td  > -49.277 </td>
-                        
-                            <td  > -55.16 </td>
-                        
-                            <td  > -52.478 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 63 </td>
-                        
-                            <td  > -49.317 </td>
-                        
-                            <td  > -77.544 </td>
-                        
-                            <td  > -53.607 </td>
-                        
-                            <td  > -45.177 </td>
-                        
-                            <td  > -50.729 </td>
-                        
-                            <td  > -47.951 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 106 </td>
-                        
-                            <td  > -45.231 </td>
-                        
-                            <td  > -71.549 </td>
-                        
-                            <td  > -48.629 </td>
-                        
-                            <td  > -40.756 </td>
-                        
-                            <td  > -46.742 </td>
-                        
-                            <td  > -43.493 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 178 </td>
-                        
-                            <td  > -40.571 </td>
-                        
-                            <td  > -63.064 </td>
-                        
-                            <td  > -43.76 </td>
-                        
-                            <td  > -36.912 </td>
-                        
-                            <td  > -42.653 </td>
-                        
-                            <td  > -38.521 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 298 </td>
-                        
-                            <td  > -35.377 </td>
-                        
-                            <td  > -53.891 </td>
-                        
-                            <td  > -38.123 </td>
-                        
-                            <td  > -33.048 </td>
-                        
-                            <td  > -38.612 </td>
-                        
-                            <td  > -33.1 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 500 </td>
-                        
-                            <td  > -32.219 </td>
-                        
-                            <td  > -50.33 </td>
-                        
-                            <td  > -34.599 </td>
-                        
-                            <td  > -27.48 </td>
-                        
-                            <td  > -33.101 </td>
-                        
-                            <td  > -30.876 </td>
-                        
-                    </tr>
-                    
-
-                    
-
-
-            
-                </blockTable>
-
-            <nextFrame/>
-            
-               
-
-                <para style="page_title"> CMDMRL </para>  
-                
-
-                <para style="param_data">Sample : MatingPlugJacktReverse</para>  
-                
-                
-                <blockTable align="CENTER">
-                
-                    <tr>
-                        <td>Freq (MHz)</td>
-                        
-                            <td>12</td>
-                        
-                            <td>36</td>
-                        
-                            <td>45</td>
-                        
-                            <td>78</td>
-                        
-                    </tr>
-                    
-                    
-                    <tr>
-                        
-                            <td  > 1 </td>
-                        
-                            <td  > -61.541 </td>
-                        
-                            <td  > -68.253 </td>
-                        
-                            <td  > -51.269 </td>
-                        
-                            <td  > -65.196 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 2 </td>
-                        
-                            <td  > -76.304 </td>
-                        
-                            <td  > -71.185 </td>
-                        
-                            <td  > -65.79 </td>
-                        
-                            <td  > -66.661 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 3 </td>
-                        
-                            <td  > -79.601 </td>
-                        
-                            <td  > -66.308 </td>
-                        
-                            <td  > -70.227 </td>
-                        
-                            <td  > -62.513 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 5 </td>
-                        
-                            <td  > -75.798 </td>
-                        
-                            <td  > -61.839 </td>
-                        
-                            <td  > -66.269 </td>
-                        
-                            <td  > -59.203 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 8 </td>
-                        
-                            <td  > -63.565 </td>
-                        
-                            <td  > -55.779 </td>
-                        
-                            <td  > -57.607 </td>
-                        
-                            <td  > -54.024 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 14 </td>
-                        
-                            <td  > -79.481 </td>
-                        
-                            <td  > -62.078 </td>
-                        
-                            <td  > -81.361 </td>
-                        
-                            <td  > -60.497 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 23 </td>
-                        
-                            <td  > -73.287 </td>
-                        
-                            <td  > -57.845 </td>
-                        
-                            <td  > -72.091 </td>
-                        
-                            <td  > -55.702 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 38 </td>
-                        
-                            <td  > -69.098 </td>
-                        
-                            <td  > -52.567 </td>
-                        
-                            <td  > -67.164 </td>
-                        
-                            <td  > -51.096 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 63 </td>
-                        
-                            <td  > -61.803 </td>
-                        
-                            <td  > -49.037 </td>
-                        
-                            <td  > -64.123 </td>
-                        
-                            <td  > -47.219 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 106 </td>
-                        
-                            <td  > -54.835 </td>
-                        
-                            <td  > -43.182 </td>
-                        
-                            <td  > -57.21 </td>
-                        
-                            <td  > -41.901 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 178 </td>
-                        
-                            <td  > -45.981 </td>
-                        
-                            <td  > -39.569 </td>
-                        
-                            <td  > -52.858 </td>
-                        
-                            <td  > -37.503 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 298 </td>
-                        
-                            <td  > -36.839 </td>
-                        
-                            <td  > -37.006 </td>
-                        
-                            <td  > -43.94 </td>
-                        
-                            <td  > -33.139 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 500 </td>
-                        
-                            <td  > -32.128 </td>
-                        
-                            <td  > -37.056 </td>
-                        
-                            <td  > -38.456 </td>
-                        
-                            <td  > -28.572 </td>
-                        
-                    </tr>
-                    
-
-                    
-
-
-            
-                </blockTable>
-
-            <nextFrame/>
-            
-               
-
-                <para style="page_title"> DMCMNEXT </para>  
-                
-
-                <para style="param_data">Sample : MatingPlugJacktReverse</para>  
-                
-                
-                <blockTable align="CENTER">
-                
-                    <tr>
-                        <td>Freq (MHz)</td>
-                        
-                            <td>12-36</td>
-                        
-                            <td>12-45</td>
-                        
-                            <td>12-78</td>
-                        
-                            <td>36-45</td>
-                        
-                            <td>36-78</td>
-                        
-                            <td>45-78</td>
-                        
-                    </tr>
-                    
-                    
-                    <tr>
-                        
-                            <td  > 1 </td>
-                        
-                            <td  > -80.442 </td>
-                        
-                            <td  > -77.52 </td>
-                        
-                            <td  > -63.727 </td>
-                        
-                            <td  > -83.502 </td>
-                        
-                            <td  > -71.232 </td>
-                        
-                            <td  > -71.755 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 2 </td>
-                        
-                            <td  > -85.309 </td>
-                        
-                            <td  > -76.206 </td>
-                        
-                            <td  > -81.326 </td>
-                        
-                            <td  > -90.312 </td>
-                        
-                            <td  > -90.323 </td>
-                        
-                            <td  > -72.218 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 3 </td>
-                        
-                            <td  > -78.857 </td>
-                        
-                            <td  > -74.708 </td>
-                        
-                            <td  > -81.553 </td>
-                        
-                            <td  > -82.617 </td>
-                        
-                            <td  > -78.453 </td>
-                        
-                            <td  > -65.827 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 5 </td>
-                        
-                            <td  > -71.94 </td>
-                        
-                            <td  > -72.742 </td>
-                        
-                            <td  > -81.896 </td>
-                        
-                            <td  > -73.555 </td>
-                        
-                            <td  > -69.04 </td>
-                        
-                            <td  > -66.376 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 8 </td>
-                        
-                            <td  > -68.143 </td>
-                        
-                            <td  > -68.713 </td>
-                        
-                            <td  > -77.698 </td>
-                        
-                            <td  > -59.534 </td>
-                        
-                            <td  > -59.667 </td>
-                        
-                            <td  > -55.701 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 14 </td>
-                        
-                            <td  > -62.323 </td>
-                        
-                            <td  > -66.144 </td>
-                        
-                            <td  > -81.988 </td>
-                        
-                            <td  > -81.662 </td>
-                        
-                            <td  > -69.462 </td>
-                        
-                            <td  > -56.078 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 23 </td>
-                        
-                            <td  > -58.278 </td>
-                        
-                            <td  > -61.564 </td>
-                        
-                            <td  > -74.946 </td>
-                        
-                            <td  > -76.366 </td>
-                        
-                            <td  > -65.121 </td>
-                        
-                            <td  > -51.807 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 38 </td>
-                        
-                            <td  > -54.127 </td>
-                        
-                            <td  > -57.202 </td>
-                        
-                            <td  > -70.095 </td>
-                        
-                            <td  > -70.939 </td>
-                        
-                            <td  > -60.541 </td>
-                        
-                            <td  > -47.573 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 63 </td>
-                        
-                            <td  > -49.675 </td>
-                        
-                            <td  > -53.193 </td>
-                        
-                            <td  > -66.244 </td>
-                        
-                            <td  > -64.625 </td>
-                        
-                            <td  > -55.858 </td>
-                        
-                            <td  > -43.388 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 106 </td>
-                        
-                            <td  > -45.768 </td>
-                        
-                            <td  > -48.48 </td>
-                        
-                            <td  > -60.048 </td>
-                        
-                            <td  > -55.89 </td>
-                        
-                            <td  > -51.309 </td>
-                        
-                            <td  > -39.21 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 178 </td>
-                        
-                            <td  > -42.111 </td>
-                        
-                            <td  > -44.187 </td>
-                        
-                            <td  > -53.944 </td>
-                        
-                            <td  > -47.028 </td>
-                        
-                            <td  > -47.829 </td>
-                        
-                            <td  > -35.644 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 298 </td>
-                        
-                            <td  > -39.605 </td>
-                        
-                            <td  > -40.646 </td>
-                        
-                            <td  > -47.053 </td>
-                        
-                            <td  > -38.46 </td>
-                        
-                            <td  > -44.263 </td>
-                        
-                            <td  > -32.555 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 500 </td>
-                        
-                            <td  > -36.303 </td>
-                        
-                            <td  > -46.537 </td>
-                        
-                            <td  > -37.917 </td>
-                        
-                            <td  > -36.231 </td>
-                        
-                            <td  > -37.599 </td>
-                        
-                            <td  > -28.951 </td>
-                        
-                    </tr>
-                    
-
-                    
-
-
-            
-                </blockTable>
-
-            <nextFrame/>
-            
-               
-
-                <para style="page_title"> DMCMRL </para>  
-                
-
-                <para style="param_data">Sample : MatingPlugJacktReverse</para>  
-                
-                
-                <blockTable align="CENTER">
-                
-                    <tr>
-                        <td>Freq (MHz)</td>
-                        
-                            <td>12</td>
-                        
-                            <td>36</td>
-                        
-                            <td>45</td>
-                        
-                            <td>78</td>
-                        
-                    </tr>
-                    
-                    
-                    <tr>
-                        
-                            <td  > 1 </td>
-                        
-                            <td  > -60.012 </td>
-                        
-                            <td  > -71.843 </td>
-                        
-                            <td  > -52.695 </td>
-                        
-                            <td  > -70.064 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 2 </td>
-                        
-                            <td  > -70.964 </td>
-                        
-                            <td  > -75.439 </td>
-                        
-                            <td  > -63.897 </td>
-                        
-                            <td  > -79.382 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 3 </td>
-                        
-                            <td  > -72.49 </td>
-                        
-                            <td  > -82.263 </td>
-                        
-                            <td  > -67.349 </td>
-                        
-                            <td  > -73.648 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 5 </td>
-                        
-                            <td  > -75.42 </td>
-                        
-                            <td  > -71.036 </td>
-                        
-                            <td  > -64.827 </td>
-                        
-                            <td  > -76.185 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 8 </td>
-                        
-                            <td  > -71.955 </td>
-                        
-                            <td  > -52.789 </td>
-                        
-                            <td  > -53.185 </td>
-                        
-                            <td  > -65.243 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 14 </td>
-                        
-                            <td  > -77.49 </td>
-                        
-                            <td  > -60.185 </td>
-                        
-                            <td  > -72.998 </td>
-                        
-                            <td  > -59.47 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 23 </td>
-                        
-                            <td  > -72.318 </td>
-                        
-                            <td  > -55.578 </td>
-                        
-                            <td  > -69.154 </td>
-                        
-                            <td  > -54.995 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 38 </td>
-                        
-                            <td  > -67.559 </td>
-                        
-                            <td  > -51.39 </td>
-                        
-                            <td  > -64.406 </td>
-                        
-                            <td  > -50.693 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 63 </td>
-                        
-                            <td  > -65.425 </td>
-                        
-                            <td  > -47.308 </td>
-                        
-                            <td  > -60.837 </td>
-                        
-                            <td  > -46.641 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 106 </td>
-                        
-                            <td  > -54.964 </td>
-                        
-                            <td  > -43.622 </td>
-                        
-                            <td  > -58.567 </td>
-                        
-                            <td  > -42.13 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 178 </td>
-                        
-                            <td  > -46.044 </td>
-                        
-                            <td  > -39.681 </td>
-                        
-                            <td  > -52.874 </td>
-                        
-                            <td  > -37.569 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 298 </td>
-                        
-                            <td  > -36.846 </td>
-                        
-                            <td  > -37.13 </td>
-                        
-                            <td  > -43.992 </td>
-                        
-                            <td  > -33.198 </td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        
-                            <td  > 500 </td>
-                        
-                            <td  > -32.134 </td>
-                        
-                            <td  > -37.166 </td>
-                        
-                            <td  > -38.705 </td>
-                        
-                            <td  > -28.634 </td>
-                        
-                    </tr>
-                    
-
                     
 
 

@@ -665,18 +665,17 @@ class SNPManipulations(rf):
             
 if __name__ == "__main__":
 
-    vna_out = SNPManipulations('snps/TestDelay.s8p')
-    vna_out.one_sided = False
+    vna_out = SNPManipulations('snps/DEEMBED TEST/MatingPlugJackForward_4.s4p')
+    vna_out.one_sided = True
     
     #vna_out.renumber([1,2], [2,1])
-    vna_out.renumber([0,1,2,3,4,5,6,7], [0,2,5,4,3,1,6,7])
+    #vna_out.renumber([0,1,2,3,4,5,6,7], [0,2,5,4,3,1,6,7])
     
     vna_out.s2mm()
 
     vna_out.port_name = {0:"12", 1:"36", 2:"45", 3:"78",4:"(r)12", 5:"(r)36", 6:"(r)45", 7:"(r)78"}
 
-    vna_out.getRL(vna_out.dd, z=True)
-
+    print(vna_out.num_ports)
     '''print("Before ",vna_out.RL_dict["12"][0])
     
     vna_out.renumber([0,2,5,4,3,1,6,7], [0,1,2,3,4,5,6,7])
