@@ -51,8 +51,8 @@ import py_compile
 import stat
 import shutil
 import zipfile
-from rlextra.utils import gloop
-from rlextra.utils.manifester import Manifester
+from reportPackages.rlextra.utils import gloop
+from reportPackages.rlextra.utils.manifester import Manifester
 
 def getCVSFilesInDirectory(directory):
     """Helper for a method defined below.  Returns a list of the files
@@ -352,7 +352,7 @@ class AppMonitor(Manifester):
         if kind in ['tgz', 'tar.gz']:
             # the tar module I found is Python 2.2 only and chokes
             # when gzipping; had to handle that myself
-            from rlextra.utils import tarfile
+            from reportPackages.rlextra.utils import tarfile
             import tempfile
             tarName = tempfile.mktemp()
             arch = tarfile.TarFileCompat(tarName, 'w', compression=tarfile.TAR_PLAIN)
@@ -372,7 +372,7 @@ class AppMonitor(Manifester):
             f.close()
             os.remove(tarName)
         elif kind =='tar':
-            from rlextra.utils import tarfile
+            from reportPackages.rlextra.utils import tarfile
             arch = tarfile.TarFileCompat(archiveName, 'w', compression=tarfile.TAR_PLAIN)
             self._writeArchive(arch,filelist,copyDir=copyDir)
         elif kind == 'zip':
@@ -380,8 +380,8 @@ class AppMonitor(Manifester):
             self._writeArchive(arch,filelist,copyDir=copyDir)
         elif kind == 'pyz':
             # ensure installer on path
-            import rlextra
-            instDir = os.path.abspath(os.path.join(os.path.dirname(rlextra.__file__),'distro','tools','Installer'))
+            import reportPackages.rlextra
+            instDir = os.path.abspath(os.path.join(os.path.dirname(reportPackages.rlextra.__file__),'distro','tools','Installer'))
             print('instDir = %s' % instDir)
             if instDir not in sys.path:
                 sys.path.insert(0,instDir)

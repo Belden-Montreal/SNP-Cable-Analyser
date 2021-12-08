@@ -11,7 +11,7 @@ from reportlab.lib.utils import getBytesIO, TimeStamp
 from reportlab.lib.rl_accel import fp_str
 from reportlab.lib.utils import rawBytes, asUnicode
 from reportlab.lib.colors import CMYKColor, PCMYKColor, Color, black, white, colorDistance, toColor
-from rlextra.graphics.sep_ops import SEP_OPS
+from reportPackages.rlextra.graphics.sep_ops import SEP_OPS
 from reportlab.graphics.renderPS import PSCanvas, draw
 from reportlab import rl_config
 

@@ -1,15 +1,15 @@
-#Copyright ReportLab Europe Ltd. 2000-2017
+#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/graphics/charts/areas.py
+#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/graphics/charts/areas.py
 
 __version__='3.3.0'
 __doc__='''This module defines a Area mixin classes'''
 
-from reportlab.lib.validators import isNumber, isColor, isColorOrNone, isNoneOrShape
-from reportlab.graphics.widgetbase import Widget
-from reportlab.graphics.shapes import Rect, Group, Line, Polygon
-from reportlab.lib.attrmap import AttrMap, AttrMapValue
-from reportlab.lib.colors import grey
+from reportPackages.reportlab.lib.validators import isNumber, isColor, isColorOrNone, isNoneOrShape
+from reportPackages.reportlab.graphics.widgetbase import Widget
+from reportPackages.reportlab.graphics.shapes import Rect, Group, Line, Polygon
+from reportPackages.reportlab.lib.attrmap import AttrMap, AttrMapValue
+from reportPackages.reportlab.lib.colors import grey
 
 class PlotArea(Widget):
     "Abstract base class representing a chart's plot area, pretty unusable by itself."
@@ -68,7 +68,7 @@ class PlotArea(Widget):
                 if _3d_dy is not None:
                     _3d_dx = self._3d_dx
                     if fillColor and not strokeColor:
-                        from reportlab.lib.colors import Blacker
+                        from reportPackages.reportlab.lib.colors import Blacker
                         c = Blacker(fillColor, getattr(self,'_3d_blacken',0.7))
                     else:
                         c = strokeColor

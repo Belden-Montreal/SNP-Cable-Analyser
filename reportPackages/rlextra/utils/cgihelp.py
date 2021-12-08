@@ -9,10 +9,10 @@ pages, so that we can manage them centrally
 - a routine to return the 'content frame'
 """
 import sys, os, socket
-from rlextra.utils import simple_doc
+from reportPackages.rlextra.utils import simple_doc
 from reportlab.lib.units import inch
 from reportlab.rl_config import defaultPageSize
-from rlextra.utils.cgisupport import TimeStamp
+from reportPackages.rlextra.utils.cgisupport import TimeStamp
 PAGE_WIDTH, PAGE_HEIGHT = defaultPageSize
 PDFOUTDIR = "../pdfout/"
 

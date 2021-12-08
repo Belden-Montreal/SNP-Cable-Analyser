@@ -1,4 +1,4 @@
-"""Helps you output colourised code snippets in ReportLab documents.
+"""Helps you output colourised code snippets in reportPackages.reportlab documents.
 
 Platypus has an 'XPreformatted' flowable for handling preformatted
 text, with variations in fonts and colors.   If Pygments is installed,
@@ -9,11 +9,11 @@ For a list of available lexers see http://pygments.org/docs/
 
 """
 __all__ = ('pygments2xpre',)
-from reportlab.lib.utils import asBytes, getBytesIO, getStringIO, asUnicode, isUnicode
+from reportPackages.reportlab.lib.utils import asBytes, getBytesIO, getStringIO, asUnicode, isUnicode
 import re
 
 def _2xpre(s,styles):
-    "Helper to transform Pygments HTML output to ReportLab markup"
+    "Helper to transform Pygments HTML output to reportPackages.reportlab markup"
     s = s.replace('<div class="highlight">','')
     s = s.replace('</div>','')
     s = s.replace('<pre>','')
@@ -48,8 +48,8 @@ def pygments2xpre(s, language="python"):
 def convertSourceFiles(filenames):
     "Helper function - makes minimal PDF document"
 
-    from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, XPreformatted
-    from reportlab.lib.styles import getSampleStyleSheet
+    from reportPackages.reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, XPreformatted
+    from reportPackages.reportlab.lib.styles import getSampleStyleSheet
     styT=getSampleStyleSheet()["Title"]
     styC=getSampleStyleSheet()["Code"]
     doc = SimpleDocTemplate("pygments2xpre.pdf")

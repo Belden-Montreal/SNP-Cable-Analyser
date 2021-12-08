@@ -1,7 +1,7 @@
 "Some XML helper classes."
 import os, re
 from reportlab.lib.utils import strTypes, asUnicode, bytesT, unicodeT, asBytes, isUnicode
-from rlextra.utils.unifunc import unifunc
+from reportPackages.rlextra.utils.unifunc import unifunc
 from itertools import takewhile
 
 #import logging
@@ -78,7 +78,7 @@ def translateStandardEntities(s,mode=0):
     else:
         return s.replace('&amp;',"&").replace('&lt;',"<").replace('&gt;',">").replace('&quot;','"').replace('&apos;',"'")
 
-from rlextra.utils.cgisupport import quoteValue
+from reportPackages.rlextra.utils.cgisupport import quoteValue
 def oQuoteValue(s):
     if not isinstance(s,(quotedBytes,quotedUnicode)): s = quoteValue(s)
     return s
@@ -804,7 +804,7 @@ def applyDocType(source, rootElement, dtdName):
 def validateXhtml(source, rootElement="html", wrapIfNeeded=True):
     """Validates against canned DTD and returns the tuple-tree, or an exception.
 
-    It uses a canned copy of the standard in rlextra/dtd.
+    It uses a canned copy of the standard in reportPackages.rlextra/dtd.
     You don't have to supply a whole document; if you want to check
     that the content is a valid paragraph, supply 'p' as rootElement.
 
@@ -853,7 +853,7 @@ def validateXhtml(source, rootElement="html", wrapIfNeeded=True):
 
     source = applyDocType(source.strip(), rootElement,'xhtml1-strict.dtd')
     import pyRXPU
-    from rlextra.radxml import xhtml
+    from reportPackages.rlextra.radxml import xhtml
     p = pyRXPU.Parser(eoCB = xhtml.openEntity)
     #try:
     tree = p.parse(source)
@@ -920,7 +920,7 @@ def validateXhtmlDocument(docText):
     ...     print("expected pyRXPU.error")
     """
     import pyRXPU
-    from rlextra.radxml import xhtml
+    from reportPackages.rlextra.radxml import xhtml
     p = pyRXPU.Parser(eoCB=xhtml.openEntity)
     return p.parse(docText)
 
@@ -976,7 +976,7 @@ def validateXhtmlTransitionalDocument(docText):
     ...     print("expected pyRXPU.error")
     """
     import pyRXPU
-    from rlextra.radxml import xhtml
+    from reportPackages.rlextra.radxml import xhtml
     p = pyRXPU.Parser(eoCB=xhtml.openEntityTransitional)
     return p.parse(docText)
 
@@ -1027,7 +1027,7 @@ def test(gentests=False):
     if gentests:
         R = [].append
     if sys.version_info[0]>2:
-        from rlextra.radxml import xmlutils as mod
+        from reportPackages.rlextra.radxml import xmlutils as mod
         class Py23DocChecker(doctest.OutputChecker):
             def check_output(self, want, got, optionflags):
                 want = re.sub("u'(.*?)'", "'\\1'", want)

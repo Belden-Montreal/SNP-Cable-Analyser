@@ -1,4 +1,4 @@
-#copyright ReportLab Europe Limited. 2000-2016
+#copyright reportPackages.reportlab Europe Limited. 2000-2016
 from os.path import splitext, isfile, abspath, isdir, normpath, basename
 from fnmatch import fnmatch
 import os, sys, time, string

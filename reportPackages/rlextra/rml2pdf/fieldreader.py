@@ -240,7 +240,7 @@ def _amount2(content, nboxes, ndp=2, lPad=' '):
 
 class XMLTreeGetter:
     '''
-    >>> from rlextra.radxml import xmlutils
+    >>> from reportPackages.rlextra.radxml import xmlutils
     >>> T = xmlutils.xml2doctree('<a><b>bval</b><c ca="cattr"><d>dval</d></c></a>',0)
     >>> x = XMLTreeGetter(T,stripDots=1)
     >>> print x('a.b')
@@ -319,7 +319,7 @@ class FieldsGetter:
 
 class PostcodeFieldsGetter(FieldsGetter):
     def __init__(self):
-        from rlextra.utils.layoututils import postcodeFormatter
+        from reportPackages.rlextra.utils.layoututils import postcodeFormatter
         pcf = lambda t: postcodeFormatter(t, singleSpace=True)
         FieldsGetter.__init__(self, pcf, nrParts=2, separator=' ')
 
@@ -449,7 +449,7 @@ class FieldReader:
 
     We can also use the xmltree as a value getter
     >>> csv.seek(0)
-    >>> from rlextra.radxml import xmlutils
+    >>> from reportPackages.rlextra.radxml import xmlutils
     >>> T=xmlutils.xml2doctree('<a><clientDetails houseName="The Willows" occupation="Builder"/></a>',0)
     >>> F=FieldReader(csv,XMLTreeGetter(T,stripDots=1))
     >>> print F.fieldRml('sippDetails.clientDetails.houseName')

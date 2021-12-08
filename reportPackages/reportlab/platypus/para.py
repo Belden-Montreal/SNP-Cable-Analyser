@@ -1835,7 +1835,7 @@ class EvalStringObject:
         self.extra = extra
 
     def getOp(self, tuple, engine):
-        from rlextra.rml2pdf.rml2pdf import Controller
+        from reportPackages.rlextra.rml2pdf.rml2pdf import Controller
         #print "tuple", tuple
         op = self.op = Controller.processTuple(tuple, self.context, {})
         return op
@@ -1931,7 +1931,7 @@ class PageNumberObject:
 ### this should be moved into rml2pdf
 def EmbedInRml2pdf():
     "make the para the default para implementation in rml2pdf"
-    from rlextra.rml2pdf.rml2pdf import MapNode, Controller # may not need to use superclass?
+    from reportPackages.rlextra.rml2pdf.rml2pdf import MapNode, Controller # may not need to use superclass?
     global paraMapper, theParaMapper, ulMapper
 
     class paraMapper(MapNode):

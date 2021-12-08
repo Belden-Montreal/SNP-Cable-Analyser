@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 import os, sys, re
-from rlextra.radxml.xmlmap import LazyAttrs, MapController, MapNode, SpecialTransform, NodeTransform
-from rlextra.radxml.xmlutils import TupleTreeWalker
+from reportPackages.rlextra.radxml.xmlmap import LazyAttrs, MapController, MapNode, SpecialTransform, NodeTransform
+from reportPackages.rlextra.radxml.xmlutils import TupleTreeWalker
 from reportlab.lib.utils import asUnicode, isStr
 import pyRXPU
 
@@ -175,7 +175,7 @@ def xhtml2rml(xml, paraStyle='normal', tableStyle='noPaddingStyle', bulletStyle=
     True
     >>> xhtml2rml('<p>test</p>', paraStyle='custom')=='<para style="custom">test</para>'
     True
-    >>> from rlextra.radxml.html_cleaner import cleanBlocks
+    >>> from reportPackages.rlextra.radxml.html_cleaner import cleanBlocks
     >>> xhtml2rml(cleanBlocks('<p>aaaa <img src="rml:img1">bbbb<p>cccc<img src="rml:img2"> dddd</p> eeeee</p>'))=='<imageAndFlowables  imageName="rml:img1" imageSide="left"><para style="normal">aaaa bbbb</para></imageAndFlowables><imageAndFlowables  imageName="rml:img2" imageSide="left"><para style="normal">cccc dddd</para></imageAndFlowables><para style="normal"> eeeee</para>'
     True
     >>> xhtml2rml(cleanBlocks('<ol><li>one</li><li>two</li></ol>'), olStyle='xxx')=='<ol style="xxx"><li><para style="normal">one</para></li><li><para style="normal">two</para></li></ol>'
@@ -285,8 +285,8 @@ def indent(str):
     return '\n'.join(['\t%s' % l for l in str.split('\n')])
 
 def testfile(path):
-    from rlextra.radxml.html_cleaner import cleanBlocks
-    from rlextra.rml2pdf.rml2pdf import invalid_rml
+    from reportPackages.rlextra.radxml.html_cleaner import cleanBlocks
+    from reportPackages.rlextra.rml2pdf.rml2pdf import invalid_rml
     import time
     import traceback
 

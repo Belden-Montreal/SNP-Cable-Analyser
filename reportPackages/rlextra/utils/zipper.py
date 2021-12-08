@@ -37,7 +37,7 @@ Examples:
     zipper.py mydir archive.zip notdirs=CVS
         -> zips up but excludes any subdirectories called CVS
 
-    C:\\code>c:\\code\\rlextra\\utils\\zipper.py reportlab rl.zip
+    C:\\code>c:\\code\\reportPackages.rlextra\\utils\\zipper.py reportlab rl.zip
     notexts=pdf,pyc,a85 notdirs=CVS
         -> makes a fairly clean distro on my PC!
         

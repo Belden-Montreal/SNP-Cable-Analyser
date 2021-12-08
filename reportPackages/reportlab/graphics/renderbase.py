@@ -1,13 +1,13 @@
-#Copyright ReportLab Europe Ltd. 2000-2021
+#Copyright reportPackages.reportlab Europe Ltd. 2000-2021
 #see license.txt for license details
-#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/graphics/renderbase.py
+#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/graphics/renderbase.py
 
 __version__='3.3.0'
 __doc__='''Superclass for renderers to factor out common functionality and default implementations.'''
 
-from reportlab.graphics.shapes import *
-from reportlab.lib.validators import DerivedValue
-from reportlab import rl_config
+from reportPackages.reportlab.graphics.shapes import *
+from reportPackages.reportlab.lib.validators import DerivedValue
+from reportPackages.reportlab import rl_config
 
 from . transform import mmult, inverse
 
@@ -114,7 +114,7 @@ class StateTracker:
 def testStateTracker():
     print('Testing state tracker')
     defaults = {'fillColor':None, 'strokeColor':None,'fontName':None, 'transform':[1,0,0,1,0,0]}
-    from reportlab.graphics.shapes import _baseGFontName
+    from reportPackages.reportlab.graphics.shapes import _baseGFontName
     deltas = [
         {'fillColor':'red'},
         {'fillColor':'green', 'strokeColor':'blue','fontName':_baseGFontName},

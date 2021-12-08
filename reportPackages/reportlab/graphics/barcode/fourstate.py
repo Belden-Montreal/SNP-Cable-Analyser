@@ -30,8 +30,8 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-from reportlab.lib.units import inch
-from reportlab.graphics.barcode.common import Barcode
+from reportPackages.reportlab.lib.units import inch
+from reportPackages.reportlab.graphics.barcode.common import Barcode
 import string
 
 # . 3 T Tracker

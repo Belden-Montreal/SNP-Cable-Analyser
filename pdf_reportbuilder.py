@@ -126,7 +126,7 @@ class PDFReportBuilder():
                                 worst, pd.pass_fail  = s.sample.getWorstMargin(param_name.replace(' ', ''))
                                 #print(worst)
                                 for key, (value, freq, limit, worstMargin) in worst.items():
-                                    pd.worst_margin[key] = (np.around(float(freq), decimals = 3), np.around(float(worstMargin), decimals=3))
+                                    pd.worst_margin[key] = (np.around(float(freq), decimals = 3), np.around(float(worstMargin, decimals=3)))
                                     pd.standard = s.sample.standard.name
                                 f, points = zip(*lim)
                                 #print(points)

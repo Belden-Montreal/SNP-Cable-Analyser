@@ -11,7 +11,7 @@ except ImportError:
     import urllib
     urllib_urlopen = urllib.urlopen
 
-from rlextra.radxml.xmlutils import TagWrapper
+from reportPackages.rlextra.radxml.xmlutils import TagWrapper
 from reportlab.lib.rparsexml import parsexml
 
 class DataFetcher:

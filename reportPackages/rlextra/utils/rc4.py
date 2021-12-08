@@ -1,11 +1,11 @@
-#copyright ReportLab Europe Limited. 2000-2016
+#copyright reportPackages.reportlab Europe Limited. 2000-2016
 #see license.txt for license details
 '''
 RC4 Stream  ciphering
 '''
 __version__='3.3.0'
 
-from reportlab.lib.arciv import ArcIV as RC4, _TESTS
+from reportPackages.reportlab.lib.arciv import ArcIV as RC4, _TESTS
 
 if __name__=='__main__':
 	i = 0

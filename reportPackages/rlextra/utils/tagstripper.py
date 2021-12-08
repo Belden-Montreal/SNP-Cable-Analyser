@@ -29,7 +29,7 @@ True
 """
 from reportlab.platypus.paraparser import HTMLParser, known_entities
 from reportlab.lib.utils import uniChr, isUnicode
-from rlextra.radxml.xmlutils import nakedAmpFix
+from reportPackages.rlextra.radxml.xmlutils import nakedAmpFix
 
 def stripTags(text,enc='utf8'):
     return TagStripper().strip(text,enc=enc)

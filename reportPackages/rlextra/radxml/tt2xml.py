@@ -1,9 +1,9 @@
-#copyright ReportLab Inc. 2000-2016
+#copyright reportPackages.reportlab Inc. 2000-2016
 #see license.txt for license details
 __version__='3.3.0'
 __all__=('tt2xml',)
 from xml.sax.saxutils import escape, quoteattr
-from reportlab.lib.utils import isBytes, isUnicode, isStr
+from reportPackages.reportlab.lib.utils import isBytes, isUnicode, isStr
 def tt2xml(tt):
     '''convert tuple tree form to unicode xml'''
     if tt is None: return ''

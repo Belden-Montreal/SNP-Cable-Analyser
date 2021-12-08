@@ -3,35 +3,35 @@ __all__=('_reset','register_reset')
 
 def _defaults_init():
     '''
-    create & return defaults for all reportlab settings from
-    reportlab.rl_settings.py
-    reportlab.local_rl_settings.py
-    reportlab_settings.py or ~/.reportlab_settings
+    create & return defaults for all reportPackages.reportlab settings from
+    reportPackages.reportlab.rl_settings.py
+    reportPackages.reportlab.local_rl_settings.py
+    reportPackages.reportlab_settings.py or ~/.reportPackages.reportlab_settings
 
     latter values override earlier
     '''
-    from reportlab.lib.utils import rl_exec
+    from reportPackages.reportlab.lib.utils import rl_exec
     import os
 
     _DEFAULTS={}
-    rl_exec('from reportlab.rl_settings import *',_DEFAULTS)
+    rl_exec('from reportPackages.reportlab.rl_settings import *',_DEFAULTS)
 
     _overrides=_DEFAULTS.copy()
     try:
-        rl_exec('from reportlab.local_rl_settings import *',_overrides)
+        rl_exec('from reportPackages.reportlab.local_rl_settings import *',_overrides)
         _DEFAULTS.update(_overrides)
     except ImportError:
         pass
 
     _overrides=_DEFAULTS.copy()
     try:
-        rl_exec('from reportlab_settings import *',_overrides)
+        rl_exec('from reportPackages.reportlab_settings import *',_overrides)
         _DEFAULTS.update(_overrides)
     except ImportError:
         _overrides=_DEFAULTS.copy()
         try:
             try:
-                fn = os.path.expanduser(os.path.join('~','.reportlab_settings'))    #appengine fails with KeyError/ImportError (dev/live)
+                fn = os.path.expanduser(os.path.join('~','.reportPackages.reportlab_settings'))    #appengine fails with KeyError/ImportError (dev/live)
             except (KeyError, ImportError):
                 fn = None
             if fn:
@@ -64,8 +64,8 @@ def _startUp():
     import os, sys
     global sys_version, _unset_
     sys_version = sys.version.split()[0]        #strip off the other garbage
-    from reportlab.lib import pagesizes
-    from reportlab.lib.utils import rl_isdir
+    from reportPackages.reportlab.lib import pagesizes
+    from reportPackages.reportlab.lib.utils import rl_isdir
 
     if _SAVED=={}:
         _unset_ = getattr(sys,'_rl_config__unset_',None)
@@ -81,8 +81,8 @@ def _startUp():
         __all__ = tuple(A)
 
     #places to search for Type 1 Font files
-    import reportlab
-    D = {'REPORTLAB_DIR': os.path.abspath(os.path.dirname(reportlab.__file__)),
+    import reportPackages.reportlab
+    D = {'reportPackages.reportlab_DIR': os.path.abspath(os.path.dirname(reportPackages.reportlab.__file__)),
         'CWD': os.getcwd(),
         'disk': os.getcwd().split(':')[0],
         'sys_version': sys_version,
@@ -123,7 +123,7 @@ def register_reset(func):
     _registered_resets.append(ref(func))
 
 def _reset():
-    '''attempt to reset reportlab and friends'''
+    '''attempt to reset reportPackages.reportlab and friends'''
     _startUp()  #our reset
     for f in _registered_resets[:]:
         c = f()

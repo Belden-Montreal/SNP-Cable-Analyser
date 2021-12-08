@@ -10,8 +10,8 @@ except ImportError:
 import sys, os, re, copy
 import traceback
 from reportlab.lib.utils import rl_exec, asNative, isNative, isNonPrimitiveInstance, safer_globals
-from rlextra.graphics.guiedit import mutils
-from rlextra.graphics.guiedit.guidialogs import AttrListBox, NameDialog, EditListDialog, upColor, RL_ScrolledText, RL_MenuBar, PMDisplay, GoStartDialog, EditTextDialog
+from reportPackages.rlextra.graphics.guiedit import mutils
+from reportPackages.rlextra.graphics.guiedit.guidialogs import AttrListBox, NameDialog, EditListDialog, upColor, RL_ScrolledText, RL_MenuBar, PMDisplay, GoStartDialog, EditTextDialog
 from time import time
 from reportlab.lib.utils import getStringIO
 from codeop import compile_command
@@ -268,7 +268,7 @@ def _adjustDimension(w,bb,A,i,d):
 				bb = self.cache[x] = w.getBounds()
 			return bb[i+2]-bb[i]
 	f = f()
-	from rlextra.utils.newtonraphson import solve
+	from reportPackages.rlextra.utils.newtonraphson import solve
 	x1 = max(x0 - (s - d),int(x0/10),1)
 	xs = solve(f,d,x0=x0,precision=1.0/d,x1=x1,maxIterations=10,failHard=0)
 	bb = f.cache[xs]
@@ -294,7 +294,7 @@ def _adjustPosition(w,bb,A,bbf,d):
 				bb = self.cache[x] = w.getBounds()
 			return bbf(bb)
 	f = f()
-	from rlextra.utils.newtonraphson import solve
+	from reportPackages.rlextra.utils.newtonraphson import solve
 	x1 = x0 - (s - d)
 	xs = solve(f,d,x0=x0,precision=1.0/max(d,1),x1=x1,maxIterations=10,failHard=0)
 	bb = f.cache[xs]
@@ -700,7 +700,7 @@ class Project:
 
 	def _writeFilter(self,text):
 		if config.testAttrFilter and _testAttrFilter_re.match(text):
-			from rlextra.graphics.guiedit.datacharts import DataAwareDrawing
+			from reportPackages.rlextra.graphics.guiedit.datacharts import DataAwareDrawing
 			if issubclass(self.sample.__class__,DataAwareDrawing): return 1
 		return 0
 
@@ -1078,7 +1078,7 @@ class GUIEditor:
 			inMap = am and aname in am or 0
 			if inMap:
 				from reportlab.lib.validators import isBoolean, OneOf
-				from rlextra.graphics.guiedit.guidialogs import _addFlipButton
+				from reportPackages.rlextra.graphics.guiedit.guidialogs import _addFlipButton
 				ame = am[aname]
 				desc = getattr(ame,'desc')
 				if isinstance(desc, str):
@@ -1901,7 +1901,7 @@ class GUIEditor:
 		'''Reload most modules'''
 		project = self.project
 		redraw = self._state=='display' and project.sample is not None
-		B = self._mN+['rlextra.graphics.guiedit.mutils','copy','tempfile','zipfile']
+		B = self._mN+['reportPackages.rlextra.graphics.guiedit.mutils','copy','tempfile','zipfile']
 		if redraw: project.sample = None
 		M = list(filter(lambda m, B=B: m not in B and hasattr(sys.modules[m],'__file__') and sys.modules[m].__file__[-4:].lower()!='.pyd',list(sys.modules.keys())))
 		try:
@@ -2044,7 +2044,7 @@ class GUIEditor:
 				menu.deletemenuitems('File',j-1,j)
 
 		_dynamicMenu(self.project.sample,'Simplify Properties','Simplify Properties',self._simplifyProperties)
-		from rlextra.graphics.guiedit.datacharts import DataAwareDrawing
+		from reportPackages.rlextra.graphics.guiedit.datacharts import DataAwareDrawing
 		_dynamicMenu(self.project.sample and isinstance(self.project.sample,DataAwareDrawing),
 				'Run DataAwareChart','GO',self.runGO)
 
@@ -2309,7 +2309,7 @@ def _getConfig(fn=None):
 			fn = os.path.join(D,'%s%s.ini' % (fc,os.path.splitext(os.path.basename(sys.argv[0]))[0]))
 		config = Config(fn,
 					package = SubConfig(
-						search = [	'reportlab.lib','reportlab','rlextra'],
+						search = [	'reportlab.lib','reportlab','reportPackages.rlextra'],
 						exclude = [	'reportlab.demo.*','reportlab.test*',
 									'reportlab.doc*','reportlab.utils.*',
 									'reportlab.lib.graphdocpy',

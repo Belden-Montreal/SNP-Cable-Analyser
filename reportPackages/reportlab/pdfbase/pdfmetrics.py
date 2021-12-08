@@ -782,7 +782,7 @@ def test3widths(texts):
         print()
 
 def testStringWidthAlgorithms():
-    rawdata = open('../../rlextra/rml2pdf/doc/rml_user_guide.prep').read()
+    rawdata = open('../../reportPackages.rlextra/rml2pdf/doc/rml_user_guide.prep').read()
     print('rawdata length %d' % len(rawdata))
     print('test one huge string...')
     test3widths([rawdata])

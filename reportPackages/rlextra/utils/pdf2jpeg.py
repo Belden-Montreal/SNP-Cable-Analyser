@@ -19,7 +19,7 @@ def _cleanFiles(pat):
 
 def gsExeFind(gsExe=None):
     if not gsExe:
-        from rlextra.utils.buildutils import find_exe
+        from reportPackages.rlextra.utils.buildutils import find_exe
         known_places = []
         if sys.platform=='win32':
             exeName = 'gswin32c'
@@ -216,7 +216,7 @@ def pdfBBox(fn,boxName='art',pageNo=0):
     >>> print pdfBBox('zzzdingo.pdf')
     [0, 0, 200, 100]
     '''
-    from rlextra.pageCatcher.pdfexplorer import PdfExplorer
+    from reportPackages.rlextra.pageCatcher.pdfexplorer import PdfExplorer
     boxName = boxName.capitalize()
     if boxName.endswith('box'):
         boxName = boxName[-3:]+'Box'

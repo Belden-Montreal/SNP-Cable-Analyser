@@ -276,8 +276,8 @@ def checkdb(options,db):
 def main():
     options,args = parseCommandLine()
     if options.test:
-        import doctest, rlextra.utils.dbcheck
-        doctest.testmod(rlextra.utils.dbcheck)
+        import doctest, reportPackages.rlextra.utils.dbcheck
+        doctest.testmod(reportPackages.rlextra.utils.dbcheck)
     else:
         for db in args:
             checkdb(options,db)

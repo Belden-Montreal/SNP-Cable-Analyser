@@ -1,5 +1,5 @@
 
-"""Support for Acrobat Forms in ReportLab documents
+"""Support for Acrobat Forms in reportPackages.reportlab documents
 
 This module is somewhat experimental at this time.
 
@@ -31,15 +31,15 @@ See individual function docstrings below for more information.
 
 The function test1(...) generates a simple test file.
 
-THIS CONTRIBUTION WAS COMMISSIONED BY REPORTLAB USERS
+THIS CONTRIBUTION WAS COMMISSIONED BY reportPackages.reportlab USERS
 WHO WISH TO REMAIN ANONYMOUS.
 """
 
 ### NOTE: MAKE THE STRING FORMATS DYNAMIC IN PATTERNS TO SUPPORT ENCRYPTION XXXX
 
 import string
-from reportlab.pdfbase.pdfdoc import PDFString, PDFStream, PDFDictionary, PDFName, PDFObject
-from reportlab.lib.colors import obj_R_G_B
+from reportPackages.reportlab.pdfbase.pdfdoc import PDFString, PDFStream, PDFDictionary, PDFName, PDFObject
+from reportPackages.reportlab.lib.colors import obj_R_G_B
 
 #==========================public interfaces
 
@@ -87,7 +87,7 @@ def selectFieldRelative(canvas, title, value, options, xR, yR, width, height):
 
 #==========================end of public interfaces
 
-from reportlab.pdfbase.pdfpattern import PDFPattern, PDFPatternIf
+from reportPackages.reportlab.pdfbase.pdfpattern import PDFPattern, PDFPatternIf
 
 def getForm(canvas):
     "get form from canvas, create the form if needed"
@@ -138,7 +138,7 @@ class AcroForm(PDFObject):
         self.fields.append(field)
         canvas._addAnnotation(field)
     def format(self, document):
-        from reportlab.pdfbase.pdfdoc import PDFArray
+        from reportPackages.reportlab.pdfbase.pdfdoc import PDFArray
         proxy = PDFPattern(FormPattern,
                     Resources=getattr(self,'resources',None) or FormResources(),
                     NeedAppearances=getattr(self,'needAppearances','false'),
@@ -156,7 +156,7 @@ PDFPatternIf('SigFlags',['\r\n/SigFlags ',['SigFlags']]),
 ]
 
 def FormFontsDictionary():
-    from reportlab.pdfbase.pdfdoc import PDFDictionary
+    from reportPackages.reportlab.pdfbase.pdfdoc import PDFDictionary
     fontsdictionary = PDFDictionary()
     fontsdictionary.__RefOnly__ = 1
     for fullname, shortname in FORMFONTNAMES.items():
@@ -363,7 +363,7 @@ PDFDocEncodingPattern = [
 '>>']
 
 def FormFont(BaseFont, Name):
-    from reportlab.pdfbase.pdfdoc import PDFName
+    from reportPackages.reportlab.pdfbase.pdfdoc import PDFName
     return PDFPattern(FormFontPattern, BaseFont=PDFName(BaseFont), Name=PDFName(Name), Encoding=PDFPattern(PDFDocEncodingPattern))
 
 FormFontPattern = [
@@ -382,13 +382,13 @@ FormFontPattern = [
 
 def resetPdfForm():
     pass
-from reportlab.rl_config import register_reset
+from reportPackages.reportlab.rl_config import register_reset
 register_reset(resetPdfForm)
 resetPdfForm()
 
 def TextField(title, value, xmin, ymin, xmax, ymax, page,
               maxlen=1000000, font="Helvetica-Bold", fontsize=9, R=0, G=0, B=0.627, multiline=0):
-    from reportlab.pdfbase.pdfdoc import PDFString, PDFName
+    from reportPackages.reportlab.pdfbase.pdfdoc import PDFString, PDFName
     Flags = 0
     if multiline:
         Flags = Flags | (1<<12) # bit 13 is at position 12 :)
@@ -428,7 +428,7 @@ TextFieldPattern = [
 def SelectField(title, value, options, xmin, ymin, xmax, ymax, page,
               font="Helvetica-Bold", fontsize=9, R=0, G=0, B=0.627):
     #print "ARGS", (title, value, options, xmin, ymin, xmax, ymax, page, font, fontsize, R, G, B)
-    from reportlab.pdfbase.pdfdoc import PDFString, PDFName, PDFArray
+    from reportPackages.reportlab.pdfbase.pdfdoc import PDFString, PDFName, PDFArray
     if value not in options:
         raise ValueError("value %s must be one of options %s" % (repr(value), repr(options)))
     fontname = FORMFONTNAMES[font]

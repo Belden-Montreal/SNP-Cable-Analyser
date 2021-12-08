@@ -80,8 +80,8 @@ class STDLOG:
 		self.close()
 
 def installerDir(P=None):
-	import rlextra
-	D = path_join(path_dirname(rlextra.__file__),'utils','installer')
+	import reportPackages.rlextra
+	D = path_join(path_dirname(reportPackages.rlextra.__file__),'utils','installer')
 	if P:
 		if type(P) not in (type(()),type([])):
 			D = path_join(D,P)
@@ -438,7 +438,7 @@ def getWindowsPath():
 
 class SpecialDistros:
 	def pythonDistro(self,full=0,postcludes=[]):
-		from rlextra.utils.superglob import FileSet
+		from reportPackages.rlextra.utils.superglob import FileSet
 		lib = _locatePythonLib()
 		fs = FileSet(lib)
 		fs.include('./**/*')
@@ -456,7 +456,7 @@ class SpecialDistros:
 		return fs
 
 	def pilDistro(self,full=1,postcludes=[],dlls=0):
-		from rlextra.utils.superglob import FileSet
+		from reportPackages.rlextra.utils.superglob import FileSet
 		lib = _locatePythonLib()
 		fs = FileSet(path_join(lib,'site-packages','PIL'))
 		if not dlls:
@@ -471,7 +471,7 @@ class SpecialDistros:
 		return fs
 
 	def pythonDLLs(self,postcludes=[]):
-		from rlextra.utils.superglob import FileSet, SuperFileSet
+		from reportPackages.rlextra.utils.superglob import FileSet, SuperFileSet
 		fs = FileSet(path_join(sys.exec_prefix,'DLLs'))
 		fs.include('./*.pyd')
 		#fs.include('./*.dll')
@@ -485,7 +485,7 @@ class SpecialDistros:
 		return sfs
 
 	def reportlabDLLs(self,postcludes=[]):
-		from rlextra.utils.superglob import FileSet, SuperFileSet
+		from reportPackages.rlextra.utils.superglob import FileSet, SuperFileSet
 		F = []
 		for modname in '''_renderPM _rl_accel sgmlop pyRXPU pyRXP pyHnj'''.split():
 			NS = {}
@@ -554,7 +554,7 @@ def copyPIL(where, tk=0):
 	copyOver(('PIL',),src,path_join(where,'Lib','site-packages'))
 
 def copy_rl_remove(where):
-	from rlextra.utils import _rl_remove
+	from reportPackages.rlextra.utils import _rl_remove
 	src = path_dirname(_rl_remove.__file__)
 	copyOver(('_rl_remove.py',),src,path_join(where,'Lib'))
 
@@ -666,7 +666,7 @@ class SVN:
 			stagingDir = stagingDir.replace('/',os.sep)
 			target = copySrc.split('/')[-1]
 		if not FS or FS=='[skiptop]':
-			from rlextra.utils.superglob import FileSet
+			from reportPackages.rlextra.utils.superglob import FileSet
 			fs = FileSet(stagingDir)
 			if FS=='[skiptop]':
 				fs = FileSet('/'.join((stagingDir,target)))
@@ -880,14 +880,14 @@ def inferSVNURL(URL,modulename):
 			return URL
 	return import_free_call(func,URL,modulename)
 
-def _fetchRLPrivate(srcDir,branchName,desiredBN=None,what='rlextra',report=None):
+def _fetchRLPrivate(srcDir,branchName,desiredBN=None,what='reportPackages.rlextra',report=None):
 		if not desiredBN: desiredBN = branchName
 		else:
 			if desiredBN.startswith('/'): desiredBN = desiredBN[1:]
 			if not (desiredBN=='trunk' or desiredBN.startswith('branches/') or desiredBN.startswith('tags/')):
 				raise ValueError('desiredBN should start with "branches/" or "tags/" not "%s"' % desiredBN)
 		desiredBN, rev = _svnRevSplit(desiredBN)
-		url = inferSVNURL('https://svn.reportlab.com/svn/private/%s/%s' % (desiredBN,what),'rlextra')+rev
+		url = inferSVNURL('https://svn.reportlab.com/svn/private/%s/%s' % (desiredBN,what),'reportPackages.rlextra')+rev
 		if report: report('Fetching %s from %s'%(what,url))
 		svn_update(srcDir,url=url,L=None)
 		if report: report('%s fetched' % what)
@@ -913,7 +913,7 @@ def fetchPFB(dstDir,report=None):
 
 def fetchRL(srcDir,rl=1,rlx=1,rla=None,report=None,pfb=None, branchName=None, branchNameX=None,
 				rli=0, branchNameI=None):
-	'''convenience routine assumes our reportlab & rlextra (& rlinfra) are SVN controlled'''
+	'''convenience routine assumes our reportlab & reportPackages.rlextra (& rlinfra) are SVN controlled'''
 	if not branchName: branchName = 'trunk'
 	else:
 		if branchName.startswith('/'): branchName = branchName[1:]
@@ -940,7 +940,7 @@ def fetchRL(srcDir,rl=1,rlx=1,rla=None,report=None,pfb=None, branchName=None, br
 			svn_update(srcDir,url=url,L=None)
 			if report: report('rl_addons fetched')
 	if rlx:
-		_fetchRLPrivate(srcDir,branchName,desiredBN=branchNameX,what='rlextra',report=report)
+		_fetchRLPrivate(srcDir,branchName,desiredBN=branchNameX,what='reportPackages.rlextra',report=report)
 	if rli:
 		_fetchRLPrivate(srcDir,branchName,desiredBN=branchNameI,what='rlinfra',report=report)
 
@@ -949,16 +949,16 @@ def stagingArea(suffix=''):
 	return get_rl_tempdir('SA_'+suffix)
 
 def copyRL(where,srcDir,rl=1,rlx=1,noFetch=0):
-	'''copy reportlab or rlextra from the staging area to the result area'''
+	'''copy reportlab or reportPackages.rlextra from the staging area to the result area'''
 	if not noFetch: fetchRL(srcDir,rl=rl,rlx=rlx)	#get export to srcDir
 	cwd = chdir(where)
 	if _verbose: print('Copying RL from %s\n  --> %s' % (srcDir,where))
-	copyOver((rl and ('reportlab',) or ())+(rlx and ('rlextra',) or ()), srcDir, where,None)
+	copyOver((rl and ('reportlab',) or ())+(rlx and ('reportPackages.rlextra',) or ()), srcDir, where,None)
 	chdir(cwd)
 
 def make_stub(stubname,fn,unix=0):
 	stubs= {'rml2pdf':'''import sys
-from rlextra.rml2pdf import rml2pdf
+from reportPackages.rlextra.rml2pdf import rml2pdf
 from reportlab import rl_config
 fn=sys.argv[1:]
 x = filter(lambda x:x[:9]=='--outdir=',fn)
@@ -968,7 +968,7 @@ if x:
 	map(fn.remove,x)
 rml2pdf.main(quiet=rl_config.verbose==0,outDir=outDir,exe=1,fn=fn)
 ''',
-	'pagecatcher': 'from rlextra.pageCatcher.pageCatcher import scriptInterp\nscriptInterp()\n',
+	'pagecatcher': 'from reportPackages.rlextra.pageCatcher.pageCatcher import scriptInterp\nscriptInterp()\n',
 	'pythonpoint': 'from reportlab.tools.pythonpoint.pythonpoint import main\nmain()\n',
 	}
 	open(fn,'w').write((unix and '#!/usr/bin/env python\n' or '') + stubs[stubname])
@@ -990,14 +990,14 @@ def postCopyFixupRL(where):
 	dst = path_join(where,'_rl_config.py')
 	rename(src,dst)
 	open(src,'w').write('from _rl_config import %s\n' % ', '.join(L))
-	make_stub('rml2pdf',path_join(where,'rlextra','rml2pdf','exe_stub_rml2pdf_distro.py'))
-	make_stub('pagecatcher', path_join(where,'rlextra','pageCatcher','exe_stub_pageCatcher_distro.py'))
+	make_stub('rml2pdf',path_join(where,'reportPackages.rlextra','rml2pdf','exe_stub_rml2pdf_distro.py'))
+	make_stub('pagecatcher', path_join(where,'reportPackages.rlextra','pageCatcher','exe_stub_pageCatcher_distro.py'))
 	make_stub('pythonpoint',path_join(where,'reportlab','tools','pythonpoint', 'exe_stub_pythonpoint_distro.py'))
 	chdir(cwd)
 
 def _compileApp(project,app,zip):
-	from rlextra.utils.appmonitor import AppMonitor
-	from rlextra.utils.superglob import FileSet
+	from reportPackages.rlextra.utils.appmonitor import AppMonitor
+	from reportPackages.rlextra.utils.superglob import FileSet
 	FS = FileSet(app)
 	FS.include('**/*')
 	m = AppMonitor(dirname=app,id=project,fileList=FS.getFileNames())
@@ -1065,8 +1065,8 @@ def makeRLDocs(where):
 	if opp: os.environ['PYTHONPATH'] = opp
 	else: del os.environ['PYTHONPATH']
 	chdir(cwd)
-	chdir(path_join(where,'rlextra','graphics','doc'))
-	do_exec('%s %s diagradoc.rml' % (sys.executable, path_join(where,'rlextra','rml2pdf','rml2pdf.py')))
+	chdir(path_join(where,'reportPackages.rlextra','graphics','doc'))
+	do_exec('%s %s diagradoc.rml' % (sys.executable, path_join(where,'reportPackages.rlextra','rml2pdf','rml2pdf.py')))
 	chdir(cwd)
 	return PDF
 
@@ -1116,7 +1116,7 @@ def assembleArchive(pkg,toc,fullName=0):
 	pkg is the name of the archive file
 	toc is the list of contents path, type
 	'''
-	from rlextra.utils.installer import CArchive
+	from reportPackages.rlextra.utils.installer import CArchive
 	A = CArchive()
 	L = []
 	for p, t in toc:
@@ -1154,7 +1154,7 @@ def _wrapEXE(src,dst,magic,project,script=None,version=None,icon=None):
 		os.rename(dst,odst)
 		import pywintypes
 		try:
-			from rlextra.utils.installer.icon import CopyIcons
+			from reportPackages.rlextra.utils.installer.icon import CopyIcons
 			CopyIcons(dst, icon)
 		except ImportError:
 			raise ValueError("win32api & NT/W2K are required for updating icons.")
@@ -1166,7 +1166,7 @@ def _wrapEXE(src,dst,magic,project,script=None,version=None,icon=None):
 		os.rename(dst,odst)
 		import pywintypes
 		try:
-			from rlextra.utils.installer.versionInfo import SetVersion
+			from reportPackages.rlextra.utils.installer.versionInfo import SetVersion
 			SetVersion(dst, version)
 		except ImportError:
 			raise ValueError("win32api & NT/W2K are required for setting Version resources.")
@@ -1340,7 +1340,7 @@ def cleanupBeforePYZ(where,movethese={},copythese={},remove_before_pyz=()):
 def makePYZ(where, pyz_exclude=(), remove_after_pyz=(), pyzName=None, preLoad=1, addLib=1, cleanUp=1, incl_list=None, verbose=None):
 	if verbose is None: verbose = _verbose
 	if verbose: print('Locating modules for PYZ')
-	from rlextra.utils.installer._rl_archive import ZlibArchive
+	from reportPackages.rlextra.utils.installer._rl_archive import ZlibArchive
 	from py_compile import compile
 	instDir = installerDir()
 	Z = []
@@ -1386,7 +1386,7 @@ def compile_dir(dir, removePy=0, noCompile=[]):
 	cwd = os.getcwd()
 	if not os.path.isabs(dir): dir = path_join(cwd,dir)
 	chdir(dir)
-	from rlextra.utils.superglob import FileSet
+	from reportPackages.rlextra.utils.superglob import FileSet
 	fsPy = FileSet(dir)
 	fsPy.include('**/*.py')
 	fsPy.scan()
@@ -1423,7 +1423,7 @@ def makeTGZ(tgzName, archDir,AFL=(),tarName=None):
 	#AR the tar module I found is Python 2.2 only and chokes
 	#when gzipping; had to handle that myself
 	AFL = AFL or listAllFiles(archDir,rel=0)
-	from rlextra.utils import tarfile
+	from reportPackages.rlextra.utils import tarfile
 	if not tarName:
 		from reportlab.lib.utils import get_rl_tempfile
 		tarName = get_rl_tempfile()
@@ -1507,10 +1507,10 @@ def generateProductInfo(where):
 	python = sys.executable
 	for (cmd,dir) in [
 		("%(python)s genuserguide.py --outdir=%(where)s/docs", "%(where)s/reportlab/docs/userguide"),
-		("%(python)s gen_rmluserguide.py --outdir=%(where)s/docs", "%(where)s/rlextra/rml2pdf/doc"),
-		("%(python)s %(where)s/rlextra/rml2pdf/rml2pdf.py %(where)s/rlextra/pageCatcher/PageCatchIntro.rml", "%(where)s/rlextra/pageCatcher"),
+		("%(python)s gen_rmluserguide.py --outdir=%(where)s/docs", "%(where)s/reportPackages.rlextra/rml2pdf/doc"),
+		("%(python)s %(where)s/reportPackages.rlextra/rml2pdf/rml2pdf.py %(where)s/reportPackages.rlextra/pageCatcher/PageCatchIntro.rml", "%(where)s/reportPackages.rlextra/pageCatcher"),
 		("%(python)s %(where)s/reportlab/tools/pythonpoint/pythonpoint.py %(where)s/reportlab/tools/pythonpoint/demos/pythonpoint.xml", "%(where)s/reportlab/tools/pythonpoint/demos"),
-		("%(python)s %(where)s/rlextra/rml2pdf/rml2pdf.py diagradoc.rml", "%(where)s/rlextra/graphics/doc"),
+		("%(python)s %(where)s/reportPackages.rlextra/rml2pdf/rml2pdf.py diagradoc.rml", "%(where)s/reportPackages.rlextra/graphics/doc"),
 		]:
 		cmd = cmd.replace('/',os_sep)
 		dir = dir.replace('/',os_sep)

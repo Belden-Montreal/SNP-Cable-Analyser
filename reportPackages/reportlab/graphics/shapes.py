@@ -757,7 +757,7 @@ class Drawing(Group, Flowable):
 
         if 'eps' in plotMode:
             try:
-                from rlextra.graphics import renderPS_SEP as renderPS
+                from reportPackages.rlextra.graphics import renderPS_SEP as renderPS
             except ImportError:
                 from reportlab.graphics import renderPS
             filename = fnroot+'.eps'
@@ -815,7 +815,7 @@ class Drawing(Group, Flowable):
                             rl_config.showBoundary),**_extraKW(self,'_renderPM_',**kw))
         elif format == 'eps':
             try:
-                from rlextra.graphics import renderPS_SEP as renderPS
+                from reportPackages.rlextra.graphics import renderPS_SEP as renderPS
             except ImportError:
                 from reportlab.graphics import renderPS
 

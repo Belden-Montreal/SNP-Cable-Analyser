@@ -1,6 +1,6 @@
-#Copyright ReportLab Europe Ltd. 2000-2017
+#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/platypus/frames.py
+#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/platypus/frames.py
 
 __version__='3.5.14'
 
@@ -13,11 +13,11 @@ __all__ = (
             )
 
 import logging
-logger = logging.getLogger('reportlab.platypus')
+logger = logging.getLogger('reportPackages.reportlab.platypus')
 
 _geomAttr=('x1', 'y1', 'width', 'height', 'leftPadding', 'bottomPadding', 'rightPadding', 'topPadding')
-from reportlab import rl_config
-from reportlab.lib.rl_accel import fp_str
+from reportPackages.reportlab import rl_config
+from reportPackages.reportlab.lib.rl_accel import fp_str
 _FUZZ=rl_config._FUZZ
 
 class ShowBoundaryValue:
@@ -176,7 +176,7 @@ class Frame:
 
             if y < p-_FUZZ:
                 if not rl_config.allowTableBoundsErrors and ((h>self._aH or w>aW) and not trySplit):
-                    from reportlab.platypus.doctemplate import LayoutError
+                    from reportPackages.reportlab.platypus.doctemplate import LayoutError
                     raise LayoutError("Flowable %s (%sx%s points) too large for frame (%sx%s points)." % (
                         flowable.__class__, w,h, aW,self._aH))
                 return 0
@@ -256,7 +256,7 @@ class Frame:
     @staticmethod
     def _drawBoundary(canv,sb,x1,y1,width,height):
         "draw the frame boundary as a rectangle (primarily for debugging)."
-        from reportlab.lib.colors import Color, toColor
+        from reportPackages.reportlab.lib.colors import Color, toColor
         ss = isinstance(sb,(str,tuple,list)) or isinstance(sb,Color)
         w = -1
         da = None

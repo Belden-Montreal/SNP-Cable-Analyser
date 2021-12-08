@@ -1,4 +1,4 @@
-#copyright ReportLab Europe Limited. 2000-2016
+#copyright reportPackages.reportlab Europe Limited. 2000-2016
 #see license.txt for license details
 """
 Code to measure the size of, and eventually auto-position, shapes.
@@ -24,12 +24,12 @@ into a method of each widget.
 """
 __version__='3.3.0'
 
-from reportlab.graphics import shapes
-from reportlab.pdfbase.pdfmetrics import stringWidth
-from reportlab.lib.validators import *
-from reportlab.lib.attrmap import *
-from reportlab.lib.colors import cyan, magenta
-from reportlab.graphics.widgetbase import Widget
+from reportPackages.reportlab.graphics import shapes
+from reportPackages.reportlab.pdfbase.pdfmetrics import stringWidth
+from reportPackages.reportlab.lib.validators import *
+from reportPackages.reportlab.lib.attrmap import *
+from reportPackages.reportlab.lib.colors import cyan, magenta
+from reportPackages.reportlab.graphics.widgetbase import Widget
 
 
 #  The functions below would logically be methods of the corresponding

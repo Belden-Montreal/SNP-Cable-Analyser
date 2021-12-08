@@ -66,7 +66,7 @@ all newlines/whitespace ignored, instead of
 adding them all to self.children.
 """
 #use either of the parsers below.
-from reportlab.lib import rparsexml
+from reportPackages.reportlab.lib import rparsexml
 
 def identity(arg):
     return arg

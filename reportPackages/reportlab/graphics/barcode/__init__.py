@@ -39,14 +39,14 @@ def registerWidget(widget):
 
 def _reset():
     _widgets[:] = []
-    from reportlab.graphics.barcode.widgets import BarcodeI2of5, BarcodeCode128, BarcodeStandard93,\
+    from reportPackages.reportlab.graphics.barcode.widgets import BarcodeI2of5, BarcodeCode128, BarcodeStandard93,\
                         BarcodeExtended93, BarcodeStandard39, BarcodeExtended39,\
                         BarcodeMSI, BarcodeCodabar, BarcodeCode11, BarcodeFIM,\
                         BarcodePOSTNET, BarcodeUSPS_4State, BarcodeCode128Auto, BarcodeECC200DataMatrix
 
     #newer codes will typically get their own module
-    from reportlab.graphics.barcode.eanbc import Ean13BarcodeWidget, Ean8BarcodeWidget, UPCA, Ean5BarcodeWidget, ISBNBarcodeWidget
-    from reportlab.graphics.barcode.qr import QrCodeWidget
+    from reportPackages.reportlab.graphics.barcode.eanbc import Ean13BarcodeWidget, Ean8BarcodeWidget, UPCA, Ean5BarcodeWidget, ISBNBarcodeWidget
+    from reportPackages.reportlab.graphics.barcode.qr import QrCodeWidget
     for widget in (BarcodeI2of5,
                 BarcodeCode128,
                 BarcodeCode128Auto,
@@ -69,12 +69,12 @@ def _reset():
                 BarcodeECC200DataMatrix,
                 ):
         registerWidget(widget)
-        from reportlab.graphics.barcode import dmtx
+        from reportPackages.reportlab.graphics.barcode import dmtx
         if dmtx.pylibdmtx:
             registerWidget(dmtx.DataMatrixWidget)
 
 _reset()
-from reportlab.rl_config import register_reset
+from reportPackages.reportlab.rl_config import register_reset
 register_reset(_reset)
 
 def getCodes():
@@ -95,7 +95,7 @@ def getCodeNames():
 def createBarcodeDrawing(codeName, **options):
     """This creates and returns a drawing with a barcode.
     """    
-    from reportlab.graphics.shapes import Drawing, Group
+    from reportPackages.reportlab.graphics.shapes import Drawing, Group
 
     codes = getCodes()
     bcc = codes[codeName]

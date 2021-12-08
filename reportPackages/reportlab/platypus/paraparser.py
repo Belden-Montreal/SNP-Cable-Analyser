@@ -1,6 +1,6 @@
-#Copyright ReportLab Europe Ltd. 2000-2017
+#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/platypus/paraparser.py
+#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/platypus/paraparser.py
 __all__ = ('ParaFrag', 'ParaParser')
 __version__='3.5.20'
 __doc__='''The parser used to process markup within paragraphs'''
@@ -12,15 +12,15 @@ import copy
 import base64
 from pprint import pprint as pp
 import unicodedata
-import reportlab.lib.sequencer
+import reportPackages.reportlab.lib.sequencer
 
-from reportlab.lib.abag import ABag
-from reportlab.lib.utils import ImageReader, annotateException, encode_label, asUnicode, asBytes, uniChr, isStr, unicodeT
-from reportlab.lib.colors import toColor, white, black, red, Color
-from reportlab.lib.fonts import tt2ps, ps2tt
-from reportlab.lib.enums import TA_LEFT, TA_RIGHT, TA_CENTER, TA_JUSTIFY
-from reportlab.lib.units import inch,mm,cm,pica
-from reportlab.rl_config import platypus_link_underline
+from reportPackages.reportlab.lib.abag import ABag
+from reportPackages.reportlab.lib.utils import ImageReader, annotateException, encode_label, asUnicode, asBytes, uniChr, isStr, unicodeT
+from reportPackages.reportlab.lib.colors import toColor, white, black, red, Color
+from reportPackages.reportlab.lib.fonts import tt2ps, ps2tt
+from reportPackages.reportlab.lib.enums import TA_LEFT, TA_RIGHT, TA_CENTER, TA_JUSTIFY
+from reportPackages.reportlab.lib.units import inch,mm,cm,pica
+from reportPackages.reportlab.rl_config import platypus_link_underline
 from html.parser import HTMLParser
 from html.entities import name2codepoint
 
@@ -2509,7 +2509,7 @@ _greek2Utf8=None
 def _greekConvert(data):
     global _greek2Utf8
     if not _greek2Utf8:
-        from reportlab.pdfbase.rl_codecs import RL_Codecs
+        from reportPackages.reportlab.pdfbase.rl_codecs import RL_Codecs
         import codecs
         #our decoding map
         dm = codecs.make_identity_dict(range(32,256))
@@ -3148,7 +3148,7 @@ class ParaParser(HTMLParser):
         self.handle_data(data)
 
     def _setup_for_parse(self,style):
-        self._seq = reportlab.lib.sequencer.getSequencer()
+        self._seq = reportPackages.reportlab.lib.sequencer.getSequencer()
         self._reset(style)  # reinitialise the parser
 
     def _complete_parse(self):
@@ -3264,8 +3264,8 @@ class ParaParser(HTMLParser):
         self.handle_data(v)
 
 if __name__=='__main__':
-    from reportlab.platypus import cleanBlockQuotedText
-    from reportlab.lib.styles import _baseFontName
+    from reportPackages.reportlab.platypus import cleanBlockQuotedText
+    from reportPackages.reportlab.lib.styles import _baseFontName
     _parser=ParaParser()
     def check_text(text,p=_parser):
         print('##########')
@@ -3305,7 +3305,7 @@ if __name__=='__main__':
     '''
     check_text(text)
     check_text('<para> </para>')
-    check_text('<para font="%s" size=24 leading=28.8 spaceAfter=72>ReportLab -- Reporting for the Internet Age</para>'%_baseFontName)
+    check_text('<para font="%s" size=24 leading=28.8 spaceAfter=72>reportPackages.reportlab -- Reporting for the Internet Age</para>'%_baseFontName)
     check_text('''
     <font color=red>&tau;</font>Tell me, O muse, of that ingenious hero who travelled far and wide
     after he had sacked the famous town of Troy. Many cities did he visit,

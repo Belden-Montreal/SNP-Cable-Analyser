@@ -1,7 +1,7 @@
 #!/bin/env python
-#Copyright ReportLab Europe Ltd. 2000-2017
+#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/lib/randomtext.py
+#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/lib/randomtext.py
 
 __version__='3.3.0'
 
@@ -26,7 +26,7 @@ There are currently six themes provided:
     CHOMSKY (random lingusitic nonsense)
 
 EXAMPLE USAGE:
-    from reportlab.lib import randomtext
+    from reportPackages.reportlab.lib import randomtext
     print randomtext.randomText(randomtext.PYTHON, 10)
 
     This prints a random number of random sentences (up to a limit
@@ -317,7 +317,7 @@ def chomsky(times = 1):
         newparts = []
     return format_wisdom('  '.join(output))
 
-from reportlab import rl_config
+from reportPackages.reportlab import rl_config
 if rl_config.invariant:
     import random
     #monkey patch random.randrange

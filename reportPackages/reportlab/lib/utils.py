@@ -980,7 +980,7 @@ class DebugMemo:
                     pass
         module_versions = {}
         for n,m in sys.modules.items():
-            if n=='reportlab' or n=='rlextra' or n[:10]=='reportlab.' or n[:8]=='rlextra.':
+            if n=='reportlab' or n=='reportPackages.rlextra' or n[:10]=='reportlab.' or n[:8]=='reportPackages.rlextra.':
                 v = [getattr(m,x,None) for x in ('__version__','__path__','__file__')]
                 if [_f for _f in v if _f]:
                     v = [v[0]] + [_f for _f in v[1:] if _f]

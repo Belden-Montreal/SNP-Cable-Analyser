@@ -143,7 +143,7 @@ class CSVDataMaker(DataMaker):
             lines = [row for row in r]
             del sf, r
         else:
-            from rlextra.utils.csv import _processLine, readCSVLines
+            from reportPackages.rlextra.utils.csv import _processLine, readCSVLines
             lines = readCSVLines(self.filename)
 
         n = self.headerRows
@@ -319,7 +319,7 @@ class CSVDataMaker(DataMaker):
             raise ValueError("Bad field at line %d field %s, expected %s: '%s'" % (n, str(x), typ, f))
 
 class CSVReader:
-    from rlextra.utils.csv import readCSVLines
+    from reportPackages.rlextra.utils.csv import readCSVLines
     def __init__(self,filename,lineEndings=['\r\n','\r','\n\r']):
         self.filename = filename
         self.lineEndings = lineEndings

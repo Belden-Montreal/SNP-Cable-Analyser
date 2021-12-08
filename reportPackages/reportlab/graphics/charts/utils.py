@@ -1,15 +1,15 @@
-#Copyright ReportLab Europe Ltd. 2000-2017
+#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/graphics/charts/utils.py
+#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/graphics/charts/utils.py
 
 __version__='3.3.0'
 __doc__="Utilities used here and there."
 from time import mktime, gmtime, strftime
 from math import log10, pi, floor, sin, cos, sqrt, hypot
 import weakref
-from reportlab.graphics.shapes import transformPoint, transformPoints, inverse, Ellipse, Group, String, Path, numericXShift
-from reportlab.lib.utils import flatten
-from reportlab.pdfbase.pdfmetrics import stringWidth
+from reportPackages.reportlab.graphics.shapes import transformPoint, transformPoints, inverse, Ellipse, Group, String, Path, numericXShift
+from reportPackages.reportlab.lib.utils import flatten
+from reportPackages.reportlab.pdfbase.pdfmetrics import stringWidth
 
 ### Dinu's stuff used in some line plots (likely to vansih).
 def mkTimeTuple(timeString):

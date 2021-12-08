@@ -1,12 +1,12 @@
-#copyright ReportLab Inc. 2000-2016
+#copyright reportPackages.reportlab Inc. 2000-2016
 #see license.txt for license details
 from __future__ import print_function
 __version__='3.3.0'
 __all__ = ('USPS_4State',)
 
-from reportlab.lib.colors import black
-from reportlab.graphics.barcode.common import Barcode
-from reportlab.lib.utils import asNative
+from reportPackages.reportlab.lib.colors import black
+from reportPackages.reportlab.graphics.barcode.common import Barcode
+from reportPackages.reportlab.lib.utils import asNative
 
 def nhex(i):
     'normalized hex'

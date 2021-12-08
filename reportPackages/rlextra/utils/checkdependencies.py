@@ -43,7 +43,7 @@ Dependencies:''' % locals())
                                 ('PIL',PIL_VERSION,'Required for PDF  & renderPM images.'),
                                 ('_renderPM','_version','Required for bitmap image renderer.'),
                                 ('pyRXP','version','Required for fast validating XML parser.'),
-                                ('rlextra','Version','Fatal you need this'),
+                                ('reportPackages.rlextra','Version','Fatal you need this'),
                                 ('Pmw',Pmw_VERSION,'Required for the drawing editor'),
                                 ('mx','__version__','Possibly required for datacharts'),
                                 ):

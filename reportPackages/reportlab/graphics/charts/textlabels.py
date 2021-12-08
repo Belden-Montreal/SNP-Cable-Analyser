@@ -29,7 +29,7 @@ _A2BA=  {
         }
 
 try:
-    from rlextra.graphics.canvasadapter import DirectDrawFlowable
+    from reportPackages.rlextra.graphics.canvasadapter import DirectDrawFlowable
 except ImportError:
     DirectDrawFlowable = None
 
@@ -211,7 +211,7 @@ class Label(Widget):
             objH = self._leading*len(self._lines)
         else:
             if self.ddf is None:
-                raise RuntimeError('DirectDrawFlowable class is not available you need the rlextra package as well as reportlab')
+                raise RuntimeError('DirectDrawFlowable class is not available you need the reportPackages.rlextra package as well as reportlab')
             sty = dict(
                     name='xlabel-generated',
                     fontName=self.fontName,
@@ -488,7 +488,7 @@ class XLabel(Label):
             self._flowableClass = kwds.pop('flowableClass',XPreformatted)
             ddf = kwds.pop('directDrawClass',DirectDrawFlowable)
             if ddf is None:
-                raise RuntimeError('DirectDrawFlowable class is not available you need the rlextra package as well as reportlab')
+                raise RuntimeError('DirectDrawFlowable class is not available you need the reportPackages.rlextra package as well as reportlab')
             self._ddf = ddf
             Label.__init__(self,*args,**kwds)
         def computeSize(self):

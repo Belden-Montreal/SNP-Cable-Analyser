@@ -1,6 +1,6 @@
-#Copyright ReportLab Europe Ltd. 2000-2017
+#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
 #see license.txt for license details
-'''default settings for reportlab
+'''default settings for reportPackages.reportlab
 
 to override these drop a module rl_local_settings.py parallel to this file or
 anywhere on the path.
@@ -142,7 +142,7 @@ allowTTFSubsetting=         []                      #list of font file names tha
                                                     #have the no subsetting flag set. These should be fonts for which
                                                     #the user has explicit permission from the rights holder(s). 
                                                     #This flag could already be overcome by hacking the code.
-                                                    #ReportLab takes no responsibility for the use of this setting.
+                                                    #reportPackages.reportlab takes no responsibility for the use of this setting.
 
 spaceShrinkage=0.05                                 #allowable space shrinkage to make lines fit
 hyphenationLang=''                                  #if pyphen installed set this to the language of your choice
@@ -158,7 +158,7 @@ reserveTTFNotdef=0                                  #if true force subset elemen
 documentLang=None                                   #pdf document catalog Lang value xx-xx not ee_xx
 encryptionStrength=40                               #the bits for standard encryption 40, 128 or 256 (AES)
 trustedHosts=None                                   #set to a list of trusted for access hosts None means
-                                                    #all are trusted glob patterns eg *.reportlab.com are
+                                                    #all are trusted glob patterns eg *.reportPackages.reportlab.com are
                                                     #allowed. In environment use a comma separated string.
 trustedSchemes=['file', 'rml', 'data', 'https',     #these url schemes are trusted
                 'http', 'ftp']
@@ -172,7 +172,7 @@ T1SearchPath =  (
                 'c:/Program Files/Adobe/Acrobat 6.0/Resource/Font', #Win32, Acrobat 6
                 'c:/Program Files/Adobe/Acrobat 5.0/Resource/Font', #Win32, Acrobat 5
                 'c:/Program Files/Adobe/Acrobat 4.0/Resource/Font', #Win32, Acrobat 4
-                '%(disk)s/Applications/Python %(sys_version)s/reportlab/fonts', #Mac?
+                '%(disk)s/Applications/Python %(sys_version)s/reportPackages.reportlab/fonts', #Mac?
                 '/usr/lib/Acrobat9/Resource/Font',      #Linux, Acrobat 5?
                 '/usr/lib/Acrobat8/Resource/Font',      #Linux, Acrobat 5?
                 '/usr/lib/Acrobat7/Resource/Font',      #Linux, Acrobat 5?
@@ -186,9 +186,9 @@ T1SearchPath =  (
                 '/usr/local/Acrobat5/Resource/Font',    #Linux, Acrobat 5?
                 '/usr/local/Acrobat4/Resource/Font',    #Linux, Acrobat 4
                 '/usr/share/fonts/default/Type1',       #Linux, Fedora
-                '%(REPORTLAB_DIR)s/fonts',              #special
-                '%(REPORTLAB_DIR)s/../fonts',           #special
-                '%(REPORTLAB_DIR)s/../../fonts',        #special
+                '%(reportPackages.reportlab_DIR)s/fonts',              #special
+                '%(reportPackages.reportlab_DIR)s/../fonts',           #special
+                '%(reportPackages.reportlab_DIR)s/../../fonts',        #special
                 '%(CWD)s/fonts',                        #special
                 '~/fonts',
                 '~/.fonts',
@@ -204,9 +204,9 @@ TTFSearchPath = (
                 '/usr/share/fonts/truetype',
                 '/usr/share/fonts',             #Linux, Fedora
                 '/usr/share/fonts/dejavu',      #Linux, Fedora
-                '%(REPORTLAB_DIR)s/fonts',      #special
-                '%(REPORTLAB_DIR)s/../fonts',   #special
-                '%(REPORTLAB_DIR)s/../../fonts',#special
+                '%(reportPackages.reportlab_DIR)s/fonts',      #special
+                '%(reportPackages.reportlab_DIR)s/../fonts',   #special
+                '%(reportPackages.reportlab_DIR)s/../../fonts',#special
                 '%(CWD)s/fonts',                #special
                 '~/fonts',
                 '~/.fonts',
@@ -241,9 +241,9 @@ CMapSearchPath = (
                   'C:\\Program Files\\Adobe\\Acrobat 6.0\\Resource\\CMap',
                   'C:\\Program Files\\Adobe\\Acrobat 5.0\\Resource\\CMap',
                   'C:\\Program Files\\Adobe\\Acrobat 4.0\\Resource\\CMap',
-                  '%(REPORTLAB_DIR)s/fonts/CMap',       #special
-                  '%(REPORTLAB_DIR)s/../fonts/CMap',    #special
-                  '%(REPORTLAB_DIR)s/../../fonts/CMap', #special
+                  '%(reportPackages.reportlab_DIR)s/fonts/CMap',       #special
+                  '%(reportPackages.reportlab_DIR)s/../fonts/CMap',    #special
+                  '%(reportPackages.reportlab_DIR)s/../../fonts/CMap', #special
                   '%(CWD)s/fonts/CMap',             #special
                   '%(CWD)s/fonts',              #special
                   '~/fonts/CMap',

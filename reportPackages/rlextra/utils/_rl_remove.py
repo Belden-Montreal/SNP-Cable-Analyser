@@ -1,4 +1,4 @@
-#copyright ReportLab Europe Ltd. 2000-2016
+#copyright reportPackages.reportlab Europe Ltd. 2000-2016
 #see license.txt for license details
 __version__='3.3.0'
 """Removes all files matching a given pattern (e.g. .pyc) under directory"""

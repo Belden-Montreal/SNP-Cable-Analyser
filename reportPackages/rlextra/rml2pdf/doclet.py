@@ -1,6 +1,6 @@
 #Copyright ReportLab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history www.reportlab.co.uk/rl-cgi/viewcvs.cgi/rlextra/ers/doclet.py
+#history www.reportlab.co.uk/rl-cgi/viewcvs.cgi/reportPackages.rlextra/ers/doclet.py
 __version__='3.3.0'
 
 """Doclets allow chunks of content to be reused acrass projects.
@@ -24,9 +24,9 @@ from reportlab.platypus.tables import Table, TableStyle
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib import colors
 
-from rlextra.radxml.xmlutils import TagWrapper
+from reportPackages.rlextra.radxml.xmlutils import TagWrapper
 from xml.sax.saxutils import escape
-from rlextra.radxml.xmlmap import MapNode, MapController
+from reportPackages.rlextra.radxml.xmlmap import MapNode, MapController
 class Doclet:
     def setData(self, data):
         """Called by dynamic RML or preprocessor, data hook.

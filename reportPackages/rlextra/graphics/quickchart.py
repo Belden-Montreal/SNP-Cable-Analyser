@@ -43,7 +43,7 @@ from reportlab.graphics.widgetbase import Widget, ScaleWidget
 from reportlab.graphics.widgets.markers import Marker
 from reportlab.lib.validators import _isColor
 from reportlab.lib.utils import isStr, asBytes, safer_globals
-from rlextra.graphics.layout import getBounds, Sizer
+from reportPackages.rlextra.graphics.layout import getBounds, Sizer
 from functools import reduce
 try:
     enumerate
@@ -1277,7 +1277,7 @@ def normalizeData(data,decimals=None):
             for row in range(rowCount):
                 newBlock[row][col] = 100*data[row][col]/colTotal
         else:
-            from rlextra.utils.vecround import vecRound
+            from reportPackages.rlextra.utils.vecround import vecRound
             d = rowCount*[0]
             m = float(10**decimals)
             for row in range(rowCount):
@@ -1304,7 +1304,7 @@ def makeDataLabels(fmt, data, textData, categoryNames, seriesNames,oneLevel, dec
             ndata = _simpleData(data)
             from operator import add
             ndata = list(map(lambda x,sum=0.01*float(reduce(add,ndata)): x/sum, ndata))
-            from rlextra.utils.vecround import vecRound
+            from reportPackages.rlextra.utils.vecround import vecRound
             f = float(10**decimals)
             ndata = [vecRound(ndata,f*100,f)]
         else:

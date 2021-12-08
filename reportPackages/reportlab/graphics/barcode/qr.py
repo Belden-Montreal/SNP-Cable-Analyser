@@ -1,5 +1,5 @@
 #
-# ReportLab QRCode widget
+# reportPackages.reportlab QRCode widget
 #
 # Ported from the Javascript library QRCode for Javascript by Sam Curren
 #
@@ -7,10 +7,10 @@
 # http://d-project.googlecode.com/svn/trunk/misc/qrcode/js/qrcode.js
 # qrcode.js is copyright (c) 2009 Kazuhiko Arase
 #
-# Original ReportLab module by German M. Bravo
+# Original reportPackages.reportlab module by German M. Bravo
 #
 # modified and improved by Anders Hammarquist <iko@openend.se>
-# and used with permission under the ReportLab License
+# and used with permission under the reportPackages.reportlab License
 #
 # The word "QR Code" is registered trademark of
 # DENSO WAVE INCORPORATED
@@ -20,17 +20,17 @@ __all__ = ('QrCodeWidget')
 
 import itertools
 
-from reportlab.platypus.flowables import Flowable
-from reportlab.graphics.shapes import Group, Rect
-from reportlab.lib import colors
-from reportlab.lib.validators import isNumber, isNumberOrNone, isColor, isString, Validator
-from reportlab.lib.attrmap import AttrMap, AttrMapValue
-from reportlab.graphics.widgetbase import Widget
-from reportlab.lib.units import mm
+from reportPackages.reportlab.platypus.flowables import Flowable
+from reportPackages.reportlab.graphics.shapes import Group, Rect
+from reportPackages.reportlab.lib import colors
+from reportPackages.reportlab.lib.validators import isNumber, isNumberOrNone, isColor, isString, Validator
+from reportPackages.reportlab.lib.attrmap import AttrMap, AttrMapValue
+from reportPackages.reportlab.graphics.widgetbase import Widget
+from reportPackages.reportlab.lib.units import mm
 try:
-    from reportlab.lib.utils import asUnicodeEx, isUnicode
+    from reportPackages.reportlab.lib.utils import asUnicodeEx, isUnicode
 except ImportError:
-    # ReportLab 2.x compatibility
+    # reportPackages.reportlab 2.x compatibility
     def asUnicodeEx(v, enc='utf8'):
         if isinstance(v, unicode):
             return v
@@ -41,7 +41,7 @@ except ImportError:
     def isUnicode(v):
         return isinstance(v, unicode)
 
-from reportlab.graphics.barcode import qrencoder
+from reportPackages.reportlab.graphics.barcode import qrencoder
 
 class isLevel(Validator):
     def test(self, x):

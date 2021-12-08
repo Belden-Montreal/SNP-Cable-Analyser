@@ -2,7 +2,7 @@
 import os, sys, __main__
 from reportlab.graphics.shapes import Drawing, _DrawingEditorMixin, String
 from reportlab.rl_config import T1SearchPath, TTFSearchPath
-import reportlab, rlextra
+import reportlab, reportPackages.rlextra
 
 class DiagnosticDrawing(_DrawingEditorMixin,Drawing):
 	def __init__(self,width=400,height=200,*args,**kw):
@@ -18,7 +18,7 @@ class DiagnosticDrawing(_DrawingEditorMixin,Drawing):
 		self._add(self,String(10,self.height-3*ld,'sample path="%s"' % getattr(__main__,'_guiedit_sample_path','<unknown>'),fontSize=fs), name=None,validate=None,desc=None)
 		self._add(self,String(10,self.height-4*ld,'_rl_embed_location="%s"' % getattr(__main__,'_rl_embed_location','<unknown>'),fontSize=fs), name=None,validate=None,desc=None)
 		self._add(self,String(10,self.height-5*ld,'reportlab location="%s"' % os.path.dirname(reportlab.__file__),fontSize=fs), name=None,validate=None,desc=None)
-		self._add(self,String(10,self.height-6*ld,'rlextra location="%s"' % os.path.dirname(rlextra.__file__),fontSize=fs), name=None,validate=None,desc=None)
+		self._add(self,String(10,self.height-6*ld,'reportPackages.rlextra location="%s"' % os.path.dirname(reportPackages.rlextra.__file__),fontSize=fs), name=None,validate=None,desc=None)
 		if 'do error' in sys.argv: raise ValueError('Deliberate Error For Testing')
 		for i in range(len(sysL)): self._add(self,String(10,self.height-(7+i)*ld,'sys.%s="%s"' % (sysL[i],getattr(sys,sysL[i],'<missing>')),fontSize=fs), name=None,validate=None,desc=None)
 		for i in range(len(sys.argv)): self._add(self,String(10,self.height-(n0+i)*ld,'sys.argv[%d]="%s"' % (i,sys.argv[i]),fontSize=fs), name=None,validate=None,desc=None)

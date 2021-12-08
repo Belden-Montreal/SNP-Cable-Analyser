@@ -419,7 +419,7 @@ def test():
                  <tag with="<brackets in values>">just testing brackets feature</tag>
                  """)
 
-filenames = [ #"../../reportlab/demos/pythonpoint/pythonpoint.xml",
+filenames = [ #"../../reportPackages.reportlab/demos/pythonpoint/pythonpoint.xml",
               "samples/hamlet.xml"]
 
 #filenames = ["moa.xml"]

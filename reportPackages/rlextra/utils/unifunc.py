@@ -1,6 +1,6 @@
 __all__=('unifunc',)
 from functools import wraps
-from reportlab.lib.utils import isBytes
+from reportPackages.reportlab.lib.utils import isBytes
 def unifunc(f=None,tx=0,enc='utf8'):
     '''makes a function which accepts both unicode and bytes'''
     if f:

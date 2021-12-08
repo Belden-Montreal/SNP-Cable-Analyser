@@ -547,9 +547,9 @@ def encryptPdfInMemory(inputPDF,
     pageCatcher and cache the results."""
 
     try:
-        from rlextra.pageCatcher.pageCatcher import storeFormsInMemory, restoreFormsInMemory
+        from reportPackages.rlextra.pageCatcher.pageCatcher import storeFormsInMemory, restoreFormsInMemory
     except ImportError:
-        raise ImportError('''reportlab.lib.pdfencrypt.encryptPdfInMemory failed because rlextra cannot be imported.
+        raise ImportError('''reportlab.lib.pdfencrypt.encryptPdfInMemory failed because reportPackages.rlextra cannot be imported.
 See https://www.reportlab.com/downloads''')
 
     (bboxInfo, pickledForms) = storeFormsInMemory(inputPDF, all=1, BBoxes=1)

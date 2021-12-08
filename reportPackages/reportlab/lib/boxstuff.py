@@ -1,4 +1,4 @@
-#Copyright ReportLab Europe Ltd. 2000-2017
+#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
 #see license.txt for license details
 __version__='3.4.34'
 __doc__='''Utility functions to position and resize boxes within boxes'''

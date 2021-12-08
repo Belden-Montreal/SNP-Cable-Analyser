@@ -1,6 +1,6 @@
 #Copyright ReportLab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history www.reportlab.co.uk/rl-cgi/viewcvs.cgi/rlextra/graphics/Csrc/renderPM/renderP.py
+#history www.reportlab.co.uk/rl-cgi/viewcvs.cgi/reportPackages.rlextra/graphics/Csrc/renderPM/renderP.py
 __version__='3.3.0'
 __doc__="""Render drawing objects in common bitmap formats
 

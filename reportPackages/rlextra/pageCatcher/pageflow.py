@@ -4,7 +4,7 @@ __all__ = ('LoadPdfFlowable', 'ShowPdfFlowable', 'loadPdf',
             )
 import os
 from reportlab.platypus.flowables import Flowable, PageBreak
-from rlextra.pageCatcher.pageCatcher import storeFormsInMemory,\
+from reportPackages.rlextra.pageCatcher.pageCatcher import storeFormsInMemory,\
         restoreFormsInMemory, restoreFormsFromDict, fileName2Prefix
 from reportlab.pdfbase.pdfdoc import xObjectName
 from reportlab.platypus.doctemplate import NextPageTemplate, NotAtTopPageBreak

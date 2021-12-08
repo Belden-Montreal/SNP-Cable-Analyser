@@ -161,7 +161,7 @@ for the element itself will "vanish"
     M["TITLE"] = "" # __content__ used in top level (element vanishes)
 
 __attrs__ entry allows for special handling of attributes
-from rlextra.radxml.xmlmap import *
+from reportPackages.rlextra.radxml.xmlmap import *
 M=MapController()
 M['']='%(__content__)s'
 M['b']=MapNode('<B%(__attrs__)s>%(__content__)s</B>')

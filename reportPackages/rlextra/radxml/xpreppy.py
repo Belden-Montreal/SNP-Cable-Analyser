@@ -1,11 +1,11 @@
 #dynamic rml experiments
 
 from reportlab.lib.utils import strTypes, isBytes, isUnicode, rl_exec, asUnicodeEx
-from rlextra.radxml import xmlutils
+from reportPackages.rlextra.radxml import xmlutils
 from pprint import pprint as pp
 from reportlab.lib.utils import recursiveImport
-from rlextra.radxml import xacquire
-from rlextra.radxml.xmlutils import xmlEscape
+from reportPackages.rlextra.radxml import xacquire
+from reportPackages.rlextra.radxml.xmlutils import xmlEscape
 
 ENTITY_SUBSTITUTIONS_DRAWSTRING_DICT = {    #these must be in utf8
     u"&pound;":u'\xa3',
@@ -91,7 +91,7 @@ def preProcess(tree, nameSpace, caller=None):
     if processing a loop node.
 
     """
-    from rlextra.radxml import xmlutils
+    from reportPackages.rlextra.radxml import xmlutils
     #expand this into a class with methods for each tag it handles.
     #then I can put logic tags in one and data access in another.
     tagName, attrs, children, extraStuff = tree
@@ -224,7 +224,7 @@ def preProcess(tree, nameSpace, caller=None):
 
         #load module, import and create it
         if caller == 'rml':
-            from rlextra.rml2pdf.rml2pdf import _rml2pdf_locations
+            from reportPackages.rlextra.rml2pdf.rml2pdf import _rml2pdf_locations
             locations = _rml2pdf_locations(dirName)
         else:
             locations = dirName

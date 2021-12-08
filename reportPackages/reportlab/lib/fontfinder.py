@@ -1,4 +1,4 @@
-#Copyright ReportLab Europe Ltd. 2000-2019
+#Copyright reportPackages.reportlab Europe Ltd. 2000-2019
 #see license.txt for license details
 __version__='3.4.22'
 
@@ -49,7 +49,7 @@ One can then obtain a specific font as follows
 >>> f.fullName
 'Bitstream Vera Sans'
 >>> f.fileName
-'C:\\code\\reportlab\\fonts\\Vera.ttf'
+'C:\\code\\reportPackages.reportlab\\fonts\\Vera.ttf'
 >>>
 
 It can also produce an XML report of fonts found by family, for the benefit
@@ -59,9 +59,9 @@ Future plans might include using this to auto-register fonts; and making it
 update itself smartly on repeated instantiation.
 """
 import sys, os, tempfile
-from reportlab.lib.utils import pickle, asNative as _asNative
+from reportPackages.reportlab.lib.utils import pickle, asNative as _asNative
 from xml.sax.saxutils import quoteattr
-from reportlab.lib.utils import asBytes
+from reportPackages.reportlab.lib.utils import asBytes
 try:
     from time import process_time as clock
 except ImportError:
@@ -123,7 +123,7 @@ class FontDescriptor:
                     attrs.append('%s=%s' % (k, quoteattr(str(v))))
         return '<font ' + ' '.join(attrs) + '/>'
 
-from reportlab.lib.utils import rl_isdir, rl_isfile, rl_listdir, rl_getmtime
+from reportPackages.reportlab.lib.utils import rl_isdir, rl_isfile, rl_listdir, rl_getmtime
 class FontFinder:
     def __init__(self, dirs=[], useCache=True, validate=False, recur=False, fsEncoding=None, verbose=0):
         self.useCache = useCache
@@ -224,7 +224,7 @@ class FontFinder:
         should give same cache"""
         fsEncoding = self._fsEncoding
         hash = md5(b''.join(asBytes(_,enc=fsEncoding) for _ in sorted(self._dirs))).hexdigest()
-        from reportlab.lib.utils import get_rl_tempfile
+        from reportPackages.reportlab.lib.utils import get_rl_tempfile
         fn = get_rl_tempfile('fonts_%s.dat' % hash)
         return fn
 
@@ -287,7 +287,7 @@ class FontFinder:
 
                     elif ext in ('ttf','ttc'):
                         #parsing should check it for us
-                        from reportlab.pdfbase.ttfonts import TTFontFile, TTFError
+                        from reportPackages.reportlab.pdfbase.ttfonts import TTFontFile, TTFError
                         try:
                             font = TTFontFile(fileName,validate=self.validate)
                         except TTFError:
@@ -310,7 +310,7 @@ class FontFinder:
                         else:
                             self._skippedFiles.append(fileName)
                             continue
-                        from reportlab.pdfbase.pdfmetrics import parseAFMFile
+                        from reportPackages.reportlab.pdfbase.pdfmetrics import parseAFMFile
 
                         (info, glyphs) = parseAFMFile(f.metricsFileName)
                         f.name = info['FontName']
@@ -333,14 +333,14 @@ class FontFinder:
 
 def test():
     #windows-centric test maybe
-    from reportlab import rl_config
+    from reportPackages.reportlab import rl_config
     ff = FontFinder(verbose=rl_config.verbose)
     ff.useCache = True
     ff.validate = True
 
-    import reportlab
+    import reportPackages.reportlab
     ff.addDirectory('C:\\windows\\fonts')
-    rlFontDir = os.path.join(os.path.dirname(reportlab.__file__), 'fonts')
+    rlFontDir = os.path.join(os.path.dirname(reportPackages.reportlab.__file__), 'fonts')
     ff.addDirectory(rlFontDir)
     ff.search()
 

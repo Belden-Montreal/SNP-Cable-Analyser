@@ -283,7 +283,7 @@ class DrawingFigure(FlexFigure):
         self.drawing.drawOn(self.canv, 0, 0)
 
 try:
-    from rlextra.pageCatcher.pageCatcher import restoreForms, storeForms, storeFormsInMemory, restoreFormsInMemory
+    from reportPackages.rlextra.pageCatcher.pageCatcher import restoreForms, storeForms, storeFormsInMemory, restoreFormsInMemory
     _hasPageCatcher = 1
 except ImportError:
     _hasPageCatcher = 0

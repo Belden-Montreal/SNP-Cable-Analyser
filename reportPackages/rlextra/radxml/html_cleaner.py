@@ -55,9 +55,9 @@ Strip out all but a small, defined set of tags and attributes
 """
 import re, sys, os
 from xml.sax.saxutils import escape
-from rlextra.utils.tagstripper import stripTags
-from rlextra.radxml.xmlutils import nakedAmpFix
-from rlextra.utils.unifunc import unifunc
+from reportPackages.rlextra.utils.tagstripper import stripTags
+from reportPackages.rlextra.radxml.xmlutils import nakedAmpFix
+from reportPackages.rlextra.utils.unifunc import unifunc
 from reportlab.lib.utils import asUnicode, strTypes, isUnicode, isSeq
 
 @unifunc

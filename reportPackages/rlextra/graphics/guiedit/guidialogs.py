@@ -1,6 +1,6 @@
 #Copyright ReportLab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history www.reportlab.co.uk/rl-cgi/viewcvs.cgi/rlextra/graphics/guiedit/guidialogs.py
+#history www.reportlab.co.uk/rl-cgi/viewcvs.cgi/reportPackages.rlextra/graphics/guiedit/guidialogs.py
 __version__='3.5.43'
 '''A specialized combo box based on Pmw's ComboBox class'''
 from reportlab.graphics import renderPM
@@ -580,7 +580,7 @@ class AttrListBox(Pmw.MegaWidget):
 		return self._selectCmd()
 
 	def _logAttrInfo(self):
-		from rlextra.graphics.guiedit.guiedit import editor, _findLHS, _stripSub, exceptionLog
+		from reportPackages.rlextra.graphics.guiedit.guiedit import editor, _findLHS, _stripSub, exceptionLog
 		attrHelp = getattr(editor,'attrHelp',None)
 		if not attrHelp: return
 		try:

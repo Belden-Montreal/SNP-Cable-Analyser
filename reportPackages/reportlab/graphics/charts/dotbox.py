@@ -1,12 +1,12 @@
-from reportlab.lib.colors import blue, _PCMYK_black
-from reportlab.graphics.charts.textlabels import Label
-from reportlab.graphics.shapes import Circle, Drawing, Group, Line, Rect, String
-from reportlab.graphics.widgetbase import Widget
-from reportlab.lib.attrmap import *
-from reportlab.lib.validators import *
-from reportlab.lib.units import cm
-from reportlab.pdfbase.pdfmetrics import getFont
-from reportlab.graphics.charts.lineplots import _maxWidth
+from reportPackages.reportlab.lib.colors import blue, _PCMYK_black
+from reportPackages.reportlab.graphics.charts.textlabels import Label
+from reportPackages.reportlab.graphics.shapes import Circle, Drawing, Group, Line, Rect, String
+from reportPackages.reportlab.graphics.widgetbase import Widget
+from reportPackages.reportlab.lib.attrmap import *
+from reportPackages.reportlab.lib.validators import *
+from reportPackages.reportlab.lib.units import cm
+from reportPackages.reportlab.pdfbase.pdfmetrics import getFont
+from reportPackages.reportlab.graphics.charts.lineplots import _maxWidth
 
 class DotBox(Widget):
     """Returns a dotbox widget."""

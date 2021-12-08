@@ -1,9 +1,9 @@
-#copyright ReportLab Europe Limited. 2000-2016
+#copyright reportPackages.reportlab Europe Limited. 2000-2016
 #see license.txt for license details
 __version__='3.3.0'
 __all__=('ttf2ps',)
-from reportlab import rl_config
-from reportlab.lib.utils import uniChr
+from reportPackages.reportlab import rl_config
+from reportPackages.reportlab.lib.utils import uniChr
 from functools import reduce
 
 _template="""10 dict dup begin
@@ -45,9 +45,9 @@ end
 end
 /%(psName)s exch definefont pop
 """
-from reportlab.graphics.utils import text2PathDescription
-from reportlab.lib.rl_accel import fp_str, escapePDF
-from reportlab.graphics.shapes import definePath
+from reportPackages.reportlab.graphics.utils import text2PathDescription
+from reportPackages.reportlab.lib.rl_accel import fp_str, escapePDF
+from reportPackages.reportlab.graphics.shapes import definePath
 def glyphName(c):
     return 'C'+str(c)
 

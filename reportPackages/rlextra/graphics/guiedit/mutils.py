@@ -471,7 +471,7 @@ class KnownNames:
 		ga['classObjs'] = CO
 
 def _getKnown(gM=0,gK=1,dbg=0,
-				search = ['fidelity.epscharts','reportlab.lib','reportlab','rlextra'],
+				search = ['fidelity.epscharts','reportlab.lib','reportlab','reportPackages.rlextra'],
 				exclude = ['*fidelity.epscharts.do_*','reportlab.demo.*','reportlab.test*',
 							'reportlab.doc*','reportlab.utils.*',
 							'*fidelity.epscharts.updatedoc','reportlab.lib.graphdocpy',
@@ -480,7 +480,7 @@ def _getKnown(gM=0,gK=1,dbg=0,
 			):
 	global _tg0, _ofile
 	try:
-		from rlextra.graphics.guiedit.guiedit import _getConfig
+		from reportPackages.rlextra.graphics.guiedit.guiedit import _getConfig
 		config = _getConfig(os.path.join(os.path.dirname(sys.argv[0]),'_guiedit.ini'))
 		search = config.package.search
 		exclude = config.package.exclude+['*.guiedit.guiedit','*.guidialogs']

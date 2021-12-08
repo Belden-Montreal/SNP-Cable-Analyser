@@ -17,9 +17,9 @@ class RmlDebug(object):
         Flowable = G['Flowable']
         DeferredInitialization = G['DeferredInitialization']
         import sys, inspect
-        from reportlab.lib.utils import flatten
-        from reportlab.lib.rl_accel import fp_str
-        from reportlab.platypus.tables import Table
+        from reportPackages.reportlab.lib.utils import flatten
+        from reportPackages.reportlab.lib.rl_accel import fp_str
+        from reportPackages.reportlab.platypus.tables import Table
         isclass = inspect.isclass
         hacked_klasses = {}
         def get_nodemappers(L):

@@ -71,7 +71,7 @@ import marshal
 import string
 import tempfile
 import py_compile
-from rlextra.utils import rc4 
+from reportPackages.rlextra.utils import rc4 
 from reportlab.lib.utils import base64_encodebytes, base64_decodebytes
 
 def lineWrap(stuff, length=60):
@@ -107,7 +107,7 @@ def obfuscateModule(srcFileName):
     for line in wrapped[1:]:
         output.append( '       %s\\' % repr(line))
     output.append('')
-    output.append('from rlextra.utils import subfusc')
+    output.append('from reportPackages.rlextra.utils import subfusc')
     output.append('exec subfusc.loadByteCode(data)')
     output.append('del data')
     output.append('del subfusc')

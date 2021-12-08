@@ -1,4 +1,4 @@
-#Copyright ReportLab Europe Ltd. 2000-2017
+#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
 #see license.txt for license details
 __version__ = '$Id$'
 __doc__="""TrueType font support
@@ -10,7 +10,7 @@ subsetting and embedding and can represent all 16-bit Unicode characters.
 Note on dynamic fonts
 ---------------------
 
-Usually a Font in ReportLab corresponds to a fixed set of PDF objects (Font,
+Usually a Font in reportPackages.reportlab corresponds to a fixed set of PDF objects (Font,
 FontDescriptor, Encoding).  But with dynamic font subsetting a single TTFont
 will result in a number of Font/FontDescriptor/Encoding object sets, and the
 contents of those will depend on the actual characters used for printing.
@@ -52,10 +52,10 @@ Canvas and TextObject have special support for dynamic fonts.
 """
 
 from struct import pack, unpack, error as structError
-from reportlab.lib.utils import getBytesIO, bytestr, isUnicode, char2int, bytesT, isStr, isBytes
-from reportlab.pdfbase import pdfmetrics, pdfdoc
-from reportlab import rl_config
-from reportlab.lib.rl_accel import hex32, add32, calcChecksum, instanceStringWidthTTF
+from reportPackages.reportlab.lib.utils import getBytesIO, bytestr, isUnicode, char2int, bytesT, isStr, isBytes
+from reportPackages.reportlab.pdfbase import pdfmetrics, pdfdoc
+from reportPackages.reportlab import rl_config
+from reportPackages.reportlab.lib.rl_accel import hex32, add32, calcChecksum, instanceStringWidthTTF
 from collections import namedtuple
 import os, time
 
@@ -145,7 +145,7 @@ def TTFOpenFile(fn):
     '''Opens a TTF file possibly after searching TTFSearchPath
     returns (filename,file)
     '''
-    from reportlab.lib.utils import rl_isfile, open_for_read
+    from reportPackages.reportlab.lib.utils import rl_isfile, open_for_read
     try:
         f = open_for_read(fn,'rb')
         return fn, f
@@ -1308,6 +1308,6 @@ class TTFont:
 def _reset():
     _cached_ttf_dirs.clear()
 
-from reportlab.rl_config import register_reset
+from reportPackages.reportlab.rl_config import register_reset
 register_reset(_reset)
 del register_reset

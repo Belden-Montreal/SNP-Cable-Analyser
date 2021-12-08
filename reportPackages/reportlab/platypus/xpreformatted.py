@@ -1,17 +1,17 @@
-#Copyright ReportLab Europe Ltd. 2000-2017
+#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/platypus/xpreformatted.py
+#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/platypus/xpreformatted.py
 __all__ = (
             'XPreformatted',
             'PythonPreformatted',
             )
 __version__='3.5.20'
 __doc__='''A 'rich preformatted text' widget allowing internal markup'''
-from reportlab.lib import PyFontify
-from reportlab.platypus.paragraph import Paragraph, cleanBlockQuotedText, _handleBulletWidth, \
+from reportPackages.reportlab.lib import PyFontify
+from reportPackages.reportlab.platypus.paragraph import Paragraph, cleanBlockQuotedText, _handleBulletWidth, \
      ParaLines, _getFragWords, stringWidth, getAscentDescent, imgVRange, imgNormV
-from reportlab.lib.utils import isSeq
-from reportlab.platypus.flowables import _dedenter
+from reportPackages.reportlab.lib.utils import isSeq
+from reportPackages.reportlab.platypus.flowables import _dedenter
 
 def _getFragLines(frags):
     lines = []
@@ -300,7 +300,7 @@ if __name__=='__main__':    #NORUNTESTS
             dumpXPreformattedLines(s)
             aH = 500
 
-    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    from reportPackages.reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
     styleSheet = getSampleStyleSheet()
     B = styleSheet['BodyText']
     DTstyle = ParagraphStyle("discussiontext", parent=B)

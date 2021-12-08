@@ -1,14 +1,14 @@
 #!/bin/env python
-#Copyright ReportLab Europe Ltd. 2000-2017
+#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/lib/pagesizes.py
+#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/lib/pagesizes.py
 
 """This module defines a few common page sizes in points (1/72 inch).
 To be expanded to include things like label sizes, envelope windows
 etc."""
 __version__='3.4.18'
 
-from reportlab.lib.units import mm, inch
+from reportPackages.reportlab.lib.units import mm, inch
 
 #ISO 216 standard paer sizes; see eg https://en.wikipedia.org/wiki/ISO_216
 A0 = (841*mm,1189*mm)

@@ -1,24 +1,24 @@
-#Copyright ReportLab Europe Ltd. 2000-2017
+#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/graphics/charts/linecharts.py
+#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/graphics/charts/linecharts.py
 
 __version__='3.3.0'
 __doc__="""This modules defines a very preliminary Line Chart example."""
 
-from reportlab.lib import colors
-from reportlab.lib.validators import isNumber, isNumberOrNone, isColor, isColorOrNone, isListOfStrings, \
+from reportPackages.reportlab.lib import colors
+from reportPackages.reportlab.lib.validators import isNumber, isNumberOrNone, isColor, isColorOrNone, isListOfStrings, \
                                     isListOfStringsOrNone, SequenceOf, isBoolean, NoneOr, \
                                     isListOfNumbersOrNone, isStringOrNone, OneOf, Percentage
-from reportlab.lib.attrmap import *
-from reportlab.lib.utils import flatten
-from reportlab.graphics.widgetbase import Widget, TypedPropertyCollection, PropHolder, tpcGetItem
-from reportlab.graphics.shapes import Line, Rect, Group, Drawing, Polygon, PolyLine
-from reportlab.graphics.widgets.signsandsymbols import NoEntry
-from reportlab.graphics.charts.axes import XCategoryAxis, YValueAxis
-from reportlab.graphics.charts.textlabels import Label
-from reportlab.graphics.widgets.markers import uSymbol2Symbol, isSymbol, makeMarker
-from reportlab.graphics.charts.areas import PlotArea
-from reportlab.graphics.charts.legends import _objStr
+from reportPackages.reportlab.lib.attrmap import *
+from reportPackages.reportlab.lib.utils import flatten
+from reportPackages.reportlab.graphics.widgetbase import Widget, TypedPropertyCollection, PropHolder, tpcGetItem
+from reportPackages.reportlab.graphics.shapes import Line, Rect, Group, Drawing, Polygon, PolyLine
+from reportPackages.reportlab.graphics.widgets.signsandsymbols import NoEntry
+from reportPackages.reportlab.graphics.charts.axes import XCategoryAxis, YValueAxis
+from reportPackages.reportlab.graphics.charts.textlabels import Label
+from reportPackages.reportlab.graphics.widgets.markers import uSymbol2Symbol, isSymbol, makeMarker
+from reportPackages.reportlab.graphics.charts.areas import PlotArea
+from reportPackages.reportlab.graphics.charts.legends import _objStr
 from .utils import FillPairedData
 
 class LineChartProperties(PropHolder):
@@ -493,7 +493,7 @@ class HorizontalLineChart3D(HorizontalLineChart):
         theta_x = self.theta_x
         theta_y = self.theta_y
         F = _FakeGroup()
-        from reportlab.graphics.charts.utils3d import _make_3d_line_info
+        from reportPackages.reportlab.graphics.charts.utils3d import _make_3d_line_info
         tileWidth = getattr(self,'_3d_tilewidth',None)
         if not tileWidth and self.categoryAxis.style!='parallel_3d': tileWidth = 1
 
@@ -734,7 +734,7 @@ def sample3():
     return drawing
 
 def sampleCandleStick():
-    from reportlab.graphics.widgetbase import CandleSticks
+    from reportPackages.reportlab.graphics.widgetbase import CandleSticks
     d = Drawing(400, 200)
     chart = HorizontalLineChart()
     d.add(chart)

@@ -1,4 +1,4 @@
-#copyright ReportLab Europe Limited. 2000-2016
+#copyright reportPackages.reportlab Europe Limited. 2000-2016
 "Utilities for sending mail"
 
 def _sendMail(smtpServer,sender,receiver,msg, user=None, password=None):

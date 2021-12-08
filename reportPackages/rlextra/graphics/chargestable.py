@@ -1,9 +1,9 @@
 import os
-from reportlab.platypus.flowables import Spacer
-from reportlab.platypus.paragraph import Paragraph
-from reportlab.platypus.xpreformatted import XPreformatted
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.platypus.tables import Table, TableStyle
+from reportPackages.reportlab.platypus.flowables import Spacer
+from reportPackages.reportlab.platypus.paragraph import Paragraph
+from reportPackages.reportlab.platypus.xpreformatted import XPreformatted
+from reportPackages.reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportPackages.reportlab.platypus.tables import Table, TableStyle
 class ChargesTable:
 
     @staticmethod
@@ -36,7 +36,7 @@ class ChargesTable:
     def __makeParaStyles(self):
         psn = '_%s__paraStyles' % self.__class__.__name__
         if not hasattr(self.__class__,psn):
-            from reportlab.pdfbase import pdfmetrics
+            from reportPackages.reportlab.pdfbase import pdfmetrics
             fontDir = self.getFontDir()
             if fontDir is None:
                 fontName = 'Helvetica-Bold'
@@ -44,9 +44,9 @@ class ChargesTable:
                 face = pdfmetrics.EmbeddedType1Face(os.path.join(fontDir,'eurosbe2.afm'),os.path.join(fontDir,'eurosbe2.pfb'))
                 pdfmetrics.registerTypeFace(face)
                 fontName = "Eurostile-BoldExtendedTwo"
-            from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT, TA_JUSTIFY
-            from reportlab.lib.colors import white, PCMYKColor
-            from reportlab.lib import colors
+            from reportPackages.reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT, TA_JUSTIFY
+            from reportPackages.reportlab.lib.colors import white, PCMYKColor
+            from reportPackages.reportlab.lib import colors
             colors.fidblue = fidblue = PCMYKColor(60,40,0,20,spotName='FidelityBlue',density=100)
             colors.fidlightblue = PCMYKColor(12.1568,8.2353,0,3.9216,spotName='FidelityLightBlue',density=100)
             S = []
@@ -66,7 +66,7 @@ class ChargesTable:
 
     def __build(self):
         self.__makeParaStyles()
-        from reportlab.lib.colors import fidblue, fidlightblue, white
+        from reportPackages.reportlab.lib.colors import fidblue, fidlightblue, white
         noStyle = TableStyle([])
         verysimple = TableStyle([
             ("VALIGN", (0,0), (-1,-1), "TOP"),
@@ -393,8 +393,8 @@ class JumboChargesTable:
     def __makeParaStyles(self):
         psn = '_%s__paraStyles' % self.__class__.__name__
         if not hasattr(self.__class__,psn):
-            from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY
-            from reportlab.lib.colors import black
+            from reportPackages.reportlab.lib.enums import TA_CENTER, TA_JUSTIFY
+            from reportPackages.reportlab.lib.colors import black
             S = []
             a = S.append
             normal = getSampleStyleSheet()['Normal']
@@ -453,7 +453,7 @@ class JumboChargesTable:
 
     def __build(self):
         self.__makeParaStyles()
-        from reportlab.lib.colors import fidblue, fidlightblue, white, black
+        from reportPackages.reportlab.lib.colors import fidblue, fidlightblue, white, black
         #noStyle = TableStyle([])
         Jumbo_Fund_Table_Container = TableStyle([
             ("FONTNAME", (0,0), (-1,0), "Helvetica-Bold"),

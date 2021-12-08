@@ -1,6 +1,6 @@
-#Copyright ReportLab Europe Ltd. 2000-2017
+#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/pdfbase/pdfdoc.py
+#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/pdfbase/pdfdoc.py
 __version__='3.4.1'
 __doc__="""
 The module pdfdoc.py handles the 'outer structure' of PDF documents, ensuring that
@@ -16,11 +16,11 @@ classes are made available elsewhere for users to manipulate.
 """
 import types, binascii, codecs, time
 from collections import OrderedDict
-from reportlab.pdfbase import pdfutils
-from reportlab import rl_config
-from reportlab.lib.utils import import_zlib, open_for_read, makeFileName, isSeq, isBytes, isUnicode, _digester, isStr, bytestr, annotateException, TimeStamp
-from reportlab.lib.rl_accel import escapePDF, fp_str, asciiBase85Encode, asciiBase85Decode
-from reportlab.pdfbase import pdfmetrics
+from reportPackages.reportlab.pdfbase import pdfutils
+from reportPackages.reportlab import rl_config
+from reportPackages.reportlab.lib.utils import import_zlib, open_for_read, makeFileName, isSeq, isBytes, isUnicode, _digester, isStr, bytestr, annotateException, TimeStamp
+from reportPackages.reportlab.lib.rl_accel import escapePDF, fp_str, asciiBase85Encode, asciiBase85Decode
+from reportPackages.reportlab.pdfbase import pdfmetrics
 from hashlib import md5
 
 from sys import platform
@@ -144,7 +144,7 @@ class PDFDocument(PDFObject):
         self._pdfVersion = pdfVersion
         # signature for creating PDF ID
         sig = self.signature = md5()
-        sig.update(b"a reportlab document")
+        sig.update(b"a reportPackages.reportlab document")
         self._timeStamp = TimeStamp(self.invariant)
         cat = self._timeStamp.t
         cat = ascii(cat)
@@ -195,7 +195,7 @@ class PDFDocument(PDFObject):
         digest = self.signature.digest()
         doc = DummyDoc()
         IDs = PDFText(digest,enc='raw').format(doc)
-        self._ID = (b'\n['+IDs+IDs+b']\n% ReportLab generated PDF document -- digest (http://www.reportlab.com)\n')
+        self._ID = (b'\n['+IDs+IDs+b']\n% reportPackages.reportlab generated PDF document -- digest (http://www.reportPackages.reportlab.com)\n')
         return self._ID
 
     def SaveToFile(self, filename, canvas):
@@ -226,7 +226,7 @@ class PDFDocument(PDFObject):
             f.close()
             import os
             if os.name=='mac':
-                from reportlab.lib.utils import markfilename
+                from reportPackages.reportlab.lib.utils import markfilename
                 markfilename(filename) # do platform specific file junk
         if getattr(canvas,'_verbosity',None): print('saved %s' % (filename,))
 
@@ -387,7 +387,7 @@ class PDFDocument(PDFObject):
     def getAvailableFonts(self):
         fontnames = list(self.fontMapping.keys())
         # the standard 14 are also always available! (even if not initialized yet)
-        from reportlab.pdfbase import _fontdata
+        from reportPackages.reportlab.pdfbase import _fontdata
         for name in _fontdata.standardFonts:
             if name not in fontnames:
                 fontnames.append(name)
@@ -756,14 +756,14 @@ class ViewerPreferencesPDFDictionary(CheckedPDFDictionary):
 class PDFStreamFilterZCompress:
     pdfname = "FlateDecode"
     def encode(self, text):
-        from reportlab.lib.utils import import_zlib
+        from reportPackages.reportlab.lib.utils import import_zlib
         zlib = import_zlib()
         if not zlib: raise ImportError("cannot z-compress zlib unavailable")
         if isUnicode(text):
             text = text.encode('utf8')
         return zlib.compress(text)
     def decode(self, encoded):
-        from reportlab.lib.utils import import_zlib
+        from reportPackages.reportlab.lib.utils import import_zlib
         zlib = import_zlib()
         if not zlib: raise ImportError("cannot z-decompress zlib unavailable")
         return zlib.decompress(encoded)
@@ -774,7 +774,7 @@ PDFZCompress = PDFStreamFilterZCompress()
 class PDFStreamFilterBase85Encode:
     pdfname = "ASCII85Decode"
     def encode(self, text):
-        from reportlab.pdfbase.pdfutils import _wrap
+        from reportPackages.reportlab.pdfbase.pdfutils import _wrap
         text = asciiBase85Encode(text)
         if rl_config.wrapA85:
             text = _wrap(text)
@@ -906,7 +906,7 @@ class PDFFile(PDFObject):
         # any other encoding, and we'll be able to tell if something
         # has run our PDF files through a dodgy Unicode conversion.
         self.add((pdfdocEnc("%%PDF-%s.%s" % pdfVersion) +
-            b'\n%\223\214\213\236 ReportLab Generated PDF document http://www.reportlab.com\n'
+            b'\n%\223\214\213\236 reportPackages.reportlab Generated PDF document http://www.reportPackages.reportlab.com\n'
             ))
 
     def closeOrReset(self):
@@ -1440,7 +1440,7 @@ class PDFOutlines(PDFObject):
             if isinstance(object,tuple):
                 return tuple(L)
             return L
-        # bug contributed by Benjamin Dumke <reportlab@benjamin-dumke.de>
+        # bug contributed by Benjamin Dumke <reportPackages.reportlab@benjamin-dumke.de>
         raise TypeError("in outline, destination name must be string: got a %s"%type(object))
 
     def prepare(self, document, canvas):
@@ -1535,13 +1535,13 @@ def count(tree, closedict=None):
         return sum(counts)  #used to be: return reduce(add, counts)
     return 1
 
-_default_producer = "ReportLab PDF Library - www.reportlab.com"
+_default_producer = "reportPackages.reportlab PDF Library - www.reportPackages.reportlab.com"
 class PDFInfo(PDFObject):
     """PDF documents can have basic information embedded, viewable from
     File | Document Info in Acrobat Reader.  If this is wrong, you get
     Postscript errors while printing, even though it does not print."""
     producer = _default_producer
-    creator = "ReportLab PDF Library - www.reportlab.com"
+    creator = "reportPackages.reportlab PDF Library - www.reportPackages.reportlab.com"
     title = "untitled"
     author = "anonymous"
     subject = "unspecified"
@@ -2216,7 +2216,7 @@ class PDFImageXObject(PDFObject):
 
 class PDFSeparationCMYKColor:
     def __init__(self, cmyk):
-        from reportlab.lib.colors import CMYKColor
+        from reportPackages.reportlab.lib.colors import CMYKColor
         if not isinstance(cmyk,CMYKColor):
             raise ValueError('%s needs a CMYKColor argument' % self.__class__.__name__)
         elif not cmyk.spotName:

@@ -6,7 +6,7 @@ This is like the normal glob, except that ** matches any
 number of directories.  This provides a very concise, elegant
 way to describe recursive searches, includes and excludes.
 There are numerous systems around like the Distutils FileList
-and ReportLab's own 'action list' processor to build up
+and reportPackages.reportlab's own 'action list' processor to build up
 a set of files by using inclde and exclude patterns. These
 generally have various flags and options like 'recursive'
 to modify how the pattern is applied.  With a "superglob"

@@ -5,7 +5,7 @@ CGI support utilities
 '''
 __version__='3.3.0'
 import sys, string, os, cgi, random, struct, time
-from rlextra.utils.unifunc import unifunc
+from reportPackages.rlextra.utils.unifunc import unifunc
 
 @unifunc
 def quoteValue(v):
@@ -46,7 +46,7 @@ def makeCgiScript(cgiDir, scriptName, workDir, workModule, workFunc, verbose=0,
 		if not script_pfx: script_pfx = os.path.splitext(os.path.basename(scriptName))[0]
 		text =	[
 				'if __name__=="__main__": #noruntests',
-				'	from rlextra.ers.controller import main',
+				'	from reportPackages.rlextra.ers.controller import main',
 				'	main(1,APPDIR="%s",SCRIPT_PFX="%s")' % (workDir,script_pfx),
 				]
 	else:

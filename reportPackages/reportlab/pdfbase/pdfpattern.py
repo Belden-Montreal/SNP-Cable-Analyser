@@ -1,7 +1,7 @@
-__doc__="""helper for importing pdf structures into a ReportLab generated document
+__doc__="""helper for importing pdf structures into a reportPackages.reportlab generated document
 """
-from reportlab.pdfbase.pdfdoc import format, PDFObject, pdfdocEnc
-from reportlab.lib.utils import strTypes
+from reportPackages.reportlab.pdfbase.pdfdoc import format, PDFObject, pdfdocEnc
+from reportPackages.reportlab.lib.utils import strTypes
 
 def _patternSequenceCheck(pattern_sequence):
     allowedTypes = strTypes if isinstance(strTypes, tuple) else (strTypes,)

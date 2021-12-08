@@ -1,11 +1,11 @@
-#Copyright ReportLab Europe Ltd. 2000-2017
+#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
 #see license.txt for license details
 '''release helper utility'''
 
 import sys, os, time
 from .buildutils import	do_exec, find_exe, getFlag, kill
-from reportlab.lib.utils import getStringIO
-from reportlab import rl_config
+from reportPackages.reportlab.lib.utils import getStringIO
+from reportPackages.reportlab import rl_config
 
 def _getArgs(f,args=None):
 	m = f in args

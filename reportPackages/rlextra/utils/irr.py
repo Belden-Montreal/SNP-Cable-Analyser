@@ -2,7 +2,7 @@
 functions for solving the internal rate of return problem
 '''
 __all__=('npv','dnpv','irr')
-from rlextra.utils.newton import solve as newton_solve
+from reportPackages.rlextra.utils.newton import solve as newton_solve
 def npv(r,C):
     '''
     compute the net present value of the cash flows given in C assuming rate r

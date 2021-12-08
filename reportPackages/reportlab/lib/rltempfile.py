@@ -1,4 +1,4 @@
-#Copyright ReportLab Europe Ltd. 2000-2017
+#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
 #see license.txt for license details
 # $URI:$
 __version__='3.3.0'
@@ -23,7 +23,7 @@ def _rl_getuid():
 def get_rl_tempdir(*subdirs):
     global _rl_tempdir
     if _rl_tempdir is None:
-        _rl_tempdir = os.path.join(tempfile.gettempdir(),'ReportLab_tmp%s' % str(_rl_getuid()))
+        _rl_tempdir = os.path.join(tempfile.gettempdir(),'reportPackages.reportlab_tmp%s' % str(_rl_getuid()))
     d = _rl_tempdir
     if subdirs: d = os.path.join(*((d,)+subdirs))
     try:

@@ -1,6 +1,6 @@
 #Copyright ReportLab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history www.reportlab.co.uk/rl-cgi/viewcvs.cgi/rlextra/pageCatcher/pdfexplorer.py
+#history www.reportlab.co.uk/rl-cgi/viewcvs.cgi/reportPackages.rlextra/pageCatcher/pdfexplorer.py
 """Tool to make it easy to split pages and extract text.
 
 This is intended to become a PageCatcher PlugIn, once we have
@@ -35,11 +35,11 @@ import re
 
 import reportlab.pdfgen.canvas
 from reportlab.pdfbase.pdfdoc import xObjectName
-from rlextra.pageCatcher.pageCatcher import PDFParseContext, storeFormsInMemory, \
+from reportPackages.rlextra.pageCatcher.pageCatcher import PDFParseContext, storeFormsInMemory, \
      restoreFormsInMemory
 from reportlab.lib.utils import isBytes, open_and_read
 
-from rlextra.pageCatcher.dumpFields import pythonize, FieldTypeExpander
+from reportPackages.rlextra.pageCatcher.dumpFields import pythonize, FieldTypeExpander
 def testPattern(pat, good, bad):
     for sample in good:
         assert pat.match(sample) is not None, 'should have matched %s' % sample
@@ -222,7 +222,7 @@ class PdfExplorer(PageCatcherPlugIn):
 
     def _getXobjectText(self, xob):
         "Extract its text, including recursing into any of its own resources"
-        from rlextra.pageCatcher.pdparse import PdfTextExtractor
+        from reportPackages.rlextra.pageCatcher.pdparse import PdfTextExtractor
         xtrac = PdfTextExtractor()
         texts = []
         texts.append(xtrac.extractText(xob.content))

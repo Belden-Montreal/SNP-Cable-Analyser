@@ -1,6 +1,6 @@
-#Copyright ReportLab Europe Ltd. 2000-2017
+#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/lib/styles.py
+#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/lib/styles.py
 __version__='3.3.0'
 __doc__='''Classes for ParagraphStyle and similar things.
 
@@ -22,10 +22,10 @@ __all__=(
         'StyleSheet1',
         'getSampleStyleSheet',
         )
-from reportlab.lib.colors import white, black
-from reportlab.lib.enums import TA_LEFT, TA_CENTER
-from reportlab.lib.fonts import tt2ps
-from reportlab.rl_config import canvas_basefontname as _baseFontName, \
+from reportPackages.reportlab.lib.colors import white, black
+from reportPackages.reportlab.lib.enums import TA_LEFT, TA_CENTER
+from reportPackages.reportlab.lib.fonts import tt2ps
+from reportPackages.reportlab.rl_config import canvas_basefontname as _baseFontName, \
                                 underlineWidth as _baseUnderlineWidth, \
                                 underlineOffset as _baseUnderlineOffset, \
                                 underlineGap as _baseUnderlineGap, \

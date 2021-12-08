@@ -1,6 +1,6 @@
-#Copyright ReportLab Europe Ltd. 2000-2017
+#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/graphics/charts/doughnut.py
+#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/graphics/charts/doughnut.py
 # doughnut chart
 
 __version__='3.3.0'
@@ -13,8 +13,8 @@ Can handle multiple series (which produce concentric 'rings' in the chart).
 
 import copy
 from math import sin, cos, pi
-from reportlab.lib import colors
-from reportlab.lib.validators import isColor, isNumber, isListOfNumbersOrNone,\
+from reportPackages.reportlab.lib import colors
+from reportPackages.reportlab.lib.validators import isColor, isNumber, isListOfNumbersOrNone,\
                                     isListOfNumbers, isColorOrNone, isString,\
                                     isListOfStringsOrNone, OneOf, SequenceOf,\
                                     isBoolean, isListOfColors,\
@@ -22,14 +22,14 @@ from reportlab.lib.validators import isColor, isNumber, isListOfNumbersOrNone,\
                                     isNoneOrListOfNoneOrNumbers,\
                                     isNumberOrNone, isListOfNoneOrNumber,\
                                     isListOfListOfNoneOrNumber, EitherOr
-from reportlab.lib.attrmap import *
-from reportlab.pdfgen.canvas import Canvas
-from reportlab.graphics.shapes import Group, Drawing, Line, Rect, Polygon, Ellipse, \
+from reportPackages.reportlab.lib.attrmap import *
+from reportPackages.reportlab.pdfgen.canvas import Canvas
+from reportPackages.reportlab.graphics.shapes import Group, Drawing, Line, Rect, Polygon, Ellipse, \
     Wedge, String, SolidShape, UserNode, STATE_DEFAULTS
-from reportlab.graphics.widgetbase import Widget, TypedPropertyCollection, PropHolder
-from reportlab.graphics.charts.piecharts import AbstractPieChart, WedgeProperties, _addWedgeLabel, fixLabelOverlaps
-from reportlab.graphics.charts.textlabels import Label
-from reportlab.graphics.widgets.markers import Marker
+from reportPackages.reportlab.graphics.widgetbase import Widget, TypedPropertyCollection, PropHolder
+from reportPackages.reportlab.graphics.charts.piecharts import AbstractPieChart, WedgeProperties, _addWedgeLabel, fixLabelOverlaps
+from reportPackages.reportlab.graphics.charts.textlabels import Label
+from reportPackages.reportlab.graphics.widgets.markers import Marker
 from functools import reduce
 
 class SectorProperties(WedgeProperties):
@@ -468,7 +468,7 @@ def sample4():
 
 if __name__=='__main__':
 
-    from reportlab.graphics.renderPDF import drawToFile
+    from reportPackages.reportlab.graphics.renderPDF import drawToFile
     d = sample1()
     drawToFile(d, 'doughnut1.pdf')
     d = sample2()

@@ -10,16 +10,16 @@
 #                 \_rl_accel.pyd
 #                 \sgmlop.pyd
 # 
-# 2) rlextra\radxml\pyRXP.pyd
+# 2) reportPackages.rlextra\radxml\pyRXP.pyd
 # 
-# The original rml2pdf.py script is wrapped by rlextra\rml2pdf\exemain.py;
+# The original rml2pdf.py script is wrapped by reportPackages.rlextra\rml2pdf\exemain.py;
 # the main intention of the wrapper is to allow for some primitive
 # debugging and also stuff to force the path into a controlled state and
 # therefore avoid clashing with existing python installations.
 # 
 # To make an exe try the following
 # 
-# cd \python\rlextra\rml2pdf
+# cd \python\reportPackages.rlextra\rml2pdf
 # 
 # do_freeze.py -clean
 # 
@@ -73,7 +73,7 @@ if __name__ == '__main__': #NO RUN TESTS
 	letter = getFlag('-letter')
 	if letter:
 		rl_config.defaultPageSize = pagesizes.letter
-	from rlextra.rml2pdf import rml2pdf
+	from reportPackages.rlextra.rml2pdf import rml2pdf
 	version = rml2pdf.version
 	def Usage(msg=None,e=0):
 		if msg:
@@ -136,7 +136,7 @@ if __name__ == '__main__': #NO RUN TESTS
 	if showImport:
 		try_import('PIL')
 		try_import('reportlab.lib._rl_accel')
-		try_import('rlextra.radxml.pyRXP')
+		try_import('reportPackages.rlextra.radxml.pyRXP')
 	if verbose or showVersion:
 		print('rml2pdf version %s' % version)
 	FN=sys.argv[1:]

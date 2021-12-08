@@ -1,10 +1,10 @@
-#copyright ReportLab Europe Limited. 2000-2016
+#copyright reportPackages.reportlab Europe Limited. 2000-2016
 #see license.txt for license details
 __version__='3.3.0'
 '''Sample drawing for testing the guieditor'''
-from reportlab.graphics.shapes import Drawing
-from reportlab.graphics.charts.barcharts import HorizontalBarChart, dataSample5
-from reportlab.lib import colors
+from reportPackages.reportlab.graphics.shapes import Drawing
+from reportPackages.reportlab.graphics.charts.barcharts import HorizontalBarChart, dataSample5
+from reportPackages.reportlab.lib import colors
 class SampleH5c4(Drawing):
 	"Simple bar chart with absolute spacing."
 

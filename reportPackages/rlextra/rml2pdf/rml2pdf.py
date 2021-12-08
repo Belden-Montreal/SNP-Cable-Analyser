@@ -2,7 +2,7 @@ def __bootstrap():
     import sys, zlib, marshal
     from reportlab.lib.rl_accel import asciiBase85Decode
     from reportlab.lib.utils import rl_exec
-    mname = 'rlextra.rml2pdf.rml2pdf_%d%d%s' % (sys.version_info[:2]+('c' if not sys.flags.optimize else 'o',))
+    mname = 'reportPackages.rlextra.rml2pdf.rml2pdf_%d%d%s' % (sys.version_info[:2]+('c' if not sys.flags.optimize else 'o',))
     print(mname)
     m = {}
     rl_exec('import %s as m' % mname, m)

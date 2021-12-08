@@ -1048,7 +1048,7 @@ class RL_Codecs:
     @staticmethod
     def _rl_codecs(name):
         name = name.lower()
-        from reportlab.pdfbase.pdfmetrics import standardEncodings
+        from reportPackages.reportlab.pdfbase.pdfmetrics import standardEncodings
         for e in standardEncodings+('ExtPdfdocEncoding',):
             e = e[:-8].lower()
             if name.startswith(e): return RL_Codecs.__rl_codecs(e)

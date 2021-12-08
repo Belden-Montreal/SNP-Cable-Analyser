@@ -794,7 +794,7 @@ def simpleJustifyAlign(line, currentLength, maxLength):
 
 from reportlab.lib.colors import black
 
-from rlextra.rml2pdf import rml2pdf
+from reportPackages.rlextra.rml2pdf import rml2pdf
 
 class StyleAttributeConverters:
     fontSize=[rml2pdf.readLength]
@@ -1603,7 +1603,7 @@ class EvalStringObject:
         self.context = context
         self.extra = extra
     def getOp(self, tuple, engine):
-        from rlextra.rml2pdf.rml2pdf import Controller
+        from reportPackages.rlextra.rml2pdf.rml2pdf import Controller
         #print "tuple", tuple
         op = self.op = Controller.processTuple(tuple, self.context, {})
         return op
@@ -1690,7 +1690,7 @@ class PageNumberObject:
         textobject.textOut(str(n))
 
 ### this should be moved into rml2pdf
-from rlextra.rml2pdf.rml2pdf import MapNode, Controller # may not need to use superclass?
+from reportPackages.rlextra.rml2pdf.rml2pdf import MapNode, Controller # may not need to use superclass?
 
 class paraMapper(MapNode):
     #stylename = "para.defaultStyle"
@@ -1888,7 +1888,7 @@ def Paragraph(text, style, bulletText=None, frags=None):
 ##            print "::: COMPILING TEXT :::"
 ##            print text
 ##            print ":::"
-##        from rlextra.radxml import rparsexml
+##        from reportPackages.rlextra.radxml import rparsexml
 ##        parsedpara = rparsexml.parsexmlSimple(text)
 ##        if debug:
 ##            print "=== compiles to"

@@ -2,7 +2,7 @@
 #see license.txt for license details
 __version__='3.3.0'
 from zlib import compress, decompress
-from rlextra.utils.rc4 import RC4
+from reportPackages.rlextra.utils.rc4 import RC4
 from reportlab.pdfbase.pdfutils import _wrap, _AsciiHexEncode, _AsciiHexDecode
 from reportlab.lib.rl_accel import asciiBase85Encode, asciiBase85Decode
 import time

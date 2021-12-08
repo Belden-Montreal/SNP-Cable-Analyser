@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 import datetime
 
-from rlextra.thirdparty import xlrd
+from reportPackages.rlextra.thirdparty import xlrd
 
 def xlCellSpecToCoord(cs):
     """
@@ -60,7 +60,7 @@ def extract(fileName, sheetName,
     formats.  It tries to be modern and return Python booleans
     and dates.
     """
-    from rlextra.thirdparty.xlrd.biffh import \
+    from reportPackages.rlextra.thirdparty.xlrd.biffh import \
          XL_CELL_EMPTY, XL_CELL_DATE#, XL_CELL_TEXT, XL_CELL_NUMBER, XL_CELL_BOOLEAN, XL_CELL_ERROR
 
     if rangeName is not None:

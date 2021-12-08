@@ -6,8 +6,8 @@ if __name__=='__main__': #no run tests
 		import Installer
 		INSTALLER_DIR=os.path.dirname(Installer.__file__)
 	except:
-		import rlextra
-		INSTALLER_DIR=os.path.join(os.path.dirname(rlextra.__file__),'distro\\tools\\Installer')
+		import reportPackages.rlextra
+		INSTALLER_DIR=os.path.join(os.path.dirname(reportPackages.rlextra.__file__),'distro\\tools\\Installer')
 
 	BUILD_DIR='build_freeze'
 	NAME='rml2pdf'

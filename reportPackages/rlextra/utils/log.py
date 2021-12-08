@@ -16,7 +16,7 @@ LOGDIR = getattr(sys,'_LOGDIR','../logs')
 LOGFN = SCRIPT = LOGPATH = now = currentid = None
 def _logStart(script=None,dir=LOGDIR,fn=None):
 	global LOGDIR, LOGFN, SCRIPT, LOGPATH, LOGGLOB, now, currentid
-	from rlextra.utils.cgisupport import BorgTimeStamp
+	from reportPackages.rlextra.utils.cgisupport import BorgTimeStamp
 	cds = BorgTimeStamp()
 	cds, currentid = cds.currentDateString, cds.currentId
 
@@ -136,7 +136,7 @@ resetThisProcessEntryLog()
 
 def _tb2html(tbt,tbv,tb):
 	if sys.hexversion<0x2020000:
-		from rlextra.utils.cgisupport import quoteValue
+		from reportPackages.rlextra.utils.cgisupport import quoteValue
 		import traceback
 		html = quoteValue('\n'.join(traceback.format_tb(tb) + ['%s: %s' % (str(tbt),str(tbv))]))
 	else:

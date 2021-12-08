@@ -1,6 +1,6 @@
-#Copyright ReportLab Europe Ltd. 2000-2017
+#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/platypus/doctemplate.py
+#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/platypus/doctemplate.py
 __all__ = (
         'ActionFlowable',
         'BaseDocTemplate',
@@ -46,15 +46,15 @@ the page template for the next page (which by default is the one being used
 for the current frame).
 """
 
-from reportlab.platypus.flowables import *
-from reportlab.platypus.flowables import _ContainerSpace
-from reportlab.lib.units import inch
-from reportlab.platypus.paragraph import Paragraph
-from reportlab.platypus.frames import Frame
-from reportlab.rl_config import defaultPageSize, verbose
-import reportlab.lib.sequencer
-from reportlab.pdfgen import canvas
-from reportlab.lib.utils import isSeq, encode_label, decode_label, annotateException, strTypes
+from reportPackages.reportlab.platypus.flowables import *
+from reportPackages.reportlab.platypus.flowables import _ContainerSpace
+from reportPackages.reportlab.lib.units import inch
+from reportPackages.reportlab.platypus.paragraph import Paragraph
+from reportPackages.reportlab.platypus.frames import Frame
+from reportPackages.reportlab.rl_config import defaultPageSize, verbose
+import reportPackages.reportlab.lib.sequencer
+from reportPackages.reportlab.pdfgen import canvas
+from reportPackages.reportlab.lib.utils import isSeq, encode_label, decode_label, annotateException, strTypes
 
 try:
     set
@@ -63,7 +63,7 @@ except NameError:
 
 import sys
 import logging
-logger = logging.getLogger("reportlab.platypus")
+logger = logging.getLogger("reportPackages.reportlab.platypus")
 
 class LayoutError(Exception):
     pass
@@ -226,7 +226,7 @@ PageBegin = LCActionFlowable('pageBegin')
 
 def _evalMeasurement(n):
     if isinstance(n,str):
-        from reportlab.platypus.paraparser import _num
+        from reportPackages.reportlab.platypus.paraparser import _num
         n = _num(n)
         if isSeq(n): n = n[1]
     return n
@@ -456,7 +456,7 @@ class BaseDocTemplate:
       a chapter and two more for the interior of a chapter on odd and even pages.
       If this argument is omitted then at least one pageTemplate should be provided
       using the addPageTemplates method before the document is built.
-    - pageSize: a 2-tuple or a size constant from reportlab/lib/pagesizes.pu.
+    - pageSize: a 2-tuple or a size constant from reportPackages.reportlab/lib/pagesizes.pu.
       Used by the SimpleDocTemplate subclass which does NOT accept a list of
       pageTemplates but makes one for you; ignored when using pageTemplates.
 
@@ -984,7 +984,7 @@ class BaseDocTemplate:
         in the build process.
         '''
         #each distinct pass gets a sequencer
-        self.seq = reportlab.lib.sequencer.Sequencer()
+        self.seq = reportPackages.reportlab.lib.sequencer.Sequencer()
         canv = canvasmaker(filename or self.filename,
                             pagesize=self.pagesize,
                             invariant=self.invariant,
@@ -1009,7 +1009,7 @@ class BaseDocTemplate:
         canv.setCreator(self.creator)
         canv.setProducer(self.producer)
         canv.setKeywords(self.keywords)
-        from reportlab.pdfbase.pdfdoc import (
+        from reportPackages.reportlab.pdfbase.pdfdoc import (
                 ViewerPreferencesPDFDictionary as VPD, checkPDFBoolean as cPDFB,
                 )
         for k,vf in VPD.validate.items():
@@ -1350,9 +1350,9 @@ def progressCB(typ, value):
     print('PROGRESS MONITOR:  %-10s   %d' % (typ, value))
 
 if __name__ == '__main__':
-    from reportlab.lib.styles import _baseFontName, _baseFontNameB
+    from reportPackages.reportlab.lib.styles import _baseFontName, _baseFontNameB
     def myFirstPage(canvas, doc):
-        from reportlab.lib.colors import red
+        from reportPackages.reportlab.lib.colors import red
         PAGE_HEIGHT = canvas._pagesize[1]
         canvas.saveState()
         canvas.setStrokeColor(red)
@@ -1365,7 +1365,7 @@ if __name__ == '__main__':
         canvas.restoreState()
 
     def myLaterPages(canvas, doc):
-        from reportlab.lib.colors import red
+        from reportPackages.reportlab.lib.colors import red
         PAGE_HEIGHT = canvas._pagesize[1]
         canvas.saveState()
         canvas.setStrokeColor(red)
@@ -1377,15 +1377,15 @@ if __name__ == '__main__':
 
     def run():
         objects_to_draw = []
-        from reportlab.lib.styles import ParagraphStyle
+        from reportPackages.reportlab.lib.styles import ParagraphStyle
         #from paragraph import Paragraph
-        from reportlab.platypus.doctemplate import SimpleDocTemplate
+        from reportPackages.reportlab.platypus.doctemplate import SimpleDocTemplate
 
         #need a style
         normal = ParagraphStyle('normal')
         normal.firstLineIndent = 18
         normal.spaceBefore = 6
-        from reportlab.lib.randomtext import randomText
+        from reportPackages.reportlab.lib.randomtext import randomText
         import random
         for i in range(15):
             height = 0.5 + (2*random.random())

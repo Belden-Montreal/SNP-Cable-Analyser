@@ -1,4 +1,4 @@
-#Copyright ReportLab Europe Ltd. 2000-2017
+#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
 #see license.txt for license details
 __version__='3.3.0'
 __doc__="""Collection of axes for charts.
@@ -32,19 +32,19 @@ the former axes in its own coordinate system.
 """
 
 from math import log10 as math_log10
-from reportlab.lib.validators import    isNumber, isNumberOrNone, isListOfStringsOrNone, isListOfNumbers, \
+from reportPackages.reportlab.lib.validators import    isNumber, isNumberOrNone, isListOfStringsOrNone, isListOfNumbers, \
                                         isListOfNumbersOrNone, isColorOrNone, OneOf, isBoolean, SequenceOf, \
                                         isString, EitherOr, Validator, NoneOr, isInstanceOf, \
                                         isNormalDate, isNoneOrCallable
-from reportlab.lib.attrmap import *
-from reportlab.lib import normalDate
-from reportlab.graphics.shapes import Drawing, Line, PolyLine, Rect, Group, STATE_DEFAULTS, _textBoxLimits, _rotatedBoxLimits
-from reportlab.graphics.widgetbase import Widget, TypedPropertyCollection
-from reportlab.graphics.charts.textlabels import Label, PMVLabel, XLabel,  DirectDrawFlowable
-from reportlab.graphics.charts.utils import nextRoundNumber
-from reportlab.graphics.widgets.grids import ShadedRect
-from reportlab.lib.colors import Color
-from reportlab.lib.utils import isSeq
+from reportPackages.reportlab.lib.attrmap import *
+from reportPackages.reportlab.lib import normalDate
+from reportPackages.reportlab.graphics.shapes import Drawing, Line, PolyLine, Rect, Group, STATE_DEFAULTS, _textBoxLimits, _rotatedBoxLimits
+from reportPackages.reportlab.graphics.widgetbase import Widget, TypedPropertyCollection
+from reportPackages.reportlab.graphics.charts.textlabels import Label, PMVLabel, XLabel,  DirectDrawFlowable
+from reportPackages.reportlab.graphics.charts.utils import nextRoundNumber
+from reportPackages.reportlab.graphics.widgets.grids import ShadedRect
+from reportPackages.reportlab.lib.colors import Color
+from reportPackages.reportlab.lib.utils import isSeq
 import copy
 try:
     reduce  # Python 2.x
@@ -2056,7 +2056,7 @@ class AdjYValueAxis(YValueAxis):
     def _rangeAdjust(self):
         "Adjusts the value range of the axis."
 
-        from reportlab.graphics.charts.utils import find_good_grid, ticks
+        from reportPackages.reportlab.graphics.charts.utils import find_good_grid, ticks
         y_min, y_max = self._valueMin, self._valueMax
         m = self.maximumTicks
         n = list(filter(lambda x,m=m: x<=m,[4,5,6,7,8,9]))

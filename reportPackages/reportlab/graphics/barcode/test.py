@@ -2,29 +2,29 @@
 
 import os, sys, time
 
-from reportlab import Version as __RL_Version__
-from reportlab.graphics.barcode.common import *
-from reportlab.graphics.barcode.code39 import *
-from reportlab.graphics.barcode.code93 import *
-from reportlab.graphics.barcode.code128 import *
-from reportlab.graphics.barcode.usps import *
-from reportlab.graphics.barcode.usps4s import USPS_4State
-from reportlab.graphics.barcode.qr import QrCodeWidget
-from reportlab.graphics.barcode.dmtx import DataMatrixWidget, pylibdmtx
+from reportPackages.reportlab import Version as __RL_Version__
+from reportPackages.reportlab.graphics.barcode.common import *
+from reportPackages.reportlab.graphics.barcode.code39 import *
+from reportPackages.reportlab.graphics.barcode.code93 import *
+from reportPackages.reportlab.graphics.barcode.code128 import *
+from reportPackages.reportlab.graphics.barcode.usps import *
+from reportPackages.reportlab.graphics.barcode.usps4s import USPS_4State
+from reportPackages.reportlab.graphics.barcode.qr import QrCodeWidget
+from reportPackages.reportlab.graphics.barcode.dmtx import DataMatrixWidget, pylibdmtx
 
 
-from reportlab.platypus import Spacer, SimpleDocTemplate, Table, TableStyle, Preformatted, PageBreak
-from reportlab.lib.units import inch, cm
-from reportlab.lib import colors
+from reportPackages.reportlab.platypus import Spacer, SimpleDocTemplate, Table, TableStyle, Preformatted, PageBreak
+from reportPackages.reportlab.lib.units import inch, cm
+from reportPackages.reportlab.lib import colors
 
-from reportlab.pdfgen.canvas import Canvas
-from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.platypus.paragraph import Paragraph
-from reportlab.platypus.frames import Frame
-from reportlab.platypus.flowables import XBox, KeepTogether
-from reportlab.graphics.shapes import Drawing, Rect, Line
+from reportPackages.reportlab.pdfgen.canvas import Canvas
+from reportPackages.reportlab.lib.styles import getSampleStyleSheet
+from reportPackages.reportlab.platypus.paragraph import Paragraph
+from reportPackages.reportlab.platypus.frames import Frame
+from reportPackages.reportlab.platypus.flowables import XBox, KeepTogether
+from reportPackages.reportlab.graphics.shapes import Drawing, Rect, Line
 
-from reportlab.graphics.barcode import getCodes, getCodeNames, createBarcodeDrawing, createBarcodeImageInMemory
+from reportPackages.reportlab.graphics.barcode import getCodes, getCodeNames, createBarcodeDrawing, createBarcodeImageInMemory
 def run():
     styles = getSampleStyleSheet()
     styleN = styles['Normal']
@@ -72,7 +72,7 @@ def run():
     storyAdd(Paragraph('USPS 4 State', styleN))
     storyAdd(USPS_4State('01234567094987654321','01234567891'))
 
-    from reportlab.graphics.barcode import createBarcodeDrawing
+    from reportPackages.reportlab.graphics.barcode import createBarcodeDrawing
 
     storyAdd(Paragraph('EAN13', styleN))
     storyAdd(createBarcodeDrawing('EAN13', value='123456789012'))
@@ -176,18 +176,18 @@ def fullTest(fileName="test_full.pdf"):
     styleH2 = styles['Heading2']
     story = []
 
-    story.append(Paragraph('ReportLab %s Barcode Test Suite - full output' % __RL_Version__,styleH))
+    story.append(Paragraph('reportPackages.reportlab %s Barcode Test Suite - full output' % __RL_Version__,styleH))
     story.append(Paragraph('Generated at %s' % time.ctime(time.time()), styleN))
 
     story.append(Paragraph('About this document', styleH2))
     story.append(Paragraph('History and Status', styleH2))
 
     story.append(Paragraph("""
-        This is the test suite and docoumentation for the ReportLab open source barcode API.
+        This is the test suite and docoumentation for the reportPackages.reportlab open source barcode API.
         """, styleN))
 
     story.append(Paragraph("""
-        Several years ago Ty Sarna contributed a barcode module to the ReportLab community.
+        Several years ago Ty Sarna contributed a barcode module to the reportPackages.reportlab community.
         Several of the codes were used by him in hiw work and to the best of our knowledge
         this was correct.  These were written as flowable objects and were available in PDFs,
         but not in our graphics framework.  However, we had no knowledge of barcodes ourselves
@@ -233,7 +233,7 @@ def fullTest(fileName="test_full.pdf"):
         """, styleN))
 
     codeNames = getCodeNames()
-    from reportlab.lib.utils import flatten
+    from reportPackages.reportlab.lib.utils import flatten
     width = [float(x[8:]) for x in sys.argv if x.startswith('--width=')]
     height = [float(x[9:]) for x in sys.argv if x.startswith('--height=')]
     isoScale = [int(x[11:]) for x in sys.argv if x.startswith('--isoscale=')]

@@ -30,9 +30,9 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-from reportlab.platypus.flowables import Flowable
-from reportlab.lib.units import inch
-from reportlab.lib.utils import ascii_uppercase, ascii_lowercase
+from reportPackages.reportlab.platypus.flowables import Flowable
+from reportPackages.reportlab.lib.units import inch
+from reportPackages.reportlab.lib.utils import ascii_uppercase, ascii_lowercase
 from string import digits as string_digits
 
 class Barcode(Flowable,object):
@@ -149,7 +149,7 @@ class Barcode(Flowable,object):
     def drawHumanReadable(self):
         if self.humanReadable:
             #we have text
-            from reportlab.pdfbase.pdfmetrics import getAscent, stringWidth
+            from reportPackages.reportlab.pdfbase.pdfmetrics import getAscent, stringWidth
             s = str(self._humanText())
             fontSize = self.fontSize
             fontName = self.fontName

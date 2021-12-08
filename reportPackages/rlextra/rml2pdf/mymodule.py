@@ -140,7 +140,7 @@ def symbols(canv,data):
 
     from reportlab.graphics.shapes import Drawing
     from reportlab.graphics.widgets.markers import makeMarker
-    from rlextra.rml2pdf.rml2pdf import readLengthOrNone
+    from reportPackages.rlextra.rml2pdf.rml2pdf import readLengthOrNone
 
     name = params['name']
     n = int(params['n'])

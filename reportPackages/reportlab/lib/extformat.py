@@ -1,4 +1,4 @@
-#Copyright ReportLab Europe Ltd. 2000-2017
+#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
 #see license.txt for license details
 __version__='3.3.0'
 __doc__='''Apparently not used anywhere, purpose unknown!'''
@@ -61,7 +61,7 @@ def magicformat(format):
 	return dictformat(format,frame.f_locals, frame.f_globals)
 
 if __name__=='__main__':
-	from reportlab.lib.formatters import DecimalFormatter
+	from reportPackages.reportlab.lib.formatters import DecimalFormatter
 	_DF={}
 	def df(n,dp=2,ds='.',ts=','):
 		try:
@@ -70,7 +70,7 @@ if __name__=='__main__':
 			_df = _DF[dp,ds] = DecimalFormatter(places=dp,decimalSep=ds,thousandSep=ts)
 		return _df(n)
 
-	from reportlab.lib.extformat import magicformat
+	from reportPackages.reportlab.lib.extformat import magicformat
 
 	Z={'abc': ('ab','c')}
 	x = 300000.23

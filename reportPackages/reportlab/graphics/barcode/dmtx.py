@@ -6,14 +6,14 @@ except ImportError:
 else:
     __all__=('DataMatrix',)
 
-from reportlab.graphics.barcode.common import Barcode
-from reportlab.lib.utils import asBytes
-from reportlab.platypus.paraparser import _num as paraparser_num
-from reportlab.graphics.widgetbase import Widget
-from reportlab.lib.validators import isColor, isString, isColorOrNone, isNumber, isBoxAnchor
-from reportlab.lib.attrmap import AttrMap, AttrMapValue
-from reportlab.lib.colors import toColor
-from reportlab.graphics.shapes import Group, Rect
+from reportPackages.reportlab.graphics.barcode.common import Barcode
+from reportPackages.reportlab.lib.utils import asBytes
+from reportPackages.reportlab.platypus.paraparser import _num as paraparser_num
+from reportPackages.reportlab.graphics.widgetbase import Widget
+from reportPackages.reportlab.lib.validators import isColor, isString, isColorOrNone, isNumber, isBoxAnchor
+from reportPackages.reportlab.lib.attrmap import AttrMap, AttrMapValue
+from reportPackages.reportlab.lib.colors import toColor
+from reportPackages.reportlab.graphics.shapes import Group, Rect
 
 def _numConv(x):
     return x if isinstance(x,(int,float)) else paraparser_num(x)
