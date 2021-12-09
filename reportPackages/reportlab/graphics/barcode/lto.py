@@ -1,11 +1,11 @@
 # (c) 2008 Jerome Alet - <alet@librelogiciel.com>
-# Licensing terms : reportPackages.reportlab's license.
+# Licensing terms : ReportLab's license.
 
-from reportPackages.reportlab.graphics.barcode.code39 import Standard39
-from reportPackages.reportlab.lib import colors
-from reportPackages.reportlab.lib.units import cm
+from reportlab.graphics.barcode.code39 import Standard39
+from reportlab.lib import colors
+from reportlab.lib.units import cm
 from string import digits as string_digits
-from reportPackages.reportlab.lib.utils import ascii_uppercase
+from reportlab.lib.utils import ascii_uppercase
 
 class BaseLTOLabel(Standard39) :
     """
@@ -157,8 +157,8 @@ class VerticalLTOLabel(BaseLTOLabel) :
 
 def test() :
     """Test this."""
-    from reportPackages.reportlab.pdfgen.canvas import Canvas
-    from reportPackages.reportlab.lib import pagesizes
+    from reportlab.pdfgen.canvas import Canvas
+    from reportlab.lib import pagesizes
 
     canvas = Canvas("labels.pdf", pagesize=pagesizes.A4)
     canvas.setFont("Helvetica", 30)

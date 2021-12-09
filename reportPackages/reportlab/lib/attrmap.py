@@ -1,13 +1,13 @@
-#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
+#Copyright ReportLab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/lib/attrmap.py
+#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/lib/attrmap.py
 __version__='3.3.0'
 __doc__='''Framework for objects whose assignments are checked. Used by graphics.
 
-We developed reportPackages.reportlab/graphics prior to Python 2 and metaclasses. For the
+We developed reportlab/graphics prior to Python 2 and metaclasses. For the
 graphics, we wanted to be able to declare the attributes of a class, check
 them on assignment, and convert from string arguments.  Examples of
-attrmap-based objects can be found in reportPackages.reportlab/graphics/shapes.  It lets
+attrmap-based objects can be found in reportlab/graphics/shapes.  It lets
 us defined structures like the one below, which are seen more modern form in
 Django models and other frameworks.
 
@@ -28,9 +28,9 @@ class Rect(SolidShape):
 
 
 '''
-from reportPackages.reportlab.lib.validators import isAnything, DerivedValue
-from reportPackages.reportlab.lib.utils import isSeq
-from reportPackages.reportlab import rl_config
+from reportlab.lib.validators import isAnything, DerivedValue
+from reportlab.lib.utils import isSeq
+from reportlab import rl_config
 
 class CallableValue:
     '''a class to allow callable initial values'''

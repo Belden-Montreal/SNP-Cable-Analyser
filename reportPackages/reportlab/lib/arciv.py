@@ -1,11 +1,11 @@
-#copyright reportPackages.reportlab Europe Limited. 2000-2016
+#copyright ReportLab Europe Limited. 2000-2016
 #see license.txt for license details
 '''
 Arciv Stream  ciphering
 '''
 __all__='''ArcIV encode decode'''.split()
 __version__="1.0"
-from reportPackages.reportlab.lib.utils import isUnicode
+from reportlab.lib.utils import isUnicode
 class ArcIV:
 	'''
 	performs 'ArcIV' Stream Encryption of S using key

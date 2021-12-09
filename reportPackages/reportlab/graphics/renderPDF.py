@@ -1,6 +1,6 @@
-#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
+#Copyright ReportLab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/graphics/renderPDF.py
+#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/graphics/renderPDF.py
 # renderPDF - draws Drawings onto a canvas
 
 __version__='3.3.0'
@@ -15,12 +15,12 @@ Execute the script to see some test drawings.
 changed
 """
 
-from reportPackages.reportlab.graphics.shapes import *
-from reportPackages.reportlab.pdfgen.canvas import Canvas
-from reportPackages.reportlab.pdfbase.pdfmetrics import stringWidth
-from reportPackages.reportlab.lib.utils import getBytesIO
-from reportPackages.reportlab import rl_config
-from reportPackages.reportlab.graphics.renderbase import Renderer, StateTracker, getStateDelta, renderScaledDrawing, STATE_DEFAULTS
+from reportlab.graphics.shapes import *
+from reportlab.pdfgen.canvas import Canvas
+from reportlab.pdfbase.pdfmetrics import stringWidth
+from reportlab.lib.utils import getBytesIO
+from reportlab import rl_config
+from reportlab.graphics.renderbase import Renderer, StateTracker, getStateDelta, renderScaledDrawing, STATE_DEFAULTS
 
 # the main entry point for users...
 def draw(drawing, canvas, x, y, showBoundary=rl_config._unset_):
@@ -176,7 +176,7 @@ class _PDFRenderer(Renderer):
             self._canvas.drawString(x, y, text, mode=textRenderMode or None)
 
     def drawPath(self, path):
-        from reportPackages.reportlab.graphics.shapes import _renderPath
+        from reportlab.graphics.shapes import _renderPath
         pdfPath = self._canvas.beginPath()
         drawFuncs = (pdfPath.moveTo, pdfPath.lineTo, pdfPath.curveTo, pdfPath.close)
         autoclose = getattr(path,'autoclose','')
@@ -271,7 +271,7 @@ class _PDFRenderer(Renderer):
             elif key=='fillMode':
                 self._canvas._fillMode = value
 
-from reportPackages.reportlab.platypus import Flowable
+from reportlab.platypus import Flowable
 class GraphicsFlowable(Flowable):
     """Flowable wrapper around a Pingo drawing"""
     def __init__(self, drawing):
@@ -333,8 +333,8 @@ def drawToString(d, msg="", showBoundary=rl_config._unset_,autoSize=1,canvasKwds
 #
 #########################################################
 def test(outDir='pdfout',shout=False):
-    from reportPackages.reportlab.graphics.shapes import _baseGFontName, _baseGFontNameBI
-    from reportPackages.reportlab.rl_config import verbose
+    from reportlab.graphics.shapes import _baseGFontName, _baseGFontNameBI
+    from reportlab.rl_config import verbose
     import os
     if not os.path.isdir(outDir):
         os.mkdir(outDir)
@@ -347,7 +347,7 @@ def test(outDir='pdfout',shout=False):
     # file
 
     #grab all drawings from the test module
-    from reportPackages.reportlab.graphics import testshapes
+    from reportlab.graphics import testshapes
     drawings = []
     for funcname in dir(testshapes):
         if funcname[0:10] == 'getDrawing':

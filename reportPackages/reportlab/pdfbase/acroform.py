@@ -1,11 +1,11 @@
 __all__=('AcroForm',)
-from reportPackages.reportlab.pdfbase.pdfdoc import (PDFObject, PDFArray, PDFDictionary, PDFString, pdfdocEnc,
+from reportlab.pdfbase.pdfdoc import (PDFObject, PDFArray, PDFDictionary, PDFString, pdfdocEnc,
                                     PDFName, PDFStream, PDFStreamFilterZCompress, escapePDF)
-from reportPackages.reportlab.pdfgen.canvas  import Canvas
-from reportPackages.reportlab.pdfbase.pdfmetrics import stringWidth
-from reportPackages.reportlab.lib.colors import Color, CMYKColor, Whiter, Blacker, opaqueColor
-from reportPackages.reportlab.lib.rl_accel import fp_str
-from reportPackages.reportlab.lib.utils import isStr, asNative
+from reportlab.pdfgen.canvas  import Canvas
+from reportlab.pdfbase.pdfmetrics import stringWidth
+from reportlab.lib.colors import Color, CMYKColor, Whiter, Blacker, opaqueColor
+from reportlab.lib.rl_accel import fp_str
+from reportlab.lib.utils import isStr, asNative
 import weakref
 
 visibilities = dict(

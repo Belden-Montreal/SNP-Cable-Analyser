@@ -30,10 +30,10 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-from reportPackages.reportlab.lib.units import inch
-from reportPackages.reportlab.graphics.barcode.common import Barcode
+from reportlab.lib.units import inch
+from reportlab.graphics.barcode.common import Barcode
 from string import digits as string_digits, whitespace as string_whitespace
-from reportPackages.reportlab.lib.utils import asNative
+from reportlab.lib.utils import asNative
 
 _fim_patterns = {
     'A' : "||  |  ||",

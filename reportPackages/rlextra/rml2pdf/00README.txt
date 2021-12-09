@@ -1,8 +1,8 @@
-#copyright reportPackages.reportlab Inc. 2001-2016
+#copyright ReportLab Inc. 2001-2016
 #see license.txt for license details
 This is an evaluation copy of Report Markup Language.
 
-Report Markup Language is reportPackages.reportlab's easy-to-use
+Report Markup Language is ReportLab's easy-to-use
 enterprise reporting solution.  It consists of:
  - an XML markup language called "Report Markup Language" 
    (RML) which lets you define the precise appearance
@@ -124,7 +124,7 @@ Licensed customers will receive a license file causing the
 message to disappear, as well as other tools and materials
 as part of the package.
 
-For more information go to http://reportPackages.reportlab PLUS/ or
-email info@reportPackages.reportlab.com.
+For more information go to http://ReportLab PLUS/ or
+email info@reportlab.com.
 
 

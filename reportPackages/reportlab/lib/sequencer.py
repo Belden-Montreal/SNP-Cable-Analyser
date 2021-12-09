@@ -1,4 +1,4 @@
-#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
+#Copyright ReportLab Europe Ltd. 2000-2017
 #see license.txt for license details
 __version__='3.3.0'
 __doc__="""A Sequencer class counts things. It aids numbering and formatting lists."""
@@ -255,7 +255,7 @@ def _reset():
     if _sequencer:
         _sequencer._reset()
 
-from reportPackages.reportlab.rl_config import register_reset
+from reportlab.rl_config import register_reset
 register_reset(_reset)
 del register_reset
 

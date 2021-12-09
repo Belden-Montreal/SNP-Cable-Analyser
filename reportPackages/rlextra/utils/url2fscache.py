@@ -1,4 +1,4 @@
-#copyright reportPackages.reportlab Inc. 2000-2016
+#copyright ReportLab Inc. 2000-2016
 __version__='3.3.0'
 __all__=('URL2FSCacheKey','URL2FSCacheValue','URLValue','URL2FSCache',
         )
@@ -17,7 +17,7 @@ except ImportError:
     del urllib2
     
 import os, time, zlib
-from reportPackages.reportlab.lib.utils import pickle
+from reportlab.lib.utils import pickle
 class URL2FSCacheKey(tuple):
     for i,x in enumerate("url".split()):
         exec("%s=property(lambda self: self[%d])" % (x,i))
@@ -130,8 +130,8 @@ class URL2FSCache:
 
 def test():
     u=URL2FSCache('mycache.zpckl')
-    print(u.fetch('http://svn.reportPackages.reportlab.com/testa/a.txt','testa/a.txt'))
-    print(u.fetch('http://svn.reportPackages.reportlab.com/testb/b.txt','testb/b.txt'))
+    print(u.fetch('http://svn.reportlab.com/testa/a.txt','testa/a.txt'))
+    print(u.fetch('http://svn.reportlab.com/testb/b.txt','testb/b.txt'))
     u.writeCache()
 
 if __name__=='__main__':

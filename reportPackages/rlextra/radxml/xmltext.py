@@ -93,7 +93,7 @@ ASSUMPTIONS:
 In the event that tags contain tags indentation conventions are nested.
 
 """
-from reportPackages.reportlab.lib.utils import ascii_letters
+from reportlab.lib.utils import ascii_letters
 import string
 class XMLTextConverter:
     def __init__(self, indent=" "*4):
@@ -320,7 +320,7 @@ class XMLTextConverter:
         xml = "".join(resultlist)
         return xml
     def XML2text(self, xml):
-        from reportPackages.reportlab.lib import rparsexml
+        from reportlab.lib import rparsexml
         xml = textEscape(xml)
         parsedxml = rparsexml.parsexmlSimple(xml)
 ##        from pprint import pprint

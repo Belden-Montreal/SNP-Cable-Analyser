@@ -1,6 +1,6 @@
-#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
+#Copyright ReportLab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/pdfbase/cidfonts.py
+#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/pdfbase/cidfonts.py
 #$Header $
 __version__='3.3.0'
 __doc__="""CID (Asian multi-byte) font support.
@@ -16,15 +16,15 @@ try:
 except ImportError:
     from md5 import md5
 
-import reportPackages.reportlab
-from reportPackages.reportlab.pdfbase import pdfmetrics
-from reportPackages.reportlab.pdfbase._cidfontdata import allowedTypeFaces, allowedEncodings, CIDFontInfo, \
+import reportlab
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase._cidfontdata import allowedTypeFaces, allowedEncodings, CIDFontInfo, \
      defaultUnicodeEncodings, widthsByUnichar
-from reportPackages.reportlab.pdfgen.canvas import Canvas
-from reportPackages.reportlab.pdfbase import pdfdoc
-from reportPackages.reportlab.lib.rl_accel import escapePDF
-from reportPackages.reportlab.rl_config import CMapSearchPath
-from reportPackages.reportlab.lib.utils import isSeq, isBytes
+from reportlab.pdfgen.canvas import Canvas
+from reportlab.pdfbase import pdfdoc
+from reportlab.lib.rl_accel import escapePDF
+from reportlab.rl_config import CMapSearchPath
+from reportlab.lib.utils import isSeq, isBytes
 
 #quick hackery for 2.0 release.  Now we always do unicode, and have built in
 #the CMAP data, any code to load CMap files is not needed.
@@ -76,7 +76,7 @@ class CIDEncoding(pdfmetrics.Encoding):
         self.source = None
         if not DISABLE_CMAP:
             if useCache:
-                from reportPackages.reportlab.lib.utils import get_rl_tempdir
+                from reportlab.lib.utils import get_rl_tempdir
                 fontmapdir = get_rl_tempdir('FastCMAPS')
                 if os.path.isfile(fontmapdir + os.sep + name + '.fastmap'):
                     self.fastLoad(fontmapdir)
@@ -511,7 +511,7 @@ def test():
 
 if __name__=='__main__':
     import doctest
-    from reportPackages.reportlab.pdfbase import cidfonts
+    from reportlab.pdfbase import cidfonts
     doctest.testmod(cidfonts)
     #test()
 

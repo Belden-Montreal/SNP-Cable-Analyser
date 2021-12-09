@@ -1,7 +1,7 @@
-__doc__="""An experimental SVG renderer for the reportPackages.reportlab graphics framework.
+__doc__="""An experimental SVG renderer for the ReportLab graphics framework.
 
-This will create SVG code from the reportPackages.reportlab Graphics API (RLG).
-To read existing SVG code and convert it into reportPackages.reportlab graphics
+This will create SVG code from the ReportLab Graphics API (RLG).
+To read existing SVG code and convert it into ReportLab graphics
 objects download the svglib module here:
 
   http://python.net/~gherman/#svglib
@@ -10,16 +10,16 @@ objects download the svglib module here:
 import math, types, sys, os, codecs, base64
 from operator import getitem
 
-from reportPackages.reportlab.pdfbase.pdfmetrics import stringWidth # for font info
-from reportPackages.reportlab.lib.rl_accel import fp_str
-from reportPackages.reportlab.lib.colors import black
-from reportPackages.reportlab.lib.utils import asNative, getBytesIO
-from reportPackages.reportlab.graphics.renderbase import StateTracker, getStateDelta, Renderer, renderScaledDrawing
-from reportPackages.reportlab.graphics.shapes import STATE_DEFAULTS, Path, UserNode
-from reportPackages.reportlab.graphics.shapes import * # (only for test0)
-from reportPackages.reportlab import rl_config
-from reportPackages.reportlab.lib.utils import getStringIO, RLString, isUnicode, isBytes
-from reportPackages.reportlab.pdfgen.canvas import FILL_EVEN_ODD, FILL_NON_ZERO
+from reportlab.pdfbase.pdfmetrics import stringWidth # for font info
+from reportlab.lib.rl_accel import fp_str
+from reportlab.lib.colors import black
+from reportlab.lib.utils import asNative, getBytesIO
+from reportlab.graphics.renderbase import StateTracker, getStateDelta, Renderer, renderScaledDrawing
+from reportlab.graphics.shapes import STATE_DEFAULTS, Path, UserNode
+from reportlab.graphics.shapes import * # (only for test0)
+from reportlab import rl_config
+from reportlab.lib.utils import getStringIO, RLString, isUnicode, isBytes
+from reportlab.pdfgen.canvas import FILL_EVEN_ODD, FILL_NON_ZERO
 from .renderPM import _getImage
 
 from xml.dom import getDOMImplementation
@@ -856,7 +856,7 @@ class _SVGRenderer(Renderer):
 
     def drawPath(self, path, fillMode=FILL_EVEN_ODD):
         # print "### drawPath", path.points
-        from reportPackages.reportlab.graphics.shapes import _renderPath
+        from reportlab.graphics.shapes import _renderPath
         c = self._canvas
         drawFuncs = (c.moveTo, c.lineTo, c.curveTo, c.closePath)
         if fillMode is None:
@@ -940,7 +940,7 @@ def test(outDir='out-svg'):
     if not os.path.isdir(outDir):
         os.mkdir(outDir)
     #grab all drawings from the test module
-    from reportPackages.reportlab.graphics import testshapes
+    from reportlab.graphics import testshapes
     drawings = []
 
     for funcname in dir(testshapes):
@@ -956,12 +956,12 @@ def test(outDir='out-svg'):
         drawToFile(d, filename)
         i += 1
 
-    from reportPackages.reportlab.graphics.testshapes import getDrawing01
+    from reportlab.graphics.testshapes import getDrawing01
     d = getDrawing01()
     drawToFile(d, os.path.join(outDir,"test.svg"))
 
-    from reportPackages.reportlab.lib.corp import RL_CorpLogo
-    from reportPackages.reportlab.graphics.shapes import Drawing
+    from reportlab.lib.corp import RL_CorpLogo
+    from reportlab.graphics.shapes import Drawing
 
     rl = RL_CorpLogo()
     d = Drawing(rl.width,rl.height)

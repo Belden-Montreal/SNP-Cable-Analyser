@@ -30,9 +30,9 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-from reportPackages.reportlab.lib.units import inch
-from reportPackages.reportlab.lib.utils import asNative
-from reportPackages.reportlab.graphics.barcode.common import Barcode
+from reportlab.lib.units import inch
+from reportlab.lib.utils import asNative
+from reportlab.graphics.barcode.common import Barcode
 from string import digits as string_digits
 
 _patterns = {
@@ -60,7 +60,7 @@ _patterns = {
     '+':    ("bSbsbSbSb", 41),      '%': ("bsbSbSbSb", 42)
     }
 
-from reportPackages.reportlab.lib.utils import ascii_uppercase, ascii_lowercase
+from reportlab.lib.utils import ascii_uppercase, ascii_lowercase
 _stdchrs = string_digits + ascii_uppercase + "-. $/+%"
 
 _extended = {

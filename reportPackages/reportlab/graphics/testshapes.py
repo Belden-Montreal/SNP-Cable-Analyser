@@ -1,7 +1,7 @@
 #!/bin/env python
-#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
+#Copyright ReportLab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/graphics/testshapes.py
+#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/graphics/testshapes.py
 
 # testshapes.py - draws shapes onto a PDF canvas.
 
@@ -10,27 +10,27 @@ __version__ = ''' $Id $ '''
 __doc__='''Execute this script to see some test drawings.
 
 This contains a number of routines to generate test drawings
-for reportPackages.reportlab/graphics.  For now many of them are contrived,
+for reportlab/graphics.  For now many of them are contrived,
 but we will expand them to try and trip up any parser.
 Feel free to add more.
 '''
 
 import os, sys, base64
 
-from reportPackages.reportlab.lib import colors
-from reportPackages.reportlab.lib.units import cm
-from reportPackages.reportlab.lib.utils import asNative, base64_decodebytes
-from reportPackages.reportlab.pdfgen.canvas import Canvas
-from reportPackages.reportlab.pdfbase.pdfmetrics import stringWidth
-from reportPackages.reportlab.platypus import Flowable
-from reportPackages.reportlab.graphics.shapes import *
-from reportPackages.reportlab.graphics.renderPDF import _PDFRenderer
+from reportlab.lib import colors
+from reportlab.lib.units import cm
+from reportlab.lib.utils import asNative, base64_decodebytes
+from reportlab.pdfgen.canvas import Canvas
+from reportlab.pdfbase.pdfmetrics import stringWidth
+from reportlab.platypus import Flowable
+from reportlab.graphics.shapes import *
+from reportlab.graphics.renderPDF import _PDFRenderer
 import unittest
 
 _FONTS = ['Times-Roman','Vera','Times-BoldItalic',]
 
 def _setup():
-    from reportPackages.reportlab.pdfbase import pdfmetrics, ttfonts
+    from reportlab.pdfbase import pdfmetrics, ttfonts
     pdfmetrics.registerFont(ttfonts.TTFont("Vera", "Vera.ttf"))
     pdfmetrics.registerFont(ttfonts.TTFont("VeraBd", "VeraBd.ttf"))
     pdfmetrics.registerFont(ttfonts.TTFont("VeraIt", "VeraIt.ttf"))
@@ -67,7 +67,7 @@ def resetFonts():
     for f in _setup():
         if f not in _FONTS:
             _FONTS.append(f)
-from reportPackages.reportlab.rl_config import register_reset
+from reportlab.rl_config import register_reset
 register_reset(resetFonts)
 resetFonts()
 
@@ -385,7 +385,7 @@ def getDrawing10():
 
     return D
 
-from reportPackages.reportlab.graphics.widgets.signsandsymbols import SmileyFace
+from reportlab.graphics.widgets.signsandsymbols import SmileyFace
 def getDrawing11():
     '''test of anchoring'''
     def makeSmiley(x, y, size, color):
@@ -417,7 +417,7 @@ def getDrawing12():
     """Text strings in a non-standard font.
     All that is required is to place the .afm and .pfb files
     on the font patch given in rl_config.py,
-    for example in reportPackages.reportlab/lib/fonts/.
+    for example in reportlab/lib/fonts/.
     """
     faceName = "DarkGardenMK"
     D = Drawing(400, 200)
@@ -454,8 +454,8 @@ def getDrawing13():
 
 def smallArrow():
     '''create a small PIL image'''
-    from reportPackages.reportlab.graphics.renderPM import _getImage
-    from reportPackages.reportlab.lib.utils import getBytesIO
+    from reportlab.graphics.renderPM import _getImage
+    from reportlab.lib.utils import getBytesIO
     b = base64_decodebytes(b'''R0lGODdhCgAHAIMAAP/////29v/d3f+ysv9/f/9VVf9MTP8iIv8ICP8AAAAAAAAAAAAAAAAAAAAA
 AAAAACwAAAAACgAHAAAIMwABCBxIsKABAQASFli4MAECAgEAJJhIceKBAQkyasx4YECBjx8TICAQ
 AIDJkwYEAFgZEAA7''')
@@ -463,7 +463,7 @@ AIDJkwYEAFgZEAA7''')
 
 def getDrawing14():
     '''test shapes.Image'''
-    from reportPackages.reportlab.graphics.shapes import Image
+    from reportlab.graphics.shapes import Image
     D = Drawing(400, 200)
     im0 = smallArrow()
     D.add(Image(x=0,y=0,width=None,height=None,path=im0))
@@ -508,7 +508,7 @@ def writePDF(drawings):
     pdfPath = os.path.splitext(sys.argv[0])[0] + '.pdf'
     c = Canvas(pdfPath)
     c.setFont(_FONTS[0], 32)
-    c.drawString(80, 750, 'reportPackages.reportlab Graphics-Shapes Test')
+    c.drawString(80, 750, 'ReportLab Graphics-Shapes Test')
 
     # Print drawings in a loop, with their doc strings.
     c.setFont(_FONTS[0], 12)

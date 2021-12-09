@@ -1,6 +1,6 @@
-#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
+#Copyright ReportLab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/lib/codecharts.py
+#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/lib/codecharts.py
 #$Header $
 __version__='3.3.0'
 __doc__="""Routines to print code page (character set) drawings. Predates unicode.
@@ -11,13 +11,13 @@ These are defined herein.  The idea is to include flowable, drawable
 and graphic objects for single and multi-byte fonts. """
 import codecs
 
-from reportPackages.reportlab.pdfgen.canvas import Canvas
-from reportPackages.reportlab.platypus import Flowable
-from reportPackages.reportlab.pdfbase import pdfmetrics, cidfonts
-from reportPackages.reportlab.graphics.shapes import Drawing, Group, String, Circle, Rect
-from reportPackages.reportlab.graphics.widgetbase import Widget
-from reportPackages.reportlab.lib import colors
-from reportPackages.reportlab.lib.utils import int2Byte
+from reportlab.pdfgen.canvas import Canvas
+from reportlab.platypus import Flowable
+from reportlab.pdfbase import pdfmetrics, cidfonts
+from reportlab.graphics.shapes import Drawing, Group, String, Circle, Rect
+from reportlab.graphics.widgetbase import Widget
+from reportlab.lib import colors
+from reportlab.lib.utils import int2Byte
 
 adobe2codec = {
     'WinAnsiEncoding':'winansi',
@@ -152,7 +152,7 @@ class SingleByteEncodingChart(CodeChartBase):
         self.drawLabels()
         charList = [None] * 32 + list(map(int2Byte, list(range(32, 256))))
 
-        #we need to convert these to Unicode, since reportPackages.reportlab
+        #we need to convert these to Unicode, since ReportLab
         #2.0 can only draw in Unicode.
 
         encName = self.encodingName

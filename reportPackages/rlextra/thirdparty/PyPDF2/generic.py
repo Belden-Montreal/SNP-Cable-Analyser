@@ -616,7 +616,7 @@ class DictionaryObject(dict, PdfObject):
             if (e + ndstream) != b_("endstream"):
                 # (sigh) - the odd PDF file has a length that is too long, so
                 # we need to read backwards to find the "endstream" ending.
-                # reportPackages.reportlab (unknown version) generates files with this bug,
+                # ReportLab (unknown version) generates files with this bug,
                 # and Python users into PDF files tend to be our audience.
                 # we need to do this to correct the streamdata and chop off
                 # an extra character.

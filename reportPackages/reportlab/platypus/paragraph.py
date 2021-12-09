@@ -1,6 +1,6 @@
-#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
+#Copyright ReportLab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/platypus/paragraph.py
+#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/platypus/paragraph.py
 __all__=(
         'Paragraph',
         'cleanBlockQuotedText',
@@ -12,20 +12,20 @@ __doc__='''The standard paragraph implementation'''
 from string import whitespace
 from operator import truth
 from unicodedata import category
-from reportPackages.reportlab.pdfbase.pdfmetrics import stringWidth, getFont, getAscentDescent
-from reportPackages.reportlab.platypus.paraparser import ParaParser, _PCT, _num as _parser_num, _re_us_value
-from reportPackages.reportlab.platypus.flowables import Flowable
-from reportPackages.reportlab.lib.colors import Color
-from reportPackages.reportlab.lib.enums import TA_LEFT, TA_RIGHT, TA_CENTER, TA_JUSTIFY
-from reportPackages.reportlab.lib.geomutils import normalizeTRBL
-from reportPackages.reportlab.lib.textsplit import wordSplit, ALL_CANNOT_START
-from reportPackages.reportlab.lib.styles import ParagraphStyle
+from reportlab.pdfbase.pdfmetrics import stringWidth, getFont, getAscentDescent
+from reportlab.platypus.paraparser import ParaParser, _PCT, _num as _parser_num, _re_us_value
+from reportlab.platypus.flowables import Flowable
+from reportlab.lib.colors import Color
+from reportlab.lib.enums import TA_LEFT, TA_RIGHT, TA_CENTER, TA_JUSTIFY
+from reportlab.lib.geomutils import normalizeTRBL
+from reportlab.lib.textsplit import wordSplit, ALL_CANNOT_START
+from reportlab.lib.styles import ParagraphStyle
 from copy import deepcopy
-from reportPackages.reportlab.lib.abag import ABag
-from reportPackages.reportlab.rl_config import platypus_link_underline, decimalSymbol, _FUZZ,\
+from reportlab.lib.abag import ABag
+from reportlab.rl_config import platypus_link_underline, decimalSymbol, _FUZZ,\
         paraFontSizeHeightOffset, hyphenationMinWordLength
-from reportPackages.reportlab.lib.utils import _className, isBytes, unicodeT, bytesT, isStr
-from reportPackages.reportlab.lib.rl_accel import sameFrag
+from reportlab.lib.utils import _className, isBytes, unicodeT, bytesT, isStr
+from reportlab.lib.rl_accel import sameFrag
 import re
 from types import MethodType
 try:
@@ -1732,7 +1732,7 @@ def _setTXLineProps(tx, canvas, style):
 class Paragraph(Flowable):
     """ Paragraph(text, style, bulletText=None, caseSensitive=1)
         text a string of stuff to go into the paragraph.
-        style is a style definition as in reportPackages.reportlab.lib.styles.
+        style is a style definition as in reportlab.lib.styles.
         bulletText is an optional bullet defintion.
         caseSensitive set this to 0 if you want the markup tags and their attributes to be case-insensitive.
 
@@ -1781,10 +1781,10 @@ class Paragraph(Flowable):
 
         The <b> and <i> tags will work for the built-in fonts (Helvetica
         /Times / Courier).  For other fonts you need to register a family
-        of 4 fonts using reportPackages.reportlab.pdfbase.pdfmetrics.registerFont; then
+        of 4 fonts using reportlab.pdfbase.pdfmetrics.registerFont; then
         use the addMapping function to tell the library that these 4 fonts
         form a family e.g.
-        from reportPackages.reportlab.lib.fonts import addMapping
+        from reportlab.lib.fonts import addMapping
         addMapping('Vera', 0, 0, 'Vera')    #normal
         addMapping('Vera', 0, 1, 'Vera-Italic')    #italic
         addMapping('Vera', 1, 0, 'Vera-Bold')    #bold
@@ -2421,7 +2421,7 @@ class Paragraph(Flowable):
             else:
                 text = ''.join(getattr(f,'words',[]))
 
-            from reportPackages.reportlab.lib.textsplit import wordSplit
+            from reportlab.lib.textsplit import wordSplit
             lines = wordSplit(text, maxWidths, f.fontName, f.fontSize)
             #the paragraph drawing routine assumes multiple frags per line, so we need an
             #extra list like this
@@ -2768,14 +2768,14 @@ if __name__=='__main__':    #NORUNTESTS
                 return '\x20\x20%s([%s, %s]),' % (w.__class__.__name__, w[0], ', '.join(t.__self__))
             for _ in P2.frags:
                 _S(_showWord(_))
-            print('from reportPackages.reportlab.platypus.paragraph import _HSFrag, _SplitFragHS, _SplitFragHY, _SplitFrag, _getFragWords\nfrom reportPackages.reportlab.platypus.paraparser import ParaFrag\nfrom reportPackages.reportlab.lib.colors import Color')
+            print('from reportlab.platypus.paragraph import _HSFrag, _SplitFragHS, _SplitFragHY, _SplitFrag, _getFragWords\nfrom reportlab.platypus.paraparser import ParaFrag\nfrom reportlab.lib.colors import Color')
             print('\n'.join(('__frag_%s__ = %r' % _ for _ in sorted(_F.values()))))
             print('%s=[\n%s\x20\x20]' % (processed_frags,'\n'.join(_S.__self__)))
             print('print(_getFragWords(processed_frags))')
 
 
-    from reportPackages.reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-    from reportPackages.reportlab.lib.units import cm
+    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    from reportlab.lib.units import cm
     import sys
     TESTS = sys.argv[1:]
     if TESTS==[]: TESTS=['4']

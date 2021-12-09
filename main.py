@@ -17,6 +17,8 @@ from print2console import EmittingStream
 from widgets.ParameterWidget import ParameterWidget
 from widgets.EmbeddingWidget import EmbeddingWidget
 from widgets.AlienWidget import AlienWidget
+from widgets.PlugWidget import PlugWidget
+
 from widgets.ConsoleWidget import ConsoleWidget
 
 
@@ -123,6 +125,18 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         # Comment out this line to get messanges to appear in terminal instead of in app. 
         self.setupConsole()
 
+
+
+    def addPlug(self):   
+        testName, result = QtWidgets.QInputDialog.getText(self, "Add a Plug Sample",
+                                                                "Please enter a plug name")
+        if result and len(testName) > 0 and not testName.isspace():
+            print("%s!" % testName)
+            self.Project.addPlug(testName)
+            self.displaySamplesInTable()
+        else:
+            return
+
     def addEmbed(self):
         testName, result = QtWidgets.QInputDialog.getText(self, "Add an Embedded Sample",
                                                                 "Please enter a sample name")
@@ -136,7 +150,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
     def addAlien(self):
         testName, result = QtWidgets.QInputDialog.getText(self, "Add an Alien Test",
                                                                 "Please enter a Test name")
-        if result and len(testName) > 1 and not testName.isspace():
+        if result and len(testName) > 0 and not testName.isspace():
             print("%s!" % testName)
             self.Project.addAlien(testName)
             self.displaySamplesInTable()
@@ -195,6 +209,10 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
             elif self.selected[0].__repr__() == "Embed":
                 self.setupEmbed()
 
+            
+            elif self.selected[0].__repr__() == "Plug":
+                self.setupPlug()
+
             elif self.selected[0].__repr__() == "SNP":
                 self.displaySampleParams(self.selected)
         
@@ -231,6 +249,12 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
     def setupEmbed(self):
         self.param_tabs.clear()
         self.embeddingWidget = EmbeddingWidget(self.param_tabs,  sample = self.selected[0], graph=self.graphicsView, comm = self.comm)
+        #self.param_tabs.addTab(self.embeddingWidget.widget, "Embedding Main")
+
+
+    def setupPlug(self):
+        self.param_tabs.clear()
+        self.embeddingWidget = PlugWidget(self.param_tabs,  sample = self.selected[0], graph=self.graphicsView, comm = self.comm)
         #self.param_tabs.addTab(self.embeddingWidget.widget, "Embedding Main")
         
     def setupAlien(self):
@@ -518,6 +542,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
             addSNP = menu.addAction("Add Sample")
             addAlien = menu.addAction("Add Alien Sample")
             addEmbed = menu.addAction("Add Emdedding Sample")
+            addPlug = menu.addAction("Add Plug Sample")
 
             selectAll = menu.addAction("Select All")
             action = menu.exec_(QtGui.QCursor.pos())
@@ -529,6 +554,9 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
                 self.addAlien()
             elif action == addEmbed:
                 self.addEmbed()
+            elif action == addPlug:
+                self.addPlug()
+
 
         except Exception as e:
             print(e)

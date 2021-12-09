@@ -1,6 +1,6 @@
-#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
+#Copyright ReportLab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/graphics/charts/barcharts.py
+#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/graphics/charts/barcharts.py
 __version__='3.3.0'
 __doc__="""This module defines a variety of Bar Chart components.
 
@@ -12,22 +12,22 @@ vertical versions.
 import copy, functools
 from ast import literal_eval
 
-from reportPackages.reportlab.lib import colors
-from reportPackages.reportlab.lib.validators import isNumber, isNumberOrNone, isColor, isColorOrNone, isString,\
+from reportlab.lib import colors
+from reportlab.lib.validators import isNumber, isNumberOrNone, isColor, isColorOrNone, isString,\
             isListOfStrings, SequenceOf, isBoolean, isNoneOrShape, isStringOrNone,\
             NoneOr, isListOfNumbersOrNone, EitherOr, OneOf, isInt
-from reportPackages.reportlab.lib.utils import flatten, isStr, yieldNoneSplits
-from reportPackages.reportlab.graphics.widgets.markers import uSymbol2Symbol, isSymbol
-from reportPackages.reportlab.lib.formatters import Formatter
-from reportPackages.reportlab.lib.attrmap import AttrMap, AttrMapValue
-from reportPackages.reportlab.pdfbase.pdfmetrics import stringWidth
-from reportPackages.reportlab.graphics.widgetbase import Widget, TypedPropertyCollection, PropHolder, tpcGetItem
-from reportPackages.reportlab.graphics.shapes import Line, Rect, Group, Drawing, NotImplementedError, PolyLine
-from reportPackages.reportlab.graphics.charts.axes import XCategoryAxis, YValueAxis, YCategoryAxis, XValueAxis
-from reportPackages.reportlab.graphics.charts.textlabels import BarChartLabel, NA_Label, NoneOrInstanceOfNA_Label
-from reportPackages.reportlab.graphics.charts.areas import PlotArea
-from reportPackages.reportlab.graphics.charts.legends import _objStr
-from reportPackages.reportlab import cmp
+from reportlab.lib.utils import flatten, isStr, yieldNoneSplits
+from reportlab.graphics.widgets.markers import uSymbol2Symbol, isSymbol
+from reportlab.lib.formatters import Formatter
+from reportlab.lib.attrmap import AttrMap, AttrMapValue
+from reportlab.pdfbase.pdfmetrics import stringWidth
+from reportlab.graphics.widgetbase import Widget, TypedPropertyCollection, PropHolder, tpcGetItem
+from reportlab.graphics.shapes import Line, Rect, Group, Drawing, NotImplementedError, PolyLine
+from reportlab.graphics.charts.axes import XCategoryAxis, YValueAxis, YCategoryAxis, XValueAxis
+from reportlab.graphics.charts.textlabels import BarChartLabel, NA_Label, NoneOrInstanceOfNA_Label
+from reportlab.graphics.charts.areas import PlotArea
+from reportlab.graphics.charts.legends import _objStr
+from reportlab import cmp
 
 class BarChartProperties(PropHolder):
     _attrMap = AttrMap(
@@ -1030,7 +1030,7 @@ class BarChart3D(BarChart):
         g.add((1,z0,z1,x,y,width,height,rowNo,colNo))
 
     def makeBars(self):
-        from reportPackages.reportlab.graphics.charts.utils3d import _draw_3d_bar
+        from reportlab.graphics.charts.utils3d import _draw_3d_bar
         fg = _FakeGroup(cmp=self._cmpZ)
         self._makeBars(fg,fg)
         fg.sort()
@@ -2320,7 +2320,7 @@ def sampleSymbol1():
     bc.categoryAxis.labels.boxAnchor = 'e'
     bc.categoryAxis.categoryNames = ['Ying', 'Yang']
 
-    from reportPackages.reportlab.graphics.widgets.grids import ShadedRect
+    from reportlab.graphics.widgets.grids import ShadedRect
     sym1 = ShadedRect()
     sym1.fillColorStart = colors.black
     sym1.fillColorEnd = colors.blue
@@ -2371,7 +2371,7 @@ def sampleStacked1():
     bc.categoryAxis.labels.boxAnchor = 'e'
     bc.categoryAxis.categoryNames = ['Ying', 'Yang']
 
-    from reportPackages.reportlab.graphics.widgets.grids import ShadedRect
+    from reportlab.graphics.widgets.grids import ShadedRect
     bc.bars.symbol = ShadedRect()
     bc.bars.symbol.fillColorStart = colors.red
     bc.bars.symbol.fillColorEnd = colors.white

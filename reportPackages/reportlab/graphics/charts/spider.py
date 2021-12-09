@@ -1,6 +1,6 @@
-    #Copyright reportPackages.reportlab Europe Ltd. 2000-2017
+    #Copyright ReportLab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/graphics/charts/spider.py
+#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/graphics/charts/spider.py
 # spider chart, also known as radar chart
 
 __version__='3.3.0'
@@ -14,8 +14,8 @@ numbers first, as it will be overdrawn by each successive one.
 import copy
 from math import sin, cos, pi
 
-from reportPackages.reportlab.lib import colors
-from reportPackages.reportlab.lib.validators import isColor, isNumber, isListOfNumbersOrNone,\
+from reportlab.lib import colors
+from reportlab.lib.validators import isColor, isNumber, isListOfNumbersOrNone,\
                                     isListOfNumbers, isColorOrNone, isString,\
                                     isListOfStringsOrNone, OneOf, SequenceOf,\
                                     isBoolean, isListOfColors, isNumberOrNone,\
@@ -23,15 +23,15 @@ from reportPackages.reportlab.lib.validators import isColor, isNumber, isListOfN
                                     isNoneOrListOfNoneOrNumbers, isBoxAnchor,\
                                     isStringOrNone, isStringOrNone, EitherOr,\
                                     isCallable
-from reportPackages.reportlab.lib.attrmap import *
-from reportPackages.reportlab.pdfgen.canvas import Canvas
-from reportPackages.reportlab.graphics.shapes import Group, Drawing, Line, Rect, Polygon, PolyLine, Ellipse, \
+from reportlab.lib.attrmap import *
+from reportlab.pdfgen.canvas import Canvas
+from reportlab.graphics.shapes import Group, Drawing, Line, Rect, Polygon, PolyLine, Ellipse, \
     Wedge, String, STATE_DEFAULTS
-from reportPackages.reportlab.graphics.widgetbase import Widget, TypedPropertyCollection, PropHolder
-from reportPackages.reportlab.graphics.charts.areas import PlotArea
-from reportPackages.reportlab.graphics.charts.legends import _objStr
-from reportPackages.reportlab.graphics.charts.piecharts import WedgeLabel
-from reportPackages.reportlab.graphics.widgets.markers import makeMarker, uSymbol2Symbol, isSymbol
+from reportlab.graphics.widgetbase import Widget, TypedPropertyCollection, PropHolder
+from reportlab.graphics.charts.areas import PlotArea
+from reportlab.graphics.charts.legends import _objStr
+from reportlab.graphics.charts.piecharts import WedgeLabel
+from reportlab.graphics.widgets.markers import makeMarker, uSymbol2Symbol, isSymbol
 
 class StrandProperty(PropHolder):
 
@@ -402,7 +402,7 @@ def sample2():
 
 if __name__=='__main__':
     d = sample1()
-    from reportPackages.reportlab.graphics.renderPDF import drawToFile
+    from reportlab.graphics.renderPDF import drawToFile
     drawToFile(d, 'spider.pdf')
     d = sample2()
     drawToFile(d, 'spider2.pdf')

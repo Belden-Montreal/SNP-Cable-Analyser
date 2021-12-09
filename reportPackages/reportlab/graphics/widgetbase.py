@@ -1,14 +1,14 @@
-#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
+#Copyright ReportLab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/graphics/widgetbase.py
+#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/graphics/widgetbase.py
 __version__='3.3.0'
 __doc__='''Base class for user-defined graphical widgets'''
 
-from reportPackages.reportlab.graphics import shapes
-from reportPackages.reportlab import rl_config
-from reportPackages.reportlab.lib import colors
-from reportPackages.reportlab.lib.validators import *
-from reportPackages.reportlab.lib.attrmap import *
+from reportlab.graphics import shapes
+from reportlab import rl_config
+from reportlab.lib import colors
+from reportlab.lib.validators import *
+from reportlab.lib.attrmap import *
 from weakref import ref as weakref_ref
 
 class PropHolder:
@@ -57,7 +57,7 @@ class PropHolder:
         one simply returns everything without a leading underscore.
         """
 
-        from reportPackages.reportlab.lib.validators import isValidChild
+        from reportlab.lib.validators import isValidChild
 
         # TODO when we need it, but not before -
         # expose sequence contents?
@@ -309,7 +309,7 @@ class StyleProperties(PropHolder):
     """A container class for attributes used in charts and legends.
 
     Attributes contained can be those for any graphical element
-    (shape?) in the reportPackages.reportlab graphics package. The idea for this
+    (shape?) in the ReportLab graphics package. The idea for this
     container class is to be useful in combination with legends
     and/or the individual appearance of data series in charts.
 
@@ -621,7 +621,7 @@ def CandleSticks(**kwds):
     return TypedPropertyCollection(CandleStickProperties,**kwds)
 
 def test():
-    from reportPackages.reportlab.graphics.charts.piecharts import WedgeProperties
+    from reportlab.graphics.charts.piecharts import WedgeProperties
     wedges = TypedPropertyCollection(WedgeProperties)
     wedges.fillColor = colors.red
     wedges.setVector(fillColor=(colors.blue,colors.green,colors.white))
@@ -630,7 +630,7 @@ def test():
     d = shapes.Drawing(400, 200)
     tc = TwoCircles()
     d.add(tc)
-    from reportPackages.reportlab.graphics import renderPDF
+    from reportlab.graphics import renderPDF
     renderPDF.drawToFile(d, 'sample_widget.pdf', 'A Sample Widget')
     print('saved sample_widget.pdf')
 

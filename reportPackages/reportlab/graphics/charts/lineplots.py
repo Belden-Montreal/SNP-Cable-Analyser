@@ -1,25 +1,25 @@
-#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
+#Copyright ReportLab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/graphics/charts/lineplots.py
+#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/graphics/charts/lineplots.py
 
 __version__='3.3.0'
 __doc__="""This module defines a very preliminary Line Plot example."""
 
 import string, time
 
-from reportPackages.reportlab.lib import colors
-from reportPackages.reportlab.lib.validators import *
-from reportPackages.reportlab.lib.attrmap import *
-from reportPackages.reportlab.lib.utils import flatten, isStr
-from reportPackages.reportlab.graphics.shapes import Drawing, Group, Rect, Line, PolyLine, Polygon, _SetKeyWordArgs
-from reportPackages.reportlab.graphics.widgetbase import Widget, TypedPropertyCollection, PropHolder, tpcGetItem
-from reportPackages.reportlab.graphics.charts.textlabels import Label
-from reportPackages.reportlab.graphics.charts.axes import XValueAxis, YValueAxis, AdjYValueAxis, NormalDateXValueAxis
-from reportPackages.reportlab.graphics.charts.utils import *
-from reportPackages.reportlab.graphics.widgets.markers import uSymbol2Symbol, isSymbol, makeMarker
-from reportPackages.reportlab.graphics.widgets.grids import Grid, DoubleGrid, ShadedRect, ShadedPolygon
-from reportPackages.reportlab.pdfbase.pdfmetrics import stringWidth, getFont
-from reportPackages.reportlab.graphics.charts.areas import PlotArea
+from reportlab.lib import colors
+from reportlab.lib.validators import *
+from reportlab.lib.attrmap import *
+from reportlab.lib.utils import flatten, isStr
+from reportlab.graphics.shapes import Drawing, Group, Rect, Line, PolyLine, Polygon, _SetKeyWordArgs
+from reportlab.graphics.widgetbase import Widget, TypedPropertyCollection, PropHolder, tpcGetItem
+from reportlab.graphics.charts.textlabels import Label
+from reportlab.graphics.charts.axes import XValueAxis, YValueAxis, AdjYValueAxis, NormalDateXValueAxis
+from reportlab.graphics.charts.utils import *
+from reportlab.graphics.widgets.markers import uSymbol2Symbol, isSymbol, makeMarker
+from reportlab.graphics.widgets.grids import Grid, DoubleGrid, ShadedRect, ShadedPolygon
+from reportlab.pdfbase.pdfmetrics import stringWidth, getFont
+from reportlab.graphics.charts.areas import PlotArea
 from .utils import FillPairedData
 
 # This might be moved again from here...
@@ -80,7 +80,7 @@ class ShadedPolyFiller(Filler,ShadedPolygon):
 class PolyFiller(Filler,Polygon):
     pass
 
-from reportPackages.reportlab.graphics.charts.linecharts import AbstractLineChart
+from reportlab.graphics.charts.linecharts import AbstractLineChart
 class LinePlot(AbstractLineChart):
     """Line plot with multiple lines.
 
@@ -452,7 +452,7 @@ class LinePlot(AbstractLineChart):
         return g
 
     def addCrossHair(self,name,xv,yv,strokeColor=colors.black,strokeWidth=1,beforeLines=True):
-        from reportPackages.reportlab.graphics.shapes import Group, Line
+        from reportlab.graphics.shapes import Group, Line
         annotations = [a for a in getattr(self,'annotations',[]) if getattr(a,'name',None)!=name]
         def annotation(self,xScale,yScale):
             x = xScale(xv)
@@ -527,10 +527,10 @@ class LinePlot3D(LinePlot):
         _zadjust = self._zadjust
         theta_x = self.theta_x
         theta_y = self.theta_y
-        from reportPackages.reportlab.graphics.charts.linecharts import _FakeGroup
+        from reportlab.graphics.charts.linecharts import _FakeGroup
         F = _FakeGroup()
 
-        from reportPackages.reportlab.graphics.charts.utils3d import _make_3d_line_info, find_intersections
+        from reportlab.graphics.charts.utils3d import _make_3d_line_info, find_intersections
         if self.xValueAxis.style!='parallel_3d':
             tileWidth = getattr(self,'_3d_tilewidth',1)
             if getattr(self,'_find_intersections',None):
@@ -701,7 +701,7 @@ class GridLinePlot(SimpleTimeSeriesPlot):
         )
 
     def __init__(self):
-        from reportPackages.reportlab.lib import colors
+        from reportlab.lib import colors
         SimpleTimeSeriesPlot.__init__(self)
         self.scaleFactor = None
         self.background = Grid()
@@ -712,7 +712,7 @@ class GridLinePlot(SimpleTimeSeriesPlot):
         self.background.strokeColor = colors.black
 
     def demo(self,drawing=None):
-        from reportPackages.reportlab.lib import colors
+        from reportlab.lib import colors
         if not drawing:
             drawing = Drawing(400, 200)
         lp = GridLinePlot()

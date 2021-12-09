@@ -1,6 +1,6 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem, QFileDialog, QCheckBox
-import addplug
+import widgets.PlugWidget as PlugWidget
 
 from UI import embedWidget as EW
 from matplotlib.pyplot import cm
@@ -247,7 +247,7 @@ class EmbeddingWidget():
 
     def addPlugDialog(self):
 
-        form = addplug.AddPlug()  # We set the  form to be our ExampleApp (design)
+        form = PlugWidget.AddPlug()  # We set the  form to be our ExampleApp (design)
 
         #self.embedPlotUpdate()         
 

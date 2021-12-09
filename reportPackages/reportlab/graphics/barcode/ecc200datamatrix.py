@@ -1,5 +1,5 @@
 #this code contributed by Kyle Macfarlane see
-#https://bitbucket.org/rptlab/reportPackages.reportlab/issues/69/implementations-of-code-128-auto-and-data
+#https://bitbucket.org/rptlab/reportlab/issues/69/implementations-of-code-128-auto-and-data
 __all__= ('ECC200datamatrix',)
 FACTORS = {
     5: (228, 48, 15, 111, 62),
@@ -86,11 +86,11 @@ ALOGVAL = (
     179, 75, 150, 1
 )
 
-from reportPackages.reportlab.graphics.barcode.common import Barcode
+from reportlab.graphics.barcode.common import Barcode
 class ECC200DataMatrix(Barcode):
     '''This code only supports a Type 12 (44x44) C40 encoded data matrix.
     This is the size and encoding that Royal Mail wants on all mail from October 1st 2015.
-    see https://bitbucket.org/rptlab/reportPackages.reportlab/issues/69/implementations-of-code-128-auto-and-data
+    see https://bitbucket.org/rptlab/reportlab/issues/69/implementations-of-code-128-auto-and-data
     '''
     barWidth = 4
 

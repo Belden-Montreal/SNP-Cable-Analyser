@@ -1,12 +1,12 @@
-#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
+#Copyright ReportLab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/lib/validators.py
+#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/lib/validators.py
 __version__='3.5.33'
 __doc__="""Standard verifying functions used by attrmap."""
 
 import sys, codecs
-from reportPackages.reportlab.lib.utils import isSeq, isBytes, isStr
-from reportPackages.reportlab.lib import colors
+from reportlab.lib.utils import isSeq, isBytes, isStr
+from reportlab.lib import colors
 
 class Percentage(float):
     pass
@@ -117,7 +117,7 @@ class isNumberInRange(_isNumber):
 class _isListOfShapes(Validator):
     "ListOfShapes validator class."
     def test(self, x):
-        from reportPackages.reportlab.graphics.shapes import Shape
+        from reportlab.graphics.shapes import Shape
         if isSeq(x):
             answer = 1
             for e in x:
@@ -159,7 +159,7 @@ class _isColorOrNone(Validator):
         if x is None: return True
         return isColor(x)
 
-from reportPackages.reportlab.lib.normalDate import NormalDate
+from reportlab.lib.normalDate import NormalDate
 class _isNormalDate(Validator):
     def test(self,x):
         if isinstance(x,NormalDate):
@@ -176,7 +176,7 @@ class _isValidChild(Validator):
         I.e. does it descend from Shape or UserNode?
         """
 
-        from reportPackages.reportlab.graphics.shapes import UserNode, Shape
+        from reportlab.graphics.shapes import UserNode, Shape
         return isinstance(x, UserNode) or isinstance(x, Shape)
 
 class _isValidChildOrNone(_isValidChild):
@@ -191,9 +191,9 @@ class OneOf(Validator):
     """Make validator functions for list of choices.
 
     Usage:
-    f = reportPackages.reportlab.lib.validators.OneOf('happy','sad')
+    f = reportlab.lib.validators.OneOf('happy','sad')
     or
-    f = reportPackages.reportlab.lib.validators.OneOf(('happy','sad'))
+    f = reportlab.lib.validators.OneOf(('happy','sad'))
     f('sad'),f('happy'), f('grumpy')
     (1,1,0)
     """

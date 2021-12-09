@@ -1,4 +1,4 @@
-#copyright reportPackages.reportlab Europe Limited. 2000-2016
+#copyright ReportLab Europe Limited. 2000-2016
 #see license.txt for license details
 """Various sorting conveniences, for when the objects don't
 have a natural order but they have some attributes which can

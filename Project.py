@@ -1,6 +1,7 @@
 from Sample import Sample
 from alien import Alien
 from embedding import Embedding
+from plug import Plug
 
 import threading
 from PyQt5 import QtWidgets, QtGui
@@ -91,6 +92,9 @@ class Project(): #Put (object) later
 
             #print("Sample Index:", sample.ref )
             
+
+    def addPlug(self, testName):
+        self.measurements.append(Plug(testName))
 
     def addEmbed(self, testName):
         self.measurements.append(Embedding(testName))
@@ -188,13 +192,13 @@ class Project(): #Put (object) later
         self.activeMeasurements = samples
 
     def generateExcelReport(self, samples):
-        rb = excel_reportbuilder.ExcelReportBuilder(samples=self.activeMeasurements) # self.measurements)
+        rb = excel_reportbuilder.ExcelReportBuilder(samples=samples) # self.measurements)
         rb.displayUI()
         rb.generateExcel()
         return
     
     def generatePDFReport(self, samples):
-        rb = pdf_reportbuilder.PDFReportBuilder(samples= self.activeMeasurements ) #self.measurements)
+        rb = pdf_reportbuilder.PDFReportBuilder(samples= sample) #self.measurements)
         rb.displayUI()
         rb.generatePDF()
         return

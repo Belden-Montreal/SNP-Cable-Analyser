@@ -1,7 +1,7 @@
-#copyright reportPackages.reportlab Europe Limited. 2000-2016
+#copyright ReportLab Europe Limited. 2000-2016
 #see license.txt for license details
 __version__='3.3.0'
-from reportPackages.reportlab.lib.utils import isUnicode, asBytes, asUnicode
+from reportlab.lib.utils import isUnicode, asBytes, asUnicode
 import re, codecs
 
 def _processLine(line, sep=',', conv=0):
@@ -185,7 +185,7 @@ def modifyCSVCols(f,L,C):
     return L
 
 if __name__ == '__main__':
-    from reportPackages.reportlab.lib.utils import getStringIO
+    from reportlab.lib.utils import getStringIO
     L=read(getStringIO('"abc""d,ef""ghi",23,34\n1,2,3\na,4,5\n6,c,d\n'))
     print('originally',L)
     def f(x):

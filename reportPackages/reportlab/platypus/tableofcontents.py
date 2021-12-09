@@ -1,6 +1,6 @@
-#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
+#Copyright ReportLab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/platypus/tableofcontents.py
+#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/platypus/tableofcontents.py
 
 __version__='3.5.32'
 __doc__="""Experimental class to generate Tables of Contents easily
@@ -44,17 +44,17 @@ lines after the first are indented by the same constant named
 epsilon.
 """
 
-from reportPackages.reportlab.lib import enums
-from reportPackages.reportlab.lib.units import cm
-from reportPackages.reportlab.lib.utils import commasplit, escapeOnce, encode_label, decode_label, strTypes, asUnicode, asNative
-from reportPackages.reportlab.lib.styles import ParagraphStyle, _baseFontName
-from reportPackages.reportlab.lib import sequencer as rl_sequencer
-from reportPackages.reportlab.platypus.paragraph import Paragraph
-from reportPackages.reportlab.platypus.doctemplate import IndexingFlowable
-from reportPackages.reportlab.platypus.tables import TableStyle, Table
-from reportPackages.reportlab.platypus.flowables import Spacer, Flowable
-from reportPackages.reportlab.pdfbase.pdfmetrics import stringWidth
-from reportPackages.reportlab.pdfgen import canvas
+from reportlab.lib import enums
+from reportlab.lib.units import cm
+from reportlab.lib.utils import commasplit, escapeOnce, encode_label, decode_label, strTypes, asUnicode, asNative
+from reportlab.lib.styles import ParagraphStyle, _baseFontName
+from reportlab.lib import sequencer as rl_sequencer
+from reportlab.platypus.paragraph import Paragraph
+from reportlab.platypus.doctemplate import IndexingFlowable
+from reportlab.platypus.tables import TableStyle, Table
+from reportlab.platypus.flowables import Spacer, Flowable
+from reportlab.pdfbase.pdfmetrics import stringWidth
+from reportlab.pdfgen import canvas
 import unicodedata
 from ast import literal_eval
 
@@ -343,7 +343,7 @@ class SimpleIndex(IndexingFlowable):
         self.dot = dot
         self.headers = headers
         if name is None:
-            from reportPackages.reportlab.platypus.paraparser import DEFAULT_INDEX_NAME as name
+            from reportlab.platypus.paraparser import DEFAULT_INDEX_NAME as name
         self.name = name
         self.formatFunc = self.getFormatFunc(format)
         self.offset = offset
@@ -374,7 +374,7 @@ class SimpleIndex(IndexingFlowable):
     def getCanvasMaker(self, canvasmaker=canvas.Canvas):
 
         def newcanvasmaker(*args, **kwargs):
-            from reportPackages.reportlab.pdfgen import canvas
+            from reportlab.pdfgen import canvas
             c = canvasmaker(*args, **kwargs)
             setattr(c,self.name,self)
             return c

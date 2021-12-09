@@ -116,7 +116,9 @@ class ExcelReportBuilder():
                                     df[param_name, line_name, "db"] = s.sample.getParam(param_name, z=False)[line_name]
                 try:
                     print("sample name : ", s.sample.name)
-                    df.to_excel(writer, sheet_name=s.sample.name)
+                    df.to_excel(writer, sheet_name=s.sample.name, engine='openpyxl')
+                    writer.book[s.sample.name].delete_rows(3)
+                    writer.save()
                 except Exception as e:
                     print(e)
 

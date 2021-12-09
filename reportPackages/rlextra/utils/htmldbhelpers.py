@@ -1,4 +1,4 @@
-#copyright reportPackages.reportlab Europe Limited. 2000-2016
+#copyright ReportLab Europe Limited. 2000-2016
 # helpers for making html forms for updating db records.
 
 __version__='3.3.0'

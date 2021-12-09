@@ -1,9 +1,9 @@
-from reportPackages.reportlab.lib import colors
-from reportPackages.reportlab.lib.validators import *
-from reportPackages.reportlab.lib.attrmap import *
-from reportPackages.reportlab.lib.utils import flatten
-from reportPackages.reportlab.graphics.shapes import Drawing, _DrawingEditorMixin, Group, Polygon
-from reportPackages.reportlab.graphics.widgetbase import Widget
+from reportlab.lib import colors
+from reportlab.lib.validators import *
+from reportlab.lib.attrmap import *
+from reportlab.lib.utils import flatten
+from reportlab.graphics.shapes import Drawing, _DrawingEditorMixin, Group, Polygon
+from reportlab.graphics.widgetbase import Widget
 
 class AdjustableArrow(Widget):
 	"""This widget draws an arrow (style one).

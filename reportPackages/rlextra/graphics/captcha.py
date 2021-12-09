@@ -6,10 +6,10 @@ _mx = len(_allowed)-1
 def getCaptcha(n=5,fontName='Courier',fontSize=14,text=None,fillColor=None):
     '''return n random chars in a string and in a byte string structured
     as a GIF image'''
-    from reportPackages.reportlab.graphics.shapes import Drawing, Group, String, \
+    from reportlab.graphics.shapes import Drawing, Group, String, \
         rotate, skewX, skewY, mmult, translate, Rect
     if not text:
-        from reportPackages.reportlab.rl_config import invariant as rl_invariant
+        from reportlab.rl_config import invariant as rl_invariant
         if rl_invariant:
             import random
             random.seed(1919315535)
@@ -37,7 +37,7 @@ def getCaptcha(n=5,fontName='Courier',fontSize=14,text=None,fillColor=None):
     H = 4+y1-y0
     D = Drawing(W,H)
     if fillColor:
-        from reportPackages.reportlab.lib.colors import toColor
+        from reportlab.lib.colors import toColor
         D.add(Rect(0,0,W,H, fillColor = toColor(fillColor),strokeColor=None))
     D.add(G0)
     return text, D.asString('gif')

@@ -30,9 +30,9 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-from reportPackages.reportlab.lib.units import inch
-from reportPackages.reportlab.lib.utils import asNative
-from reportPackages.reportlab.graphics.barcode.common import MultiWidthBarcode
+from reportlab.lib.units import inch
+from reportlab.lib.utils import asNative
+from reportlab.graphics.barcode.common import MultiWidthBarcode
 
 _patterns = {
   '0' : ('AcAaAb', 0),  '1' : ('AaAbAc', 1),  '2' : ('AaAcAb', 2),

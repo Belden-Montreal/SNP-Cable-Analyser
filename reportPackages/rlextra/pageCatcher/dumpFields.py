@@ -60,7 +60,7 @@ def dumpAnnotationFields(frompdffile):
         result.append(thispageannotations)
     return result
 
-from reportPackages.reportlab.pdfbase.pdfdoc import PDFText, PDFString, PDFDictionary, PDFArray
+from reportlab.pdfbase.pdfdoc import PDFText, PDFString, PDFDictionary, PDFArray
 
 def pythonize(structure, compilation, seen=None):
     "translate basic pdf structures into roughly equivalent python types. return None for obscure structures"

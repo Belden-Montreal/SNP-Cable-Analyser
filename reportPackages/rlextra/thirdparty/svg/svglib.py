@@ -11,7 +11,7 @@ def svg2rlg(path, resolve_entities=False, **kwds):
 
 def main():
     import glob, traceback, sys, os, logging
-    from reportPackages.reportlab.lib.boxstuff import aspectRatioFix
+    from reportlab.lib.boxstuff import aspectRatioFix
     from svglib.svglib import logger
 
     argv = sys.argv[1:]

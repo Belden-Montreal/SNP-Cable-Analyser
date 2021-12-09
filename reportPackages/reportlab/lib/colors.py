@@ -1,6 +1,6 @@
-#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
+#Copyright ReportLab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/lib/colors.py
+#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/lib/colors.py
 __version__='3.3.0'
 __doc__='''Defines standard colour-handling classes and colour names.
 
@@ -9,7 +9,7 @@ rhese can be constructed from several popular formats.  We also include
 
 - pre-built colour objects for the HTML standard colours
 
-- pre-built colours used in reportPackages.reportlab's branding
+- pre-built colours used in ReportLab's branding
 
 - various conversion and construction functions
 
@@ -40,9 +40,9 @@ Traceback (most recent call last):
 ValueError: css color 'pcmyka(100,0,0,0)' has wrong number of components
 '''
 import math, re, functools
-from reportPackages.reportlab import cmp
-from reportPackages.reportlab.lib.rl_accel import fp_str
-from reportPackages.reportlab.lib.utils import asNative, isStr, rl_safe_eval
+from reportlab import cmp
+from reportlab.lib.rl_accel import fp_str
+from reportlab.lib.utils import asNative, isStr, rl_safe_eval
 from ast import literal_eval
 
 class Color:
@@ -520,14 +520,14 @@ _CMYK_black=CMYKColor(0,0,0,1)
 _PCMYK_black=PCMYKColor(0,0,0,100)
 
 # Special colors
-reportPackages.reportlabBlueOLD = HexColor(0x4e5688)
-reportPackages.reportlabBlue = HexColor(0x00337f)
-reportPackages.reportlabBluePCMYK = PCMYKColor(100,65,0,30,spotName='Pantone 288U')
-reportPackages.reportlabLightBlue = HexColor(0xb7b9d3)
-reportPackages.reportlabFidBlue=HexColor(0x3366cc)
-reportPackages.reportlabFidRed=HexColor(0xcc0033)
-reportPackages.reportlabGreen = HexColor(0x336600)
-reportPackages.reportlabLightGreen = HexColor(0x339933)
+ReportLabBlueOLD = HexColor(0x4e5688)
+ReportLabBlue = HexColor(0x00337f)
+ReportLabBluePCMYK = PCMYKColor(100,65,0,30,spotName='Pantone 288U')
+ReportLabLightBlue = HexColor(0xb7b9d3)
+ReportLabFidBlue=HexColor(0x3366cc)
+ReportLabFidRed=HexColor(0xcc0033)
+ReportLabGreen = HexColor(0x336600)
+ReportLabLightGreen = HexColor(0x339933)
 
 # color constants -- mostly from HTML standard
 aliceblue =     HexColor(0xF0F8FF)
@@ -718,7 +718,7 @@ def getAllNamedColors():
     # uses a singleton for efficiency
     global _namedColors
     if _namedColors is not None: return _namedColors
-    from reportPackages.reportlab.lib import colors
+    from reportlab.lib import colors
     _namedColors = {}
     for name, value in colors.__dict__.items():
         if isinstance(value, Color):

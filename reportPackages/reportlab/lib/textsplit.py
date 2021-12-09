@@ -1,6 +1,6 @@
-#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
+#Copyright ReportLab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/lib/textsplit.py
+#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/lib/textsplit.py
 
 """Helpers for text wrapping, hyphenation, Asian text splitting and kinsoku shori.
 
@@ -13,9 +13,9 @@ in based on possible knowledge of the language and desirable 'niceness' of the a
 __version__='3.3.0'
 
 from unicodedata import category
-from reportPackages.reportlab.pdfbase.pdfmetrics import stringWidth
-from reportPackages.reportlab.rl_config import _FUZZ
-from reportPackages.reportlab.lib.utils import isUnicode
+from reportlab.pdfbase.pdfmetrics import stringWidth
+from reportlab.rl_config import _FUZZ
+from reportlab.lib.utils import isUnicode
 
 CANNOT_START_LINE = [
     #strongly prohibited e.g. end brackets, stop, exclamation...
@@ -45,8 +45,8 @@ def getCharWidths(word, fontName, fontSize):
 
     >>> getCharWidths('Hello', 'Courier', 10)
     [6.0, 6.0, 6.0, 6.0, 6.0]
-    >>> from reportPackages.reportlab.pdfbase.cidfonts import UnicodeCIDFont
-    >>> from reportPackages.reportlab.pdfbase.pdfmetrics import registerFont
+    >>> from reportlab.pdfbase.cidfonts import UnicodeCIDFont
+    >>> from reportlab.pdfbase.pdfmetrics import registerFont
     >>> registerFont(UnicodeCIDFont('HeiseiMin-W3'))
     >>> getCharWidths(u'\u6771\u4EAC', 'HeiseiMin-W3', 10)   #most kanji are 100 ems
     [10.0, 10.0]
@@ -237,5 +237,5 @@ def cjkwrap(text, width, encoding="utf8"):
 
 if __name__=='__main__':
     import doctest
-    from reportPackages.reportlab.lib import textsplit
+    from reportlab.lib import textsplit
     doctest.testmod(textsplit)

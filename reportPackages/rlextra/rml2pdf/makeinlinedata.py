@@ -1,7 +1,7 @@
 def main(filters,fileNames):
     import base64, zlib, bz2
     from xml.sax.saxutils import escape
-    from reportPackages.reportlab.pdfbase import pdfutils
+    from reportlab.pdfbase import pdfutils
     if isinstance(filters,str):
         filters = filters.split()
     for fn in fileNames:

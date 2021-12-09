@@ -1,6 +1,6 @@
-#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
+#Copyright ReportLab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/platypus/tables.py
+#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/platypus/tables.py
 __all__= (
         'Table',
         'TableStyle',
@@ -23,17 +23,17 @@ cause the value to wrap (ie are like a traditional linefeed).
 See the test output from running this module as a script for a discussion of the method for constructing
 tables and table styles.
 """
-from reportPackages.reportlab.platypus.flowables import Flowable, Preformatted
-from reportPackages.reportlab import rl_config
-from reportPackages.reportlab.lib.styles import PropertySet, ParagraphStyle, _baseFontName
-from reportPackages.reportlab.lib import colors
-from reportPackages.reportlab.lib.utils import annotateException, IdentStr, flatten, isStr, asNative, strTypes, __UNSET__
-from reportPackages.reportlab.lib.validators import isListOfNumbersOrNone
-from reportPackages.reportlab.lib.rl_accel import fp_str
-from reportPackages.reportlab.lib.abag import ABag as CellFrame
-from reportPackages.reportlab.pdfbase.pdfmetrics import stringWidth
-from reportPackages.reportlab.platypus.doctemplate import Indenter, NullActionFlowable
-from reportPackages.reportlab.platypus.flowables import LIIndenter
+from reportlab.platypus.flowables import Flowable, Preformatted
+from reportlab import rl_config
+from reportlab.lib.styles import PropertySet, ParagraphStyle, _baseFontName
+from reportlab.lib import colors
+from reportlab.lib.utils import annotateException, IdentStr, flatten, isStr, asNative, strTypes, __UNSET__
+from reportlab.lib.validators import isListOfNumbersOrNone
+from reportlab.lib.rl_accel import fp_str
+from reportlab.lib.abag import ABag as CellFrame
+from reportlab.pdfbase.pdfmetrics import stringWidth
+from reportlab.platypus.doctemplate import Indenter, NullActionFlowable
+from reportlab.platypus.flowables import LIIndenter
 from collections import namedtuple
 
 LINECAPS={None: None, 'butt':0,'round':1,'projecting':2,'squared':2}
@@ -635,7 +635,7 @@ class Table(Flowable):
                             if canv: canv._fontname, canv._fontsize, canv._leading = saved
                             dW = dW + s.leftPadding + s.rightPadding
                             if not rl_config.allowTableBoundsErrors and dW>w:
-                                from reportPackages.reportlab.platypus.doctemplate import LayoutError
+                                from reportlab.platypus.doctemplate import LayoutError
                                 raise LayoutError("Flowable %s (%sx%s points) too wide for cell(%d,%d) (%sx* points) in\n%s" % (v[0].identity(30),fp_str(dW),fp_str(t),i,j, fp_str(w), self.identity(30)))
                         else:
                             v = (v is not None and str(v) or '').split("\n")

@@ -1,24 +1,24 @@
-#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
+#Copyright ReportLab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/graphics/charts/legends.py
+#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/graphics/charts/legends.py
 
 __version__='3.3.0'
 __doc__="""This will be a collection of legends to be used with charts."""
 
 import copy, operator
 
-from reportPackages.reportlab.lib import colors
-from reportPackages.reportlab.lib.validators import isNumber, OneOf, isString, isColorOrNone,\
+from reportlab.lib import colors
+from reportlab.lib.validators import isNumber, OneOf, isString, isColorOrNone,\
         isNumberOrNone, isListOfNumbersOrNone, isStringOrNone, isBoolean,\
         EitherOr, NoneOr, AutoOr, isAuto, Auto, isBoxAnchor, SequenceOf, isInstanceOf
-from reportPackages.reportlab.lib.attrmap import *
-from reportPackages.reportlab.pdfbase.pdfmetrics import stringWidth, getFont
-from reportPackages.reportlab.graphics.widgetbase import Widget, TypedPropertyCollection, PropHolder
-from reportPackages.reportlab.graphics.shapes import Drawing, Group, String, Rect, Line, STATE_DEFAULTS
-from reportPackages.reportlab.graphics.charts.areas import PlotArea
-from reportPackages.reportlab.graphics.widgets.markers import uSymbol2Symbol, isSymbol
-from reportPackages.reportlab.lib.utils import isSeq, find_locals, isStr, asNative
-from reportPackages.reportlab.graphics.shapes import _baseGFontName
+from reportlab.lib.attrmap import *
+from reportlab.pdfbase.pdfmetrics import stringWidth, getFont
+from reportlab.graphics.widgetbase import Widget, TypedPropertyCollection, PropHolder
+from reportlab.graphics.shapes import Drawing, Group, String, Rect, Line, STATE_DEFAULTS
+from reportlab.graphics.charts.areas import PlotArea
+from reportlab.graphics.widgets.markers import uSymbol2Symbol, isSymbol
+from reportlab.lib.utils import isSeq, find_locals, isStr, asNative
+from reportlab.graphics.shapes import _baseGFontName
 from functools import reduce
 
 def _transMax(n,A):
@@ -123,7 +123,7 @@ class Legend(Widget):
 
     The swatches are filled rectangles whenever the respective
     color object in 'colorNamePairs' is a subclass of Color in
-    reportPackages.reportlab.lib.colors. Otherwise the object passed instead is
+    reportlab.lib.colors. Otherwise the object passed instead is
     assumed to have 'x', 'y', 'width' and 'height' attributes.
     A legend then tries to set them or catches any error. This
     lets you plug-in any widget you like as a replacement for
@@ -566,7 +566,7 @@ class TotalAnnotator(LegendColEndCallout):
         self.strokeDashArray = strokeDashArray
 
     def __call__(self,legend, g, x, xt, y, width, lWidth):
-        from reportPackages.reportlab.graphics.shapes import String, Line
+        from reportlab.graphics.shapes import String, Line
         fontSize = self.fontSize
         fontName = self.fontName
         fillColor = self.fillColor
@@ -607,8 +607,8 @@ class LineSwatch(Widget):
     )
 
     def __init__(self):
-        from reportPackages.reportlab.lib.colors import red
-        from reportPackages.reportlab.graphics.shapes import Line
+        from reportlab.lib.colors import red
+        from reportlab.graphics.shapes import Line
         self.x = 0
         self.y = 0
         self.width  = 20

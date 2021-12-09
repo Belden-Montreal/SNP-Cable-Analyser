@@ -7,8 +7,7 @@ from PyQt5 import QtWidgets, QtCore
 import visa
 import time
 
-from visa import Error as VisaError
-from pyvisa import ResourceManager
+
 import tempfile
 import os
 class Communication(QtCore.QObject):
@@ -34,7 +33,7 @@ class Communication(QtCore.QObject):
 
         try:
             #self._session = self._manager.open_resource(self._config.getAddress())
-            self.rm = visa.ResourceManager()
+            self.rm = pyvisa.ResourceManager()
             self.session = self.rm.open_resource(address)
 
             print(self._config.getAddress())

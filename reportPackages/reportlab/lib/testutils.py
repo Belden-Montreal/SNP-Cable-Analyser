@@ -1,15 +1,15 @@
-#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
+#Copyright ReportLab Europe Ltd. 2000-2017
 #see license.txt for license details
-import reportPackages.reportlab
-reportPackages.reportlab._rl_testing=True
-del reportPackages.reportlab
+import reportlab
+reportlab._rl_testing=True
+del reportlab
 __version__='3.3.0'
 __doc__="""Provides support for the test suite.
 
 The test suite as a whole, and individual tests, need to share
 certain support functions.  We have to put these in here so they
 can always be imported, and so that individual tests need to import
-nothing more than "reportPackages.reportlab.whatever..."
+nothing more than "reportlab.whatever..."
 """
 
 import sys, os, fnmatch, re
@@ -18,7 +18,7 @@ try:
 except ImportError:
     from ConfigParser import ConfigParser
 import unittest
-from reportPackages.reportlab.lib.utils import isCompactDistro, __rl_loader__, rl_isdir, asUnicode
+from reportlab.lib.utils import isCompactDistro, __rl_loader__, rl_isdir, asUnicode
 
 # Helper functions.
 def isWritable(D):
@@ -63,10 +63,10 @@ def setOutDir(name):
         _OUTDIR = scriptDir
 
     if not isWritable(_OUTDIR):
-        _OUTDIR = get_rl_tempdir('reportPackages.reportlab_test')
+        _OUTDIR = get_rl_tempdir('reportlab_test')
 
-    import reportPackages.reportlab
-    RL_HOME=reportPackages.reportlab.__path__[0]
+    import reportlab
+    RL_HOME=reportlab.__path__[0]
     if not os.path.isabs(RL_HOME): RL_HOME=os.path.normpath(os.path.abspath(RL_HOME))
     topDir = os.path.dirname(RL_HOME)
     testsFolder = os.path.join(topDir,'tests')
@@ -85,7 +85,7 @@ def setOutDir(name):
 
 _mockumap = (
         None if os.environ.get('OFFLINE_MOCK','1')!='1' 
-            else'http://www.reportPackages.reportlab.com/rsrc/encryption.gif',
+            else'http://www.reportlab.com/rsrc/encryption.gif',
         )
 def mockUrlRead(name):
     if name in _mockumap:

@@ -1,5 +1,5 @@
 __all__ = '''MultiCol'''.split()
-from reportPackages.reportlab.lib.utils import strTypes
+from reportlab.lib.utils import strTypes
 from .flowables import Flowable, _Container, _FindSplitterMixin, _listWrapOn
 
 class MultiCol(_Container,_FindSplitterMixin,Flowable):

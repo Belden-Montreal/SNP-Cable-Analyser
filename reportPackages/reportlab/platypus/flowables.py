@@ -1,6 +1,6 @@
-#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
+#Copyright ReportLab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/platypus/flowables.py
+#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/platypus/flowables.py
 __version__='3.3.0'
 __doc__="""
 A flowable is a "floating element" in a document whose exact position is determined by the
@@ -26,15 +26,15 @@ higher level components).
 """
 import os
 from copy import deepcopy, copy
-from reportPackages.reportlab.lib.colors import red, gray, lightgrey
-from reportPackages.reportlab.lib.rl_accel import fp_str
-from reportPackages.reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT, TA_JUSTIFY
-from reportPackages.reportlab.lib.styles import _baseFontName
-from reportPackages.reportlab.lib.utils import strTypes, rl_safe_exec
-from reportPackages.reportlab.lib.abag import ABag
-from reportPackages.reportlab.pdfbase import pdfutils
-from reportPackages.reportlab.pdfbase.pdfmetrics import stringWidth
-from reportPackages.reportlab.rl_config import _FUZZ, overlapAttachedSpace, ignoreContainerActions, listWrapOnFakeWidth
+from reportlab.lib.colors import red, gray, lightgrey
+from reportlab.lib.rl_accel import fp_str
+from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT, TA_JUSTIFY
+from reportlab.lib.styles import _baseFontName
+from reportlab.lib.utils import strTypes, rl_safe_exec
+from reportlab.lib.abag import ABag
+from reportlab.pdfbase import pdfutils
+from reportlab.pdfbase.pdfmetrics import stringWidth
+from reportlab.rl_config import _FUZZ, overlapAttachedSpace, ignoreContainerActions, listWrapOnFakeWidth
 import collections
 
 __all__ = '''AnchorFlowable BalancedColumns BulletDrawer CallerMacro CondPageBreak DDIndenter DocAssert
@@ -421,7 +421,7 @@ class Image(Flowable):
         if not fp and os.path.splitext(filename)[1] in ['.jpg', '.JPG', '.jpeg', '.JPEG']:
             # if it is a JPEG, will be inlined within the file -
             # but we still need to know its size now
-            from reportPackages.reportlab.lib.utils import open_for_read
+            from reportlab.lib.utils import open_for_read
             f = open_for_read(filename, 'b')
             try:
                 try:
@@ -496,7 +496,7 @@ class Image(Flowable):
 
     def __getattr__(self,a):
         if a=='_img':
-            from reportPackages.reportlab.lib.utils import ImageReader  #this may raise an error
+            from reportlab.lib.utils import ImageReader  #this may raise an error
             self._img = ImageReader(self._file)
             if not isinstance(self._file,strTypes):
                 self._file = None
@@ -604,7 +604,7 @@ class CondPageBreak(Spacer):
         if availHeight<self.height:
             f = self._doctemplateAttr('frame')
             if not f: return availWidth, availHeight
-            from reportPackages.reportlab.platypus.doctemplate import FrameBreak
+            from reportlab.platypus.doctemplate import FrameBreak
             f.add_generated_content(FrameBreak)
         return 0, 0
 
@@ -618,7 +618,7 @@ def _listWrapOn(F,availWidth,canv,mergeSpace=1,obj=None,dims=None,fakeWidth=None
     if fakeWidth is None:
         fakeWidth = listWrapOnFakeWidth
     if cframe:
-        from reportPackages.reportlab.platypus.doctemplate import _addGeneratedContent, Indenter
+        from reportlab.platypus.doctemplate import _addGeneratedContent, Indenter
         doct_frame = cframe
         cframe = doct.frame = deepcopy(doct_frame)
         cframe._generated_content = None
@@ -632,7 +632,7 @@ def _listWrapOn(F,availWidth,canv,mergeSpace=1,obj=None,dims=None,fakeWidth=None
         while F:
             f = F.pop(0)
             if hasattr(f,'frameAction'):
-                from reportPackages.reportlab.platypus.doctemplate import Indenter
+                from reportlab.platypus.doctemplate import Indenter
                 if isinstance(f,Indenter):
                     availWidth -= f.left+f.right
                 continue
@@ -667,7 +667,7 @@ def _listWrapOn(F,availWidth,canv,mergeSpace=1,obj=None,dims=None,fakeWidth=None
 def _flowableSublist(V):
     "if it isn't a list or tuple, wrap it in a list"
     if not isinstance(V,(list,tuple)): V = V is not None and [V] or []
-    from reportPackages.reportlab.platypus.doctemplate import LCActionFlowable
+    from reportlab.platypus.doctemplate import LCActionFlowable
     assert not [x for x in V if isinstance(x,LCActionFlowable)],'LCActionFlowables not allowed in sublists'
     return V
 
@@ -690,9 +690,9 @@ class KeepTogether(_ContainerSpace,Flowable):
     def __init__(self,flowables,maxHeight=None):
         if not hasattr(KeepTogether,'NullActionFlowable'):
             #cache these on the class
-            from reportPackages.reportlab.platypus.doctemplate import NullActionFlowable
-            from reportPackages.reportlab.platypus.doctemplate import FrameBreak
-            from reportPackages.reportlab.lib.utils import annotateException
+            from reportlab.platypus.doctemplate import NullActionFlowable
+            from reportlab.platypus.doctemplate import FrameBreak
+            from reportlab.lib.utils import annotateException
             KeepTogether.NullActionFlowable = NullActionFlowable
             KeepTogether.FrameBreak = FrameBreak
             KeepTogether.annotateException = annotateException
@@ -925,7 +925,7 @@ def cdeepcopy(obj):
 class _Container(_ContainerSpace):  #Abstract some common container like behaviour
     def drawOn(self, canv, x, y, _sW=0, scale=1.0, content=None, aW=None):
         '''we simulate being added to a frame'''
-        from reportPackages.reportlab.platypus.doctemplate import ActionFlowable, Indenter
+        from reportlab.platypus.doctemplate import ActionFlowable, Indenter
         x0 = x
         y0 = y
         pS = 0
@@ -1002,7 +1002,7 @@ class PTOContainer(_Container,Flowable):
         return self.width,self.height
 
     def split(self, availWidth, availHeight):
-        from reportPackages.reportlab.platypus.doctemplate import Indenter
+        from reportlab.platypus.doctemplate import Indenter
         if availHeight<0: return []
         canv = self.canv
         C = self._content
@@ -1149,7 +1149,7 @@ class KeepInFrame(_Container,Flowable):
                 getattr(self,'maxHeight','')and (' maxHeight=%s' % fp_str(getattr(self,'maxHeight')))or '')
 
     def wrap(self,availWidth,availHeight):
-        from reportPackages.reportlab.platypus.doctemplate import LayoutError
+        from reportlab.platypus.doctemplate import LayoutError
         mode = self.mode
         maxWidth = float(min(self.maxWidth or availWidth,availWidth))
         maxHeight = float(min(self.maxHeight or availHeight,availHeight))
@@ -1236,7 +1236,7 @@ class _FindSplitterMixin:
         F = self._getContent(content)
         for i,f in enumerate(F):
             if hasattr(f,'frameAction'):
-                from reportPackages.reportlab.platypus.doctemplate import Indenter
+                from reportlab.platypus.doctemplate import Indenter
                 if isinstance(f,Indenter):
                     availWidth -= f.left+f.right
                 continue
@@ -1256,7 +1256,7 @@ class _FindSplitterMixin:
             if H>availHeight:
                 aH = availHeight-(H-h)
                 if paraFix:
-                    from reportPackages.reportlab.platypus.paragraph import Paragraph
+                    from reportlab.platypus.paragraph import Paragraph
                     if isinstance(f,(Paragraph,Preformatted)):
                         leading = f.style.leading
                         nH = leading*int(aH/float(leading))+_FUZZ
@@ -1529,9 +1529,9 @@ class BalancedColumns(_FindSplitterMixin,NullDraw):
     def _generated_content(self,aW,aH):
         G = []
         frame = self._frame
-        from reportPackages.reportlab.platypus.doctemplate import CurrentFrameFlowable,LayoutError, ActionFlowable, Indenter
-        from reportPackages.reportlab.platypus.frames import Frame
-        from reportPackages.reportlab.platypus.doctemplate import FrameBreak
+        from reportlab.platypus.doctemplate import CurrentFrameFlowable,LayoutError, ActionFlowable, Indenter
+        from reportlab.platypus.frames import Frame
+        from reportlab.platypus.doctemplate import FrameBreak
         lpad = frame._leftPadding if self._leftPadding is None else self._leftPadding
         rpad = frame._rightPadding if self._rightPadding is None else self._rightPadding
         tpad = frame._topPadding if self._topPadding is None else self._topPadding
@@ -1850,7 +1850,7 @@ class FrameBG(AnchorFlowable):
         Spacer.__init__(self,0,0)
         self.start = start
         if start:
-            from reportPackages.reportlab.platypus.doctemplate import _evalMeasurement
+            from reportlab.platypus.doctemplate import _evalMeasurement
             self.left = _evalMeasurement(left)
             self.right = _evalMeasurement(right)
             self.color = color
@@ -1901,7 +1901,7 @@ class FrameSplitter(NullDraw):
 
     def wrap(self,aW,aH):
         frame = self._frame
-        from reportPackages.reportlab.platypus.doctemplate import NextPageTemplate,CurrentFrameFlowable,LayoutError
+        from reportlab.platypus.doctemplate import NextPageTemplate,CurrentFrameFlowable,LayoutError
         G=[NextPageTemplate(self.nextTemplate)]
         if aH<self.gap+self.required-_FUZZ:
             #we are going straight to the nextTemplate with no attempt to modify the frames
@@ -1938,7 +1938,7 @@ class FrameSplitter(NullDraw):
         return 0,0
 
 
-from reportPackages.reportlab.lib.sequencer import _type2formatter
+from reportlab.lib.sequencer import _type2formatter
 _bulletNames = dict(
                 bulletchar=u'\u2022',   #usually a small circle
                 circle=u'\u25cf',   #circle as high as the font
@@ -2105,7 +2105,7 @@ class LIIndenter(DDIndenter):
         self._flowable.drawOn(canv,x+self._leftIndent,y,max(0,_sW-self._leftIndent-self._rightIndent))
 
 
-from reportPackages.reportlab.lib.styles import ListStyle
+from reportlab.lib.styles import ListStyle
 class ListItem:
     def __init__(self,
                     flowables,  #the initial flowables
@@ -2507,10 +2507,10 @@ class DocPara(DocAssign):
         value = self.get_value(aW,aH)
         P = self.klass
         if not P:
-            from reportPackages.reportlab.platypus.paragraph import Paragraph as P
+            from reportlab.platypus.paragraph import Paragraph as P
         style = self.style
         if not style:
-            from reportPackages.reportlab.lib.styles import getSampleStyleSheet
+            from reportlab.lib.styles import getSampleStyleSheet
             style=getSampleStyleSheet()['Code']
         if self.escape:
             from xml.sax.saxutils import escape

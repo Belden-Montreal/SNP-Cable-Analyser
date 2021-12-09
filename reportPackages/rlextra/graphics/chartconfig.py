@@ -27,8 +27,8 @@ Here's the kind of file you can create:
 
 Lots of doctests follow.  Start by making a drawing
 
->>> from reportPackages.reportlab.graphics.shapes import Drawing
->>> from reportPackages.reportlab.graphics.charts.barcharts import HorizontalBarChart
+>>> from reportlab.graphics.shapes import Drawing
+>>> from reportlab.graphics.charts.barcharts import HorizontalBarChart
 >>> d = Drawing()
 >>> chart = HorizontalBarChart()
 >>> d.add(chart, name='chart')
@@ -38,7 +38,7 @@ Lots of doctests follow.  Start by making a drawing
 'Times-Roman'
 
 >>> d.__class__.__module__
-'reportPackages.reportlab.graphics.shapes'
+'reportlab.graphics.shapes'
 >>> #hack it so I can test better
 >>> d.__class__.__module__ = 'mychart'
 >>> d.__class__.__module__
@@ -57,7 +57,7 @@ Lots of doctests follow.  Start by making a drawing
 ... height = 250
 ... '''
 >>> #parse it by hand
->>> from reportPackages.reportlab.lib.utils import getStringIO
+>>> from reportlab.lib.utils import getStringIO
 >>> config = SafeConfigParser()
 >>> config.optionxform = str
 >>> buf = getStringIO(configData)
@@ -170,10 +170,10 @@ def applyToDrawing(config, drawing, verbose=False):
     #presumably Robin could apply here whatever trickery he did
     #in guiedit to type-convert
 
-    from reportPackages.reportlab.graphics.shapes import STATE_DEFAULTS
+    from reportlab.graphics.shapes import STATE_DEFAULTS
     SDK = list(STATE_DEFAULTS.keys())
     ns.update(dict(drawing=drawing, STATE_DEFAULTS=STATE_DEFAULTS))
-    exec("from reportPackages.reportlab.lib.colors import *", ns)
+    exec("from reportlab.lib.colors import *", ns)
 
     setOK = 0
     for fullPath, strValue in items.items():

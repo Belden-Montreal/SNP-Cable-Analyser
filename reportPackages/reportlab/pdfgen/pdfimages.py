@@ -1,19 +1,19 @@
-#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
+#Copyright ReportLab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/pdfgen/pdfimages.py
+#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/pdfgen/pdfimages.py
 __version__='3.3.0'
 __doc__="""
 Image functionality sliced out of canvas.py for generalization
 """
 
 import os
-import reportPackages.reportlab
-from reportPackages.reportlab import rl_config
-from reportPackages.reportlab.pdfbase import pdfutils
-from reportPackages.reportlab.pdfbase import pdfdoc
-from reportPackages.reportlab.lib.utils import import_zlib, haveImages, getBytesIO, isStr
-from reportPackages.reportlab.lib.rl_accel import fp_str, asciiBase85Encode
-from reportPackages.reportlab.lib.boxstuff import aspectRatioFix
+import reportlab
+from reportlab import rl_config
+from reportlab.pdfbase import pdfutils
+from reportlab.pdfbase import pdfdoc
+from reportlab.lib.utils import import_zlib, haveImages, getBytesIO, isStr
+from reportlab.lib.rl_accel import fp_str, asciiBase85Encode
+from reportlab.lib.boxstuff import aspectRatioFix
 
 
 class PDFImage:
@@ -206,7 +206,7 @@ class PDFImage:
 
 if __name__=='__main__':
     srcfile = os.path.join(
-                os.path.dirname(reportPackages.reportlab.__file__),
+                os.path.dirname(reportlab.__file__),
                 'test',
                 'pythonpowered.gif'
                 )

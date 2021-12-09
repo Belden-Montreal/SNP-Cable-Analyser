@@ -3,7 +3,7 @@ import os
 import sys
 
 #page template
-TEMPLATE_FN='../htdocs/reportPackages.reportlab_template.html'
+TEMPLATE_FN='../htdocs/reportlab_template.html'
 START_DELIM = '<!--User Content Starts Here-->'
 END_DELIM = '<!--User Content Ends Here-->'
 
@@ -47,7 +47,7 @@ def DoNormalPages(pages):
 			print('    Specified file %s not found' % filename)
 
 def get_templated_HTML( src_template=DUMB_FMT_HTML, title=None, heading=None, body=None):
-	from reportPackages.reportlab.lib.utils import getStringIO
+	from reportlab.lib.utils import getStringIO
 	p = DocStyle0HTML()
 	D = p.processfile( getStringIO(body), None )
 	if title is not None: D['title'] = title
@@ -128,7 +128,7 @@ def intersperse(data1, data2, delim1, delim2):
 	Returns the interspersed data, or the original (data1) is nothing found.
 
 	Example:
-		data1 = 'Made By reportPackages.reportlab <TITLE>Title Goes Here</Title> 2000-02-28'
+		data1 = 'Made By ReportLab <TITLE>Title Goes Here</Title> 2000-02-28'
 		data2 = 'Made by PageMill <TITLE>MyPage</TITLE> copyright Adobe'
 	When interspersed, you get 'MyPage' in the first line.
 	"""
@@ -173,9 +173,9 @@ and so forth.
 
 .H stuff for HTML ONLY you've been warned RGB :)
 """
-import reportPackages.reportlab
-from reportPackages.reportlab import platypus
-inch = reportPackages.reportlab.lib.units.inch
+import reportlab
+from reportlab import platypus
+inch = reportlab.lib.units.inch
 
 do_images = 1
 
@@ -186,7 +186,7 @@ class DocStyle0PDF:
 	def __init__(self):
 		self.elts = []
 		self.paragraph = []
-		styles = reportPackages.reportlab.lib.styles.getSampleStyleSheet()
+		styles = reportlab.lib.styles.getSampleStyleSheet()
 		self.paraStyle = styles["Normal"]
 		self.headerStyle = styles["Heading3"]
 		self.preStyle = styles["Code"]
@@ -260,9 +260,9 @@ class DocStyle0PDF:
 		canvas.setStrokeColorRGB(1,0,0)
 		canvas.setLineWidth(5)
 		canvas.setFont("Helvetica-Bold",16)
-		canvas.drawCentredString(4*inch, reportPackages.reportlab.lib.units.PAGE_HEIGHT-4*inch, self.Title)
+		canvas.drawCentredString(4*inch, reportlab.lib.units.PAGE_HEIGHT-4*inch, self.Title)
 		canvas.setFont('Times-Roman',9)
-		canvas.drawString(2*inch, reportPackages.reportlab.lib.units.PAGE_HEIGHT-0.50 * inch, "First Page / %s" % self.Title)
+		canvas.drawString(2*inch, reportlab.lib.units.PAGE_HEIGHT-0.50 * inch, "First Page / %s" % self.Title)
 		canvas.restoreState()
 
 	def myLaterPages(self, canvas, doc):
@@ -273,7 +273,7 @@ class DocStyle0PDF:
 		#	canvas.drawInlineImage("images/replog.gif",20,750,90,60)
 		canvas.setFont('Times-Roman',9)
 		pageinfo=self.Title
-		canvas.drawString(2*inch, reportPackages.reportlab.lib.units.PAGE_HEIGHT-0.5 * inch, "Page %d %s" % (doc.page, pageinfo))
+		canvas.drawString(2*inch, reportlab.lib.units.PAGE_HEIGHT-0.5 * inch, "Page %d %s" % (doc.page, pageinfo))
 		canvas.restoreState()
 
 	def process(self, lines, tofilename):
@@ -305,7 +305,7 @@ class DocStyle0PDF:
 			self.finish(tofilename)
 
 	def finish(self, tofilename):
-		doc = platypus.doctemplate.SimpleFlowDocument(tofilename, reportPackages.reportlab.lib.units.DEFAULT_PAGE_SIZE)
+		doc = platypus.doctemplate.SimpleFlowDocument(tofilename, reportlab.lib.units.DEFAULT_PAGE_SIZE)
 		doc.onFirstPage = self.myFirstPage
 		doc.onNewPage = self.myLaterPages
 		doc.leftMargin = 144

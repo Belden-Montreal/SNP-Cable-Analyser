@@ -16,14 +16,14 @@ __all__ = list(filter(None,'''
         add32
         hex32
         '''.split()))
-import reportPackages.reportlab
-testing = getattr(reportPackages.reportlab,'_rl_testing',False)
-del reportPackages.reportlab
+import reportlab
+testing = getattr(reportlab,'_rl_testing',False)
+del reportlab
 
 for fn in __all__:
     D={}
     try:
-        exec('from reportPackages.reportlab.lib._rl_accel import %s as f' % fn,D)
+        exec('from reportlab.lib._rl_accel import %s as f' % fn,D)
         _c_funcs[fn] = D['f']
         if testing: _py_funcs[fn] = None
     except ImportError:
@@ -31,7 +31,7 @@ for fn in __all__:
     del D
 
 if _py_funcs:
-    from reportPackages.reportlab.lib.utils import isBytes, isUnicode, isSeq, rawBytes, asNative, asUnicode, asBytes
+    from reportlab.lib.utils import isBytes, isUnicode, isSeq, rawBytes, asNative, asUnicode, asBytes
     from math import log
     from struct import unpack
 
@@ -331,7 +331,7 @@ del fn, f, G
 
 if __name__=='__main__':
     import sys, os, subprocess
-    for modname in 'reportPackages.reportlab.lib.rl_accel','reportPackages.reportlab.lib._rl_accel':
+    for modname in 'reportlab.lib.rl_accel','reportlab.lib._rl_accel':
         for cmd  in (
             #"unicode2T1('abcde fghi . jkl ; mno',fonts)",
             #"unicode2T1(u'abcde fghi . jkl ; mno',fonts)",
@@ -340,7 +340,7 @@ if __name__=='__main__':
             ):
             print('%s %s' % (modname,cmd))
             s=';'.join((
-                "from reportPackages.reportlab.pdfbase.pdfmetrics import getFont",
+                "from reportlab.pdfbase.pdfmetrics import getFont",
                 "from %s import unicode2T1,instanceStringWidthT1" % modname,
                 "fonts=[getFont('Helvetica')]+getFont('Helvetica').substitutionFonts""",
                 "font=fonts[0]",

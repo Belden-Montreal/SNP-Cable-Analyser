@@ -1,13 +1,13 @@
-#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
+#Copyright ReportLab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/graphics/widgets/grids.py
+#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/graphics/widgets/grids.py
 __version__='3.3.0'
 
-from reportPackages.reportlab.lib import colors
-from reportPackages.reportlab.lib.validators import isNumber, isColorOrNone, isBoolean, isListOfNumbers, OneOf, isListOfColors, isNumberOrNone
-from reportPackages.reportlab.lib.attrmap import AttrMap, AttrMapValue
-from reportPackages.reportlab.graphics.shapes import Drawing, Group, Line, Rect, LineShape, definePath, EmptyClipPath
-from reportPackages.reportlab.graphics.widgetbase import Widget
+from reportlab.lib import colors
+from reportlab.lib.validators import isNumber, isColorOrNone, isBoolean, isListOfNumbers, OneOf, isListOfColors, isNumberOrNone
+from reportlab.lib.attrmap import AttrMap, AttrMapValue
+from reportlab.graphics.shapes import Drawing, Group, Line, Rect, LineShape, definePath, EmptyClipPath
+from reportlab.graphics.widgetbase import Widget
 
 def frange(start, end=None, inc=None):
     "A range function, that does accept float increments..."
@@ -511,8 +511,8 @@ class ShadedPolygon(Widget,LineShape):
         return g
 
 if __name__=='__main__': #noruntests
-    from reportPackages.reportlab.lib.colors import blue
-    from reportPackages.reportlab.graphics.shapes import Drawing
+    from reportlab.lib.colors import blue
+    from reportlab.graphics.shapes import Drawing
     angle=45
     D = Drawing(120,120)
     D.add(ShadedPolygon(points=(10,10,60,60,110,10),strokeColor=None,strokeWidth=1,angle=90,numShades=50,cylinderMode=0))

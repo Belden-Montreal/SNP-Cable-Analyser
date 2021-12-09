@@ -1,4 +1,4 @@
-#copyright reportPackages.reportlab Europe Limited. 2000-2016
+#copyright ReportLab Europe Limited. 2000-2016
 #see license.txt for license details
 """Page Description Parsing tools.  Extracts text from pages.
 
@@ -12,7 +12,7 @@ of PDF files.
 
 """
 import re
-from reportPackages.reportlab.lib.utils import asNative
+from reportlab.lib.utils import asNative
 
 patStartString = re.compile(r"\(")
 patEndString = re.compile(r"\)")

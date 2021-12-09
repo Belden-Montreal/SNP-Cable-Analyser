@@ -1,6 +1,6 @@
-#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
+#Copyright ReportLab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/pdfbase/_fontdata.py
+#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/pdfbase/_fontdata.py
 #$Header $
 __version__='3.3.0'
 __doc__="""Database of font related things
@@ -98,8 +98,8 @@ else:
 def _findFNR(fontName):
     return _font2fnrMap[fontName.lower()]
 
-from reportPackages.reportlab.rl_config import T1SearchPath
-from reportPackages.reportlab.lib.utils import rl_isfile
+from reportlab.rl_config import T1SearchPath
+from reportlab.lib.utils import rl_isfile
 def _searchT1Dirs(n,rl_isfile=rl_isfile,T1SearchPath=T1SearchPath):
     assert T1SearchPath!=[], "No Type-1 font search path"
     for d in T1SearchPath:
@@ -153,13 +153,13 @@ encodings = _Name2StandardEncodingMap()
 #well under 64k.  We might well be able to ditch many of
 #these anyway now we run on Unicode.
 
-from reportPackages.reportlab.pdfbase._fontdata_enc_winansi import WinAnsiEncoding
-from reportPackages.reportlab.pdfbase._fontdata_enc_macroman import MacRomanEncoding
-from reportPackages.reportlab.pdfbase._fontdata_enc_standard import StandardEncoding
-from reportPackages.reportlab.pdfbase._fontdata_enc_symbol import SymbolEncoding
-from reportPackages.reportlab.pdfbase._fontdata_enc_zapfdingbats import ZapfDingbatsEncoding
-from reportPackages.reportlab.pdfbase._fontdata_enc_pdfdoc import PDFDocEncoding
-from reportPackages.reportlab.pdfbase._fontdata_enc_macexpert import MacExpertEncoding
+from reportlab.pdfbase._fontdata_enc_winansi import WinAnsiEncoding
+from reportlab.pdfbase._fontdata_enc_macroman import MacRomanEncoding
+from reportlab.pdfbase._fontdata_enc_standard import StandardEncoding
+from reportlab.pdfbase._fontdata_enc_symbol import SymbolEncoding
+from reportlab.pdfbase._fontdata_enc_zapfdingbats import ZapfDingbatsEncoding
+from reportlab.pdfbase._fontdata_enc_pdfdoc import PDFDocEncoding
+from reportlab.pdfbase._fontdata_enc_macexpert import MacExpertEncoding
 encodings.update({
     'WinAnsiEncoding': WinAnsiEncoding,
     'MacRomanEncoding': MacRomanEncoding,
@@ -188,49 +188,49 @@ ascent_descent = {
     }
 
 # ditto about 64k limit - profusion of external files
-import reportPackages.reportlab.pdfbase._fontdata_widths_courier
-import reportPackages.reportlab.pdfbase._fontdata_widths_courierbold
-import reportPackages.reportlab.pdfbase._fontdata_widths_courieroblique
-import reportPackages.reportlab.pdfbase._fontdata_widths_courierboldoblique
-import reportPackages.reportlab.pdfbase._fontdata_widths_helvetica
-import reportPackages.reportlab.pdfbase._fontdata_widths_helveticabold
-import reportPackages.reportlab.pdfbase._fontdata_widths_helveticaoblique
-import reportPackages.reportlab.pdfbase._fontdata_widths_helveticaboldoblique
-import reportPackages.reportlab.pdfbase._fontdata_widths_timesroman
-import reportPackages.reportlab.pdfbase._fontdata_widths_timesbold
-import reportPackages.reportlab.pdfbase._fontdata_widths_timesitalic
-import reportPackages.reportlab.pdfbase._fontdata_widths_timesbolditalic
-import reportPackages.reportlab.pdfbase._fontdata_widths_symbol
-import reportPackages.reportlab.pdfbase._fontdata_widths_zapfdingbats
+import reportlab.pdfbase._fontdata_widths_courier
+import reportlab.pdfbase._fontdata_widths_courierbold
+import reportlab.pdfbase._fontdata_widths_courieroblique
+import reportlab.pdfbase._fontdata_widths_courierboldoblique
+import reportlab.pdfbase._fontdata_widths_helvetica
+import reportlab.pdfbase._fontdata_widths_helveticabold
+import reportlab.pdfbase._fontdata_widths_helveticaoblique
+import reportlab.pdfbase._fontdata_widths_helveticaboldoblique
+import reportlab.pdfbase._fontdata_widths_timesroman
+import reportlab.pdfbase._fontdata_widths_timesbold
+import reportlab.pdfbase._fontdata_widths_timesitalic
+import reportlab.pdfbase._fontdata_widths_timesbolditalic
+import reportlab.pdfbase._fontdata_widths_symbol
+import reportlab.pdfbase._fontdata_widths_zapfdingbats
 widthsByFontGlyph = {
     'Courier':
-    reportPackages.reportlab.pdfbase._fontdata_widths_courier.widths,
+    reportlab.pdfbase._fontdata_widths_courier.widths,
     'Courier-Bold':
-    reportPackages.reportlab.pdfbase._fontdata_widths_courierbold.widths,
+    reportlab.pdfbase._fontdata_widths_courierbold.widths,
     'Courier-Oblique':
-    reportPackages.reportlab.pdfbase._fontdata_widths_courieroblique.widths,
+    reportlab.pdfbase._fontdata_widths_courieroblique.widths,
     'Courier-BoldOblique':
-    reportPackages.reportlab.pdfbase._fontdata_widths_courierboldoblique.widths,
+    reportlab.pdfbase._fontdata_widths_courierboldoblique.widths,
     'Helvetica':
-    reportPackages.reportlab.pdfbase._fontdata_widths_helvetica.widths,
+    reportlab.pdfbase._fontdata_widths_helvetica.widths,
     'Helvetica-Bold':
-    reportPackages.reportlab.pdfbase._fontdata_widths_helveticabold.widths,
+    reportlab.pdfbase._fontdata_widths_helveticabold.widths,
     'Helvetica-Oblique':
-    reportPackages.reportlab.pdfbase._fontdata_widths_helveticaoblique.widths,
+    reportlab.pdfbase._fontdata_widths_helveticaoblique.widths,
     'Helvetica-BoldOblique':
-    reportPackages.reportlab.pdfbase._fontdata_widths_helveticaboldoblique.widths,
+    reportlab.pdfbase._fontdata_widths_helveticaboldoblique.widths,
     'Times-Roman':
-    reportPackages.reportlab.pdfbase._fontdata_widths_timesroman.widths,
+    reportlab.pdfbase._fontdata_widths_timesroman.widths,
     'Times-Bold':
-    reportPackages.reportlab.pdfbase._fontdata_widths_timesbold.widths,
+    reportlab.pdfbase._fontdata_widths_timesbold.widths,
     'Times-Italic':
-    reportPackages.reportlab.pdfbase._fontdata_widths_timesitalic.widths,
+    reportlab.pdfbase._fontdata_widths_timesitalic.widths,
     'Times-BoldItalic':
-    reportPackages.reportlab.pdfbase._fontdata_widths_timesbolditalic.widths,
+    reportlab.pdfbase._fontdata_widths_timesbolditalic.widths,
     'Symbol':
-    reportPackages.reportlab.pdfbase._fontdata_widths_symbol.widths,
+    reportlab.pdfbase._fontdata_widths_symbol.widths,
     'ZapfDingbats':
-    reportPackages.reportlab.pdfbase._fontdata_widths_zapfdingbats.widths,
+    reportlab.pdfbase._fontdata_widths_zapfdingbats.widths,
 }
 
 
@@ -250,6 +250,6 @@ def _reset(
         d.clear()
         d.update(v)
 
-from reportPackages.reportlab.rl_config import register_reset
+from reportlab.rl_config import register_reset
 register_reset(_reset)
 del register_reset

@@ -30,9 +30,9 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-from reportPackages.reportlab.lib.units import inch
-from reportPackages.reportlab.lib.utils import asNative
-from reportPackages.reportlab.graphics.barcode.common import MultiWidthBarcode
+from reportlab.lib.units import inch
+from reportlab.lib.utils import asNative
+from reportlab.graphics.barcode.common import MultiWidthBarcode
 from string import digits
 
 _patterns = {
@@ -362,7 +362,7 @@ class Code128(MultiWidthBarcode):
 
 class Code128Auto(Code128):
     '''contributed by https://bitbucket.org/kylemacfarlane/
-    see https://bitbucket.org/rptlab/reportPackages.reportlab/issues/69/implementations-of-code-128-auto-and-data
+    see https://bitbucket.org/rptlab/reportlab/issues/69/implementations-of-code-128-auto-and-data
     '''
     def encode(self):
         s = self.validated
@@ -417,12 +417,12 @@ class Code128Auto(Code128):
 
 if __name__=='__main__':
     def main():
-        from reportPackages.reportlab.graphics.barcode.code128 import Code128
-        from reportPackages.reportlab.platypus import Spacer, SimpleDocTemplate
-        from reportPackages.reportlab.lib.units import inch, cm
-        from reportPackages.reportlab.lib.styles import getSampleStyleSheet
-        from reportPackages.reportlab.platypus.paragraph import Paragraph
-        from reportPackages.reportlab.platypus.flowables import KeepTogether
+        from reportlab.graphics.barcode.code128 import Code128
+        from reportlab.platypus import Spacer, SimpleDocTemplate
+        from reportlab.lib.units import inch, cm
+        from reportlab.lib.styles import getSampleStyleSheet
+        from reportlab.platypus.paragraph import Paragraph
+        from reportlab.platypus.flowables import KeepTogether
         import os
         styles = getSampleStyleSheet()
         styleN = styles['Normal']

@@ -1,19 +1,19 @@
-#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
+#Copyright ReportLab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/graphics/renderPS.py
+#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/graphics/renderPS.py
 __version__='3.3.0'
 __doc__="""Render drawing objects in Postscript"""
 
-from reportPackages.reportlab.pdfbase.pdfmetrics import getFont, stringWidth, unicode2T1 # for font info
-from reportPackages.reportlab.lib.utils import getBytesIO, getStringIO, asBytes, char2int, rawBytes, asNative, isUnicode
-from reportPackages.reportlab.lib.rl_accel import fp_str
-from reportPackages.reportlab.lib.colors import black
-from reportPackages.reportlab.graphics.renderbase import Renderer, StateTracker, getStateDelta, renderScaledDrawing
-from reportPackages.reportlab.graphics.shapes import STATE_DEFAULTS
+from reportlab.pdfbase.pdfmetrics import getFont, stringWidth, unicode2T1 # for font info
+from reportlab.lib.utils import getBytesIO, getStringIO, asBytes, char2int, rawBytes, asNative, isUnicode
+from reportlab.lib.rl_accel import fp_str
+from reportlab.lib.colors import black
+from reportlab.graphics.renderbase import Renderer, StateTracker, getStateDelta, renderScaledDrawing
+from reportlab.graphics.shapes import STATE_DEFAULTS
 import math
 from operator import getitem
-from reportPackages.reportlab import rl_config
-from reportPackages.reportlab.pdfgen.canvas import FILL_EVEN_ODD, FILL_NON_ZERO
+from reportlab import rl_config
+from reportlab.pdfgen.canvas import FILL_EVEN_ODD, FILL_NON_ZERO
 _ESCAPEDICT={}
 for c in range(256):
     if c<32 or c>=127:
@@ -156,7 +156,7 @@ class PSCanvas:
         _f.write(rawBytes(self._sep.join(self.code)))
         if _f is not f:
             _f.close()
-            from reportPackages.reportlab.lib.utils import markfilename
+            from reportlab.lib.utils import markfilename
             markfilename(f,creatorcode='XPR3',filetype='EPSF')
 
     def saveState(self):
@@ -186,7 +186,7 @@ class PSCanvas:
 
     def setDash(self, array=[], phase=0):
         """Two notations.  pass two numbers, or an array and phase"""
-        # copied and modified from reportPackages.reportlab.canvas
+        # copied and modified from reportlab.canvas
         psoperation = "setdash"
         if isinstance(array,(float,int)):
             self.code_append('[%s %s] 0 %s' % (array, phase, psoperation))
@@ -697,10 +697,10 @@ class PSCanvas:
 
 # renderpdf - draws them onto a canvas
 """Usage:
-    from reportPackages.reportlab.graphics import renderPS
+    from reportlab.graphics import renderPS
     renderPS.draw(drawing, canvas, x, y)
 Execute the script to see some test drawings."""
-from reportPackages.reportlab.graphics.shapes import *
+from reportlab.graphics.shapes import *
 
 # hack so we only get warnings once each
 #warnOnce = WarnOnce()
@@ -834,7 +834,7 @@ class _PSRenderer(Renderer):
             self._canvas.drawString(x,y,text, textRenderMode=textRenderMode)
 
     def drawPath(self, path, fillMode=None):
-        from reportPackages.reportlab.graphics.shapes import _renderPath
+        from reportlab.graphics.shapes import _renderPath
         c = self._canvas
         drawFuncs = (c.moveTo, c.lineTo, c.curveTo, c.closePath)
         autoclose = getattr(path,'autoclose','')
@@ -913,7 +913,7 @@ class _PSRenderer(Renderer):
                 self._canvas.setFont(fontname, fontsize)
 
     def drawImage(self, image):
-        from reportPackages.reportlab.lib.utils import ImageReader
+        from reportlab.lib.utils import ImageReader
         im = ImageReader(image.path)
         self._canvas.drawImage(im._image,image.x,image.y,image.width,image.height)
 
@@ -936,8 +936,8 @@ def drawToString(d, showBoundary=rl_config.showBoundary):
 #
 #########################################################
 def test(outDir='epsout',shout=False):
-    from reportPackages.reportlab.graphics import testshapes
-    from reportPackages.reportlab.rl_config import verbose
+    from reportlab.graphics import testshapes
+    from reportlab.rl_config import verbose
     OLDFONTS = testshapes._FONTS[:]
     testshapes._FONTS[:] = ['Times-Roman','Times-Bold','Times-Italic', 'Times-BoldItalic','Courier']
     try:

@@ -6,6 +6,9 @@ from UI import plugDialog
 from UI import VNA_addr_dialog
 from UI import TestParameters
 
+from UI import plugWidget as PW
+
+
 from Communication import Communication
 from embedding import Embedding
 
@@ -18,12 +21,25 @@ from matplotlib.pyplot import cm
 import numpy as np
 
 
-class AddPlug(QtWidgets.QMainWindow, plugDialog.Ui_Dialog, QtWidgets.QAction, QtWidgets.QFileDialog, QtWidgets.QListView, QtWidgets.QDialog, QtCore.Qt):
+class PlugWidget():
 
-    def __init__(self):
+    def __init__(self, parentTab, graph, sample, comm=None):
         super(self.__class__, self).__init__()
-        self.dialog = QtWidgets.QDialog()
-        self.setupUi(self.dialog)
+
+        self.widget  = QtWidgets.QWidget()
+        self.plugWidget = PW.Ui_ParameterWidget()
+        self.plugWidget.setupUi(self.widget)
+
+        self.sample = sample
+        self.graphicsView = graph
+
+        self.plugTab = QtWidgets.QWidget()
+        #self.TPNextPhaseTab = QtWidgets.QWidget()
+        self.plugWidget = PW.Ui_PlugWidget()
+        #self.parentTab.addTab(self.TPNextPhaseTab, "TP NEXT phase")        
+        self.plugWidget.setupUi(self.plugTab)
+
+
 
         self.em = Embedding()
 
@@ -35,11 +51,12 @@ class AddPlug(QtWidgets.QMainWindow, plugDialog.Ui_Dialog, QtWidgets.QAction, Qt
 
         font = QtGui.QFont()
         font.setPointSize(7)
-        self.df_open_label.setFont(font)
-        self.df_short_label.setFont(font)
-        self.pdf_open_label.setFont(font)
-        self.pdf_short_label.setFont(font)
-        self.pdf_load_label.setFont(font)
+
+        self.plugWidget.df_open_label.setFont(font)
+        self.plugWidget.df_short_label.setFont(font)
+        self.plugWidget.pdf_open_label.setFont(font)
+        self.plugWidget.pdf_short_label.setFont(font)
+        self.plugWidget.pdf_load_label.setFont(font)
         '''Here we will connect the buttons (import/acquire) to their apropriate functions'''
 
         self.df_open_import.clicked.connect(self.dfOpenImport)
@@ -53,12 +70,12 @@ class AddPlug(QtWidgets.QMainWindow, plugDialog.Ui_Dialog, QtWidgets.QAction, Qt
         self.pdf_load_import.clicked.connect(self.pdfLoadImport)
         #self.pdf_load_acquire.clicked.connect(self.pdfLoadAcquire)
         
-        self.cancelButton.clicked.connect(self.cancel)
+        #self.cancelButton.clicked.connect(self.cancel)
 
-        self.addPlug.clicked.connect(self.addNewPlug)
-        self.addPlug.setEnabled(False)
+        self.pdf_load_import.calculate.clicked.connect(self.addNewPlug)
+        self.pdf_load_import.calculate.setEnabled(False)
 
-        self.dialog.exec_()
+        self.embedWidget.setupUi(self.embeddingTab)
 
     def dfOpenImport(self):
         try:

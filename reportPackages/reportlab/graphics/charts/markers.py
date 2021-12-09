@@ -1,6 +1,6 @@
-#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
+#Copyright ReportLab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/graphics/charts/markers.py
+#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/graphics/charts/markers.py
 
 __version__='3.3.0'
 __doc__="""This modules defines a collection of markers used in charts.
@@ -9,9 +9,9 @@ The make* functions return a simple shape or a widget as for
 the smiley.
 """
 
-from reportPackages.reportlab.lib import colors
-from reportPackages.reportlab.graphics.shapes import Rect, Line, Circle, Polygon
-from reportPackages.reportlab.graphics.widgets.signsandsymbols import SmileyFace
+from reportlab.lib import colors
+from reportlab.graphics.shapes import Rect, Line, Circle, Polygon
+from reportlab.graphics.widgets.signsandsymbols import SmileyFace
 
 
 def makeEmptySquare(x, y, size, color):

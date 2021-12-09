@@ -1,17 +1,17 @@
-from reportPackages.reportlab.lib import colors
-from reportPackages.reportlab.lib.attrmap import *
-from reportPackages.reportlab.pdfgen.canvas import Canvas
-from reportPackages.reportlab.graphics.shapes import Group, Drawing, Ellipse, Wedge, String, STATE_DEFAULTS, Polygon, Line
+from reportlab.lib import colors
+from reportlab.lib.attrmap import *
+from reportlab.pdfgen.canvas import Canvas
+from reportlab.graphics.shapes import Group, Drawing, Ellipse, Wedge, String, STATE_DEFAULTS, Polygon, Line
 
 def _getShaded(col,shd=None,shading=0.1):
     if shd is None:
-        from reportPackages.reportlab.lib.colors import Blacker
+        from reportlab.lib.colors import Blacker
         if col: shd = Blacker(col,1-shading)
     return shd
 
 def _getLit(col,shd=None,lighting=0.1):
     if shd is None:
-        from reportPackages.reportlab.lib.colors import Whiter
+        from reportlab.lib.colors import Whiter
         if col: shd = Whiter(col,1-lighting)
     return shd
 
@@ -218,8 +218,8 @@ def find_intersections(data,small=0):
     return I
 
 if __name__=='__main__':
-    from reportPackages.reportlab.graphics.shapes import Drawing
-    from reportPackages.reportlab.lib.colors import lightgrey, pink
+    from reportlab.graphics.shapes import Drawing
+    from reportlab.lib.colors import lightgrey, pink
     D = Drawing(300,200)
     _draw_3d_bar(D, 10, 20, 10, 50, 5, 5, fillColor=lightgrey, strokeColor=pink)
     _draw_3d_bar(D, 30, 40, 10, 45, 5, 5, fillColor=lightgrey, strokeColor=pink)

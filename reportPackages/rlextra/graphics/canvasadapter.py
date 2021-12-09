@@ -6,10 +6,10 @@ __all__=(
         'SVGCanvasAdapter',
         'DirectDrawFlowable',
         )
-from reportPackages.reportlab.pdfbase.pdfmetrics import stringWidth
+from reportlab.pdfbase.pdfmetrics import stringWidth
 import collections
-from reportPackages.reportlab.lib.colors import toColor
-from reportPackages.reportlab.lib.utils import isStr
+from reportlab.lib.colors import toColor
+from reportlab.lib.utils import isStr
 
 class TextObject:
     def __init__(self, canv, x=0, y=0):
@@ -188,7 +188,7 @@ class CanvasAdapter:
         self.__trans = trans
         self.__rtrans = kw.pop('rtrans',{})
         self.__canv = baseCanvas
-        from reportPackages.reportlab.graphics.shapes import STATE_DEFAULTS
+        from reportlab.graphics.shapes import STATE_DEFAULTS
         if baseRenderer:
             D = baseRenderer._combined[-1]
         else:
@@ -449,11 +449,11 @@ class SVGCanvasAdapter(CanvasAdapter):
         self._getCanvas().endGroup(self._savedStates.pop())
         CanvasAdapter.restoreState(self)
 
-from reportPackages.reportlab.graphics.shapes import DirectDraw
-from reportPackages.reportlab.graphics.renderPS import PSCanvas
-from reportPackages.reportlab.graphics.renderPM import PMCanvas
-from reportPackages.reportlab.graphics.renderSVG import SVGCanvas
-from reportPackages.reportlab.pdfgen.canvas import Canvas
+from reportlab.graphics.shapes import DirectDraw
+from reportlab.graphics.renderPS import PSCanvas
+from reportlab.graphics.renderPM import PMCanvas
+from reportlab.graphics.renderSVG import SVGCanvas
+from reportlab.pdfgen.canvas import Canvas
 class DirectDrawFlowable(DirectDraw):
     def __init__(self,f):
         self.f = f  #our flowable which should be ready to draw

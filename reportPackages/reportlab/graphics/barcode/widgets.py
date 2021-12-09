@@ -1,4 +1,4 @@
-#copyright reportPackages.reportlab Europe Limited. 2000-2016
+#copyright ReportLab Europe Limited. 2000-2016
 #see license.txt for license details
 __version__='3.3.0'
 __all__= (
@@ -16,22 +16,22 @@ __all__= (
         'BarcodeUSPS_4State',
         )
 
-from reportPackages.reportlab.lib.validators import isInt, isNumber, isColor, isString, isColorOrNone, OneOf, isBoolean, EitherOr, isNumberOrNone
-from reportPackages.reportlab.lib.attrmap import AttrMap, AttrMapValue
-from reportPackages.reportlab.lib.colors import black
-from reportPackages.reportlab.lib.utils import rl_exec
-from reportPackages.reportlab.graphics.shapes import Line, Rect, Group, NotImplementedError, String
-from reportPackages.reportlab.graphics.charts.areas import PlotArea
+from reportlab.lib.validators import isInt, isNumber, isColor, isString, isColorOrNone, OneOf, isBoolean, EitherOr, isNumberOrNone
+from reportlab.lib.attrmap import AttrMap, AttrMapValue
+from reportlab.lib.colors import black
+from reportlab.lib.utils import rl_exec
+from reportlab.graphics.shapes import Line, Rect, Group, NotImplementedError, String
+from reportlab.graphics.charts.areas import PlotArea
 
 '''
 #snippet
 
 #first make your Drawing
-from reportPackages.reportlab.graphics.shapes import Drawing
+from reportlab.graphics.shapes import Drawing
 d= Drawing(100,50)
 
 #create and set up the widget
-from reportPackages.reportlab.graphics.barcode.widgets import BarcodeStandard93
+from reportlab.graphics.barcode.widgets import BarcodeStandard93
 bc = BarcodeStandard93()
 bc.value = 'RGB-123456'
 
@@ -152,7 +152,7 @@ BarcodeI2of5 = _BCW(
         humanReadable = AttrMapValue(isBoolean, desc='if human readable'),
         stop = AttrMapValue(isBoolean, desc='if we use start/stop symbols (default 1)'),
         ),
-    'reportPackages.reportlab.graphics.barcode.common',
+    'reportlab.graphics.barcode.common',
     1234,
     _tests = [
         '12',
@@ -166,16 +166,16 @@ BarcodeI2of5 = _BCW(
 BarcodeCode128 = _BCW("""Code 128 encodes any number of characters in the ASCII character set.""",
                 "Code128",
                 AttrMap(BASE=BarcodeI2of5,UNWANTED=('bearers','checksum','ratio','checksum','stop')),
-                'reportPackages.reportlab.graphics.barcode.code128',
+                'reportlab.graphics.barcode.code128',
                 "AB-12345678",
-                _tests = ['reportPackages.reportlab Rocks!', 'PFWZF'],
+                _tests = ['ReportLab Rocks!', 'PFWZF'],
                 )
 
 BarcodeCode128Auto = _BCW(
                 'Modified Code128 to use auto encoding',
                 'Code128Auto',
                 AttrMap(BASE=BarcodeCode128),
-                'reportPackages.reportlab.graphics.barcode.code128',
+                'reportlab.graphics.barcode.code128',
                 'XY149740345GB'
                 )
 
@@ -184,7 +184,7 @@ BarcodeStandard93=_BCW("""This is a compressed form of Code 39""",
                         AttrMap(BASE=BarcodeCode128,
                                 stop = AttrMapValue(isBoolean, desc='if we use start/stop symbols (default 1)'),
                                 ),
-                        'reportPackages.reportlab.graphics.barcode.code93',
+                        'reportlab.graphics.barcode.code93',
                         "CODE 93",
                         )
 
@@ -193,7 +193,7 @@ BarcodeExtended93=_BCW("""This is a compressed form of Code 39, allowing the ful
                         AttrMap(BASE=BarcodeCode128,
                                 stop = AttrMapValue(isBoolean, desc='if we use start/stop symbols (default 1)'),
                                 ),
-                        'reportPackages.reportlab.graphics.barcode.code93',
+                        'reportlab.graphics.barcode.code93',
                         "L@@K! Code 93 ;-)",
                         )
 
@@ -201,7 +201,7 @@ BarcodeStandard39=_BCW("""Code39 is widely used in non-retail, especially US def
                         Allowed characters are 0-9, A-Z (caps only), space, and -.$/+%*.""",
                         "Standard39",
                         AttrMap(BASE=BarcodeI2of5),
-                        'reportPackages.reportlab.graphics.barcode.code39',
+                        'reportlab.graphics.barcode.code39',
                         "A012345B%R",
                         )
 
@@ -210,7 +210,7 @@ BarcodeExtended39=_BCW("""Extended 39 encodes the full ASCII character set by en
                         shift characters.""",
                         "Extended39",
                         AttrMap(BASE=BarcodeI2of5),
-                        'reportPackages.reportlab.graphics.barcode.code39',
+                        'reportlab.graphics.barcode.code39',
                         "A012345B}",
                         )
 
@@ -221,7 +221,7 @@ BarcodeMSI=_BCW("""MSI is used for inventory control in retail applications.
                 """,
                 "MSI",
                 AttrMap(BASE=BarcodeI2of5),
-                'reportPackages.reportlab.graphics.barcode.common',
+                'reportlab.graphics.barcode.common',
                 1234,
                 )
 
@@ -229,7 +229,7 @@ BarcodeCodabar=_BCW("""Used in blood banks, photo labs and FedEx labels.
                     Encodes 0-9, -$:/.+, and four start/stop characters A-D.""",
                     "Codabar",
                     AttrMap(BASE=BarcodeI2of5),
-                    'reportPackages.reportlab.graphics.barcode.common',
+                    'reportlab.graphics.barcode.common',
                     "A012345B",
                     )
 
@@ -243,7 +243,7 @@ BarcodeCode11=_BCW("""Used mostly for labelling telecommunications equipment.
                             How many checksum digits to include. -1 ("auto") means
                             1 if the number of digits is 10 or less, else 2.'''),
                             ),
-                    'reportPackages.reportlab.graphics.barcode.common',
+                    'reportlab.graphics.barcode.common',
                     "01234545634563",
                     )
 
@@ -275,7 +275,7 @@ BarcodeFIM=_BCW("""
                     fontSize = AttrMapValue(isNumber, desc='human readable font size'),
                     humanReadable = AttrMapValue(isBoolean, desc='if human readable'),
                     ),
-                'reportPackages.reportlab.graphics.barcode.usps',
+                'reportlab.graphics.barcode.usps',
                 "A",
                 )
 
@@ -290,7 +290,7 @@ BarcodePOSTNET=_BCW('',
                             fontSize = AttrMapValue(isNumber, desc='human readable font size'),
                             humanReadable = AttrMapValue(isBoolean, desc='if human readable'),
                             ),
-                    'reportPackages.reportlab.graphics.barcode.usps',
+                    'reportlab.graphics.barcode.usps',
                     "78247-1043",
                     )
 
@@ -308,7 +308,7 @@ BarcodeUSPS_4State=_BCW('',
                             barHeight = AttrMapValue(isNumber, desc='barHeight'),
                             pitch = AttrMapValue(isNumber, desc='pitch'),
                             ),
-                        'reportPackages.reportlab.graphics.barcode.usps4s',
+                        'reportlab.graphics.barcode.usps4s',
                         '01234567094987654321',
                         _pre_init="\n\t\tkw.setdefault('routing','01234567891')\n",
                         _methods = "\n\tdef annotate(self,x,y,text,fontName,fontSize,anchor='middle'):\n\t\t_BarcodeWidget.annotate(self,x,y,text,fontName,fontSize,anchor='start')\n"
@@ -342,7 +342,7 @@ BarcodeECC200DataMatrix = _BCW(
         validated = AttrMapValue(None, desc='???'),
         decomposed = AttrMapValue(None, desc='???'),
     ),
-    'reportPackages.reportlab.graphics.barcode.ecc200datamatrix',
+    'reportlab.graphics.barcode.ecc200datamatrix',
     'JGB 0204H20B012722900021AC35B2100001003241014241014TPS01  WJ067073605GB185 MOUNT PLEASANT MAIL CENTER         EC1A1BB9ZGBREC1A1BB  EC1A1BB  STEST FILE       FOR SPEC                                       '
     )
 

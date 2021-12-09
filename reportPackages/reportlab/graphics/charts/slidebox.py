@@ -1,12 +1,12 @@
-from reportPackages.reportlab.lib.colors import Color, white, black
-from reportPackages.reportlab.graphics.charts.textlabels import Label
-from reportPackages.reportlab.graphics.shapes import Polygon, Line, Circle, String, Drawing, PolyLine, Group, Rect
-from reportPackages.reportlab.graphics.widgetbase import Widget, TypedPropertyCollection
-from reportPackages.reportlab.lib.attrmap import *
-from reportPackages.reportlab.lib.validators import *
-from reportPackages.reportlab.lib.units import cm
-from reportPackages.reportlab.pdfbase.pdfmetrics import stringWidth, getFont
-from reportPackages.reportlab.graphics.widgets.grids import ShadedRect, Grid
+from reportlab.lib.colors import Color, white, black
+from reportlab.graphics.charts.textlabels import Label
+from reportlab.graphics.shapes import Polygon, Line, Circle, String, Drawing, PolyLine, Group, Rect
+from reportlab.graphics.widgetbase import Widget, TypedPropertyCollection
+from reportlab.lib.attrmap import *
+from reportlab.lib.validators import *
+from reportlab.lib.units import cm
+from reportlab.pdfbase.pdfmetrics import stringWidth, getFont
+from reportlab.graphics.widgets.grids import ShadedRect, Grid
 
 class SlideBox(Widget):
     """Returns a slidebox widget"""
@@ -65,7 +65,7 @@ class SlideBox(Widget):
         self.topPadding=5
         self.bottomPadding=5
         self.background=None
-        self.sourceLabelText = "Source: reportPackages.reportlab"
+        self.sourceLabelText = "Source: ReportLab"
         self.sourceLabelOffset = 0.2*cm
         self.sourceLabelFontName = "Helvetica-Oblique"
         self.sourceLabelFontSize = 6
@@ -91,7 +91,7 @@ class SlideBox(Widget):
         return colorsList
 
     def demo(self,drawing=None):
-        from reportPackages.reportlab.lib import colors
+        from reportlab.lib import colors
         if not drawing:
             tx,ty=self._getDrawingDimensions()
             drawing = Drawing(tx,ty)

@@ -1,9 +1,9 @@
-#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
+#Copyright ReportLab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/graphics/widgets/signsandsymbols.py
+#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/graphics/widgets/signsandsymbols.py
 # signsandsymbols.py
 # A collection of new widgets
-# author: John Precedo (johnp@reportPackages.reportlab.com)
+# author: John Precedo (johnp@reportlab.com)
 
 __version__='3.3.0'
 __doc__="""This file is a collection of widgets to produce some common signs and symbols.
@@ -28,13 +28,13 @@ Widgets include:
 - CrossHair
 """
 
-from reportPackages.reportlab.lib import colors
-from reportPackages.reportlab.lib.validators import *
-from reportPackages.reportlab.lib.attrmap import *
-from reportPackages.reportlab.lib.utils import isStr, asUnicode
-from reportPackages.reportlab.graphics import shapes
-from reportPackages.reportlab.graphics.widgetbase import Widget
-from reportPackages.reportlab.graphics import renderPDF
+from reportlab.lib import colors
+from reportlab.lib.validators import *
+from reportlab.lib.attrmap import *
+from reportlab.lib.utils import isStr, asUnicode
+from reportlab.graphics import shapes
+from reportlab.graphics.widgetbase import Widget
+from reportlab.graphics import renderPDF
 
 
 class _Symbol(Widget):

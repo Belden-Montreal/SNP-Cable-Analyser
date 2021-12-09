@@ -1,22 +1,22 @@
 #!/bin/env python
-#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
+#Copyright ReportLab Europe Ltd. 2000-2017
 #see license.txt for license details
 __version__='3.3.0'
-__doc__="""Generate reportPackages.reportlab logo in a variety of sizes and formats.
+__doc__="""Generate ReportLab logo in a variety of sizes and formats.
 
 
-This module includes some reusable routines for reportPackages.reportlab's
+This module includes some reusable routines for ReportLab's
  'Corporate Image' - the logo, standard page backdrops and
  so on - you are advised to do the same for your own company!"""
 
-from reportPackages.reportlab.lib.units import inch,cm
-from reportPackages.reportlab.lib.validators import *
-from reportPackages.reportlab.lib.attrmap import *
-from reportPackages.reportlab.lib.formatters import DecimalFormatter
-from reportPackages.reportlab.graphics.shapes import definePath, Group, Drawing, Rect, PolyLine, String
-from reportPackages.reportlab.graphics.widgetbase import Widget
-from reportPackages.reportlab.lib.colors import Color, black, white, reportPackages.reportlabBlue
-from reportPackages.reportlab.pdfbase.pdfmetrics import stringWidth
+from reportlab.lib.units import inch,cm
+from reportlab.lib.validators import *
+from reportlab.lib.attrmap import *
+from reportlab.lib.formatters import DecimalFormatter
+from reportlab.graphics.shapes import definePath, Group, Drawing, Rect, PolyLine, String
+from reportlab.graphics.widgetbase import Widget
+from reportlab.lib.colors import Color, black, white, ReportLabBlue
+from reportlab.pdfbase.pdfmetrics import stringWidth
 from math import sin, pi
 
 class RL_CorpLogo(Widget):
@@ -39,7 +39,7 @@ class RL_CorpLogo(Widget):
         showPage = AttrMapValue(EitherOr((isBoolean,SequenceOf(isBoolean,lo=2,hi=2))), desc="If true or (true(top),true(bottom)) show the page lines"),
         xFlip = AttrMapValue(isBoolean, desc="If true do x reversal"),
         yFlip = AttrMapValue(isBoolean, desc="If true do y reversal"),
-        oColors = AttrMapValue(NoneOr(EitherOr((isColor,SequenceOf(isColorOrNone,lo=2,hi=2)))),desc="None or fill/stroke colors for the o in reportPackages.reportlab"),
+        oColors = AttrMapValue(NoneOr(EitherOr((isColor,SequenceOf(isColorOrNone,lo=2,hi=2)))),desc="None or fill/stroke colors for the o in ReportLab"),
         pageColors = AttrMapValue(NoneOr(EitherOr((isColor,SequenceOf(isColorOrNone,lo=2,hi=2)))),desc="None or fill/stroke colors for the page outline"),
         prec = AttrMapValue(NoneOr(isInt),desc="None or precision negative means strip excess"),
         )
@@ -48,7 +48,7 @@ class RL_CorpLogo(Widget):
         self.fillColor = white
         self.strokeColor = None
         self.strokeWidth = 0.1
-        self.background = reportPackages.reportlabBlue
+        self.background = ReportLabBlue
         self.border = None
         self.borderWidth = 1
         self.shadow = 0.5
@@ -166,10 +166,10 @@ class RL_CorpLogoReversed(RL_CorpLogo):
     def __init__(self):
         RL_CorpLogo.__init__(self)
         self.background = white
-        self.fillColor = reportPackages.reportlabBlue
+        self.fillColor = ReportLabBlue
 
 class RL_CorpLogoThin(Widget):
-    """The reportPackages.reportlab Logo.
+    """The ReportLab Logo.
 
     New version created by John Precedo on 7-8 August 2001.
     Based on bitmapped imaged from E-Id.
@@ -191,7 +191,7 @@ class RL_CorpLogoThin(Widget):
     _fontSize = 16
 
     def __init__(self):
-        self.fillColor = reportPackages.reportlabBlue
+        self.fillColor = ReportLabBlue
         self.strokeColor = white
         self.x = 0
         self.y = 0
@@ -246,8 +246,8 @@ class RL_CorpLogoThin(Widget):
         g.shift(self.x,self.y)
         return g
 
-class reportPackages.reportlabLogo:
-    """vector reportPackages.reportlab logo centered in a 250x by 150y rectangle"""
+class ReportLabLogo:
+    """vector reportlab logo centered in a 250x by 150y rectangle"""
 
     def __init__(self, atx=0, aty=0, width=2.5*inch, height=1.5*inch, powered_by=0):
         self.origin = (atx, aty)
@@ -255,7 +255,7 @@ class reportPackages.reportlabLogo:
         self.powered_by = powered_by
 
     def draw(self, canvas):
-        from reportPackages.reportlab.graphics import renderPDF
+        from reportlab.graphics import renderPDF
         canvas.saveState()
         (atx,aty) = self.origin
         (width, height) = self.dimensions
@@ -305,7 +305,7 @@ class RL_BusinessCard(Widget):
 
 
     def __init__(self):
-        self.fillColor = reportPackages.reportlabBlue
+        self.fillColor = ReportLabBlue
         self.strokeColor = black
         self.altStrokeColor = white
         self.x = 0
@@ -322,10 +322,10 @@ class RL_BusinessCard(Widget):
         self.telephone="020 8545 7271"
         self.mobile="-"
         self.fax="020 8544 1311"
-        self.email="info@reportPackages.reportlab.com"
-        self.web="www.reportPackages.reportlab.com"
+        self.email="info@reportlab.com"
+        self.web="www.reportlab.com"
         self.rh_blurb_top = ["London office:",
-                     "reportPackages.reportlab Europe Ltd",
+                     "ReportLab Europe Ltd",
                      "Media House",
                      "3 Palmerston Road",
                      "Wimbledon",

@@ -1,6 +1,6 @@
-#Copyright reportPackages.reportlab Europe Ltd. 2000-2017
+#Copyright ReportLab Europe Ltd. 2000-2017
 #see license.txt for license details
-#history https://hg.reportPackages.reportlab.com/hg-public/reportPackages.reportlab/log/tip/src/reportPackages.reportlab/graphics/charts/piecharts.py
+#history https://hg.reportlab.com/hg-public/reportlab/log/tip/src/reportlab/graphics/charts/piecharts.py
 # experimental pie chart script.  Two types of pie - one is a monolithic
 #widget with all top-level properties, the other delegates most stuff to
 #a wedges collection whic lets you customize the group or every individual
@@ -16,8 +16,8 @@ supports elliptical and circular pies.
 import copy, functools
 from math import sin, cos, pi
 
-from reportPackages.reportlab.lib import colors
-from reportPackages.reportlab.lib.validators import isColor, isNumber, isListOfNumbersOrNone,\
+from reportlab.lib import colors
+from reportlab.lib.validators import isColor, isNumber, isListOfNumbersOrNone,\
                                     isListOfNumbers, isColorOrNone, isString,\
                                     isListOfStringsOrNone, OneOf, SequenceOf,\
                                     isBoolean, isListOfColors, isNumberOrNone,\
@@ -25,15 +25,15 @@ from reportPackages.reportlab.lib.validators import isColor, isNumber, isListOfN
                                     isNoneOrListOfNoneOrNumbers, isBoxAnchor,\
                                     isStringOrNone, NoneOr, EitherOr,\
                                     isNumberInRange
-from reportPackages.reportlab.graphics.widgets.markers import uSymbol2Symbol, isSymbol
-from reportPackages.reportlab.lib.attrmap import *
-from reportPackages.reportlab.pdfgen.canvas import Canvas
-from reportPackages.reportlab.graphics.shapes import Group, Drawing, Ellipse, Wedge, String, STATE_DEFAULTS, ArcPath, Polygon, Rect, PolyLine, Line
-from reportPackages.reportlab.graphics.widgetbase import Widget, TypedPropertyCollection, PropHolder
-from reportPackages.reportlab.graphics.charts.areas import PlotArea
-from reportPackages.reportlab.graphics.charts.legends import _objStr
-from reportPackages.reportlab.graphics.charts.textlabels import Label
-from reportPackages.reportlab import cmp
+from reportlab.graphics.widgets.markers import uSymbol2Symbol, isSymbol
+from reportlab.lib.attrmap import *
+from reportlab.pdfgen.canvas import Canvas
+from reportlab.graphics.shapes import Group, Drawing, Ellipse, Wedge, String, STATE_DEFAULTS, ArcPath, Polygon, Rect, PolyLine, Line
+from reportlab.graphics.widgetbase import Widget, TypedPropertyCollection, PropHolder
+from reportlab.graphics.charts.areas import PlotArea
+from reportlab.graphics.charts.legends import _objStr
+from reportlab.graphics.charts.textlabels import Label
+from reportlab import cmp
 
 _ANGLE2BOXANCHOR={0:'w', 45:'sw', 90:'s', 135:'se', 180:'e', 225:'ne', 270:'n', 315: 'nw', -45: 'nw'}
 _ANGLE2RBOXANCHOR={0:'e', 45:'ne', 90:'n', 135:'nw', 180:'w', 225:'sw', 270:'s', 315: 'se', -45: 'se'}
@@ -1002,7 +1002,7 @@ class LegendedPie(Pie):
         self.legend_data = self.data
 
         #set up the legends
-        from reportPackages.reportlab.graphics.charts.legends import Legend
+        from reportlab.graphics.charts.legends import Legend
         self.legend1 = Legend()
         self.legend1.x = self.width+legendOffset
         self.legend1.y = self.height
@@ -1091,7 +1091,7 @@ class LegendedPie(Pie):
         drawing.add(self.draw())
         return drawing
 
-from reportPackages.reportlab.graphics.charts.utils3d import _getShaded, _2rad, _360, _pi_2, _2pi, _180_pi
+from reportlab.graphics.charts.utils3d import _getShaded, _2rad, _360, _pi_2, _2pi, _180_pi
 class Wedge3dProperties(PropHolder):
     """This holds descriptive information about the wedges in a pie chart.
 
@@ -1691,11 +1691,11 @@ def sample9():
 if __name__=='__main__':
     """Normally nobody will execute this
 
-    It's helpful for reportPackages.reportlab developers to put a 'main' block in to execute
+    It's helpful for reportlab developers to put a 'main' block in to execute
     the most recently edited feature.
     """
     import sys
-    from reportPackages.reportlab.graphics import renderPDF
+    from reportlab.graphics import renderPDF
     argv = sys.argv[1:] or ['7']
     for a in argv:
         name = a if a.startswith('sample') else 'sample%s' % a
