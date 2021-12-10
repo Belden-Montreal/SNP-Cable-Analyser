@@ -254,7 +254,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
 
     def setupPlug(self):
         self.param_tabs.clear()
-        self.embeddingWidget = PlugWidget(self.param_tabs,  sample = self.selected[0], graph=self.graphicsView, comm = self.comm)
+        self.plugWidget = PlugWidget(self.param_tabs,  sample = self.selected[0], graph=self.graphicsView, comm = self.comm)
         #self.param_tabs.addTab(self.embeddingWidget.widget, "Embedding Main")
         
     def setupAlien(self):
@@ -656,6 +656,11 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
                 tab_index = self.param_tabs.currentIndex()
                 activeParameter = self.param_tabs.tabText(self.tab_index)
                 self.embeddingWidget.embedPlotUpdate(activeParameter)
+
+            if sample.__repr__() == "Plug":
+                tab_index = self.param_tabs.currentIndex()
+                activeParameter = self.param_tabs.tabText(self.tab_index)
+                self.plugWidget.plugPlotUpdate(activeParameter)
 
             elif sample.__repr__() == "Alien":
                 try: 

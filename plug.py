@@ -1,3 +1,4 @@
+#from reportPackages.reportlab.platypus.paragraph import P
 from snpAnalyze import SNPManipulations
 import numpy as np
 import os
@@ -25,6 +26,7 @@ class Plug(SNPManipulations):
         self.name = testName  # "DEEMBED_1"
         self.date = time.strftime("%a, %d %b %Y %X +0000", time.gmtime())
         self.limit = None
+        self.standard = None
 
         # TIA-568.2-D-2018.pdf  --> p.216 --> (C.6.5.11.3.2)  --> #6
         #Delay_round_trip_plug_jack
@@ -32,22 +34,44 @@ class Plug(SNPManipulations):
         self.k2 = 14e-12    #Pair Shorting jack 36
         self.k3 = 20e-12    #Thru calibration
 
+        self.directFixtureDelay = {}
 
-    def addPlug(self, dfOpen, dfShort, pdfOpen, pdfShort, pdfLoad, plugName = None ):
+        self.correctedPlugVectorPhase = {}
+        self.correctedPlugVectorMag = {}
+        self.correctedPlugVector = {}
+
+    def addPlug(self, dfOpen_file, dfShort_file, pdfOpen_file, pdfShort_file, pdfLoad_file, plugName = None ):
         '''
         This function is used to calculate the plug and export its data into a file
         df  -> Direct Fixture
         pdf -> Plug and Direct Fixture
         '''
+
+
+        dfOpen = self.getSample(dfOpen_file)
+        dfShort = self.getSample(dfShort_file)
+        pdfOpen = self.getSample(pdfOpen_file)
+        pdfShort = self.getSample(pdfShort_file)
+        pdfLoad = self.getSample(pdfLoad_file)
+
         directFixtureDelay = self.getDirectFixtureDelay(dfOpen, dfShort) #Dictionairy of the delay in seconds on each pair
 
         plugDelay = self.getPlugDelay(pdfOpen, pdfShort) #Dictionairy of the delay in seconds on each pair
         plugNextDelay = self.getPlugNextDelay() #Dictionairy of the delay in seconds on each pair combination ex.: {12-36, 12-45}
-        print("plugDirectFixtureLoad, " , pdfLoad)
+        #print("plugDirectFixtureLoad, " , pdfLoad)
         correctedPlugVector = self.correctPlugVector(pdfLoad) #Dictionairy of arrays of the corrected vector for the plug ex,: {12-36 : [...]}
+        
+
+        self.correctedPlugVectorPhase = {}    
+        self.correctedPlugVectorMag = {}    
+        for pair in correctedPlugVector.keys():
+            self.correctedPlugVectorMag[pair]   = 20*np.log10(np.abs(correctedPlugVector[pair]))
+            self.correctedPlugVectorPhase[pair] = np.angle(correctedPlugVector[pair], deg = True)        
+        
+
 
         #Now we'll write to the xml file the plugs data as elements 
-        if plugName:
+        '''if plugName:
 
             if not os.path.isdir(self.plugFolder):
                 os.mkdir(self.plugFolder)
@@ -89,11 +113,10 @@ class Plug(SNPManipulations):
 
             mydata = ET.tostring(plug)
             myfile = open(file, "wb")  
-            myfile.write(mydata)
-
+            myfile.write(mydata)'''
         return correctedPlugVector
 
-    def getPlugDelay(self, openSNP, shortSNP):
+    def getPlugDelay(self, pdfOpen, pdfShort):
 
         '''
         Once the direct fixture delay has been calculated, the plug delay can be calculated.
@@ -101,44 +124,41 @@ class Plug(SNPManipulations):
         and a short measurement on each pair from 100MHZ to 500MHZ. 
         '''
 
-        self.openSample = openSNP
-        self.shortSample = shortSNP
-        
-        openDelay = self.getOpenDelay()
-        shortDelay = self.getShortDelay()
+        openDelay = self.getDelay(pdfOpen)
+        shortDelay = self.getDelay(pdfShort)
 
         pairs = openDelay.keys() #Get list of pairs (This is the same as shortDelay)
-        freq = self.openSample.freq   #Get the list of frequencies (This is the same as the shortSample)
+        freq = pdfOpen.freq   #Get the list of frequencies (This is the same as the shortSample)
         num_samples = len(freq)
 
                
         for pair in pairs:
-            f100 = list(self.openSample.freq.astype(int)).index(100)
-            f500 = list(self.openSample.freq.astype(int)).index(500)
+            f100 = list(pdfOpen.freq.astype(int)).index(100)
+            f500 = list(pdfOpen.freq.astype(int)).index(500)
             #print("f100 ", f100)
             openAvg = np.mean(openDelay[pair][f100:f500])
             shortAvg = np.mean(shortDelay[pair][f100:f500]) 
 
             self.plugDelay[pair] = ((openAvg + shortAvg - self.k1 - self.k2) / 4) - self.directFixtureDelay[pair] + self.k3
 
-        print("Plug Delay ", self.plugDelay)
+        #print("Plug Delay ", self.plugDelay)
         return self.plugDelay
 
 
 
-    def correctPlugVector(self, loadSNP):
+    def correctPlugVector(self, pdfload):
 
         '''
         This function calculates the new vector for the plug, based on its  delay that was found in getPlugDelay() and  getPlugNextDelay()
         '''
         
-        self.loadSample = loadSNP
+        loadSample = pdfload
 
-        plugNextNoCorrection = self.loadSample.getNEXT(self.loadSample.dd, z=True)
+        plugNextNoCorrection = loadSample.getNEXT(loadSample.dd, z=True)
 
-        self.minFreq = self.loadSample.freq[0]
-        self.maxFreq = self.loadSample.freq[-1]
-        self.numPoints = len(self.loadSample.freq)
+        self.minFreq = loadSample.freq[0]
+        self.maxFreq = loadSample.freq[-1]
+        self.numPoints = len(loadSample.freq)
         
         print("Plug No corr ",plugNextNoCorrection.keys())
         self.correctedPlugVector = {}
@@ -150,13 +170,13 @@ class Plug(SNPManipulations):
                 #To correct the phase, we must first calculate the old phase
                 phase_calib = np.angle(plugNextNoCorrection[key][f], deg=True)
                 #Using the old phase and the delay, we will calculate the corrected phase
-                phase_corrected = phase_calib + 360 * self.loadSample.freq[f] * self.plugNextDelay[key]
+                phase_corrected = phase_calib + 360 * loadSample.freq[f] * self.plugNextDelay[key]
 
-                if(key == "45-36" and self.loadSample.freq[f] == 100):
-                    print("freq: ", self.loadSample.freq[f])
+                '''if(key == "45-36" and loadSample.freq[f] == 100):
+                    print("freq: ", loadSample.freq[f])
                     print("Next No corr : ", plugNextNoCorrection[key][f])
                     print("Correct Plug Phase :", phase_corrected)
-                    print("Old Plug Phase :", phase_calib)
+                    print("Old Plug Phase :", phase_calib)'''
     
                 #Then we'll calculate the amplitude
                 amplitude = np.abs(plugNextNoCorrection[key][f])
@@ -168,9 +188,9 @@ class Plug(SNPManipulations):
                 #And finally we add the new next with the corrected phase to the corrected plug dictionary
                 self.correctedPlugVector[key].append(complex(real, imag))
 
-                if(key == "45-36" and self.loadSample.freq[f] == 100):
+                '''if(key == "45-36" and loadSample.freq[f] == 100):
                     print("Correct Plug Vect = "+  str(self.correctedPlugVector[key][f]) + "@ pair :" + key)
-                    print("Correct Vect: ", complex(real, imag))         
+                    print("Correct Vect: ", complex(real, imag)) '''        
         
         return self.correctedPlugVector
 
@@ -191,8 +211,7 @@ class Plug(SNPManipulations):
         return self.plugNextDelay
 
 
-
-    def getDirectFixtureDelay(self, openSNP, shortSNP):
+    def getDirectFixtureDelay(self, dfopen, dfshort):
         '''
         This function is used to calculate the Delay of the Direct Fixture.
         It must be called before finding the delay of the plug to allow for correction of the delay on the plug
@@ -201,23 +220,21 @@ class Plug(SNPManipulations):
         
         print("Calculating Direct Fixture Delay")
 
-        self.openSample = openSNP
-        self.shortSample = shortSNP
         
-        openDelay = self.getOpenDelay()
-        shortDelay = self.getShortDelay()
+        openDelay = self.getDelay(dfopen)
+        shortDelay = self.getDelay(dfshort)
 
         #print("DF Open Delay = ", openDelay["12"][0])
         
         #directFixtureDelay = {} #initialize the DF dictionairy.
 
         pairs = openDelay.keys() #Get list of pairs (This is the same as shortDelay)
-        self.freq = self.openSample.freq   #Get the list of frequencies (This is the same as the shortSample)
+        self.freq = dfopen.freq   #Get the list of frequencies (This is the same as the shortSample)
         num_samples = len(self.freq)
         for pair in pairs:
             #first Find 100MHz and 500MHz
-            f100 = list(self.openSample.freq.astype(int)).index(100)
-            f500 = list(self.openSample.freq.astype(int)).index(500)
+            f100 = list(dfopen.freq.astype(int)).index(100)
+            f500 = list(dfopen.freq.astype(int)).index(500)
             openAvg = np.mean(openDelay[pair][f100:f500])
             shortAvg = np.mean(shortDelay[pair][f100:f500])
             self.directFixtureDelay[pair] = (openAvg + shortAvg)/4
@@ -229,5 +246,12 @@ class Plug(SNPManipulations):
         return "Plug"
 
 
-    def importSNP(self):
-        pass
+    def getSample(self, snpfile):
+        sample = SNPManipulations(snpfile)       
+        sample.s2mm()
+        sample.port_name = {0:"45", 1:"12", 2:"36", 3:"78"}
+        sample.one_sided = True
+        return sample
+
+    def getDelay(self, sample):
+        return sample.getPropagationDelay()

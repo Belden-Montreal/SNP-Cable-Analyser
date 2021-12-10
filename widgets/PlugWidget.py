@@ -1,4 +1,6 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem, QFileDialog, QCheckBox
+
 import sys
 import scipy
 
@@ -11,6 +13,8 @@ from UI import plugWidget as PW
 
 from Communication import Communication
 from embedding import Embedding
+from plug import Plug
+
 
 import matplotlib.figure
 import matplotlib.backends.backend_qt5
@@ -27,27 +31,28 @@ class PlugWidget():
         super(self.__class__, self).__init__()
 
         self.widget  = QtWidgets.QWidget()
-        self.plugWidget = PW.Ui_ParameterWidget()
+        self.plugWidget = PW.Ui_PlugWidget()
         self.plugWidget.setupUi(self.widget)
 
+        self.parentTab = parentTab
         self.sample = sample
         self.graphicsView = graph
 
         self.plugTab = QtWidgets.QWidget()
         #self.TPNextPhaseTab = QtWidgets.QWidget()
         self.plugWidget = PW.Ui_PlugWidget()
-        #self.parentTab.addTab(self.TPNextPhaseTab, "TP NEXT phase")        
         self.plugWidget.setupUi(self.plugTab)
 
 
 
-        self.em = Embedding()
+        self.plug = sample
 
         self.dfOpen = None
         self.dfShort = None
         self.pdfOpen = None
         self.pdfShort = None
         self.pdfLoad = None
+        self.correctedPlugVectorPhase = {}  
 
         font = QtGui.QFont()
         font.setPointSize(7)
@@ -59,90 +64,109 @@ class PlugWidget():
         self.plugWidget.pdf_load_label.setFont(font)
         '''Here we will connect the buttons (import/acquire) to their apropriate functions'''
 
-        self.df_open_import.clicked.connect(self.dfOpenImport)
+        self.plugWidget.df_open_import.clicked.connect(self.dfOpenImport)
         #self.df_open_acquire.clicked.connect(self.dfOpenAcquire)
-        self.df_short_import.clicked.connect(self.dfShortImport)
+        self.plugWidget.df_short_import.clicked.connect(self.dfShortImport)
         #self.df_short_acquire.clicked.connect(self.dfOpenAcquire)
-        self.pdf_open_import.clicked.connect(self.pdfOpenImport)
+        self.plugWidget.pdf_open_import.clicked.connect(self.pdfOpenImport)
         #self.pdf_open_acquire.clicked.connect(self.pdfOpenAcquire)
-        self.pdf_short_import.clicked.connect(self.pdfShortImport)
+        self.plugWidget.pdf_short_import.clicked.connect(self.pdfShortImport)
         #self.pdf_short_acquire.clicked.connect(self.pdfShortAcquire)
-        self.pdf_load_import.clicked.connect(self.pdfLoadImport)
+        self.plugWidget.pdf_load_import.clicked.connect(self.pdfLoadImport)
         #self.pdf_load_acquire.clicked.connect(self.pdfLoadAcquire)
         
         #self.cancelButton.clicked.connect(self.cancel)
 
-        self.pdf_load_import.calculate.clicked.connect(self.addNewPlug)
-        self.pdf_load_import.calculate.setEnabled(False)
+        self.plugWidget.calculate.clicked.connect(self.createPlug)
+        self.plugWidget.calculate.setEnabled(True)    #CHANGE TO FALSE ! (True only for testing)
+        '''For testing (comment out later)'''
 
-        self.embedWidget.setupUi(self.embeddingTab)
+        self.dfOpen = "C:/Users/lxf09011/Desktop/SNP_test/snps/DEEMBED TEST/DirectFixOpen.s8p"
+        self.dfShort = "C:/Users/lxf09011/Desktop/SNP_test/snps/DEEMBED TEST/DirectFixShort.s8p"
+        self.pdfOpen = "C:/Users/lxf09011/Desktop/SNP_test/snps/DEEMBED TEST/DirectFixPlugOpen.s8p"
+        self.pdfShort = "C:/Users/lxf09011/Desktop/SNP_test/snps/DEEMBED TEST/DirectFixPlugShort.s8p"
+        self.pdfLoad = "C:/Users/lxf09011/Desktop/SNP_test/snps/DEEMBED TEST/DirectFixPlugLoad2.s8p"
+        
+
+        ''' End of "for testing"'''
+        #self.plugWidget.setupUi(self.plugTab)
+        self.plugUpdateTab()
 
     def dfOpenImport(self):
         try:
             self.dfOpen = self.importSNP()
-            self.df_open_label.setText(self.dfOpen.split('/')[-1])
-            self.createPlug()
-        except Exception:
-            return
+            self.plugWidget.df_open_label.setText(self.dfOpen.split('/')[-1])
+            self.enableCalcButton()
+        
+        except Exception as e:
+            print(e)
 
     def dfShortImport(self):
         try:
             self.dfShort = self.importSNP()
-            self.df_short_label.setText(self.dfShort.split('/')[-1])
-            self.createPlug()
+            self.plugWidget.df_short_label.setText(self.dfShort.split('/')[-1])
+            self.enableCalcButton()
+       
         except Exception:
             return
 
     def pdfOpenImport(self):
         try:
             self.pdfOpen = self.importSNP()
-            self.pdf_open_label.setText(self.pdfOpen.split('/')[-1])
-            self.createPlug()
+            self.plugWidget.pdf_open_label.setText(self.pdfOpen.split('/')[-1])
+            self.enableCalcButton()
         except Exception:
             return
 
     def pdfShortImport(self):
         try:
             self.pdfShort = self.importSNP()
-            self.pdf_short_label.setText(self.pdfShort.split('/')[-1])
-            self.createPlug()
+            self.plugWidget.pdf_short_label.setText(self.pdfShort.split('/')[-1])
+            self.enableCalcButton()
+
         except Exception:
             return
 
     def pdfLoadImport(self):
         try:
             self.pdfLoad = self.importSNP()
-            self.pdf_load_label.setText(self.pdfLoad.split('/')[-1])
-            self.createPlug()
+            self.plugWidget.pdf_load_label.setText(self.pdfLoad.split('/')[-1])
+            self.enableCalcButton()
         except Exception:
             return
+
+    def enableCalcButton(self):
+        condition = self.dfOpen and self.dfShort and self.pdfOpen and self.pdfShort and self.pdfLoad
+        if condition:
+            self.plugWidget.calculate.setEnabled(True)
+        else:
+            self.plugWidget.calculate.setEnabled(False)
+
+
 
 
     def createPlug(self, plugName = None):
 
-        condition = self.dfOpen and self.dfShort and self.pdfOpen and self.pdfShort and self.pdfLoad
 
-        if condition:  #if all the required measurements are there
-            correctedPlugVector = self.em.addPlug(self.dfOpen , self.dfShort , self.pdfOpen , self.pdfShort , self.pdfLoad, plugName)
+        correctedPlugVector = self.plug.addPlug(self.dfOpen , self.dfShort , self.pdfOpen , self.pdfShort , self.pdfLoad, plugName)
 
-            self.addPlug.setEnabled(True)
+        #self.addPlug.setEnabled(True)
 
-            '''if plugName == None:
+        '''if plugName == None:
 
-                self.correctedPlugVectorPhase = {}'''
+            self.correctedPlugVectorPhase = {}'''
 
+        #print("Corrected Plug Vect Phase : ", self.correctedPlugVectorPhase)
+        #self.plot()
 
-            self.correctedPlugVectorPhase = {}    
-            for pair in correctedPlugVector.keys():
-                self.correctedPlugVectorPhase[pair] = np.angle(correctedPlugVector[pair], deg = True)
-            print("Corrected Plug Vect Phase : ", self.correctedPlugVectorPhase)
-            self.plot()
+        self.limit = self.getPhaseLimits()
 
+        self.plugUpdateTab()
 
     def importSNP(self):
-        options = self.Options()
-        options |= self.DontUseNativeDialog
-        file, _ = self.getOpenFileName(self,"QFileDialog.getOpenFileNames()", "","sNp Files (*.s*p)", options=options)
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        file, _ = QFileDialog.getOpenFileName(None,"QFileDialog.getOpenFileNames()", "","sNp Files (*.s*p)", options=options)
         #print files
         if file:
             print(file)
@@ -152,10 +176,10 @@ class PlugWidget():
     def getPhaseLimits(self):
         tpLim = {}
 
-        f100 = list(self.em.freq.astype(int)).index(100)
-        f500 = list(self.em.freq.astype(int)).index(500)
+        f100 = list(self.plug.freq.astype(int)).index(100)
+        f500 = list(self.plug.freq.astype(int)).index(500)
 
-        freq = np.array(self.em.freq[f100:f500]) / 1e6
+        freq = np.array(self.plug.freq[f100:f500]) / 1e6
         tpLim["45-36"] = {}
         tpLim["45-36"]["+"] = [(-90 + 1.5*f/100) + 1 if f in range(1, 500) else (-90 + 1.5*f/100) + f/100 for f in freq]
         tpLim["45-36"]["-"] = [(-90 + 1.5*f/100) - 1 if f in range(1, 500) else (-90 + 1.5*f/100) - f/100 for f in freq]
@@ -180,35 +204,49 @@ class PlugWidget():
         tpLim["12-78"] = None
         
         return tpLim
-        
-    def plot(self):
 
-        limit = self.getPhaseLimits()
-        
+
+    def plugPlotUpdate(self, activeParameter):
+
+
+        if activeParameter != "Plug Main":
+            self.graphicsView.figure.clear()
+
+            if activeParameter not in self.plug.correctedPlugVectorPhase.keys():
+                print(self.plug.correctedPlugVectorPhase.keys())
+                print(activeParameter, "not here")
+                return
+
+
+
         self.graphicsView.figure.clear()
-        for i, pair in enumerate(self.correctedPlugVectorPhase):
-            f100 = list(self.em.freq.astype(int)).index(100)
-            f500 = list(self.em.freq.astype(int)).index(500)
+        f100 = list(self.plug.freq.astype(int)).index(100)
+        f500 = list(self.plug.freq.astype(int)).index(500)
 
-            ax=self.graphicsView.figure.add_subplot(3, 2, i+1)
-            ax.semilogx(self.em.freq[f100: f500], self.correctedPlugVectorPhase[pair][f100: f500])
+        ax=self.graphicsView.figure.add_subplot(2, 1, 1)
+        ax.semilogx(self.plug.freq[f100: f500], self.plug.correctedPlugVectorMag[activeParameter][f100: f500])
 
-            ax.set_ylim((-100, 300))
 
-            if limit[pair]:
-                ax.semilogx(self.em.freq[f100: f500], limit[pair]["+"])
-                ax.semilogx(self.em.freq[f100: f500], limit[pair]["-"])
+        ax=self.graphicsView.figure.add_subplot(2, 1, 2)
+        if self.limit[activeParameter]:
+            ax.semilogx(self.plug.freq[f100: f500], self.limit[activeParameter]["+"])
+            ax.semilogx(self.plug.freq[f100: f500], self.limit[activeParameter]["-"])
 
-                ax.set_ylim((min(limit[pair]["-"]) - 5), max(limit[pair]["+"])+5)
-    
-            ax.grid(which="both")
+            ax.set_ylim((min(self.limit[activeParameter]["-"]) - 5), max(self.limit[activeParameter]["+"])+5)
+        ax.semilogx(self.plug.freq[f100: f500], self.plug.correctedPlugVectorPhase[activeParameter][f100: f500])
 
-            ax.set_title(pair)
+        ax.set_ylim((-100, 300))
 
-            ax.set_xlabel('Freq (Hz)')
-            ax.set_ylabel('dB')
-            self.graphicsView.figure.tight_layout(pad=3.0)
+
+        ax.grid(which="both")
+
+        ax.set_title(activeParameter)
+
+        ax.set_xlabel('Freq (Hz)')
+        ax.set_ylabel('dB')
+        self.graphicsView.figure.tight_layout(pad=3.0)
         self.graphicsView.draw()
+
 
     def addNewPlug(self):
 
@@ -228,8 +266,30 @@ class PlugWidget():
                
             retval = msg.exec_()  
 
-    def cancel(self):
-        self.dialog.close()
+    def plugUpdateTab(self):
+
+        self.plugWidget.df_open_label.setText(self.dfOpen.split('/')[-1])
+        self.plugWidget.df_short_label.setText(self.dfShort.split('/')[-1])
+        self.plugWidget.pdf_open_label.setText(self.pdfOpen.split('/')[-1])
+        self.plugWidget.pdf_short_label.setText(self.pdfShort.split('/')[-1])
+        self.plugWidget.pdf_load_label.setText(self.pdfLoad.split('/')[-1])
+
+
+        self.parentTab.clear()
+
+        self.parentTab.addTab(self.plugTab, "Plug Main")        
+
+        if self.plug.correctedPlugVectorPhase:
+
+            #self.embeded_tab_list = []
+
+            for key in self.plug.correctedPlugVectorPhase.keys():
+                self.new_plugtab = QtWidgets.QWidget()
+                #self.embeded_tab_list.append(self.new_plugtab)
+                self.parentTab.addTab(self.new_plugtab, key)
+                
+
+
 
 
 def main():

@@ -24,7 +24,6 @@ class Embedding(SNPManipulations):
         self.embeddedShort = " "
         self.embeddedLoad = " "
 
-        self.directFixtureDelay = {}
 
         self.jackDelay = {}
         self.jackNextDelay = {}
