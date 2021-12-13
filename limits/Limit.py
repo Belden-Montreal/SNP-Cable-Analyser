@@ -7,14 +7,16 @@ from multiprocessing.dummy import Pool as ThreadPool
 import numpy as np
 class Limit:
 
-    def __init__(self, parameter, clauses=[""], bounds=[-math.inf, math.inf], maxValue=math.inf):
+    def __init__(self, parameter, clauses=[""], bounds=[-math.inf, math.inf], maxValue=math.inf, type = None):
         self.clauses = clauses
         self.maxValue = maxValue
         self.parameter = parameter
+        self.type = type
         self.parseClauses(clauses)
         self.bounds = bounds
         self.resultsDict = None
         self.resultsList = None
+        
     def __str__(self):
         return self.clauses[0]
 
@@ -63,7 +65,7 @@ class Limit:
         return self.resultsList'''
 
     def evaluateLimit(self, vals, nb, neg=False):
-
+        print("EVALUATE LIMIT FCT : ", self.functions)
         if not len(self.functions):
             return
         self.evaluatePoints(vals, nb)

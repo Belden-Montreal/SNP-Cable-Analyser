@@ -12,8 +12,9 @@ class Box():
 
 class EditLimitDialog():
     NEW_ITEM = "New"
-    def __init__(self, model):
+    def __init__(self, model, type = None):
         self.model = model
+        self.type =type
         self.dialog = QtWidgets.QDialog()
         self.editLimitDialog = Edit_Limit_Dialog.Ui_Dialog()
         self.editLimitDialog.setupUi(self.dialog)
@@ -124,7 +125,7 @@ class EditLimitDialog():
                         self.boxes[i].setItemText(self.boxes[i].currentIndex(), item.name)
                         parent = item
                 else: #New limit
-                    newItem = TreeItem(self.lineEdits[i].text(), parent)
+                    newItem = TreeItem(self.lineEdits[i].text(), parent, type=self.type)
                     self.boxes[i].addItem(newItem.name, newItem)
                     self.boxes[i].setCurrentText(newItem.name)
                     parent.addChild(newItem)
@@ -145,7 +146,7 @@ class EditLimitDialog():
                     bounds.append(float(self.editLimitDialog.limitsTable.item(x, 1).text()))
                 if not (self.editLimitDialog.maxLineEdit.text() == ""):
                     maxVal = float(self.editLimitDialog.maxLineEdit.text())
-            self.boxes[Box.HARDW].currentData().standard.limits[self.boxes[Box.PARAM].currentText()] = Limit(self.boxes[Box.PARAM].currentText(), limits, bounds, maxVal)
+            self.boxes[Box.HARDW].currentData().standard.limits[self.boxes[Box.PARAM].currentText()] = Limit(self.boxes[Box.PARAM].currentText(), limits, bounds, maxVal, type=self.type)
             for box in self.boxes:
                 box.blockSignals(False)
             self.model.endResetModel()

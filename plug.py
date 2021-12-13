@@ -15,6 +15,7 @@ import xml.etree.ElementTree as ET
 import xmltodict
 
 import os
+from PyQt5 import QtCore     
 
 class Plug(SNPManipulations):
     
@@ -40,6 +41,14 @@ class Plug(SNPManipulations):
         self.correctedPlugVectorMag = {}
         self.correctedPlugVector = {}
 
+        self.worstValue = {}
+        self.worstMargin = {}
+        
+        self.parameters = ["TPMag 45-36 L", "TPMag 45-36 H", "TPMag 12-36 L", "TPMag 12-36 H", "TPMag 36-78 L", "TPMag 36-78 H", "TPMag 36-78 L", "TPMag 36-78 L", "TPMag 45-12 L", "TPMag 45-12 H", "TPMag 45-78 L", "TPMag 45-78 H", "TPMag 12-78 L", "TPMag 12-78 H", "TPPhase 45-36 L", "TPPhase 45-36 H", "TPPhase 12-36 L", "TPPhase 12-36 H", "TPPhase 36-78 L", "TPPhase 36-78 H", "TPPhase 36-78 L", "TPPhase 36-78 L", "TPPhase 45-12 L", "TPPhase 45-12 H", "TPPhase 45-78 L", "TPPhase 45-78 H", "TPPhase 12-78 L", "TPPhase 12-78 H"]
+        # self.getParameters()
+    limitmutex = QtCore.QMutex()
+    parammutex = QtCore.QMutex()
+    
     def addPlug(self, dfOpen_file, dfShort_file, pdfOpen_file, pdfShort_file, pdfLoad_file, plugName = None ):
         '''
         This function is used to calculate the plug and export its data into a file
@@ -255,3 +264,31 @@ class Plug(SNPManipulations):
 
     def getDelay(self, sample):
         return sample.getPropagationDelay()
+
+        
+    def setStandard(self, standard):
+        self.standard = standard
+        self.worstMargin = {}
+        self.worstValue = {}
+
+       # with ProcessPool(cpu_count()) as p:
+
+        for parameter in self.parameters:
+            print()
+            self.limitmutex.lock()
+
+            self.evaluateLimit(parameter)
+                    
+
+            #self.getWorstMargin(parameter.replace(" ", ""))
+            #self.getWorstValue(parameter.replace(" ", ""))
+            
+            self.limitmutex.unlock()
+
+
+    def evaluateLimit(self, param):
+        #print("Evaulating : ", param)
+
+        self.standard.limits[param].evaluateLimit({"f": self.freq} , len(self.freq), neg = True)
+        #print("ERROR: Limit Not evaluated", param)
+            

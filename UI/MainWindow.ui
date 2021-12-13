@@ -429,7 +429,7 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Who am I ?</string>
+    <string>About</string>
    </property>
   </action>
   <action name="actionMeasure">

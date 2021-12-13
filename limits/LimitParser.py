@@ -4,14 +4,14 @@ from limits.TreeItem import TreeItem
 from limits.Limit import Limit
 class LimitParser():
 
-    def __init__(self, url):
+    def __init__(self, url, type=None):
         self.url = url
         self.NAME_BY_LEVEL = ["Category", "Hardware", "Limit", "Part"]
-
+        self.type = type
     def parseFile(self):
         dataFile = open(self.url, "r")
         dictData = xmltodict.parse(dataFile.read())
-        rootItem = TreeItem(dictData["Root"]["@name"])
+        rootItem = TreeItem(dictData["Root"]["@name"], type=self.type)
         self.parseProperty("Standard", rootItem, dictData["Root"])
         dataFile.close()
         return rootItem
@@ -23,7 +23,7 @@ class LimitParser():
             properties = data[name]
         for prop in properties:
             if "@name" in prop:
-                item = TreeItem(prop["@name"], parent)
+                item = TreeItem(prop["@name"], parent, type = self.type)
                 parent.addChild(item)
                 for nextName in prop:
                     if not nextName == "@name":
@@ -36,7 +36,7 @@ class LimitParser():
                     parent.clauses.append(prop["#text"])
                     parent.parseClauses(parent.clauses)
             elif "Part" in prop:
-                parent.standard.limits[prop["@param"]] = Limit(prop["@param"], [], [])
+                parent.standard.limits[prop["@param"]] = Limit(prop["@param"], [], [], type=self.type)
                 if "Max" in prop:
                     parent.standard.limits[prop["@param"]].maxValue = float(prop["Max"])
                 self.parseProperty("Part", parent.standard.limits[prop["@param"]], prop)

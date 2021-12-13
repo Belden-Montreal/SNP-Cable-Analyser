@@ -205,8 +205,31 @@ class PlugWidget():
         
         return tpLim
 
-
     def plugPlotUpdate(self, activeParameter):
+        self.activeParameter = activeParameter
+        sample = self.sample
+        limit = None
+        H_limit_mag=None
+        H_limit_phase = None
+        L_limit_mag = None
+        L_limit_phase = None
+        if sample.standard is not None:
+            if "TPMag " + self.activeParameter + " H" in sample.standard.limits:
+                H_limit_mag = sample.standard.limits["TPMag " + self.activeParameter + " H"].getArray()
+                print("yes ! ")
+            if "TPP " + self.activeParameter + " H" in sample.standard.limits:
+                H_limit_phase = sample.standard.limits["TPP " + self.activeParameter + " H"].getArray()            
+            if "TPMag " + self.activeParameter + " L" in sample.standard.limits:
+                L_limit_mag = sample.standard.limits["TPMag " + self.activeParameter + " L"].getArray()
+                print("yes ! ")
+
+            if "TPP " + self.activeParameter + " L" in sample.standard.limits:
+                L_limit_phase = sample.standard.limits["TPP " + self.activeParameter + " L"].getArray()       
+        
+
+        self.plot(activeParameter, h_lim_mag = H_limit_mag, h_lim_ph = H_limit_phase, l_lim_mag = L_limit_mag, l_lim_ph=L_limit_phase)
+
+    def plot(self, activeParameter, h_lim_mag=None, h_lim_ph=None, l_lim_mag=None, l_lim_ph=None):
 
 
         if activeParameter != "Plug Main":
@@ -223,27 +246,36 @@ class PlugWidget():
         f100 = list(self.plug.freq.astype(int)).index(100)
         f500 = list(self.plug.freq.astype(int)).index(500)
 
-        ax=self.graphicsView.figure.add_subplot(2, 1, 1)
-        ax.semilogx(self.plug.freq[f100: f500], self.plug.correctedPlugVectorMag[activeParameter][f100: f500])
-
-
-        ax=self.graphicsView.figure.add_subplot(2, 1, 2)
-        if self.limit[activeParameter]:
-            ax.semilogx(self.plug.freq[f100: f500], self.limit[activeParameter]["+"])
-            ax.semilogx(self.plug.freq[f100: f500], self.limit[activeParameter]["-"])
-
-            ax.set_ylim((min(self.limit[activeParameter]["-"]) - 5), max(self.limit[activeParameter]["+"])+5)
-        ax.semilogx(self.plug.freq[f100: f500], self.plug.correctedPlugVectorPhase[activeParameter][f100: f500])
-
-        ax.set_ylim((-100, 300))
-
-
+        ax=self.graphicsView.figure.add_subplot(1, 2, 1)
         ax.grid(which="both")
 
-        ax.set_title(activeParameter)
+        ax.set_title("Test Plug Mag. " + activeParameter)
 
-        ax.set_xlabel('Freq (Hz)')
+        ax.set_xlabel('Freq (MHz)')
         ax.set_ylabel('dB')
+        ax.semilogx(self.plug.freq, self.plug.correctedPlugVectorMag[activeParameter], label=activeParameter)
+        if h_lim_mag:
+            ax.semilogx(self.plug.freq, h_lim_mag, label = "Upper Limit")
+        if l_lim_mag:
+            print("Plot got l lmim mag")
+            ax.semilogx(*zip(*l_lim_mag), label = "Lower Limit")
+        ax.xaxis.set_major_formatter(matplotlib.ticker.ScalarFormatter())
+
+
+        ax=self.graphicsView.figure.add_subplot(1, 2, 2)
+        ax.grid(which="both")
+        ax.set_title("Test Plug Phase " + activeParameter)
+
+        ax.set_xlabel('Freq (MHz)')
+        ax.set_ylabel('deg')
+
+        ax.semilogx(self.plug.freq, self.plug.correctedPlugVectorPhase[activeParameter])
+        if h_lim_ph:
+            ax.semilogx(self.plug.freq, h_lim_ph)
+        if l_lim_ph:
+            ax.semilogx(self.plug.freq, l_lim_ph)
+        ax.xaxis.set_major_formatter(matplotlib.ticker.ScalarFormatter())
+
         self.graphicsView.figure.tight_layout(pad=3.0)
         self.graphicsView.draw()
 

@@ -1,7 +1,7 @@
 from limits.Standard import Standard
 
 class TreeItem():
-    def __init__(self, name, parent=None):
+    def __init__(self, name, parent=None, type=None):
         self.parent = parent
         self.name = name
         current = parent
@@ -9,7 +9,7 @@ class TreeItem():
         while current and not(current.name == "Standard"):
             standardName = current.name+"|"+standardName
             current = current.parent
-        self.standard = Standard(standardName)
+        self.standard = Standard(standardName, type=type)
         self.children = []
 
     def addChild(self, item):

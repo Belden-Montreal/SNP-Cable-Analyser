@@ -4,11 +4,12 @@ from limits.TreeModel import TreeModel
 from limits.EditLimitDialog import EditLimitDialog
 
 class LimitDialog(object):
-    def __init__(self):
+    def __init__(self, type = None):
         self.dialog = QtWidgets.QDialog()
         self.limitDialog = Set_Limit_Dialog.Ui_LimitDialog()
         self.limitDialog.setupUi(self.dialog)
-        self.model = TreeModel()
+        self.type=type
+        self.model = TreeModel(type = type)
         self.limitDialog.treeView.setModel(self.model)
         self.resizeColumns(QtCore.QModelIndex())
         button = self.limitDialog.buttonBox.button(QtWidgets.QDialogButtonBox.Ok)
@@ -46,7 +47,7 @@ class LimitDialog(object):
         return not (self.model.parent(index) == QtCore.QModelIndex() or index.internalPointer().children)
 
     def openLimitEditDialog(self):
-        editLimitDialog = EditLimitDialog(self.model)
+        editLimitDialog = EditLimitDialog(self.model, type=self.type)
 
         res = editLimitDialog.showDialog()
     

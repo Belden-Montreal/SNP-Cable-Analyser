@@ -123,7 +123,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         self.poolMutex = QtCore.QMutex()
 
         # Comment out this line to get messanges to appear in terminal instead of in app. 
-        self.setupConsole()
+        #self.setupConsole()
 
 
 
@@ -169,8 +169,10 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         self.setActiveSample()
 
     def setLimit(self):
-        
-        limitDialog = LimitDialog()
+        type = None
+        if self.selected[0].__repr__() == "Embed" or self.selected[0].__repr__() == "Plug" :
+            type = "Embedding"
+        limitDialog = LimitDialog(type = type)
         result = limitDialog.showDialog()
         if result:
             item = limitDialog.getSelection().internalPointer().standard
