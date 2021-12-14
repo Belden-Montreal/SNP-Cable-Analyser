@@ -129,7 +129,7 @@ class Alien(object):
         self.disturbers[end][testType][name] = alien
 
         #print(self.disturbers[end][testType][name].keys())
-        print("Added disturber : ", end, testType, snpFile)
+        #print("Added disturber : ", end, testType, snpFile)
  
 
     def getAlien(self, snpFile):
@@ -167,7 +167,7 @@ class Alien(object):
     
 
     def getPSAlien(self, end, Test, disturbers):
-        print(disturbers)
+        #print(disturbers)
         #print (self.disturbers["dist_1"][end]["ANEXT"].keys())
         numDisturbers = len(disturbers)
         numPairs = self.numPairs
@@ -239,7 +239,7 @@ class Alien(object):
             self.evaluateLimit(parameter )
 
     def evaluateLimit(self, param):
-        print("Evaulating : ", param)
+        #print("Evaulating : ", param)
         #self.standard.limits[param].None
 
         #self.standard.limits[param].evaluateArray({"f": self.freq} , len(self.freq), neg=not(param=="PropagationDelay"))

@@ -4,8 +4,37 @@
 		<Category name="CAT6A">
 			<Hardware name="Connecting Hardware">
 				<Limit param="TPMag 45-36 L">
+					<Part min="10.0" max="500.0">38.1-20*log(f/100)</Part>
+				</Limit>
+				<Limit param="TPMag 45-36 H">
+					<Part min="10.0" max="inf">39.5-20*log(f/100)</Part>
+				</Limit>
+				<Limit param="TPMag 12-36 L">
+					<Part min="10.0" max="500.0">46.5-20*log(f/100)</Part>
+				</Limit>
+				<Limit param="TPMag 12-36 H">
+					<Part min="10.0" max="500.0">49.5-20*log(f/100)</Part>
+				</Limit>
+				<Limit param="TPMag 36-78 L">
+					<Part min="10.0" max="500.0">46.5-20*log(f/100)</Part>
+				</Limit>
+				<Limit param="TPMag 36-78 H">
+					<Part min="10.0" max="500.0">49.5-20*log(f/100)</Part>
+				</Limit>
+				<Limit param="TPMag 45-12 L">
 					<Max>70.0</Max>
-					<Part min="10.0" max="inf">38.1-20*log(f/100)</Part>
+					<Part min="10.0" max="500.0">57-20*log(f/100)</Part>
+				</Limit>
+				<Limit param="TPMag 45-78 L">
+					<Max>70.0</Max>
+					<Part min="10.0" max="500.0">57-20*log(f/100)</Part>
+				</Limit>
+				<Limit param="TPMag 12-78 L">
+					<Max>70.0</Max>
+					<Part min="10.0" max="500.0">66-20*log(f/100)</Part>
+				</Limit>
+				<Limit param="TPMag 12-45 L">
+					<Part min="10.0" max="500.0">57-20*log(f/100)</Part>
 				</Limit>
 			</Hardware>
 		</Category>

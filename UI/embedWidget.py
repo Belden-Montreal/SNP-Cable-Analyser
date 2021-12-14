@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_EmbeddingWidget(object):
     def setupUi(self, EmbeddingWidget):
         EmbeddingWidget.setObjectName("EmbeddingWidget")
-        EmbeddingWidget.resize(873, 324)
+        EmbeddingWidget.resize(873, 263)
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout(EmbeddingWidget)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.plugVerticalLayout = QtWidgets.QVBoxLayout()

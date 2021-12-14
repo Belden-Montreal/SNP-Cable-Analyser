@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(896, 724)
+        MainWindow.resize(896, 683)
         MainWindow.setMinimumSize(QtCore.QSize(896, 683))
         MainWindow.setSizeIncrement(QtCore.QSize(0, 0))
         MainWindow.setWindowOpacity(42.0)
@@ -314,7 +314,7 @@ class Ui_MainWindow(object):
         self.actionNew_Project.setToolTip(_translate("MainWindow", "Create New Project"))
         self.actionNew_Project.setStatusTip(_translate("MainWindow", "Create New Project (Erases current)"))
         self.actionConnect.setText(_translate("MainWindow", "Connect"))
-        self.actionWho_am_I.setText(_translate("MainWindow", "Who am I ?"))
+        self.actionWho_am_I.setText(_translate("MainWindow", "About"))
         self.actionMeasure.setText(_translate("MainWindow", "Measure"))
         self.actionCalibrate.setText(_translate("MainWindow", "Calibrate"))
         self.actionDisconnect.setText(_translate("MainWindow", "Disconnect"))

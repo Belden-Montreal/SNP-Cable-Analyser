@@ -79,6 +79,9 @@ class PlugWidget():
 
         self.plugWidget.calculate.clicked.connect(self.createPlug)
         self.plugWidget.calculate.setEnabled(True)    #CHANGE TO FALSE ! (True only for testing)
+
+        self.plugWidget.save_plug.clicked.connect(self.savePlug)
+
         '''For testing (comment out later)'''
 
         self.dfOpen = "C:/Users/lxf09011/Desktop/SNP_test/snps/DEEMBED TEST/DirectFixOpen.s8p"
@@ -91,7 +94,7 @@ class PlugWidget():
         ''' End of "for testing"'''
         #self.plugWidget.setupUi(self.plugTab)
         self.plugUpdateTab()
-
+        self.updateDelayLabels()
     def dfOpenImport(self):
         try:
             self.dfOpen = self.importSNP()
@@ -136,6 +139,7 @@ class PlugWidget():
             return
 
     def enableCalcButton(self):
+        self.plug.calculated = False
         condition = self.dfOpen and self.dfShort and self.pdfOpen and self.pdfShort and self.pdfLoad
         if condition:
             self.plugWidget.calculate.setEnabled(True)
@@ -162,6 +166,19 @@ class PlugWidget():
         self.limit = self.getPhaseLimits()
 
         self.plugUpdateTab()
+
+        self.plugWidget.save_plug.setEnabled(True)   
+        self.updateDelayLabels()
+
+    def updateDelayLabels(self):
+        if self.plug.calculated:
+            self.plugWidget.dnext12_36.setText(str(self.plug.plugNextDelay["12-36"]))
+            self.plugWidget.dnext45_12.setText(str(self.plug.plugNextDelay["45-12"]))
+            self.plugWidget.dnext12_78.setText(str(self.plug.plugNextDelay["12-78"]))
+            self.plugWidget.dnext45_36.setText(str(self.plug.plugNextDelay["45-36"]))
+            self.plugWidget.dnext36_78.setText(str(self.plug.plugNextDelay["36-78"]))
+            self.plugWidget.dnext45_78.setText(str(self.plug.plugNextDelay["45-78"]))
+
 
     def importSNP(self):
         options = QFileDialog.Options()
@@ -255,11 +272,11 @@ class PlugWidget():
         ax.set_ylabel('dB')
         ax.semilogx(self.plug.freq, self.plug.correctedPlugVectorMag[activeParameter], label=activeParameter)
         if h_lim_mag:
-            ax.semilogx(self.plug.freq, h_lim_mag, label = "Upper Limit")
+            ax.semilogx(*zip(*h_lim_mag), label = "Upper Limit")
         if l_lim_mag:
             print("Plot got l lmim mag")
             ax.semilogx(*zip(*l_lim_mag), label = "Lower Limit")
-        ax.xaxis.set_major_formatter(matplotlib.ticker.ScalarFormatter())
+        #ax.xaxis.set_major_formatter(matplotlib.ticker.ScalarFormatter())
 
 
         ax=self.graphicsView.figure.add_subplot(1, 2, 2)
@@ -271,9 +288,9 @@ class PlugWidget():
 
         ax.semilogx(self.plug.freq, self.plug.correctedPlugVectorPhase[activeParameter])
         if h_lim_ph:
-            ax.semilogx(self.plug.freq, h_lim_ph)
+            ax.semilogx(*zip(* h_lim_ph), label = "Upper Limit")
         if l_lim_ph:
-            ax.semilogx(self.plug.freq, l_lim_ph)
+            ax.semilogx(*zip(*l_lim_ph), label = "Lower Limit")
         ax.xaxis.set_major_formatter(matplotlib.ticker.ScalarFormatter())
 
         self.graphicsView.figure.tight_layout(pad=3.0)
@@ -320,6 +337,11 @@ class PlugWidget():
                 #self.embeded_tab_list.append(self.new_plugtab)
                 self.parentTab.addTab(self.new_plugtab, key)
                 
+
+    def savePlug(self, file):
+        pass
+
+
 
 
 

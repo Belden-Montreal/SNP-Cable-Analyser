@@ -86,8 +86,8 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         newProject = self.actionNew_Project
 
         #Initialize sample sample Table 
-        self.sampleTable.setColumnCount(3)
-        self.sampleTable.setHorizontalHeaderLabels(["Name","Date", "Limit"])
+        self.sampleTable.setColumnCount(4)
+        self.sampleTable.setHorizontalHeaderLabels([None, "Name","Date", "Limit"])
         self.sampleTable.setSortingEnabled(True)
         self.sampleTable.setContextMenuPolicy(self.CustomContextMenu)
         self.sampleTable.customContextMenuRequested.connect(self.tableContextMenu)
@@ -122,11 +122,13 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         self.threadpool = QtCore.QThreadPool()
         self.poolMutex = QtCore.QMutex()
 
+        self.paramWidgetList = []
+
         # Comment out this line to get messanges to appear in terminal instead of in app. 
         #self.setupConsole()
 
 
-
+    #@QtCore.pyqtSlot()
     def addPlug(self):   
         testName, result = QtWidgets.QInputDialog.getText(self, "Add a Plug Sample",
                                                                 "Please enter a plug name")
@@ -232,25 +234,36 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         self.sampleTable.setRowCount(measurementCount)
         for i, measurement in enumerate(self.Project.measurements):
 
-            #Column 1 (name)
-            self.sampleTable.setItem(i, 0, QtWidgets.QTableWidgetItem(measurement.name))
+
+
+            #Column 0 (type)
+            type = measurement.__repr__()[0]
+            self.sampleTable.setItem(i, 0, QtWidgets.QTableWidgetItem(type))
             self.sampleTable.item(i, 0).setData(Qt.UserRole, measurement)
+
+            #Column 1 (name)
+            self.sampleTable.setItem(i, 1, QtWidgets.QTableWidgetItem(measurement.name))
+            self.sampleTable.item(i, 1).setData(Qt.UserRole, measurement)
             
             #Column 2 (date)
-            self.sampleTable.setItem(i, 1, QtWidgets.QTableWidgetItem(measurement.date))
-            self.sampleTable.item(i, 1).setData(Qt.UserRole, measurement)
+            self.sampleTable.setItem(i, 2, QtWidgets.QTableWidgetItem(measurement.date))
+            self.sampleTable.item(i, 2).setData(Qt.UserRole, measurement)
 
             #Column 3 (standard)
             if measurement.standard is not None:
-                self.sampleTable.setItem(i, 2, QtWidgets.QTableWidgetItem(measurement.standard.name))
-                self.sampleTable.item(i, 2).setData(Qt.UserRole, measurement)
-
+                self.sampleTable.setItem(i, 3, QtWidgets.QTableWidgetItem(measurement.standard.name))
+                self.sampleTable.item(i, 3).setData(Qt.UserRole, measurement)
+        
+        self.sampleTable.resizeColumnsToContents()
         self.setActiveSample()
 
     
     def setupEmbed(self):
         self.param_tabs.clear()
-        self.embeddingWidget = EmbeddingWidget(self.param_tabs,  sample = self.selected[0], graph=self.graphicsView, comm = self.comm)
+        self.embeddingWidget = EmbeddingWidget(self.param_tabs,  sample = self.selected[0], graph=self.graphicsView, comm = self.comm, project=self.Project)
+        self.embeddingWidget.proc_addPlug.connect(self.addPlug)
+
+        
         #self.param_tabs.addTab(self.embeddingWidget.widget, "Embedding Main")
 
 
@@ -408,6 +421,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
 
             sample.__init__(snp, sided, standard, pair_names = names)
             sample.getParameters()
+            sample.setStandard(standard)
             self.Project.activeSample = self.selected
             #print self.selected
             if len(self.selected) == 1:  #Since only one sample can be displayed at a time
@@ -673,7 +687,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
                     self.setupAlien()
                 self.alienWidget.alienPlotUpdate()
 
-            else:
+            elif sample.__repr__() == "SNP":
                 currentParamWidget = self.paramWidgetList[self.tab_index]
                 currentParamWidget.plotUpdate(sample, self.activeParameter)
             

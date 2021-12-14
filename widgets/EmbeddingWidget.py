@@ -6,11 +6,11 @@ from UI import embedWidget as EW
 from matplotlib.pyplot import cm
 import numpy as np
 
-class EmbeddingWidget():
-
-    def __init__(self, parentTab, graph, sample, comm=None):
+class EmbeddingWidget(QtWidgets.QWidget):
+    proc_addPlug = QtCore.pyqtSignal()
+    def __init__(self, parentTab, graph, sample, comm=None, project = None):
         
-        #super(self.__class__, self).__init__()
+        super(self.__class__, self).__init__()
 
         print("Embedding Sample Added")
         self.comm = comm
@@ -20,6 +20,8 @@ class EmbeddingWidget():
         self.parentTab = parentTab
         
         self.graphicsView = graph
+
+        self.project = project
 
         self.embeddingTab = QtWidgets.QWidget()
         #self.TPNextPhaseTab = QtWidgets.QWidget()
@@ -41,10 +43,11 @@ class EmbeddingWidget():
 
         self.embedWidget.reembedButton.clicked.connect(self.reembed)
 
-        self.embedWidget.addPlug.clicked.connect(self.addPlugDialog)
+        
+        self.embedWidget.addPlug.clicked.connect(self.add_Plug)
 
         
-        self.embedWidget.plugList.currentIndexChanged.connect(self.embedUpdatePlugDNEXT)
+        self.embedWidget.plugList.currentIndexChanged.connect(self.embedUpdatePlug)
         
         self.embedWidget.reverseCheckBox.toggled.connect(self.embedUpdateTab)
         
@@ -54,21 +57,28 @@ class EmbeddingWidget():
         #self.parentTab.addTab(self.embeddingTab, "Embedding Main")
         self.embedUpdateTab()
 
-    def embedUpdatePlugDNEXT(self):
+    def embedUpdatePlug(self, idx):
+        print("idx : ", idx)
+        plug = None
+        try:
+            plug = self.embedWidget.plugList.itemData(idx)
+        except:
+            print("No plug found. Please add a plug")
+        #self.embeddedSample.getPlugParams(plugFile)
+        #print(self.embeddedSample.plugNextDelay)
 
-        plugIndex = self.embedWidget.plugList.currentIndex()
-        plug = self.embeddedSample.getPlugList()[plugIndex]
-        plugFile = plug + ".xml"
-
-        self.embeddedSample.getPlugParams(plugFile)
-        print(self.embeddedSample.plugNextDelay)
-        self.embedWidget.dnext12_36.setText(str(self.embeddedSample.plugNextDelay["12-36"]))
-        self.embedWidget.dnext45_12.setText(str(self.embeddedSample.plugNextDelay["45-12"]))
-        self.embedWidget.dnext12_78.setText(str(self.embeddedSample.plugNextDelay["12-78"]))
-        self.embedWidget.dnext45_36.setText(str(self.embeddedSample.plugNextDelay["45-36"]))
-        self.embedWidget.dnext36_78.setText(str(self.embeddedSample.plugNextDelay["36-78"]))
-        self.embedWidget.dnext45_78.setText(str(self.embeddedSample.plugNextDelay["45-78"]))
         
+
+        if plug is not None:
+            self.embeddedSample.setPlug(plug)
+            self.embedWidget.dnext12_36.setText(str(plug.plugNextDelay["12-36"]))
+            self.embedWidget.dnext45_12.setText(str(plug.plugNextDelay["45-12"]))
+            self.embedWidget.dnext12_78.setText(str(plug.plugNextDelay["12-78"]))
+            self.embedWidget.dnext45_36.setText(str(plug.plugNextDelay["45-36"]))
+            self.embedWidget.dnext36_78.setText(str(plug.plugNextDelay["36-78"]))
+            self.embedWidget.dnext45_78.setText(str(plug.plugNextDelay["45-78"]))
+            
+
     def importOpen(self):
         self.embeddedSample.embeddedOpen = self.embedImportSNP()
         self.embedUpdateTab()
@@ -85,9 +95,6 @@ class EmbeddingWidget():
 
 
     def acquireOpen(self):
-
-
-
         
         try:
             self.embeddedSample.embeddedOpen = self.comm.aquireInterface()
@@ -130,22 +137,21 @@ class EmbeddingWidget():
             print(e)
         
     def reembed(self):
-        plugIndex = self.embedWidget.plugList.currentIndex()
-        plug = self.embeddedSample.getPlugList()[plugIndex]
-        plugFile = plug + ".xml"
+       
+        plug = self.embeddedSample.plug
 
         cat = "6A" if  self.embedWidget.embedCat6.isChecked() else "5"
 
-        self.embeddedSample.getPlugParams(plugFile)
+        #self.embeddedSample.getPlugParams(plugFile)
 
         self.embeddedSample.k1 = self.embedWidget.SJ_124578_LineEdit.text()
         self.embeddedSample.k2 = self.embedWidget.sJ36LineEdit.text()
         self.embeddedSample.k3 = self.embedWidget.thruCalibLineEdit.text()
 
-        print(self.embeddedSample.k1)
+        #print(self.embeddedSample.k1)
 
         if self.embedtestType == "Reverse":
-            print(self.embeddedSample.embeddedOpen)
+            #print(self.embeddedSample.embeddedOpen)
             if self.embeddedSample.embeddedOpen.isspace() or self.embeddedSample.embeddedShort.isspace() or self.embeddedSample.embeddedLoad.isspace():
                 msg = QtWidgets.QMessageBox()
                 msg.setIcon(QtWidgets.QMessageBox.Warning)
@@ -184,13 +190,30 @@ class EmbeddingWidget():
         if file:
             return file
 
+    def updatePlugList(self):
+        print("updatePlugList HERE !")
+        
+        self.embedWidget.plugList.clear()
+
+        if self.project is not None:
+            for m in self.project.measurements:
+                if m.__repr__() is "Plug":
+                    print("M : ", m.name)
+                    if m.calculated:
+                        self.embedWidget.plugList.addItem(m.name, m)
+                        print(m.name)
+
+        if self.embeddedSample.plug is not None:
+            idx = self.embedWidget.plugList.findData(self.embeddedSample.plug)
+            self.embedWidget.plugList.setCurrentIndex(idx)
+
+
     def embedUpdateTab(self):
-
-        plugIndex = self.embedWidget.plugList.currentIndex()
-        plug = self.embeddedSample.getPlugList()[plugIndex]
-        plugFile = plug + ".xml"
-
-        self.embeddedSample.getPlugParams(plugFile)
+        if self.embeddedSample.cat == "6" or self.embeddedSample.cat == "6A" or self.embeddedSample.cat == "8":
+            self.embedWidget.embedCat6.setDown(True)
+        else:
+            self.embedWidget.embedCat5.setDown(True)
+    
 
         self.embedWidget.openFileName.setText(self.embeddedSample.embeddedOpen)
         self.embedWidget.shortFileName.setText(self.embeddedSample.embeddedShort)
@@ -202,18 +225,14 @@ class EmbeddingWidget():
         self.embedWidget.shortFileName.setFont(font)
         self.embedWidget.loadFileName.setFont(font)
 
-        plugs = self.embeddedSample.getPlugList()
-        
-        self.embedWidget.plugList.clear()
-
-        self.embedWidget.plugList.addItems(plugs)
+        self.updatePlugList()        
 
         self.parentTab.clear()
 
         self.parentTab.addTab(self.embeddingTab, "Embedding Main")
 
         embededParams = self.embeddedSample.getParameters()
-        print(embededParams)
+        #print(embededParams)
 
         if bool(self.embeddedSample.reembeded):
 
@@ -244,12 +263,15 @@ class EmbeddingWidget():
 
 
 
+    def add_Plug(self, t):
+        self.proc_addPlug.emit()
 
-    def addPlugDialog(self):
+
+    '''def addPlugDialog(self):
 
         form = PlugWidget.AddPlug()  # We set the  form to be our ExampleApp (design)
 
-        #self.embedPlotUpdate()         
+        #self.embedPlotUpdate()    '''     
 
     def embedPlotUpdate(self, activeParameter):
         
@@ -268,7 +290,7 @@ class EmbeddingWidget():
             
             ax=self.graphicsView.figure.add_subplot(111)
              
-            color=iter(cm.rainbow(np.linspace(0,1,len(embededParams[activeParameter]))))
+            color=iter(cm.rainbow(np.linspace(0, 1, len(embededParams[activeParameter]))))
             for case in embededParams[activeParameter]:
                 c = next(color)
                 reembedingNum = int(case.replace("case", ""))

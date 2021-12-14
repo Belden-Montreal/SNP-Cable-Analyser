@@ -82,7 +82,7 @@ class Alien(object):
 
         self.disturbers[end][testType][name] = alien
 
-        print(self.disturbers[end][testType][name].keys())
+        #print(self.disturbers[end][testType][name].keys())
  
 
     def getAlien(self, snpFile):

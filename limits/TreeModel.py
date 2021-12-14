@@ -9,7 +9,7 @@ class TreeModel(QtCore.QAbstractItemModel):
     def __init__(self, fileUrl = "limits/limits.xml", parent = None, type=None):
         QtCore.QAbstractItemModel.__init__(self)
         if type == "Embedding":
-            self.header = ["Standard", "Mat. Next", "Mat. Next 1,4", "TPMag 45-36 L", "TPMag 45-36 H", "TPMag 12-36 L", "TPMag 12-36 H", "TPMag 36-78 L", "TPMag 36-78 H", "TPMag 36-78 L", "TPMag 36-78 L", "TPMag 45-12 L", "TPMag 45-12 H", "TPMag 45-78 L", "TPMag 45-78 H", "TPMag 12-78 L", "TPMag 12-78 H", "TPPhase 45-36 L", "TPPhase 45-36 H", "TPPhase 12-36 L", "TPPhase 12-36 H", "TPPhase 36-78 L", "TPPhase 36-78 H", "TPPhase 36-78 L", "TPPhase 36-78 L", "TPPhase 45-12 L", "TPPhase 45-12 H", "TPPhase 45-78 L", "TPPhase 45-78 H", "TPPhase 12-78 L", "TPPhase 12-78 H" ] 
+            self.header = ["Standard", "Mat. Next", "Mat. Next 1,4", "TPMag 45-36 L", "TPMag 45-36 H", "TPMag 12-36 L", "TPMag 12-36 H", "TPMag 36-78 L", "TPMag 36-78 H",  "TPMag 45-12 L", "TPMag 45-12 H", "TPMag 45-78 L", "TPMag 45-78 H", "TPMag 12-78 L", "TPMag 12-78 H", "TPPhase 45-36 L", "TPPhase 45-36 H", "TPPhase 12-36 L", "TPPhase 12-36 H", "TPPhase 36-78 L", "TPPhase 36-78 H",  "TPPhase 45-12 L", "TPPhase 45-12 H", "TPPhase 45-78 L", "TPPhase 45-78 H", "TPPhase 12-78 L", "TPPhase 12-78 H" ] 
             fileUrl = "limits/limits_embedding.xml"
         else:
             self.header = ["Standard", "RL", "IL", "PropagationDelay", "NEXT", "PSNEXT","FEXT", "PSFEXT", "ACRF", "PSACRF", "LCL", "LCTL", "TCL", "TCTL", "ELTCTL","CMRL", "CMNEXT", "CMDMNEXT", "CMDMRL", "DMCMNEXT", "DMCMRL", "ANEXT", "PSANEXT", "AVGPSANEXT", "AFEXT", "PSAFEXT", "PSAACRF", "AVGPSAACRF"]

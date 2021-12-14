@@ -17,7 +17,7 @@ import os
 
 class Embedding(SNPManipulations):
 
-    def __init__(self, testName = "DEEMBED_1"):
+    def __init__(self, testName = "DEEMBED_1", plug = None):
 
 
         self.embeddedOpen = " "
@@ -36,7 +36,7 @@ class Embedding(SNPManipulations):
         self.plugName = "TestPlug"
         self.jackName = "TestJack"
 
-        self.plugFolder = "plugs/"
+        self.plug = plug
 
         #self.workbook = xlsxwriter.Workbook(self.testName + ".xlsx")
 
@@ -51,12 +51,14 @@ class Embedding(SNPManipulations):
 
         self.standard = None
 
+        self.parameters = ["36-45","12-36","36-78","12-45","45-78","12-78"]
+
     def getOpenDelay(self):
         '''
         Using aquired S8P for an open sample, this function returns the progation delay
         on all pairs
         '''
-        print("Num Samples = ", self.openSample.num_samples)
+        #print("Num Samples = ", self.openSample.num_samples)
         return self.openSample.getPropagationDelay()
     
     def getShortDelay(self):
@@ -106,8 +108,8 @@ class Embedding(SNPManipulations):
                 self.jackVector[key].append(matedNextCorrected - self.correctedPlugVector[key][f])
                 
         #And then we write the corrected jack Next dictionary to a json file
-        print(self.jackVector["12-36"][2])
-        print()
+        #print(self.jackVector["12-36"][2])
+        #print()
         #testPlugFile = open(self.jackName, "w")
         #testPlugFile.write(json.dumps(self.jackVector))
         #testPlugFile.close
@@ -131,13 +133,13 @@ class Embedding(SNPManipulations):
         for pair in pairs:
             f100 = list(self.openSample.freq.astype(int)).index(100)
             f500 = list(self.openSample.freq.astype(int)).index(500)
-            print("f100 ", f100)
+            #print("f100 ", f100)
             openAvg = np.mean(openDelay[pair][f100:f500])
             shortAvg = np.mean(shortDelay[pair][f100:f500]) 
-            print(self.correctedPlugVector.keys())
+            #print(self.correctedPlugVector.keys())
             #correctedPlug = np.mean(self.correctedPlugVector[pair][f100:f500])
 
-            print(self.k3)
+            #print(self.k3)
             self.jackDelay[pair] = ((openAvg + shortAvg - float(self.k1) - float(self.k2) )/4)  - self.plugDelay[pair] + float(self.k3)
             
             
@@ -169,7 +171,7 @@ class Embedding(SNPManipulations):
                 self.jackVector[key].append(matedNextCorrected - self.correctedPlugVector[key][f])
                 
         #And then we write the corrected jack Next dictionary to a json file
-        print(self.jackVector["12-36"][2])
+        #print(self.jackVector["12-36"][2])
         #testPlugFile = open(self.jackName, "w")
         #testPlugFile.write(json.dumps(self.jackVector))
         #testPlugFile.close
@@ -206,10 +208,11 @@ class Embedding(SNPManipulations):
             self.case8  = lambda f: (-(50.0- 20 * np.log10((f)/100)), np.angle(self.correctedPlugVector["36-78"][list(self.loadSample.freq).index(f)], deg=True))
             self.case9  = lambda f: (-(50.0- 20 * np.log10((f)/100)), np.angle(self.correctedPlugVector["45-12"][list(self.loadSample.freq).index(f)], deg=True))
             self.case10 = lambda f:(None, None)
-            self.case11 = lambda f: (-50.0- 20 * np.log10((f)/100), np.angle(self.correctedPlugVector["45-78"][list(self.loadSample.freq).index(f)], deg=True))
+            self.case11 = lambda f: (-(50.0- 20 * np.log10((f)/100)), np.angle(self.correctedPlugVector["45-78"][list(self.loadSample.freq).index(f)], deg=True))
             self.case12 = lambda f:(None, None)
             self.case13 = lambda f: (-(60.0- 20 * np.log10((f)/100)), np.angle(self.correctedPlugVector["12-78"][list(self.loadSample.freq).index(f)], deg=True))
             self.case14 = lambda f:(None, None)
+
 
     def reembed(self, case = "6A"):
 
@@ -242,7 +245,7 @@ class Embedding(SNPManipulations):
                 key = ["45-36", "45-36", "45-36", "45-36", "12-36", "12-36", "36-78", "36-78", "45-12", "45-12", "45-78", "45-78", "12-78", "12-78"][i-1]
                 reembed = plugRI + self.jackVector[key][j]
                 self.reembeded[i].append(20*np.log10(reembed))
-        print(list(self.loadSample.freq))     
+        #print(list(self.loadSample.freq))     
 
         f10 = list(self.loadSample.freq.astype(int)).index(10)
         f100 = list(self.loadSample.freq.astype(int)).index(100)
@@ -283,6 +286,11 @@ class Embedding(SNPManipulations):
             pair = key.replace('Next_', '')
             self.correctedPlugVector[pair] = eval(plug['plug']['correctedPlugVector'][key])
 
+    def setPlug(self, plug):
+        self.plug = plug
+        self.correctedPlugVector = self.plug.correctedPlugVector
+        self.plugNextDelay = self.plug.plugNextDelay
+        self.plugDelay = self.plug.plugDelay
 
     def getParameters(self):
         

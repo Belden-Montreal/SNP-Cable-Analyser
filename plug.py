@@ -43,6 +43,8 @@ class Plug(SNPManipulations):
 
         self.worstValue = {}
         self.worstMargin = {}
+
+        self.calculated = False
         
         self.parameters = ["TPMag 45-36 L", "TPMag 45-36 H", "TPMag 12-36 L", "TPMag 12-36 H", "TPMag 36-78 L", "TPMag 36-78 H", "TPMag 36-78 L", "TPMag 36-78 L", "TPMag 45-12 L", "TPMag 45-12 H", "TPMag 45-78 L", "TPMag 45-78 H", "TPMag 12-78 L", "TPMag 12-78 H", "TPPhase 45-36 L", "TPPhase 45-36 H", "TPPhase 12-36 L", "TPPhase 12-36 H", "TPPhase 36-78 L", "TPPhase 36-78 H", "TPPhase 36-78 L", "TPPhase 36-78 L", "TPPhase 45-12 L", "TPPhase 45-12 H", "TPPhase 45-78 L", "TPPhase 45-78 H", "TPPhase 12-78 L", "TPPhase 12-78 H"]
         # self.getParameters()
@@ -123,6 +125,8 @@ class Plug(SNPManipulations):
             mydata = ET.tostring(plug)
             myfile = open(file, "wb")  
             myfile.write(mydata)'''
+        
+        self.calculated = True
         return correctedPlugVector
 
     def getPlugDelay(self, pdfOpen, pdfShort):
@@ -292,3 +296,16 @@ class Plug(SNPManipulations):
         self.standard.limits[param].evaluateLimit({"f": self.freq} , len(self.freq), neg = True)
         #print("ERROR: Limit Not evaluated", param)
             
+
+    def serialize(self):
+
+        files = []
+        obj_dict = {}
+
+        obj_dict['name'] = self.name 
+        obj_dict['date'] = self.date 
+        self.limit = None
+        self.standard = None
+
+
+
