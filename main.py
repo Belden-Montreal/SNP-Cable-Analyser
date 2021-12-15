@@ -125,7 +125,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         self.paramWidgetList = []
 
         # Comment out this line to get messanges to appear in terminal instead of in app. 
-        #self.setupConsole()
+        self.setupConsole()
 
 
     #@QtCore.pyqtSlot()

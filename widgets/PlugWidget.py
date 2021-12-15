@@ -84,11 +84,11 @@ class PlugWidget():
 
         '''For testing (comment out later)'''
 
-        self.dfOpen = "snps/DEEMBED TEST/DirectFixOpen.s8p"
+        '''self.dfOpen = "snps/DEEMBED TEST/DirectFixOpen.s8p"
         self.dfShort = "snps/DEEMBED TEST/DirectFixShort.s8p"
         self.pdfOpen = "snps/DEEMBED TEST/DirectFixPlugOpen.s8p"
         self.pdfShort = "snps/DEEMBED TEST/DirectFixPlugShort.s8p"
-        self.pdfLoad = "snps/DEEMBED TEST/DirectFixPlugLoad2.s8p"
+        self.pdfLoad = "snps/DEEMBED TEST/DirectFixPlugLoad2.s8p"'''
         
 
         ''' End of "for testing"'''
@@ -316,14 +316,16 @@ class PlugWidget():
             retval = msg.exec_()  
 
     def plugUpdateTab(self):
+        try:
+            self.plugWidget.df_open_label.setText(self.dfOpen.split('/')[-1])
+            self.plugWidget.df_short_label.setText(self.dfShort.split('/')[-1])
+            self.plugWidget.pdf_open_label.setText(self.pdfOpen.split('/')[-1])
+            self.plugWidget.pdf_short_label.setText(self.pdfShort.split('/')[-1])
+            self.plugWidget.pdf_load_label.setText(self.pdfLoad.split('/')[-1])
 
-        self.plugWidget.df_open_label.setText(self.dfOpen.split('/')[-1])
-        self.plugWidget.df_short_label.setText(self.dfShort.split('/')[-1])
-        self.plugWidget.pdf_open_label.setText(self.pdfOpen.split('/')[-1])
-        self.plugWidget.pdf_short_label.setText(self.pdfShort.split('/')[-1])
-        self.plugWidget.pdf_load_label.setText(self.pdfLoad.split('/')[-1])
-
-
+        except:
+            pass
+        
         self.parentTab.clear()
 
         self.parentTab.addTab(self.plugTab, "Plug Main")        
