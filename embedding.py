@@ -14,6 +14,7 @@ import xml.etree.ElementTree as ET
 import xmltodict
 
 import os
+from PyQt5 import QtCore     
 
 class Embedding(SNPManipulations):
 
@@ -53,6 +54,9 @@ class Embedding(SNPManipulations):
 
         self.parameters = ["36-45","12-36","36-78","12-45","45-78","12-78"]
 
+    limitmutex = QtCore.QMutex()
+    parammutex = QtCore.QMutex()
+    
     def getOpenDelay(self):
         '''
         Using aquired S8P for an open sample, this function returns the progation delay
@@ -313,6 +317,33 @@ class Embedding(SNPManipulations):
                     "12-78": ["case13", "case14"]}
 
         return params
+        
+    def setStandard(self, standard):
+        self.standard = standard
+        self.worstMargin = {}
+        self.worstValue = {}
+
+       # with ProcessPool(cpu_count()) as p:
+        limits = ["Mat. Next", "Mat. Next 1,4"]
+        for l in limits:
+
+            self.limitmutex.lock()
+
+            self.evaluateLimit(l)
+                    
+
+            #self.getWorstMargin(parameter.replace(" ", ""))
+            #self.getWorstValue(parameter.replace(" ", ""))
+            
+            self.limitmutex.unlock()
+
+
+    def evaluateLimit(self, param):
+        #print("Evaulating : ", param)
+
+        self.standard.limits[param].evaluateLimit({"f": self.freq} , len(self.freq), neg = True)
+        #print("ERROR: Limit Not evaluated", param)
+            
             
 
     def __repr__(self):

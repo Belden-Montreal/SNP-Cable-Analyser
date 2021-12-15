@@ -274,12 +274,18 @@ class EmbeddingWidget(QtWidgets.QWidget):
         #self.embedPlotUpdate()    '''     
 
     def embedPlotUpdate(self, activeParameter):
+        sample = self.embeddedSample
+        if sample.standard is not None:
+            limit = None
+            if activeParameter == "36-45":
+                limit = sample.standard.limits["Mat. Next 1,4"].getArray()
+            else:
+                limit = sample.standard.limits["Mat. Next"].getArray()
+
+        self.embedPlot(activeParameter, limit=limit)
+
+    def embedPlot(self, activeParameter, limit):
         
-        #tab_index = self.parentTab.currentIndex()
-        #activeParameter = self.parentTab.tabText(self.tab_index)
-        #print(self.activeParameter)
-
-
         embededParams = self.embeddedSample.getParameters()
 
         if activeParameter != "Embedding Main":
@@ -295,7 +301,9 @@ class EmbeddingWidget(QtWidgets.QWidget):
                 c = next(color)
                 reembedingNum = int(case.replace("case", ""))
                 ax.semilogx(self.embeddedSample.freq, self.embeddedSample.reembeded[reembedingNum], label=case, c = c)
-                 
+
+            if limit:
+                ax.semilogx(*zip(*limit), label = "Limit") 
             ax.legend(loc='upper left', ncol =  2 )
  
             #self.figure.tight_layout()

@@ -84,11 +84,11 @@ class PlugWidget():
 
         '''For testing (comment out later)'''
 
-        self.dfOpen = "C:/Users/lxf09011/Desktop/SNP_test/snps/DEEMBED TEST/DirectFixOpen.s8p"
-        self.dfShort = "C:/Users/lxf09011/Desktop/SNP_test/snps/DEEMBED TEST/DirectFixShort.s8p"
-        self.pdfOpen = "C:/Users/lxf09011/Desktop/SNP_test/snps/DEEMBED TEST/DirectFixPlugOpen.s8p"
-        self.pdfShort = "C:/Users/lxf09011/Desktop/SNP_test/snps/DEEMBED TEST/DirectFixPlugShort.s8p"
-        self.pdfLoad = "C:/Users/lxf09011/Desktop/SNP_test/snps/DEEMBED TEST/DirectFixPlugLoad2.s8p"
+        self.dfOpen = "snps/DEEMBED TEST/DirectFixOpen.s8p"
+        self.dfShort = "snps/DEEMBED TEST/DirectFixShort.s8p"
+        self.pdfOpen = "snps/DEEMBED TEST/DirectFixPlugOpen.s8p"
+        self.pdfShort = "snps/DEEMBED TEST/DirectFixPlugShort.s8p"
+        self.pdfLoad = "snps/DEEMBED TEST/DirectFixPlugLoad2.s8p"
         
 
         ''' End of "for testing"'''
