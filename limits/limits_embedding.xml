@@ -6,11 +6,11 @@
 				<Limit param="Mat. Next">
 					<Max>75.0</Max>
 					<Part min="1.0" max="250.0">54-20*log(f/100)</Part>
-					<Part max="500.0">46.04-40*log(f/100)</Part>
+					<Part max="500.0">46.04-40*log(f/250)</Part>
 				</Limit>
 				<Limit param="Mat. Next 1,4">
 					<Part min="1.0" max="250.0">52.5-20*log(f/100)</Part>
-					<Part max="500.0">44.54-40*log(f/100)</Part>
+					<Part max="500.0">44.54-40*log(f/250)</Part>
 				</Limit>
 				<Limit param="TPMag 45-36 L">
 					<Part min="10.0" max="500.0">38.1-20*log(f/100)</Part>

@@ -330,7 +330,8 @@ class Embedding(SNPManipulations):
             self.limitmutex.lock()
 
             self.evaluateLimit(l)
-                    
+            for limit in l:
+                print(l) 
 
             #self.getWorstMargin(parameter.replace(" ", ""))
             #self.getWorstValue(parameter.replace(" ", ""))
