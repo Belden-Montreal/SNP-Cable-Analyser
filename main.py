@@ -60,7 +60,7 @@ from Project import Project
 from calWizard import CalWizard
 
 from decimal import Decimal
-
+import pickle
 
 import matplotlib.ticker
 
@@ -262,6 +262,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         self.param_tabs.clear()
         self.embeddingWidget = EmbeddingWidget(self.param_tabs,  sample = self.selected[0], graph=self.graphicsView, comm = self.comm, project=self.Project)
         self.embeddingWidget.proc_addPlug.connect(self.addPlug)
+        self.embeddingWidget.proc_importPlug.connect(self.importPlug)
 
         
         #self.param_tabs.addTab(self.embeddingWidget.widget, "Embedding Main")
@@ -440,7 +441,6 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
                 setLimit = menu.addAction("Set Limit")
 
                 if len(self.selected) == 1: 
-
                     setPairNumber = menu.addAction("Renumber Pairs")
 
                 test_type = menu.addMenu("Set Test Type") #Set the sub menu to select the different types of matrixes
@@ -452,6 +452,7 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
                 exportPDF = menu.addAction("Export To PDF")
 
                 delete = menu.addAction("Delete")
+
 
                 #get test type for samples. If theyre all one sided, all
                 #end-end or all different.
@@ -511,6 +512,8 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
                     self.setLimit()
                 #self.Project.activeMeasurements = selected
 
+
+
                 elif action == setPairNumber and len(self.selected) == 1:
                     self.setPairNumber()
                 return 1
@@ -523,6 +526,8 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
 
                 if len(self.selected) == 1:
                     setPairNumber = menu.addAction("Renumber Pairs")
+                    if self.selected[0].__repr__() == "Embed":
+                        saveDeembed = menu.addAction("Save Embedding Measurement")
 
                 exportExcel = menu.addAction("Export To Excel")
                 exportPDF = menu.addAction("Export To PDF")
@@ -548,6 +553,9 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
 
                 elif action == setLimit:
                     self.setLimit()
+
+                elif action == saveDeembed:
+                    self.saveDeembedding()
 
                 elif action == setPairNumber and len(self.selected) == 1:
                     self.setPairNumber()
@@ -703,6 +711,55 @@ class BeldenSNPApp(QtWidgets.QMainWindow, MainWindow.Ui_MainWindow, QtWidgets.QA
         self.mainTabWidget.testNameLabel.setText(self.sample.name+" : ")
         self.mainTabWidget.dateLabel.setText(self.sample.date.__str__())
         self.mainTabWidget.limitLabel.setText(self.sample.standard.__str__())
+
+
+    def importPlug(self):
+
+        options = self.Options()
+        options |= self.DontUseNativeDialog
+        file, _ = self.getOpenFileName(self, "Select Plug", "", "Plug (*.plug)", options=options)
+        #print files
+        print(file)
+        p = self.Project.addPlug(" ")
+        p.deserialize(file)
+
+        self.displaySamplesInTable()
+
+    def importDeembedding(self):
+
+        options = self.Options()
+        options |= self.DontUseNativeDialog
+        file, _ = self.getOpenFileName(self, "Select Deembeding", "", "Deembedding (*.mbed)", options=options)
+        #print files
+        print(file)
+
+        f = open(file, 'rb')
+        temp = pickle.load(f)
+        f.close() 
+
+        plug = temp.plug
+        self.Project.measurements.append(plug)
+
+        d = self.Project.addEmbed(" ")
+        d.deserialize(file)
+
+        self.displaySamplesInTable()
+
+
+    def saveDeembedding(self):
+        if len(self.selected) == 1:
+            sample = self.selected[0]
+            outputFile, _ = self.getSaveFileName(self, "Save Deembedding", "","Deembedding file (*.mbed)")
+            sample.serialize(file = outputFile)
+
+
+    def saveProject(self):
+        pass
+
+    def openProject(self):
+        pass
+
+
 
     def connect(self):
 

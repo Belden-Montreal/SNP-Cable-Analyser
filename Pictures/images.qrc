@@ -1,14 +1,15 @@
-<!DOCTYPE RCC><RCC version="1.0">
-<qresource>
-<file>newProject.png</file>
-<file>ImportFIle2.png</file>
-<file>Run.png</file>
-<file>Run_disabled.png</file>
-
-<file>calibrate.png</file>
-<file>calibrate_disabled.png</file>
-<file>deembed.png</file>
-<file>alien.png</file>
-
-</qresource>
+<RCC>
+  <qresource>
+    <file>disconnected.png</file>
+    <file>plug.png</file>
+    <file>newProject.png</file>
+    <file>ImportFIle2.png</file>
+    <file>Run.png</file>
+    <file>Run_disabled.png</file>
+    <file>calibrate.png</file>
+    <file>calibrate_disabled.png</file>
+    <file>deembed.png</file>
+    <file>alien.png</file>
+  </qresource>
+  <qresource/>
 </RCC>

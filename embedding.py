@@ -16,6 +16,7 @@ import xmltodict
 import os
 from PyQt5 import QtCore     
 
+import pickle 
 class Embedding(SNPManipulations):
 
     def __init__(self, testName = "DEEMBED_1", plug = None):
@@ -345,6 +346,20 @@ class Embedding(SNPManipulations):
         self.standard.limits[param].evaluateLimit({"f": self.freq} , len(self.freq), neg = True)
         #print("ERROR: Limit Not evaluated", param)
             
+    def serialize(self, file = None):
+        #if file_out is None:
+        #    file_out = self.name + ".pickle"
+        if file is None:
+            return pickle.dumps(self.__dict__)
+        with open(file, 'wb') as f:
+            pickle.dump(self.__dict__, f)
+
+    def deserialize(self, file):
+        f = open(file, 'rb')
+        tmp_dict = pickle.load(f)
+        f.close()          
+
+        self.__dict__.update(tmp_dict) 
             
 
     def __repr__(self):

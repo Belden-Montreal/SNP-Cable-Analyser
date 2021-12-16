@@ -94,11 +94,16 @@ class Project(): #Put (object) later
             
 
     def addPlug(self, testName):
-        self.measurements.append(Plug(testName))
+        p = Plug(testName)
+        self.measurements.append(p)
+        return p
 
     def addEmbed(self, testName):
-        self.measurements.append(Embedding(testName))
         
+        e = Embedding(testName)
+        self.measurements.append(e)
+        return e
+
     def addAlien(self, testName):              
  
         self.measurements.append(Alien(testName))
@@ -198,11 +203,16 @@ class Project(): #Put (object) later
         return
     
     def generatePDFReport(self, samples):
-        rb = pdf_reportbuilder.PDFReportBuilder(samples= sample) #self.measurements)
+        rb = pdf_reportbuilder.PDFReportBuilder(samples= samples) #self.measurements)
         rb.displayUI()
         rb.generatePDF()
         return
 
+    def serialize(self, samples):
+        for s in samples:
+            files, pickle = s.serialize()
+        
+    
 
     
     

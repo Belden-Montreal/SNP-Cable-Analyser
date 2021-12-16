@@ -47,11 +47,11 @@ class PlugWidget():
 
         self.plug = sample
 
-        self.dfOpen = None
-        self.dfShort = None
-        self.pdfOpen = None
-        self.pdfShort = None
-        self.pdfLoad = None
+        self.dfOpen = self.plug.dfOpen
+        self.dfShort = self.plug.dfShort
+        self.pdfOpen = self.plug.pdfOpen
+        self.pdfShort = self.plug.pdfShort
+        self.pdfLoad = self.plug.pdfLoad
         self.correctedPlugVectorPhase = {}  
 
         font = QtGui.QFont()
@@ -83,18 +83,19 @@ class PlugWidget():
         self.plugWidget.save_plug.clicked.connect(self.savePlug)
 
         '''For testing (comment out later)'''
-
-        '''self.dfOpen = "snps/DEEMBED TEST/DirectFixOpen.s8p"
+        self.dfOpen = "snps/DEEMBED TEST/DirectFixOpen.s8p"
         self.dfShort = "snps/DEEMBED TEST/DirectFixShort.s8p"
         self.pdfOpen = "snps/DEEMBED TEST/DirectFixPlugOpen.s8p"
         self.pdfShort = "snps/DEEMBED TEST/DirectFixPlugShort.s8p"
-        self.pdfLoad = "snps/DEEMBED TEST/DirectFixPlugLoad2.s8p"'''
+        self.pdfLoad = "snps/DEEMBED TEST/DirectFixPlugLoad2.s8p"
         
 
         ''' End of "for testing"'''
+
         #self.plugWidget.setupUi(self.plugTab)
         self.plugUpdateTab()
         self.updateDelayLabels()
+
     def dfOpenImport(self):
         try:
             self.dfOpen = self.importSNP()
@@ -297,24 +298,6 @@ class PlugWidget():
         self.graphicsView.draw()
 
 
-    def addNewPlug(self):
-
-        plugName = self.plug_name_line_edit.text()
-        try:
-
-            self.createPlug(plugName)
-        except Exception as e:
-            print(e)
-            msg = QtWidgets.QMessageBox()
-            msg.setIcon(QtWidgets.QMessageBox.Information)
-
-            msg.setText("A plug by this name already exists.")
-            msg.setInformativeText("Please rename your plug")
-            msg.setWindowTitle("Plug name conflict")
-            msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
-               
-            retval = msg.exec_()  
-
     def plugUpdateTab(self):
         try:
             self.plugWidget.df_open_label.setText(self.dfOpen.split('/')[-1])
@@ -341,11 +324,8 @@ class PlugWidget():
                 
 
     def savePlug(self, file):
-        pass
-
-
-
-
+        outputFile, _ = QFileDialog.getSaveFileName(None, "Save Plug", "","Plug file (*.plug)")
+        self.plug.serialize(file = outputFile)
 
 
 def main():

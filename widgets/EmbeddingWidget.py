@@ -8,6 +8,8 @@ import numpy as np
 
 class EmbeddingWidget(QtWidgets.QWidget):
     proc_addPlug = QtCore.pyqtSignal()
+    proc_importPlug = QtCore.pyqtSignal()
+
     def __init__(self, parentTab, graph, sample, comm=None, project = None):
         
         super(self.__class__, self).__init__()
@@ -45,6 +47,7 @@ class EmbeddingWidget(QtWidgets.QWidget):
 
         
         self.embedWidget.addPlug.clicked.connect(self.add_Plug)
+        self.embedWidget.importPlug.clicked.connect(self.import_Plug)
 
         
         self.embedWidget.plugList.currentIndexChanged.connect(self.embedUpdatePlug)
@@ -267,6 +270,9 @@ class EmbeddingWidget(QtWidgets.QWidget):
         self.proc_addPlug.emit()
 
 
+    def import_Plug(self):
+        self.proc_importPlug.emit()
+
     '''def addPlugDialog(self):
 
         form = PlugWidget.AddPlug()  # We set the  form to be our ExampleApp (design)
@@ -275,8 +281,9 @@ class EmbeddingWidget(QtWidgets.QWidget):
 
     def embedPlotUpdate(self, activeParameter):
         sample = self.embeddedSample
+        limit = None
+
         if sample.standard is not None:
-            limit = None
             if activeParameter == "36-45":
                 limit = sample.standard.limits["Mat. Next 1,4"].getArray()
             else:

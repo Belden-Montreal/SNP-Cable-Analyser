@@ -221,10 +221,13 @@
    </attribute>
    <addaction name="actionNew_Project"/>
    <addaction name="actionToolbar_Import_SnP"/>
+   <addaction name="separator"/>
    <addaction name="actionRun"/>
    <addaction name="actionCalibrate_2"/>
+   <addaction name="separator"/>
    <addaction name="actionAlien"/>
    <addaction name="actionDeembed"/>
+   <addaction name="actionNewPlug"/>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -239,16 +242,20 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionImport_Project"/>
-    <addaction name="actionImport_SnP"/>
+    <addaction name="actionNew_Project_2"/>
     <addaction name="separator"/>
+    <addaction name="actionImport_Project"/>
     <addaction name="actionSave_Project"/>
+    <addaction name="separator"/>
+    <addaction name="actionImport_SnP"/>
+    <addaction name="actionImport_Alien"/>
+    <addaction name="actionImport_Deembedding"/>
+    <addaction name="actionImportPlug"/>
     <addaction name="separator"/>
     <addaction name="actionExport_Excel"/>
     <addaction name="actionGenerate_Report"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
-    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuSettings">
     <property name="title">
@@ -287,7 +294,7 @@
   </widget>
   <action name="actionImport_SnP">
    <property name="text">
-    <string>Import SnP</string>
+    <string>Import sNp</string>
    </property>
   </action>
   <action name="actionImport_Project">
@@ -298,12 +305,15 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Import Project</string>
+    <string>Open Project</string>
    </property>
   </action>
   <action name="actionSave_Project">
    <property name="text">
     <string>Save Project</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
   <action name="actionExport_Excel">
@@ -313,7 +323,7 @@
   </action>
   <action name="actionGenerate_Report">
    <property name="text">
-    <string>Generate Report</string>
+    <string>Export PDF</string>
    </property>
   </action>
   <action name="actionExit">
@@ -498,8 +508,8 @@
   </action>
   <action name="actionDeembed">
    <property name="icon">
-    <iconset resource="../Pictures/images.qrc">
-     <normaloff>:/deembed.png</normaloff>:/deembed.png</iconset>
+    <iconset>
+     <normaloff>../Pictures/disconnected.png</normaloff>../Pictures/disconnected.png</iconset>
    </property>
    <property name="text">
     <string>Deembed</string>
@@ -521,6 +531,35 @@
   <action name="actionShow_Log">
    <property name="text">
     <string>Show Log</string>
+   </property>
+  </action>
+  <action name="actionImportPlug">
+   <property name="text">
+    <string>Import Plug</string>
+   </property>
+  </action>
+  <action name="actionNew_Project_2">
+   <property name="text">
+    <string>New Project</string>
+   </property>
+  </action>
+  <action name="actionImport_Deembedding">
+   <property name="text">
+    <string>Import Deembedding</string>
+   </property>
+  </action>
+  <action name="actionImport_Alien">
+   <property name="text">
+    <string>Import Alien</string>
+   </property>
+  </action>
+  <action name="actionNewPlug">
+   <property name="icon">
+    <iconset>
+     <normaloff>../Pictures/plug.png</normaloff>../Pictures/plug.png</iconset>
+   </property>
+   <property name="text">
+    <string>New Plug</string>
    </property>
   </action>
  </widget>
@@ -775,6 +814,54 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionImportPlug</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>importPlug()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>447</x>
+     <y>341</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionImport_Deembedding</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>importDeembedding()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>447</x>
+     <y>341</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSave_Project</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>saveProject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>447</x>
+     <y>341</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>importSnp()</slot>
@@ -790,5 +877,8 @@
   <slot>addEmbed()</slot>
   <slot>pairRename()</slot>
   <slot>pairRenameAlien()</slot>
+  <slot>importPlug()</slot>
+  <slot>importDeembedding()</slot>
+  <slot>saveProject()</slot>
  </slots>
 </ui>

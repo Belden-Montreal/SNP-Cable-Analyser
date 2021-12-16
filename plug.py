@@ -16,6 +16,8 @@ import xmltodict
 
 import os
 from PyQt5 import QtCore     
+import pickle
+
 
 class Plug(SNPManipulations):
     
@@ -23,6 +25,12 @@ class Plug(SNPManipulations):
         self.plugDelay = {}
         self.plugNextDelay = {}
         self.plugJackDelay = {}
+
+        self.dfOpen = None
+        self.dfShort = None
+        self.pdfOpen = None
+        self.pdfShort = None
+        self.pdfLoad = None
 
         self.name = testName  # "DEEMBED_1"
         self.date = time.strftime("%a, %d %b %Y %X +0000", time.gmtime())
@@ -59,18 +67,18 @@ class Plug(SNPManipulations):
         '''
 
 
-        dfOpen = self.getSample(dfOpen_file)
-        dfShort = self.getSample(dfShort_file)
-        pdfOpen = self.getSample(pdfOpen_file)
-        pdfShort = self.getSample(pdfShort_file)
-        pdfLoad = self.getSample(pdfLoad_file)
+        self.dfOpen = self.getSample(dfOpen_file)
+        self.dfShort = self.getSample(dfShort_file)
+        self.pdfOpen = self.getSample(pdfOpen_file)
+        self.pdfShort = self.getSample(pdfShort_file)
+        self.pdfLoad = self.getSample(pdfLoad_file)
 
-        directFixtureDelay = self.getDirectFixtureDelay(dfOpen, dfShort) #Dictionairy of the delay in seconds on each pair
+        directFixtureDelay = self.getDirectFixtureDelay(self.dfOpen, self.dfShort) #Dictionairy of the delay in seconds on each pair
 
-        plugDelay = self.getPlugDelay(pdfOpen, pdfShort) #Dictionairy of the delay in seconds on each pair
+        plugDelay = self.getPlugDelay(self.pdfOpen, self.pdfShort) #Dictionairy of the delay in seconds on each pair
         plugNextDelay = self.getPlugNextDelay() #Dictionairy of the delay in seconds on each pair combination ex.: {12-36, 12-45}
         #print("plugDirectFixtureLoad, " , pdfLoad)
-        correctedPlugVector = self.correctPlugVector(pdfLoad) #Dictionairy of arrays of the corrected vector for the plug ex,: {12-36 : [...]}
+        correctedPlugVector = self.correctPlugVector(self.pdfLoad) #Dictionairy of arrays of the corrected vector for the plug ex,: {12-36 : [...]}
         
 
         self.correctedPlugVectorPhase = {}    
@@ -297,15 +305,17 @@ class Plug(SNPManipulations):
         #print("ERROR: Limit Not evaluated", param)
             
 
-    def serialize(self):
+    def serialize(self, file = None):
+        #if file_out is None:
+        #    file_out = self.name + ".pickle"
+        if file is None:
+            return pickle.dumps(self.__dict__)
+        with open(file, 'wb') as f:
+            pickle.dump(self.__dict__, f)
 
-        files = []
-        obj_dict = {}
+    def deserialize(self, file):
+        f = open(file, 'rb')
+        tmp_dict = pickle.load(f)
+        f.close()          
 
-        obj_dict['name'] = self.name 
-        obj_dict['date'] = self.date 
-        self.limit = None
-        self.standard = None
-
-
-
+        self.__dict__.update(tmp_dict) 
