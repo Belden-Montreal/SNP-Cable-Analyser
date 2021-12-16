@@ -78,7 +78,7 @@ class Project(): #Put (object) later
         
             return s
         except Exception as e:
-            print(f"Import Error. {file} not added to project")
+            print(f"Import Error. {file} not added to project" , e)
             return None
         
     def delete(self, samples):
