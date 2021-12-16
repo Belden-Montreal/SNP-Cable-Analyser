@@ -244,16 +244,13 @@ class SNPManipulations(rf):
         #Populate dictionairy
         #self.PSNEXT_dict[self.port_name[0]] = []
 
-        for f in range(0, self.num_samples):
-            for k in range(0, numPorts):
-                keys = NEXT_db.keys()
-                PSk = 10*np.log10(np.sum([10**(NEXT_db[key][f]/10) for key in keys if (key.split("-")[0] == self.port_name[k] or key.split("-")[1] == self.port_name[k]) ]))
-                self.PSNEXT_dict[self.port_name[k]].append(PSk)
+        for k in range(0, numPorts):
+            keys = NEXT_db.keys()
+            PSk = 10*np.log10(np.sum([10**(NEXT_db[key]/10) for key in keys if (key.split("-")[0] == self.port_name[k] or key.split("-")[1] == self.port_name[k]) ], axis = 0))
+            self.PSNEXT_dict[self.port_name[k]] = PSk
                     
-
-
-                #PSNEXT_side2 = 10*np.log10(np.sum([10**-(NEXT_db[self.port_name[k+numPorts/2] + "-" + self.port_name[i]])/10 for i in range(numPorts/2, numPorts) if i < k]))
-                #self.PSNEXT_dict[self.port_name[k+numPorts/2]].append(PSNEXT_side2)
+            #PSNEXT_side2 = 10*np.log10(np.sum([10**-(NEXT_db[self.port_name[k+numPorts/2] + "-" + self.port_name[i]])/10 for i in range(numPorts/2, numPorts) if i < k]))
+            #self.PSNEXT_dict[self.port_name[k+numPorts/2]].append(PSNEXT_side2)
 
 
             
@@ -279,13 +276,12 @@ class SNPManipulations(rf):
         #self.PSNEXT_dict[self.port_name[0]] = []
         keys = FEXT_db.keys()
 
-        for f in range(0, self.num_samples):
-            for k in range(0, numPorts):
-                PSk = 10*np.log10(np.sum([10**(FEXT_db[key][f]/10) for key in keys if (key.split("-")[0] == self.port_name[k] ) ]))
-                self.PSFEXT_dict[self.port_name[k]].append(PSk)
-                    
-                #PSNEXT_side2 = 10*np.log10(np.sum([10**-(NEXT_db[self.port_name[k+numPorts/2] + "-" + self.port_name[i]])/10 for i in range(numPorts/2, numPorts) if i < k]))
-                #self.PSNEXT_dict[self.port_name[k+numPorts/2]].append(PSNEXT_side2)
+        for k in range(0, numPorts):
+            PSk = 10*np.log10(np.sum([10**(FEXT_db[key]/10) for key in keys if (key.split("-")[0] == self.port_name[k] ) ] , axis = 0 ) )
+            self.PSFEXT_dict[self.port_name[k]] = PSk
+                
+            #PSNEXT_side2 = 10*np.log10(np.sum([10**-(NEXT_db[self.port_name[k+numPorts/2] + "-" + self.port_name[i]])/10 for i in range(numPorts/2, numPorts) if i < k]))
+            #self.PSNEXT_dict[self.port_name[k+numPorts/2]].append(PSNEXT_side2)
 
 
         #print len(self.PSFEXT_dict["12"] )
@@ -321,12 +317,11 @@ class SNPManipulations(rf):
         #Populate dictionairy
         #self.PSNEXT_dict[self.port_name[0]] = []
 
-        for f in range(0, self.num_samples):
-            for key in FEXT_keys:
-                k = key.split("-")[0]
-                ACRFk = FEXT_db[key][f] - IL_db[k][f]
-                self.ACRF_dict[key].append(ACRFk)       
-        
+        for key in FEXT_keys:
+            k = key.split("-")[0]
+            ACRFk = FEXT_db[key] - IL_db[k]
+            self.ACRF_dict[key]=ACRFk 
+    
 
         return self.ACRF_dict
 
@@ -374,10 +369,9 @@ class SNPManipulations(rf):
         #Populate dictionairy
         #self.PSNEXT_dict[self.port_name[0]] = []
 
-        for f in range(0, self.num_samples):
-            for key in PSFEXT_keys:
-                PSACRFk =PSFEXT_db[key][f] - IL_db[key][f]
-                self.PSACRF_dict[key].append(PSACRFk)     
+        for key in PSFEXT_keys:
+            PSACRFk =PSFEXT_db[key] - IL_db[key]
+            self.PSACRF_dict[key]=PSACRFk
 
         return self.PSACRF_dict
 
@@ -437,11 +431,10 @@ class SNPManipulations(rf):
             self.ELTCTL_dict[key] = []
 
         #We calculate for each frequency
-        for f in range(0, self.num_samples):
-            for k in port_names:
-                #We create a list of ACRFs that disturbed on port k. 
-                ELTCTL_k = TCTL[k][f] - IL[k][f]
-                self.ELTCTL_dict[k].append(ELTCTL_k)
+        for k in port_names:
+            #We create a list of ACRFs that disturbed on port k. 
+            ELTCTL_k = TCTL[k] - IL[k]
+            self.ELTCTL_dict[k]=ELTCTL_k
 
         return self.ELTCTL_dict
 
@@ -673,7 +666,9 @@ class SNPManipulations(rf):
         
 
             
+            
 if __name__ == "__main__":
+    import time
 
     #vna_out = SNPManipulations('snps/DEEMBED TEST/MatingPlugJackForward.s8p')
     vna_out = SNPManipulations('C:/Users/lxf09011/Desktop/SNP_test/snps/ALIEN TEST/AlienEnd1_2redo3 _4.s16p')
@@ -685,37 +680,12 @@ if __name__ == "__main__":
     vna_out.s2mm()
 
     vna_out.port_name = {0:"12", 1:"36", 2:"45", 3:"78",4:"(r)12", 5:"(r)36", 6:"(r)45", 7:"(r)78"}
-    #n = vna_out.to_dataframe(vna_out.dd)
-    print(vna_out.getFEXT(vna_out.dd))
+    t0 = time.time()
 
-    z=False
-    RL =  vna_out.getRL(vna_out.dd, z)
-    IL = vna_out.getIL(vna_out.dd, z )
-    NEXT = vna_out.getNEXT(vna_out.dd, z)
-    PropagationDelay = vna_out.getPropagationDelay()
-
-    FEXT = vna_out.getFEXT(vna_out.dd, z)
     PSNEXT = vna_out.getPSNEXT(vna_out.dd)
-    PSFEXT = vna_out.getPSFEXT(vna_out.dd)
-    ACRF = vna_out.getACRF(vna_out.dd)
-    PSACRF = vna_out.getPSACRF(vna_out.dd)
 
-    LCL = vna_out.getRL(vna_out.dc, z)
-    LCTL = vna_out.getIL(vna_out.dc, z)
-    TCL = vna_out.getRL(vna_out.cd, z)
-    TCTL = vna_out.getIL(vna_out.cd, z)
-    ELTCTL = vna_out.getELTCTL()
-
-    CMRL =  vna_out.getRL(vna_out.cc, z) #commun mode Return Loss
-    CMNEXT =  vna_out.getNEXT(vna_out.cc, z) #commun mode NEXT
-
-    CMDMNEXT =  vna_out.getNEXT(vna_out.cd, z) #commun mode NEXT
-    CMDMRL =  vna_out.getRL(vna_out.cd, z) #commun mode NEXT
-
-    DMCMNEXT    = vna_out.getNEXT(vna_out.dc, z)
-    DMCMRL      = vna_out.getRL(vna_out.dc, z)
-
-
+    t1 = time.time()
+    print(t1-t0)
 
     '''print("Before ",vna_out.RL_dict["12"][0])
     
