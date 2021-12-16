@@ -57,7 +57,7 @@ import multiprocessing
 
 from Project import Project
 
-from calWizard import CalWizard
+from calWizard import CalibrationWizard
 
 from decimal import Decimal
 import pickle

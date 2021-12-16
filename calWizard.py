@@ -1,24 +1,24 @@
+from  calibration import Calibration
+
 from PyQt5 import QtCore
 from PyQt5 import QtGui
 from PyQt5.QtCore import pyqtProperty
 from PyQt5 import QtCore, QtWidgets
 
-from calibration import Calibration
-
 import time
-
 
 import visa
 import pyvisa
+
 class QIComboBox(QtWidgets.QComboBox):
     def __init__(self,parent=None):
         super(QIComboBox, self).__init__(parent)
  
  
-class CalWizard(QtWidgets.QWizard):
+class CalibrationWizard(QtWidgets.QWizard):
     def __init__(self, comm, parent=None):
         
-        super(CalWizard, self).__init__(parent)
+        super(CalibrationWizard, self).__init__(parent)
 
         self.cal = Calibration(comm.session)
         time.sleep(3)
@@ -57,6 +57,7 @@ class CalWizard(QtWidgets.QWizard):
                             "seq4":[(7,12), (8,11)]}}
         
         self.setWindowTitle("Cal Wizard")
+        print("Setting title")
 
         self.addPage(self.Intro())
         self.addPage(self.Open())
@@ -71,10 +72,13 @@ class CalWizard(QtWidgets.QWizard):
                 for seq in self.thruTwoEnd[attach]:
                     self.addPage(self.Thru2E(attach, seq))
 
+        self.addPage(self.SaveCal())
+
         self.addPage(self.Finished())
                 
         #self.button(self.NextButton).clicked.connect(self.nextButtonAction)
         self.button(self.FinishButton).clicked.connect(self.finishButtonAction)
+
 
         self.resize(640,480)
 
@@ -94,6 +98,7 @@ To begin calibration, click Next''')
         print("Intro")
 
         return page
+ 
 
     def Open(self):
         page = QtWidgets.QWizardPage()
@@ -107,6 +112,7 @@ Press Next once you've done so''')
         layout = QtWidgets.QVBoxLayout()
         layout.addWidget(self.label)
         layout.addWidget(self.openButton)
+        
 
         page.setLayout(layout)
 
@@ -190,7 +196,6 @@ Press Next once you've done so'''.format(attach,  str(self.thruTwoEnd[attach][se
 
         page.setLayout(layout)
 
-        print("Cal here")
 
         self.thruOut = self.thruTwoEnd[attach][seq]
 
@@ -247,10 +252,37 @@ Press Next once you've done so'''.format(attach,  str(self.thruTwoEnd[attach][se
         seq = title.split(",")[2]
         self.thruOut = self.thruTwoEnd[attach][seq]
         self.cal.thruCalib(self.thruOut)
+
+    def SaveCal(self):
+            page = QtWidgets.QWizardPage()
+            page.setTitle("Save the calibration?")
+            self.label = QtWidgets.QLabel('''Do you want to save your calibration in the CalSet?''')
+            self.label.setWordWrap(True)
+            self.labelname= QtWidgets.QLabel('''Name:''')
+            self.saveButton = QtWidgets.QPushButton("Save Calset", self)
+            self.calSetEdit = QtWidgets.QLineEdit()
+            self.saveButton.clicked.connect(lambda: self.saveButtonAction())
+            layout2=QtWidgets.QHBoxLayout()
+            layout2.addWidget(self.labelname)
+            layout2.addWidget(self.calSetEdit)
+            layout = QtWidgets.QVBoxLayout()
+            layout.addWidget(self.label)
+            layout.addLayout(layout2)
+            layout.addWidget(self.saveButton)
+
+            page.setLayout(layout)
+
+            return page
+    def saveButtonAction(self):
+        title =  self.currentPage().title()
+        print(title)
+        print("SKIP")
+        self.cal.saveCalib(self.calSetEdit.text())
     
     def finishButtonAction(self):
          self.cal.save()
          self.cal.close()
+         print("Done")
 
 if __name__ == '__main__':
     import sys
@@ -263,6 +295,6 @@ if __name__ == '__main__':
     session = rm.open_resource(VISA_ADDRESS)
     session.timeout = timeout
     
-    wizard = CalWizard()
+    wizard = CalibrationWizard()
     wizard.show()
     sys.exit(app.exec_())

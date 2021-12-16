@@ -1,5 +1,5 @@
 import pyvisa
-from calWizard import CalWizard
+from calWizard import CalibrationWizard
 
 from PyQt5.QtWidgets import QMessageBox
 from config.vna import VNAConfiguration
@@ -177,12 +177,12 @@ class Communication(QtCore.QObject):
         return'''
 
     def calibrate(self):
-        wizard = CalWizard(self)
+        wizard = CalibrationWizard(self)
         wizard.exec()
         print("Showing")
 
     def calibrateNew(self):
-        wizard = CalWizard(self)
+        wizard = CalibrationWizard(self)
         return wizard.exec()
         print("Showing")
 

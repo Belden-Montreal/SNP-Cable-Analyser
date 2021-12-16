@@ -315,6 +315,10 @@ class Sample(SNPManipulations):
             paramName = "PropagationDelay"
         return hasattr(self,paramName + "Z")
 
+    def serialize(self):
+        pass
+
+
 
 
 
