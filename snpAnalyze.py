@@ -1,6 +1,8 @@
 #import pylab
 from skrf import Network as rf
 import numba
+import pandas as pd
+from pandas import DataFrame, Series
 
 import numpy as np
 from scipy.misc import derivative
@@ -10,6 +12,9 @@ class SNPManipulations(rf):
     def __init__(self, snpFile):
         self.rs = super(SNPManipulations, self)
         self.rs.__init__(snpFile)
+        
+        
+        #self.network = self.to_dataframe
         
         #self.sMat = self.rs.s   #Scattering parameter matrix.
         #self.zMat = self.rs.z   #Impedance parameter matrix.
@@ -46,20 +51,18 @@ class SNPManipulations(rf):
         self.RL_dict = {}
         numPorts = self.getNumPorts(matrix)
         
-        print("Port NAME = ",self.port_name )
         #Establish dicitonairy keys and initialize arrays
         for i in range(0, numPorts):
             self.RL_dict[self.port_name[i]] = []
             
         #Populate dictionairy
-        for f in range(0, self.num_samples):
-            for j in range(0, numPorts):
-                rlVal = matrix[f, j, j]
-                #Convert to polar coordinates (Mag, Phase)                
-                if(z == False):
-                    rlVal = self.complex2db(rlVal)   #(Mag_dB, phase)
-                #self.RL_dict["RL_" + str(j) + str(j)].append(rlVal)
-                self.RL_dict[self.port_name[j]].append(rlVal)
+        for j in range(0, numPorts):
+            rlVal = matrix["%i%i"%(j, j)].values 
+            #Convert to polar coordinates (Mag, Phase)                
+            if(z == False):
+                rlVal = self.complex2db(rlVal)   #(Mag_dB, phase)
+            #self.RL_dict["RL_" + str(j) + str(j)].append(rlVal)
+            self.RL_dict[self.port_name[j]] = rlVal
         return self.RL_dict
 
     def getIL(self, matrix, z=True, full=False):
@@ -95,21 +98,20 @@ class SNPManipulations(rf):
 
         #print self.IL_dict.keys()
         #Populate dictionairy
-        for f in range(0, self.num_samples):           
             
-            for j in range(0, numPorts//2):
-                topRight = matrix[f, j, j+numPorts//2]
-                if full is True:
-                    bottomLeft = matrix[f,j+numPorts//2, j]
+        for j in range(0, numPorts//2):
+            topRight = matrix["%i%i"%(j, j+numPorts//2)].values 
+            if full is True:
+                bottomLeft = matrix["%i%i"%(j+numPorts//2, j)].values 
 
-                #Convert to polar coordinates (Mag, Phase)                
-                if(z == False):
-                    topRight = self.complex2db(topRight)
-                    if full is True:
-                        bottomLeft = self.complex2db(bottomLeft)    
-                self.IL_dict[str(self.port_name[j])].append(topRight)
+            #Convert to polar coordinates (Mag, Phase)                
+            if(z == False):
+                topRight = self.complex2db(topRight)
                 if full is True:
-                    self.IL_dict[self.port_name[j+numPorts//2]].append(bottomLeft)
+                    bottomLeft = self.complex2db(bottomLeft)    
+            self.IL_dict[str(self.port_name[j])] = topRight
+            if full is True:
+                self.IL_dict[self.port_name[j+numPorts//2]] = bottomLeft
 
                 
 
@@ -143,19 +145,18 @@ class SNPManipulations(rf):
                         self.NEXT_dict[self.port_name[i + numPorts//2] + "-" + self.port_name[j + numPorts//2]] = []
 
             #Populate dictionairy
-            for f in range(0, self.num_samples):
-                for i in range(0, numPorts//2):
-                    for j in range (0, numPorts//2):
-                        if i < j:
-                            topLeft = matrix[f, i, j]
-                            bottomRight = matrix[f, i+numPorts//2, j+numPorts//2]
-                            if(z == False):
-                                #Convert to polar coordinates (Mag, Phase)
-                                topLeft = self.complex2db(matrix[f, i, j])
-                                bottomRight = self.complex2db(matrix[f, i+numPorts//2, j+numPorts//2]) 
-                                
-                            self.NEXT_dict[self.port_name[i] + "-" + self.port_name[j]].append(topLeft)
-                            self.NEXT_dict[self.port_name[i + numPorts//2] + "-" + self.port_name[j + numPorts//2]].append(bottomRight)
+            for i in range(0, numPorts//2):
+                for j in range (0, numPorts//2):
+                    if i < j:
+                        topLeft = matrix["%i%i"%(i, j)].values 
+                        bottomRight = matrix["%i%i"%(i+numPorts//2, j+numPorts//2)].values 
+                        if(z == False):
+                            #Convert to polar coordinates (Mag, Phase)
+                            topLeft = self.complex2db(matrix["%i%i"%(i, j)].values)
+                            bottomRight = self.complex2db(matrix["%i%i"%(i+numPorts//2, j+numPorts//2)].values) 
+                            
+                        self.NEXT_dict[self.port_name[i] + "-" + self.port_name[j]] = topLeft
+                        self.NEXT_dict[self.port_name[i + numPorts//2] + "-" + self.port_name[j + numPorts//2]] = bottomRight
 
             return  self.NEXT_dict
 
@@ -166,17 +167,16 @@ class SNPManipulations(rf):
                     self.NEXT_dict[self.port_name[i] + "-" + self.port_name[j]] = []
 
         #Populate dictionairy
-        for f in range(0, self.num_samples):
-            for i in range(0, numPorts):
-                for j in range (0, numPorts):
-                    if i < j:
-                        m = matrix[f, i, j]
-                        bottomLeft = m
-                        if(z == False):
-                        #Convert to polar coordinates (Mag, Phase)
-                            bottomLeft = self.complex2db(m) 
-                            
-                        self.NEXT_dict[self.port_name[i] + "-" + self.port_name[j]].append(bottomLeft)
+        for i in range(0, numPorts):
+            for j in range (0, numPorts):
+                if i < j:
+                    m = matrix["%i%i"%(i, j)].values 
+                    bottomLeft = m
+                    if(z == False):
+                    #Convert to polar coordinates (Mag, Phase)
+                        bottomLeft = self.complex2db(m) 
+                        
+                    self.NEXT_dict[self.port_name[i] + "-" + self.port_name[j]] = bottomLeft
 
             
         return self.NEXT_dict 
@@ -213,21 +213,20 @@ class SNPManipulations(rf):
         #return self.FEXT_dict
 
         #Populate dictionairy
-        for f in range(0, self.num_samples):
-            for i in range(numPorts//2, numPorts):
-                for j in range (0,numPorts//2):
-                    #print str(j)
+        for i in range(numPorts//2, numPorts):
+            for j in range (0,numPorts//2):
+                #print str(j)
 
-                    if i != j and abs(i-j) != (numPorts/2):
-                        bottomLeft = matrix[f, i, j]
-                        topRight = matrix[f, j, i]
-                        if(z == False):
-                            #Convert to polar coordinates (Mag, Phase)
-                            bottomLeft = self.complex2db(bottomLeft) 
-                            topRight =  self.complex2db(topRight) 
-                        
-                        self.FEXT_dict[self.port_name[i] + "-" + self.port_name[j]].append(bottomLeft)
-                        self.FEXT_dict[self.port_name[j] + "-" + self.port_name[i]].append(topRight)
+                if i != j and abs(i-j) != (numPorts/2):
+                    bottomLeft = matrix["%i%i"%(i, j)].values 
+                    topRight = matrix["%i%i"%(j, i)].values 
+                    if(z == False):
+                        #Convert to polar coordinates (Mag, Phase)
+                        bottomLeft = self.complex2db(bottomLeft) 
+                        topRight =  self.complex2db(topRight) 
+                    
+                    self.FEXT_dict[self.port_name[i] + "-" + self.port_name[j]] = bottomLeft
+                    self.FEXT_dict[self.port_name[j] + "-" + self.port_name[i]] = topRight
 
         return self.FEXT_dict
 
@@ -289,7 +288,7 @@ class SNPManipulations(rf):
                 #self.PSNEXT_dict[self.port_name[k+numPorts/2]].append(PSNEXT_side2)
 
 
-        #print len(self.PSFEXT_dict["12"].values())
+        #print len(self.PSFEXT_dict["12"] )
         return self.PSFEXT_dict
 
 
@@ -337,7 +336,7 @@ class SNPManipulations(rf):
         PSFEXT = self.getPSFEXT(matrix)
 
         #Then we get a list of all the port names as well as a list of all the ACRF names
-        port_names = [names for names in self.port_name.values()]
+        port_names = [names for names in self.port_name ]
         PSFEXT_names = [names for names in ACRF.keys()]
 
         #We establish dicitonairy keys and initialize arrays
@@ -617,16 +616,16 @@ class SNPManipulations(rf):
         self.mm = self.s #mixed mode
         halfWay = int(self.getNumPorts(self.mm)/2)
         print("NUM PORTS :", self.getNumPorts(self.mm) )
-        self.dd = self.mm[:,:halfWay,:halfWay]  #diff-diff
-        self.dc = self.mm[:,:halfWay,halfWay:]  #diff-comm
-        self.cd = self.mm[:,halfWay:,:halfWay]  #comm-diff
-        self.cc = self.mm[:,halfWay:,halfWay:]  #comm-comm
-
+        self.dd = self.to_dataframe(self.mm[:,:halfWay,:halfWay])  #diff-diff
+        self.dc = self.to_dataframe(self.mm[:,:halfWay,halfWay:])  #diff-comm
+        self.cd = self.to_dataframe(self.mm[:,halfWay:,:halfWay])  #comm-diff
+        self.cc = self.to_dataframe(self.mm[:,halfWay:,halfWay:])  #comm-comm
         #print self.dd[0]
         
 
     def getNumPorts(self, matrix):
-        
+        if isinstance(matrix, pd.DataFrame) :
+            return int(np.sqrt(matrix.shape[1]))
         return matrix[0].shape[0]
     
     def merge_dicts(self, *dict_args):
@@ -639,6 +638,17 @@ class SNPManipulations(rf):
             result.update(dictionary)
         return result
 
+    def to_dataframe(self, matrix):
+        d = {}
+        index = self.frequency.f_scaled
+        numPorts = self.getNumPorts(matrix)
+        
+        #Establish dicitonairy keys and initialize arrays
+        for i in range(0, numPorts):
+            for j in range(0, numPorts):
+                d['%i%i'%(i,j)] = Series(matrix[:,i,j], index=index)
+        
+        return DataFrame(d)
 
     @property
     def freq_unit(self):
@@ -665,17 +675,48 @@ class SNPManipulations(rf):
             
 if __name__ == "__main__":
 
-    vna_out = SNPManipulations('snps/DEEMBED TEST/MatingPlugJackForward_4.s4p')
-    vna_out.one_sided = True
-    
+    #vna_out = SNPManipulations('snps/DEEMBED TEST/MatingPlugJackForward.s8p')
+    vna_out = SNPManipulations('C:/Users/lxf09011/Desktop/SNP_test/snps/ALIEN TEST/AlienEnd1_2redo3 _4.s16p')
+    vna_out.one_sided = False
+
     #vna_out.renumber([1,2], [2,1])
     #vna_out.renumber([0,1,2,3,4,5,6,7], [0,2,5,4,3,1,6,7])
     
     vna_out.s2mm()
 
     vna_out.port_name = {0:"12", 1:"36", 2:"45", 3:"78",4:"(r)12", 5:"(r)36", 6:"(r)45", 7:"(r)78"}
+    #n = vna_out.to_dataframe(vna_out.dd)
+    print(vna_out.getFEXT(vna_out.dd))
 
-    print(vna_out.num_ports)
+    z=False
+    RL =  vna_out.getRL(vna_out.dd, z)
+    IL = vna_out.getIL(vna_out.dd, z )
+    NEXT = vna_out.getNEXT(vna_out.dd, z)
+    PropagationDelay = vna_out.getPropagationDelay()
+
+    FEXT = vna_out.getFEXT(vna_out.dd, z)
+    PSNEXT = vna_out.getPSNEXT(vna_out.dd)
+    PSFEXT = vna_out.getPSFEXT(vna_out.dd)
+    ACRF = vna_out.getACRF(vna_out.dd)
+    PSACRF = vna_out.getPSACRF(vna_out.dd)
+
+    LCL = vna_out.getRL(vna_out.dc, z)
+    LCTL = vna_out.getIL(vna_out.dc, z)
+    TCL = vna_out.getRL(vna_out.cd, z)
+    TCTL = vna_out.getIL(vna_out.cd, z)
+    ELTCTL = vna_out.getELTCTL()
+
+    CMRL =  vna_out.getRL(vna_out.cc, z) #commun mode Return Loss
+    CMNEXT =  vna_out.getNEXT(vna_out.cc, z) #commun mode NEXT
+
+    CMDMNEXT =  vna_out.getNEXT(vna_out.cd, z) #commun mode NEXT
+    CMDMRL =  vna_out.getRL(vna_out.cd, z) #commun mode NEXT
+
+    DMCMNEXT    = vna_out.getNEXT(vna_out.dc, z)
+    DMCMRL      = vna_out.getRL(vna_out.dc, z)
+
+
+
     '''print("Before ",vna_out.RL_dict["12"][0])
     
     vna_out.renumber([0,2,5,4,3,1,6,7], [0,1,2,3,4,5,6,7])
